@@ -14,5 +14,10 @@
             "name": "Greg Bowler",
             "email": "greg.bowler@g105b.com"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "g105b\\Dom": "./src"
+        }
+    }
 }
