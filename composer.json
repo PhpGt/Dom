@@ -1,0 +1,18 @@
+{
+    "name": "g105b/dom",
+    "description": "Enhancement to the PHP DOMDocument functionality.",
+    "type": "library",
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Greg Bowler",
+            "email": "greg.bowler@g105b.com"
+        }
+    ]
+}
