@@ -1,0 +1,7 @@
+machine:
+  php:
+    version: 7.0.0RC7
+
+test:
+  override:
+    - vendor/bin/phpunit
