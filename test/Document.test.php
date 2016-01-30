@@ -5,6 +5,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase {
 
 public function testInheritance() {
 	$document = new Document();
+	$this->assertInstanceOf("g105b\Dom\Element", $document);
 	$this->assertInstanceOf("g105b\Dom\Node", $document);
 }
 
