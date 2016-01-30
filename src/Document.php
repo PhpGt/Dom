@@ -20,7 +20,7 @@ namespace g105b\Dom;
  *  document. Stylesheets are <link> elements with attribute `rel=stylesheet`
  * @property string $title The document title.
  */
-class Document extends Node {
+class Document extends Element {
 
 public function __construct() {
 
