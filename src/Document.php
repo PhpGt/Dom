@@ -26,4 +26,18 @@ public function __construct() {
 
 }
 
+/**
+ * Adopts a node from an external document. The node and its subtree is
+ * removed from the document it's in (if any), and its ownerDocument is
+ * changed to the current document. The node can then be inserted into the
+ * current document.
+ * @param  Node $externalNode The node from another document to be adopted
+ * @return Node	The adopted node that can be used in the current document.
+ * The new node's parentNode is null, since it has not yet been inserted
+ * into the document tree.
+ */
+public function adoptNode(Node $externalNode): Node {
+	// TODO.
+}
+
 }#
