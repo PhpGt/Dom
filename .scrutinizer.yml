@@ -1,4 +1,14 @@
 build:
-    environment:
-        php:
-            version: 7.0
+  environment:
+    php:
+      version: 7.0
+
+checks:
+  php:
+    code_rating: true
+    duplication: true
+
+filter:
+  excluded_paths:
+    - test/*
+    - vendor/*
