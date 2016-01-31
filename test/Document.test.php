@@ -7,7 +7,7 @@ const HTML = "<!doctype html><html><body><h1>Hello!</h1></body></html>";
 
 public function testInheritance() {
 	$document = new Document(self::HTML);
-	$this->assertInstanceOf("g105b\Dom\Element", $document->documentElement);
+	$this->assertInstanceOf("phpgt\dom\Element", $document->documentElement);
 }
 
 public function testRemoveElement() {
