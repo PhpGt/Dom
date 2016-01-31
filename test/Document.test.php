@@ -1,5 +1,5 @@
 <?php
-namespace g105b\Dom;
+namespace phpgt\dom;
 
 class DocumentTest extends \PHPUnit_Framework_TestCase {
 

@@ -1,5 +1,5 @@
 <?php
-namespace g105b\Dom;
+namespace phpgt\dom;
 
 class Node extends \DOMNode {
 

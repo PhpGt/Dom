@@ -1,5 +1,5 @@
 <?php
-namespace g105b\Dom;
+namespace phpgt\dom;
 
 class Element extends \DOMElement {
 
@@ -9,6 +9,14 @@ class Element extends \DOMElement {
  */
 public function remove() {
 	$this->parentNode->removeChild($this);
+}
+
+public function querySelector($selector):Element {
+	// TODO.
+}
+
+public function querySelectorAll($selector):NodeList {
+	// TODO.
 }
 
 }#
