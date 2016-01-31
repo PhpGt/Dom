@@ -1,6 +1,6 @@
 <?php
 namespace g105b\Dom;
 
-class Node {
+class Node extends \DOMNode {
 
 }#
