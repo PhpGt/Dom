@@ -46,7 +46,22 @@ public function testQuerySelector() {
 	$h2TagName = $document->getElementsByTagName("h2")->item(0);
 	$h2QuerySelector = $document->querySelector("h2");
 
-	// $this->assertSame($h2QuerySelector, $h2TagName);
+	$this->assertSame($h2QuerySelector, $h2TagName);
+}
+
+public function testQuerySelectorAll() {
+	$document = new HTMLDocument(self::HTML_MORE);
+	$pListTagName = $document->getElementsByTagName("p");
+	$pListQuerySelector = $document->querySelectorAll("p");
+
+	$this->assertEquals($pListQuerySelector->length, $pListTagName->length);
+
+	for($i = 0, $len = $pListQuerySelector->length; $i < $len; $i++) {
+		$this->assertSame(
+			$pListQuerySelector->item($i),
+			$pListTagName->item($i)
+		);
+	}
 }
 
 }#

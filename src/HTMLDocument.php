@@ -9,7 +9,11 @@ public function __construct($html) {
 }
 
 public function querySelector(string $selectors):Element {
-	return new Element("test");
+	return $this->documentElement->querySelector($selectors);
+}
+
+public function querySelectorAll(string $selectors):NodeList {
+	return $this->documentElement->querySelectorAll($selectors);
 }
 
 }#
