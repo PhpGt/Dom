@@ -5,10 +5,19 @@ use Iterator;
 use ArrayAccess;
 
 /**
- * Represents a NodeList that can only contain Element nodes. Internally,
- * a DOMNodeList is used to store the association to
+ * Represents a Node list that can only contain Element nodes. Internally,
+ * a DOMNodeList is used to store the association to the original list of
+ * Nodes. The Iterator interface is used to handle the selection of Nodes
+ * that are Elements.
  */
 class HTMLCollection implements Iterator, ArrayAccess {
+
+private $domNodeList;
+private $key = 0;
+
+public function __construct(\DOMNodeList $domNodeList) {
+	$this->domNodeList = $domNodeList;
+}
 
 // Iterator implementation /////////////////////////////////////////////////////
 
