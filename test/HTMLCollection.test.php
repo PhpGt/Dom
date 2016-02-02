@@ -8,4 +8,12 @@ public function testType() {
 	$this->assertInstanceOf("\phpgt\dom\HTMLCollection", $document->children);
 }
 
+/**
+ * The type of the Nodes that are stored within an HTMLCollection should only
+ * be derivatives of Element.
+ */
+public function testElementType() {
+
+}
+
 }#

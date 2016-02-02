@@ -15,23 +15,23 @@ public function remove() {
 }
 
 public function querySelector(string $selector):Element {
-	$nodeList = $this->css($selector);
-	return $nodeList->item(0);
+	$htmlCollection = $this->css($selector);
+	return $htmlCollection->item(0);
 }
 
-public function querySelectorAll(string $selector):NodeList {
+public function querySelectorAll(string $selector):HTMLCollection {
 	return $this->css($selector);
 }
 
-private function css(string $selector):NodeList {
+private function css(string $selector):HTMLCollection {
 	$converter = new CssSelectorConverter();
 	$xPathSelector = $converter->toXPath($selector);
 	return $this->xPath($xPathSelector);
 }
 
-private function xPath(string $selector):NodeList {
+private function xPath(string $selector):HTMLCollection {
 	$x = new DOMXPath($this->ownerDocument);
-	return new NodeList($x->query($selector, $this));
+	return new HTMLCollection($x->query($selector, $this));
 }
 
 }#

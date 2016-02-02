@@ -19,6 +19,19 @@ public function __construct(\DOMNodeList $domNodeList) {
 	$this->domNodeList = $domNodeList;
 }
 
+/**
+ * Gets the nth Element object in the internal DOMNodeList.
+ *
+ * @param int $index
+ * @return Element
+ */
+public function item(int $index):Element {
+	foreach ($this as $key => $element) {
+		var_dump($key);
+	}
+	die();
+}
+
 // Iterator implementation /////////////////////////////////////////////////////
 
 public function current():Element {
@@ -29,12 +42,12 @@ public function key():int {
 
 }
 
-public function next():void {
+public function next() {
 
 }
 
-public function rewind():void {
-
+public function rewind() {
+	$this->key = 0;
 }
 
 public function valid():bool {

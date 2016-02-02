@@ -15,7 +15,7 @@ public function querySelector(string $selectors):Element {
 	return $this->documentElement->querySelector($selectors);
 }
 
-public function querySelectorAll(string $selectors):NodeList {
+public function querySelectorAll(string $selectors):HTMLCollection {
 	return $this->documentElement->querySelectorAll($selectors);
 }
 

@@ -17,4 +17,19 @@ public function __construct() {
 	$this->registerNodeClass("\DOMText", "\phpgt\dom\Text");
 }
 
+/**
+ * Returns an instance of Element or one of its extensions from any given Node.
+ *
+ * @param Node $node The Node to obtain the Element for
+ * @return Element An Element or extension of Element with specific
+ * functionality relating to its Element type
+ */
+public function getNodeElement(Node $node):Element {
+	$hash = spl_object_hash($node);
+
+	if(!isset($this->elementMap[$node])) {
+		$this->elementMap[$node] = $node;
+	}
+}
+
 };
