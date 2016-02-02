@@ -33,7 +33,7 @@ public function testQuerySelectorAll() {
 	$pListTagName = $document->getElementsByTagName("p");
 	$pListQuerySelector = $document->querySelectorAll("p");
 
-	$this->assertEquals($pListQuerySelector->length, $pListTagName->length);
+	$this->assertEquals($pListTagName->length, $pListQuerySelector->length);
 
 	for($i = 0, $len = $pListQuerySelector->length; $i < $len; $i++) {
 		$this->assertSame(

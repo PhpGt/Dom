@@ -27,7 +27,7 @@ public function __get($name) {
 }
 
 public function prop_children():HTMLCollection {
-	return new HTMLCollection($this->childNodes);
+	return $this->documentElement->children;
 }
 
 }#

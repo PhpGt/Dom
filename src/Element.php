@@ -4,6 +4,9 @@ namespace phpgt\dom;
 use DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
+/**
+ * @property-read HTMLCollection $children
+ */
 class Element extends \DOMElement {
 
 /**
@@ -32,6 +35,17 @@ private function css(string $selector):HTMLCollection {
 private function xPath(string $selector):HTMLCollection {
 	$x = new DOMXPath($this->ownerDocument);
 	return new HTMLCollection($x->query($selector, $this));
+}
+
+public function __get($name) {
+	$methodName = "prop_$name";
+	if(method_exists($this, $methodName)) {
+		return $this->$methodName();
+	}
+}
+
+private function prop_children() {
+	return new HTMLCollection($this->childNodes);
 }
 
 }#
