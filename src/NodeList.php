@@ -2,6 +2,7 @@
 namespace phpgt\dom;
 
 use DOMNodeList;
+use Error;
 
 /**
  * Wraps the native DOMNodeList in a more usable class, providing iteration
@@ -17,7 +18,11 @@ public function __construct(DomNodeList $domNodeList) {
 
 public function __call($name, $args) {
 	if(!method_exists($this->domNodeList, $name)) {
-		return null;
+		throw new Error(
+			"Call to undefined method "
+			. get_class()
+			. "::$name()"
+		);
 	}
 
 	$result = call_user_func_array([$this->domNodeList, $name], $args);
@@ -30,7 +35,10 @@ public function __call($name, $args) {
 
 public function __get($name) {
 	if(!property_exists($this->domNodeList, $name)) {
-		return null;
+		trigger_error("Undefined property: "
+			. get_class()
+			. "::\$$name"
+		);
 	}
 
 	$result = $this->domNodeList->$name;

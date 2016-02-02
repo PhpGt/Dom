@@ -1,6 +1,9 @@
 <?php
 namespace phpgt\dom;
 
+/**
+ * @property-read HTMLCollection $children
+ */
 class HTMLDocument extends Document {
 
 public function __construct($html) {
@@ -14,6 +17,17 @@ public function querySelector(string $selectors):Element {
 
 public function querySelectorAll(string $selectors):NodeList {
 	return $this->documentElement->querySelectorAll($selectors);
+}
+
+public function __get($name) {
+	$dynamicPropertyMethodName = "prop_$name";
+	if(method_exists($this, $dynamicPropertyMethodName)) {
+		return $this->$dynamicPropertyMethodName();
+	}
+}
+
+public function prop_children():HTMLCollection {
+	return new HTMLCollection($this->childNodes);
 }
 
 }#
