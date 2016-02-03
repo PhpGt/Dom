@@ -43,4 +43,26 @@ public function testQuerySelectorAll() {
 	}
 }
 
+public function testHeadElement() {
+	$document = new HTMLDocument(TestHelper::HTML_MORE);
+	$this->assertInstanceOf("\phpgt\dom\Element", $document->head);
+}
+
+public function testHeadElementAutomaticallyCreated() {
+	// TestHelper::HTML does not explicitly define a <head>
+	$document = new HTMLDocument(TestHelper::HTML);
+	$this->assertInstanceOf("\phpgt\dom\Element", $document->head);
+}
+
+public function testBodyElement() {
+	$document = new HTMLDocument(TestHelper::HTML_MORE);
+	$this->assertInstanceOf("\phpgt\dom\Element", $document->body);
+}
+
+public function testBodyElementAutomaticallyCreated() {
+	// TestHelper::HTML does not explicitly define a <body>
+	$document = new HTMLDocument(TestHelper::HTML);
+	$this->assertInstanceOf("\phpgt\dom\Element", $document->body);
+}
+
 }#
