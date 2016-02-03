@@ -11,7 +11,7 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  * @property-read Element $lastElementChild
  * @property-read int $childElementCount
  */
-class Element extends \DOMElement implements ParentNode {
+class Element extends \DOMElement {
 
 /**
  * Removes this ChildNode from the children list of its parent.
