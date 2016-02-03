@@ -13,6 +13,7 @@ use ArrayAccess;
  * @property-read int $length Number of Element nodes in this collection
  */
 class HTMLCollection implements Iterator, ArrayAccess {
+use LivePropertyGetter;
 
 private $domNodeList;
 private $key = 0;
