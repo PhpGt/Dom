@@ -19,6 +19,17 @@ public function querySelectorAll(string $selector):HTMLCollection {
 	return $this->css($selector);
 }
 
+/**
+ * returns true if the element would be selected by the specified selector
+ * string; otherwise, returns false.
+ *
+ * @param string $selector The CSS selector to check against
+ * @return bool True if this element is selectable by provided selector
+ */
+public function matches(string $selector):bool {
+	// TODO. https://github.com/phpgt/dom/issues/7
+}
+
 private function css(string $selector):HTMLCollection {
 	$converter = new CssSelectorConverter();
 	$xPathSelector = $converter->toXPath($selector);
