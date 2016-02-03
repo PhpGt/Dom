@@ -2,8 +2,21 @@
 namespace phpgt\dom;
 
 /**
- * @property-read Element $body
- * @property-read Element $head
+ * Provides access to special properties and methods not present by default
+ * on a regular (XML) document.
+ *
+ * @property-read HTMLCollection $anchors List of all of the anchors
+ *  in the document. Anchors are <a> Elements with the `name` attribute.
+ * @property-read Element $body The <body> element. Returns new Element if there
+ *  was no body in the source HTML.
+ * @property-read HTMLCollection $forms List of all <form> elements.
+ * @property-read Element $head The <head> element. Returns new Element if there
+ *  was no head in the source HTML.
+ * @property-read HTMLCollection $images List of all <img> elements.
+ * @property-read HTMLCollection $links List of all links in the document.
+ *  Links are <a> Elements with the `href` attribute.
+ * @property-read HTMLCollection $scripts List of all <script> elements.
+ * @property string $title The title of the document, defined using <title>.
  */
 class HTMLDocument extends Document {
 use LivePropertyGetter, ParentNode;
@@ -11,6 +24,18 @@ use LivePropertyGetter, ParentNode;
 public function __construct($html) {
 	parent::__construct();
 	$this->loadHTML($html);
+}
+
+/**
+ * Adopts a node from an external document. The node and its subtree is removed
+ * from the document it's in (if any), and its ownerDocument is changed to the
+ * current document. The node can then be inserted into the current document.
+ *
+ * @param  Node $externalNode The node, outside of the document
+ * @return Node The Node, within the current document
+ */
+public function adoptNode(Node $externalNode):Node {
+	// TODO.
 }
 
 public function querySelector(string $selectors) {
