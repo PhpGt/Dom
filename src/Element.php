@@ -5,11 +5,7 @@ use DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
 /**
- * ParentNode properties:
- * @property-read HTMLCollection $children
- * @property-read Element $firstElementChild
- * @property-read Element $lastElementChild
- * @property-read int $childElementCount
+ * Represents an object of a Document.
  */
 class Element extends \DOMElement {
 use LivePropertyGetter, NonDocumentTypeChildNode, ChildNode, ParentNode;
