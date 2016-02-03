@@ -17,7 +17,7 @@ public function remove() {
 	$this->parentNode->removeChild($this);
 }
 
-public function querySelector(string $selector):Element {
+public function querySelector(string $selector) {
 	$htmlCollection = $this->css($selector);
 	return $htmlCollection->item(0);
 }

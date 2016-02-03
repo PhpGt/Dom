@@ -25,9 +25,9 @@ public function __construct(\DOMNodeList $domNodeList) {
  * Gets the nth Element object in the internal DOMNodeList.
  *
  * @param int $index
- * @return Element
+ * @return Element|null
  */
-public function item(int $index):Element {
+public function item(int $index) {
 	$count = 0;
 	foreach ($this as $element) {
 		if($index === $count) {
@@ -37,7 +37,7 @@ public function item(int $index):Element {
 		$count++;
 	}
 
-	// TODO: Throw exception... which one?
+	return null;
 }
 
 public function __get($name) {
