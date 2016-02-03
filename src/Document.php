@@ -5,6 +5,7 @@ namespace phpgt\dom;
  * @property-read Element $documentElement
  */
 class Document extends \DOMDocument {
+use LivePropertyGetter, ParentNode;
 
 public function __construct() {
 	parent::__construct("1.0", "utf-8");
@@ -16,6 +17,7 @@ public function __construct() {
 	$this->registerNodeClass("\DOMDocumentType", "\phpgt\dom\DocumentType");
 	$this->registerNodeClass("\DOMCharacterData", "\phpgt\dom\CharacterData");
 	$this->registerNodeClass("\DOMText", "\phpgt\dom\Text");
+	$this->registerNodeClass("\DOMComment", "\phpgt\dom\Comment");
 }
 
 };

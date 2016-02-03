@@ -12,33 +12,7 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  * @property-read int $childElementCount
  */
 class Element extends \DOMElement {
-use LivePropertyGetter;
-
-/**
- * Removes this ChildNode from the children list of its parent.
- * @return void
- */
-public function remove() {
-	$this->parentNode->removeChild($this);
-}
-
-/**
- * Inserts a Node into the children list of this ChildNode's parent,
- * just before this ChildNode.
- * @return void
- */
-public function before(Node $node) {
-	$this->parentNode->insertBefore($node, $this);
-}
-
-/**
- * Inserts a Node into the children list of this ChildNode's parent,
- * just after this ChildNode.
- * @return void
- */
-public function after(Node $node) {
-	$this->parentNode->insertBefore($node, $this->nextSibling);
-}
+use LivePropertyGetter, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
 public function querySelector(string $selector) {
 	$htmlCollection = $this->css($selector);
@@ -58,20 +32,6 @@ private function css(string $selector):HTMLCollection {
 private function xPath(string $selector):HTMLCollection {
 	$x = new DOMXPath($this->ownerDocument);
 	return new HTMLCollection($x->query($selector, $this));
-}
-
-private function prop_children():HTMLCollection {
-	return new HTMLCollection($this->childNodes);
-}
-
-private function prop_firstElementChild() {
-	return $this->children->item(0);
-}
-private function prop_lastElementChild() {
-	return $this->children->item($this->children->length - 1);
-}
-private function prop_childElementCount() {
-	return $this->children->length;
 }
 
 }#
