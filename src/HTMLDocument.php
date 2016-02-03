@@ -7,6 +7,7 @@ namespace phpgt\dom;
  * @property-read Element $head
  */
 class HTMLDocument extends Document {
+use LivePropertyGetter;
 
 public function __construct($html) {
 	parent::__construct();
@@ -19,13 +20,6 @@ public function querySelector(string $selectors) {
 
 public function querySelectorAll(string $selectors):HTMLCollection {
 	return $this->documentElement->querySelectorAll($selectors);
-}
-
-public function __get($name) {
-	$dynamicPropertyMethodName = "prop_$name";
-	if(method_exists($this, $dynamicPropertyMethodName)) {
-		return $this->$dynamicPropertyMethodName();
-	}
 }
 
 private function prop_head():Element {

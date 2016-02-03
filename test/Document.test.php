@@ -4,12 +4,12 @@ namespace phpgt\dom;
 class DocumentTest extends \PHPUnit_Framework_TestCase {
 
 public function testInheritance() {
-	$document = new HTMLDocument(TestHelper::HTML);
+	$document = new HTMLDocument(test\Helper::HTML);
 	$this->assertInstanceOf("phpgt\dom\Element", $document->documentElement);
 }
 
 public function testRemoveElement() {
-	$document = new HTMLDocument(TestHelper::HTML);
+	$document = new HTMLDocument(test\Helper::HTML);
 
 	$h1List = $document->getElementsByTagName("h1");
 	$this->assertEquals(1, $h1List->length);
@@ -21,7 +21,7 @@ public function testRemoveElement() {
 }
 
 public function testQuerySelector() {
-	$document = new HTMLDocument(TestHelper::HTML_MORE);
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$h2TagName = $document->getElementsByTagName("h2")->item(0);
 	$h2QuerySelector = $document->querySelector("h2");
 
@@ -29,7 +29,7 @@ public function testQuerySelector() {
 }
 
 public function testQuerySelectorAll() {
-	$document = new HTMLDocument(TestHelper::HTML_MORE);
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$pListTagName = $document->getElementsByTagName("p");
 	$pListQuerySelector = $document->querySelectorAll("p");
 
@@ -44,24 +44,24 @@ public function testQuerySelectorAll() {
 }
 
 public function testHeadElement() {
-	$document = new HTMLDocument(TestHelper::HTML_MORE);
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$this->assertInstanceOf("\phpgt\dom\Element", $document->head);
 }
 
 public function testHeadElementAutomaticallyCreated() {
-	// TestHelper::HTML does not explicitly define a <head>
-	$document = new HTMLDocument(TestHelper::HTML);
+	// test\Helper::HTML does not explicitly define a <head>
+	$document = new HTMLDocument(test\Helper::HTML);
 	$this->assertInstanceOf("\phpgt\dom\Element", $document->head);
 }
 
 public function testBodyElement() {
-	$document = new HTMLDocument(TestHelper::HTML_MORE);
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$this->assertInstanceOf("\phpgt\dom\Element", $document->body);
 }
 
 public function testBodyElementAutomaticallyCreated() {
-	// TestHelper::HTML does not explicitly define a <body>
-	$document = new HTMLDocument(TestHelper::HTML);
+	// test\Helper::HTML does not explicitly define a <body>
+	$document = new HTMLDocument(test\Helper::HTML);
 	$this->assertInstanceOf("\phpgt\dom\Element", $document->body);
 }
 

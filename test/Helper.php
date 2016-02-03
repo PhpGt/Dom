@@ -1,7 +1,7 @@
 <?php
-namespace phpgt\dom;
+namespace phpgt\dom\test;
 
-class TestHelper {
+class Helper {
 
 const HTML = "<!doctype html><html><body><h1>Hello!</h1></body></html>";
 const HTML_MORE = <<<HTML

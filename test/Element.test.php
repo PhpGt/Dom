@@ -4,7 +4,7 @@ namespace phpgt\dom;
 class ElementTest extends \PHPUnit_Framework_TestCase {
 
 public function testQuerySelector() {
-	$document = new HTMLDocument(TestHelper::HTML_MORE);
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$pAfterH2 = $document->querySelector("h2+p");
 	$aWithinP = $pAfterH2->querySelector("a");
 
@@ -17,7 +17,7 @@ public function testQuerySelector() {
 }
 
 public function testQuerySelectorAll() {
-	$document = new HTMLDocument(TestHelper::HTML_MORE);
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$pCollection = $document->documentElement->querySelectorAll("p");
 	$pNodeList = $document->documentElement->getElementsByTagName("p");
 

@@ -4,12 +4,12 @@ namespace phpgt\dom;
 class HTMLCollectionTest extends \PHPUnit_Framework_TestCase {
 
 public function testType() {
-	$document = new HTMLDocument(TestHelper::HTML);
+	$document = new HTMLDocument(test\Helper::HTML);
 	$this->assertInstanceOf("\phpgt\dom\HTMLCollection", $document->children);
 }
 
 public function testNonElementsRemoved() {
-	$document = new HTMLDocument(TestHelper::HTML_MORE);
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$bodyChildNodes = $document->body->childNodes;
 	$bodyChildren = $document->body->children;
 
