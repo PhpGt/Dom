@@ -8,12 +8,16 @@ public function testType() {
 	$this->assertInstanceOf("\phpgt\dom\HTMLCollection", $document->children);
 }
 
-/**
- * The type of the Nodes that are stored within an HTMLCollection should only
- * be derivatives of Element.
- */
-public function testElementType() {
+public function testNonElementsRemoved() {
+	$document = new HTMLDocument(TestHelper::HTML_MORE);
+	$bodyChildNodes = $document->body->childNodes;
+	$bodyChildren = $document->body->children;
 
+	$this->assertInstanceOf("\DOMNodeList", $bodyChildNodes);
+	$this->assertInstanceOf("\phpgt\dom\HTMLCollection", $bodyChildren);
+
+	$this->assertInstanceOf("\phpgt\dom\Text", $bodyChildNodes->item(0));
+	$this->assertInstanceOf("\phpgt\dom\Element", $bodyChildren->item(0));
 }
 
 }#
