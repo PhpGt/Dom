@@ -28,25 +28,4 @@ public function replaceWholeText(string $content) {
 	// TODO.
 }
 
-/**
- * Breaks the Textnode into two nodes at the specified offset, keeping both
- * nodes in the tree as siblings.
- *
- * After the split, the current node contains all the content up to the
- * specified offset point, and a newly created node of the same type contains
- * the remaining text. The newly created node is returned to the caller. If the
- * original node had a parent, the new node is inserted as the next sibling of
- * the original node. If the offset is equal to the length of the original
- * node, the newly created node has no data.
- *
- * Separated text nodes can be concatenated using the Node.normalize() method.
- *
- * @param int $offset Character offset to split at
- * @return Text The newly created Text Node, representing the second part of
- * the split
- */
-public function splitText(int $offset):Text {
-	// TODO.
-}
-
 }#
