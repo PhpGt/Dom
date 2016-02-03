@@ -1,6 +1,9 @@
 <?php
 namespace phpgt\dom;
 
+/**
+ * @property-read Element $documentElement
+ */
 class Document extends \DOMDocument {
 
 public function __construct() {
