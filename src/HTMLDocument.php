@@ -3,11 +3,10 @@ namespace phpgt\dom;
 
 /**
  * @property-read Element $body
- * @property-read HTMLCollection $children
  * @property-read Element $head
  */
 class HTMLDocument extends Document {
-use LivePropertyGetter;
+use LivePropertyGetter, ParentNode;
 
 public function __construct($html) {
 	parent::__construct();
@@ -28,10 +27,6 @@ private function prop_head():Element {
 
 private function prop_body():Element {
 	return $this->getOrCreateElement("body");
-}
-
-private function prop_children():HTMLCollection {
-	return $this->documentElement->children;
 }
 
 private function getOrCreateElement(string $tagName):Element {
