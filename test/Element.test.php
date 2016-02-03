@@ -16,4 +16,12 @@ public function testQuerySelector() {
 	$this->assertSame($a, $aWithinP);
 }
 
+public function testQuerySelectorAll() {
+	$document = new HTMLDocument(TestHelper::HTML_MORE);
+	$pCollection = $document->documentElement->querySelectorAll("p");
+	$pNodeList = $document->documentElement->getElementsByTagName("p");
+
+	$this->assertEquals($pNodeList->length, $pCollection->length);
+}
+
 }#
