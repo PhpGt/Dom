@@ -66,13 +66,6 @@ public function namedItem(string $name) {
 	return $namedElement;
 }
 
-public function __get($name) {
-	$methodName = "prop_$name";
-	if(method_exists($this, $methodName)) {
-		return $this->$methodName();
-	}
-}
-
 /**
  * Returns the number of Elements contained in this Collection. Exposed as the
  * $length property.
