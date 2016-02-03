@@ -26,18 +26,6 @@ public function __construct($html) {
 	$this->loadHTML($html);
 }
 
-/**
- * Adopts a node from an external document. The node and its subtree is removed
- * from the document it's in (if any), and its ownerDocument is changed to the
- * current document. The node can then be inserted into the current document.
- *
- * @param  Node $externalNode The node, outside of the document
- * @return Node The Node, within the current document
- */
-public function adoptNode(Node $externalNode):Node {
-	// TODO.
-}
-
 public function querySelector(string $selectors) {
 	return $this->documentElement->querySelector($selectors);
 }
