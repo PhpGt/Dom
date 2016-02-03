@@ -5,9 +5,13 @@ use DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
 /**
+ * ParentNode properties:
  * @property-read HTMLCollection $children
+ * @property-read Element $firstElementChild
+ * @property-read Element $lastElementChild
+ * @property-read int $childElementCount
  */
-class Element extends \DOMElement {
+class Element extends \DOMElement implements ParentNode {
 
 /**
  * Removes the object from the tree it belongs to.
@@ -44,8 +48,18 @@ public function __get($name) {
 	}
 }
 
-private function prop_children() {
+private function prop_children():HTMLCollection {
 	return new HTMLCollection($this->childNodes);
+}
+
+private function prop_firstElementChild() {
+	return $this->children->item(0);
+}
+private function prop_lastElementChild() {
+	return $this->children->item($this->children->length - 1);
+}
+private function prop_childElementCount() {
+
 }
 
 }#
