@@ -14,11 +14,29 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
 class Element extends \DOMElement implements ParentNode {
 
 /**
- * Removes the object from the tree it belongs to.
+ * Removes this ChildNode from the children list of its parent.
  * @return void
  */
 public function remove() {
 	$this->parentNode->removeChild($this);
+}
+
+/**
+ * Inserts a Node into the children list of this ChildNode's parent,
+ * just before this ChildNode.
+ * @return void
+ */
+public function before(Node $node) {
+	$this->parentNode->insertBefore($node, $this);
+}
+
+/**
+ * Inserts a Node into the children list of this ChildNode's parent,
+ * just after this ChildNode.
+ * @return void
+ */
+public function after(Node $node) {
+	$this->parentNode->insertBefore($node, $this->nextSibling);
 }
 
 public function querySelector(string $selector) {
@@ -59,7 +77,7 @@ private function prop_lastElementChild() {
 	return $this->children->item($this->children->length - 1);
 }
 private function prop_childElementCount() {
-
+	return $this->children->length;
 }
 
 }#
