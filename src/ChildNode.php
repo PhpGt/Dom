@@ -24,7 +24,7 @@ public function remove() {
  * just before this ChildNode.
  * @return void
  */
-public function before(Node $node) {
+public function before(\DOMNode $node) {
 	$this->parentNode->insertBefore($node, $this);
 }
 
@@ -33,7 +33,7 @@ public function before(Node $node) {
  * just after this ChildNode.
  * @return void
  */
-public function after(Node $node) {
+public function after(\DOMNode $node) {
 	$this->parentNode->insertBefore($node, $this->nextSibling);
 }
 
@@ -43,7 +43,7 @@ public function after(Node $node) {
  * @param Node $replacement
  * @return void
  */
-public function replaceWith(Node $replacement) {
+public function replaceWith(\DOMNode $replacement) {
 	$this->parentNode->insertBefore($replacement, $this);
 	$this->remove();
 }
