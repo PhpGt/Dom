@@ -27,7 +27,26 @@ public function querySelectorAll(string $selector):HTMLCollection {
  * @return bool True if this element is selectable by provided selector
  */
 public function matches(string $selector):bool {
-	// TODO. https://github.com/phpgt/dom/issues/7
+	$matches = $this->ownerDocument->querySelectorAll($selector);
+	$i = $matches->length;
+	while(--$i >= 0 && $matches->item($i) !== $this);
+
+	return ($i >= 0);
+}
+
+/**
+ * Returns a live HTMLCollection containing all child elements which have all
+ * of the given class names. When called on the document object, the complete
+ * document is searched, including the root node.
+ *
+ * @param string $names a string representing the list of class names to
+ *  match; class names are separated by whitespace
+ * @return HTMLCollection
+ */
+public function getElementsByClassName(string $names):HTMLCollection {
+	$namesArray = explode(" ", $names);
+	$dots = "." . implode(".", $namesArray);
+	return $this->css($dots);
 }
 
 private function css(string $selector):HTMLCollection {

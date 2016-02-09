@@ -34,6 +34,10 @@ public function querySelectorAll(string $selectors):HTMLCollection {
 	return $this->documentElement->querySelectorAll($selectors);
 }
 
+public function getElementsByClassName(string $names):HTMLCollection {
+	return $this->documentElement->getElementsByClassName($names);
+}
+
 private function prop_head():Element {
 	return $this->getOrCreateElement("head");
 }
