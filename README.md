@@ -21,7 +21,7 @@ Performing DOM manipulation in your server-side code enhances the way dynamic pa
 
 Consider a page with a form, with an input element to enter your name. When the form is submitted, the page should greet you by your name.
 
-This is a simple example of how source HTML files can be treated as templates.This can easily be applied to more advanced template pages to provide dynamic content, without requiring non-standard techniques such as `{{curly braces}}` for placeholders, or `echo "<div>$content</div>"` horrible HTML construction from within PHP.
+This is a simple example of how source HTML files can be treated as templates.This can easily be applied to more advanced template pages to provide dynamic content, without requiring non-standard techniques such as `{{curly braces}}` for placeholders, or `echo '<div class='easy-mistake'>' . $content['opa'] . '</div>'` horrible HTML construction from within PHP.
 
 ### Source HTML:
 
