@@ -37,4 +37,21 @@ public function testAfter() {
 	$this->assertSame($h2, $div->previousSibling);
 }
 
+public function testReplaceWith() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$h2 = $document->getElementsByTagName("h2")->item(0);
+
+	$beforeH2 = $h2->previousSibling;
+	$afterH2 = $h2->nextSibling;
+
+	$div = $document->createElement("div");
+	$h2->replaceWith($div);
+
+	$this->assertSame($div, $beforeH2->nextSibling);
+	$this->assertSame($beforeH2, $div->previousSibling);
+	$this->assertSame($div, $afterH2->previousSibling);
+	$this->assertSame($afterH2, $div->nextSibling);
+
+	$this->assertNull($h2->parentNode);
+}
 }#
