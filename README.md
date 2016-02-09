@@ -23,7 +23,7 @@ Consider a page with a form, with an input element to enter your name. When the 
 
 This is a simple example of how source HTML files can be treated as templates.This can easily be applied to more advanced template pages to provide dynamic content, without requiring non-standard techniques such as `{{curly braces}}` for placeholders, or `echo "<div>$content</div>"` horrible HTML construction from within PHP.
 
-Source HTML:
+### Source HTML:
 
 ```html
 <!doctype html>
@@ -38,7 +38,7 @@ Source HTML:
 </form>
 ```
 
-PHP used to inject your name:
+### PHP used to inject your name:
 
 ```php
 <?php
