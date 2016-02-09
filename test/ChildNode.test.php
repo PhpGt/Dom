@@ -26,4 +26,15 @@ public function testBefore() {
 	$this->assertSame($h2, $div->nextSibling);
 }
 
+public function testAfter() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$h2 = $document->getElementsByTagName("h2")->item(0);
+
+	$div = $document->createElement("div");
+	$h2->after($div);
+
+	$this->assertSame($div, $h2->nextSibling);
+	$this->assertSame($h2, $div->previousSibling);
+}
+
 }#
