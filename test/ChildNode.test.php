@@ -38,4 +38,15 @@ public function testReplaceWith() {
 	$this->assertSame($newElement, $currentBefore->nextSibling);
 }
 
+public function testReplaceWithInSameDocument() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$h2 = $document->getElementById("who");
+	$beforeH2 = $h2->previousSibling;
+	$h1 = $document->firstChild;
+
+	$h2->replaceWith($h1);
+	$this->assertSame($h1, $beforeH2->nextSibling);
+	$this->assertNotSame($h1, $document->firstChild);
+}
+
 }#
