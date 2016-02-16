@@ -1,6 +1,8 @@
 <?php
 namespace phpgt\dom;
 
+use \DOMNode;
+
 /**
  * Contains methods that are particular to Node objects that can have a parent.
  *
@@ -24,8 +26,8 @@ public function remove() {
  * just before this ChildNode.
  * @return void
  */
-public function before(Node $node) {
-	$this->parentNode->insertBefore($node, $this);
+public function before(DOMNode $element) {
+	$this->parentNode->insertBefore($element, $this);
 }
 
 /**
@@ -33,8 +35,8 @@ public function before(Node $node) {
  * just after this ChildNode.
  * @return void
  */
-public function after(Node $node) {
-	$this->parentNode->insertBefore($node, $this->nextSibling);
+public function after(DOMNode $element) {
+	$this->parentNode->insertBefore($element, $this->nextSibling);
 }
 
 /**
@@ -43,7 +45,7 @@ public function after(Node $node) {
  * @param Node $replacement
  * @return void
  */
-public function replaceWith(Node $replacement) {
+public function replaceWith(DOMNode $replacement) {
 	$this->parentNode->insertBefore($replacement, $this);
 	$this->remove();
 }
