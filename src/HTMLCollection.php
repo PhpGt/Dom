@@ -13,6 +13,7 @@ use ArrayAccess;
  * @property-read int $length Number of Element nodes in this collection
  */
 class HTMLCollection implements Iterator, ArrayAccess {
+use LivePropertyGetter;
 
 private $domNodeList;
 private $key = 0;
@@ -64,13 +65,6 @@ public function namedItem(string $name) {
 	}
 
 	return $namedElement;
-}
-
-public function __get($name) {
-	$methodName = "prop_$name";
-	if(method_exists($this, $methodName)) {
-		return $this->$methodName();
-	}
 }
 
 /**

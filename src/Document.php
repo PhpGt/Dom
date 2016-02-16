@@ -2,7 +2,9 @@
 namespace phpgt\dom;
 
 /**
- * @property-read Element $documentElement
+ * Represents any web page loaded in the browser and serves as an entry point
+ * into the web page's content, the DOM tree (including elements such as
+ * <body> or <table>).
  */
 class Document extends \DOMDocument {
 use LivePropertyGetter, ParentNode;

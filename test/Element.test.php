@@ -24,4 +24,17 @@ public function testQuerySelectorAll() {
 	$this->assertEquals($pNodeList->length, $pCollection->length);
 }
 
+public function testMatches() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$p = $document->getElementsByClassName("plug")->item(0);
+
+	$this->assertTrue($p->matches("p"));
+	$this->assertTrue($p->matches("p.plug"));
+	$this->assertTrue($p->matches("body>p:nth-of-type(3)"));
+	$this->assertTrue($p->matches("p:nth-of-type(3)"));
+	$this->assertTrue($p->matches("body>*"));
+	$this->assertFalse($p->matches("div"));
+	$this->assertFalse($p->matches("body>p:nth-of-type(4)"));
+}
+
 }#
