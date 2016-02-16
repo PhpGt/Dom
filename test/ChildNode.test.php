@@ -15,4 +15,16 @@ public function testBefore() {
 	$this->assertSame($newElement, $currentBefore->nextSibling);
 }
 
+public function testAfter() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$element = $document->getElementById("who");
+	$currentAfter = $element->nextSibling;
+
+	$newElement = $document->createElement("div");
+	$element->after($newElement);
+
+	$this->assertSame($newElement, $element->nextSibling);
+	$this->assertSame($newElement, $currentAfter->previousSibling);
+}
+
 }#
