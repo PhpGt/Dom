@@ -27,4 +27,15 @@ public function testAfter() {
 	$this->assertSame($newElement, $currentAfter->previousSibling);
 }
 
+public function testReplaceWith() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$element = $document->getElementById("who");
+	$currentBefore = $element->previousSibling;
+
+	$newElement = $document->createElement("div");
+	$element->replaceWith($newElement);
+
+	$this->assertSame($newElement, $currentBefore->nextSibling);
+}
+
 }#
