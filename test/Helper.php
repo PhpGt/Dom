@@ -16,7 +16,7 @@ const HTML_MORE = <<<HTML
 	<p>There are a few elements in this document.</p>
 	<p>This is so we can test different traversal methods.</p>
 	<p class="plug">This package is a part of the phpgt webengine.</p>
-	<h2>Who made this?</h2>
+	<h2 id="who">Who made this?</h2>
 	<p>
 		<a href="https://twitter.com/g105b">Greg Bowler</a> started this project
 		to bring modern DOM techniques to the server side.
