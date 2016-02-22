@@ -1,5 +1,5 @@
 # phpgt dom
-The modern DOM API for PHP7 projects
+The modern DOM API for PHP 7 projects
 
 ***
 
