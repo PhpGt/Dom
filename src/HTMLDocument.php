@@ -38,31 +38,35 @@ public function getElementsByClassName(string $names):HTMLCollection {
 	return $this->documentElement->getElementsByClassName($names);
 }
 
-private function prop_head():Element {
+private function prop_get_head():Element {
 	return $this->getOrCreateElement("head");
 }
 
-private function prop_body():Element {
+private function prop_get_body():Element {
 	return $this->getOrCreateElement("body");
 }
 
-private function prop_forms() {
+private function prop_get_forms() {
 	return $this->getElementsByTagName("form");
 }
 
-private function prop_anchors() {
+private function prop_get_anchors() {
 	return $this->querySelectorAll("a[name]:not(a[name=''])");
 }
 
-private function prop_images() {
+private function prop_get_images() {
 	return $this->getElementsByTagName("img");
 }
 
-private function prop_links() {
+private function prop_get_links() {
 	return $this->querySelectorAll("a[href]:not(a[href=''])");
 }
 
-private function prop_title() {
+private function prop_get_title() {
+
+}
+
+private function prop_set_title() {
 
 }
 

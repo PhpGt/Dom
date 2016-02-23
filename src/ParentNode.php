@@ -22,19 +22,19 @@ namespace phpgt\dom;
  */
 trait ParentNode {
 
-private function prop_children():HTMLCollection {
+private function prop_get_children():HTMLCollection {
 	return new HTMLCollection($this->childNodes);
 }
 
-private function prop_firstElementChild() {
+private function prop_get_firstElementChild() {
 	return $this->children->item(0);
 }
 
-private function prop_lastElementChild() {
+private function prop_get_lastElementChild() {
 	return $this->children->item($this->children->length - 1);
 }
 
-private function prop_childElementCount() {
+private function prop_get_childElementCount() {
 	return $this->children->length;
 }
 

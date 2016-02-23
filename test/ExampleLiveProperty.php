@@ -12,7 +12,7 @@ public function __get($name) {
 	return $this->__get_live($name);
 }
 
-private function prop_example() {
+private function prop_get_example() {
 	return "from prop_example";
 }
 

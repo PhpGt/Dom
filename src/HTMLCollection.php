@@ -73,7 +73,7 @@ public function namedItem(string $name) {
  *
  * @return int Number of Elements
  */
-private function prop_length():int {
+private function prop_get_length():int {
 	$length = 0;
 	foreach($this as $element) {
 		$length++;

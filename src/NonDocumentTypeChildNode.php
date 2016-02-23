@@ -20,11 +20,11 @@ namespace phpgt\dom;
  */
 trait NonDocumentTypeChildNode {
 
-private function prop_previousElementSibling() {
+private function prop_get_previousElementSibling() {
 
 }
 
-private function prop_nextElementSibling() {
+private function prop_get_nextElementSibling() {
 
 }
 

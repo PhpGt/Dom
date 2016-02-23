@@ -35,7 +35,7 @@ private function tok() {
 	$this->tokenArray = explode(" ", $attributeValue);
 }
 
-private function prop_length() {
+private function prop_get_length() {
 	$this->tok();
 	return count($this->tokenArray);
 }
