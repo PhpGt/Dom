@@ -46,6 +46,10 @@ private function prop_body():Element {
 	return $this->getOrCreateElement("body");
 }
 
+private function prop_forms() {
+	return $this->getElementsByTagName("form");
+}
+
 private function getOrCreateElement(string $tagName):Element {
 	$element = $this->documentElement->querySelector($tagName);
 	if(is_null($element)) {
