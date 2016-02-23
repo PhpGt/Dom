@@ -54,6 +54,10 @@ private function prop_anchors() {
 	return $this->querySelectorAll("a[name]:not(a[name=''])");
 }
 
+private function prop_images() {
+	return $this->getElementsByTagName("img");
+}
+
 private function getOrCreateElement(string $tagName):Element {
 	$element = $this->documentElement->querySelector($tagName);
 	if(is_null($element)) {
