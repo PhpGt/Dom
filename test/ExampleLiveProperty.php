@@ -1,8 +1,8 @@
 <?php
 namespace phpgt\dom;
 
-class ExampleLivePropertyGetter {
-use LivePropertyGetter;
+class ExampleLiveProperty {
+use LiveProperty;
 
 public function __get($name) {
 	if($name === "overload") {

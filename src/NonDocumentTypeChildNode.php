@@ -5,7 +5,7 @@ namespace phpgt\dom;
  * Contains methods that are particular to Node objects that can have a parent,
  * but not suitable for DocumentType.
  *
- * This trait can only be used in a class that is a trait of LivePropertyGetter.
+ * This trait can only be used in a class that is a trait of LiveProperty.
  *
  * This trait is used by the following classes:
  *  - Element

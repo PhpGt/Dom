@@ -8,7 +8,7 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  * Represents an object of a Document.
  */
 class Element extends \DOMElement {
-use LivePropertyGetter, NonDocumentTypeChildNode, ChildNode, ParentNode;
+use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
 public function querySelector(string $selector) {
 	$htmlCollection = $this->css($selector);

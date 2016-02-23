@@ -7,7 +7,7 @@ namespace phpgt\dom;
  * <body> or <table>).
  */
 class Document extends \DOMDocument {
-use LivePropertyGetter, ParentNode;
+use LiveProperty, ParentNode;
 
 public function __construct() {
 	parent::__construct("1.0", "utf-8");

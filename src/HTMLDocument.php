@@ -19,7 +19,7 @@ namespace phpgt\dom;
  * @property string $title The title of the document, defined using <title>.
  */
 class HTMLDocument extends Document {
-use LivePropertyGetter, ParentNode;
+use LiveProperty, ParentNode;
 
 public function __construct($html) {
 	parent::__construct();
@@ -60,6 +60,10 @@ private function prop_images() {
 
 private function prop_links() {
 	return $this->querySelectorAll("a[href]:not(a[href=''])");
+}
+
+private function prop_title() {
+
 }
 
 private function getOrCreateElement(string $tagName):Element {

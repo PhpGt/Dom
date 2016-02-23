@@ -19,6 +19,6 @@ namespace phpgt\dom;
  * Document::createDocumentFragment() method or the constructor.
  */
 class DocumentFragment extends \DOMDocumentFragment {
-use LivePropertyGetter, ParentNode;
+use LiveProperty, ParentNode;
 
 }#

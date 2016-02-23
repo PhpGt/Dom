@@ -13,7 +13,7 @@ namespace phpgt\dom;
  * @property-read int $length
  */
 class TokenList {
-use LivePropertyGetter;
+use LiveProperty;
 
 private $element;
 private $attributeName;

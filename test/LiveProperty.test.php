@@ -1,10 +1,10 @@
 <?php
 namespace phpgt\dom;
 
-class LivePropertyGetterTest extends \PHPUnit_Framework_TestCase {
+class LivePropertyTest extends \PHPUnit_Framework_TestCase {
 
 /**
- * This assertion shows that because of the LivePropertyGetter trait,
+ * This assertion shows that because of the LiveProperty trait,
  * the non-existent attribute "children" is in fact callable, because of the
  * prop_children function.
  */
@@ -19,8 +19,8 @@ public function testLiveProperty() {
  * compatible with the trait's.
  */
 public function testGetterOnClass() {
-	require "ExampleLivePropertyGetter.php";
-	$t = new ExampleLivePropertyGetter();
+	require "ExampleLiveProperty.php";
+	$t = new ExampleLiveProperty();
 	$this->assertEquals("from __get overload", $t->overload);
 	$this->assertEquals("from prop_example", $t->example);
 }
