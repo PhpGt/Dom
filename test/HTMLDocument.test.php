@@ -89,4 +89,14 @@ public function testAnchorsPropertyWhenAnchors() {
 	$this->assertEquals(2, $documentWith->anchors->length);
 }
 
+public function testImagesPropertyWhenNoImages() {
+	$documentWithout = new HTMLDocument(test\Helper::HTML);
+	$this->assertEquals(0, $documentWithout->images->length);
+}
+
+public function testImagesPropertyWhenImages() {
+	$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
+	$this->assertEquals(2, $documentWith->images->length);
+}
+
 }#

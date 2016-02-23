@@ -16,6 +16,7 @@ const HTML_MORE = <<<HTML
 		This <a href="https://en.wikipedia.org/wiki/HTML">HTML</a>
 		is for the unit test.
 	</h1>
+	<img src="header.jpg" />
 	<a name="firstParagraph"></a>
 	<p>There are a few elements in this document.</p>
 	<p>This is so we can test different traversal methods.</p>
@@ -32,6 +33,7 @@ const HTML_MORE = <<<HTML
 	</form>
 	<form>
 		<input name="fieldB" type="text">
+		<img src="bottomForm.jpg" />
 	</form>
 </body>
 HTML;
