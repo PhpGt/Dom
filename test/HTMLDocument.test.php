@@ -85,7 +85,7 @@ public function testAnchorsPropertyWhenNoAnchors() {
 public function testAnchorsPropertyWhenAnchors() {
 	$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
 	// There are actually 3 "a" elements, but only two are anchors - the
-	// other one is a link.
+	// other is a link.
 	$this->assertEquals(2, $documentWith->anchors->length);
 }
 
@@ -97,6 +97,16 @@ public function testImagesPropertyWhenNoImages() {
 public function testImagesPropertyWhenImages() {
 	$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
 	$this->assertEquals(2, $documentWith->images->length);
+}
+
+public function testLinksPropertyWhenNoLinks() {
+	$documentWithout = new HTMLDocument(test\Helper::HTML);
+	$this->assertEquals(0, $documentWithout->links->length);
+}
+
+public function testLinksPropertyWhenLinks() {
+	$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
+	$this->assertEquals(1, $documentWith->links->length);
 }
 
 }#

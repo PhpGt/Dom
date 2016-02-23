@@ -13,8 +13,7 @@ const HTML_MORE = <<<HTML
 </head>
 <body>
 	<h1>
-		This <a href="https://en.wikipedia.org/wiki/HTML">HTML</a>
-		is for the unit test.
+		This HTML is for the unit test.
 	</h1>
 	<img src="header.jpg" />
 	<a name="firstParagraph"></a>
