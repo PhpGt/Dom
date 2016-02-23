@@ -20,14 +20,4 @@ public function testNonElementsRemoved() {
 	$this->assertInstanceOf("\phpgt\dom\Element", $bodyChildren->item(0));
 }
 
-public function testFormsPropertyWhenNoForms() {
-	$documentWithout = new HTMLDocument(test\Helper::HTML);
-	$this->assertEquals(0, $documentWithout->forms->length);
-}
-
-public function testFormsPropertyWhenForms() {
-	$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
-	$this->assertEquals(2, $documentWith->forms->length);
-}
-
 }#

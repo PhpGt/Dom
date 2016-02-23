@@ -1,7 +1,7 @@
 <?php
 namespace phpgt\dom;
 
-class DocumentTest extends \PHPUnit_Framework_TestCase {
+class HTMLDocumentTest extends \PHPUnit_Framework_TestCase {
 
 public function testInheritance() {
 	$document = new HTMLDocument(test\Helper::HTML);
@@ -63,6 +63,18 @@ public function testBodyElementAutomaticallyCreated() {
 	// test\Helper::HTML does not explicitly define a <body>
 	$document = new HTMLDocument(test\Helper::HTML);
 	$this->assertInstanceOf("\phpgt\dom\Element", $document->body);
+}
+
+// Test live properties:
+
+public function testFormsPropertyWhenNoForms() {
+	$documentWithout = new HTMLDocument(test\Helper::HTML);
+	$this->assertEquals(0, $documentWithout->forms->length);
+}
+
+public function testFormsPropertyWhenForms() {
+	$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
+	$this->assertEquals(2, $documentWith->forms->length);
 }
 
 }#
