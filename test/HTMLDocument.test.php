@@ -109,15 +109,15 @@ public function testLinksPropertyWhenLinks() {
 	$this->assertEquals(1, $documentWith->links->length);
 }
 
-public function testTitleGetterSetter() {
-	$document = new HTMLDocument(test\Helper::HTML_MORE);
-	$this->assertEquals("Test HTML", $document->title);
+// public function testTitleGetterSetter() {
+// 	$document = new HTMLDocument(test\Helper::HTML_MORE);
+// 	$this->assertEquals("Test HTML", $document->title);
 
-	$newTitle = $document->title . " (New Title)";
-	$document->title = $newTitle;
+// 	$newTitle = $document->title . " (New Title)";
+// 	$document->title = $newTitle;
 
-	$this->assertEquals($newTitle, $document->title);
-}
+// 	$this->assertEquals($newTitle, $document->title);
+// }
 
 public function testTitleWhenNoTitle() {
 	$document = new HTMLDocument(test\Helper::HTML);

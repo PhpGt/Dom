@@ -63,11 +63,25 @@ private function prop_get_links() {
 }
 
 private function prop_get_title() {
+	$title = $this->head->getElementsByTagName("title")->item(0);
 
+	if(is_null($title)) {
+		return "";
+	}
+	else {
+		return $title->textContent;
+	}
 }
 
-private function prop_set_title() {
+private function prop_set_title($value) {
+	$title = $this->head->getElementsByTagName("title")->item(0);
 
+	if(is_null($title)) {
+		$title = $this->createElement("title");
+		$this->head->appendChild($title);
+	}
+
+	$title->textContent = $value;
 }
 
 private function getOrCreateElement(string $tagName):Element {
