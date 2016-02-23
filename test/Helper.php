@@ -21,6 +21,13 @@ const HTML_MORE = <<<HTML
 		<a href="https://twitter.com/g105b">Greg Bowler</a> started this project
 		to bring modern DOM techniques to the server side.
 	</p>
+	<form>
+		<input name="fieldA" type="text">
+		<button type="submit">Submit</button>
+	</form>
+	<form>
+		<input name="fieldB" type="text">
+	</form>
 </body>
 HTML;
 
