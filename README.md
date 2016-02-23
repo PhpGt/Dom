@@ -4,13 +4,13 @@ The modern DOM API for PHP 7 projects
 ***
 
 <a href="https://circleci.com/gh/phpgt/dom" target="_blank">
-    <img src="https://img.shields.io/circleci/project/phpgt/dom.svg?style=flat-square" alt="Build status" />
+    <img src="https://img.shields.io/circleci/project/phpgt/dom/master.svg?style=flat-square" alt="Build status" />
 </a>
 <a href="https://scrutinizer-ci.com/g/phpgt/dom" target="_blank">
-    <img src="https://img.shields.io/scrutinizer/g/phpgt/dom.svg?style=flat-square" alt="Code quality" />
+    <img src="https://img.shields.io/scrutinizer/g/phpgt/dom/master.svg?style=flat-square" alt="Code quality" />
 </a>
 <a href="https://scrutinizer-ci.com/g/phpgt/dom" target="_blank">
-    <img src="https://img.shields.io/scrutinizer/coverage/g/phpgt/dom.svg?style=flat-square" alt="Code coverage" />
+    <img src="https://img.shields.io/scrutinizer/coverage/g/phpgt/dom/master.svg?style=flat-square" alt="Code coverage" />
 </a>
 
 Built on top of PHP's native [DOMDocument](http://php.net/manual/en/book.dom.php), this project provides access to modern DOM APIs, as you would expect working with client-side code in the browser.
