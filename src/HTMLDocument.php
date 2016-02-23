@@ -58,6 +58,10 @@ private function prop_images() {
 	return $this->getElementsByTagName("img");
 }
 
+private function prop_links() {
+	return $this->querySelectorAll("a[href]:not(a[href=''])");
+}
+
 private function getOrCreateElement(string $tagName):Element {
 	$element = $this->documentElement->querySelector($tagName);
 	if(is_null($element)) {
