@@ -86,7 +86,7 @@ public function testAnchorsPropertyWhenAnchors() {
 	$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
 	// There are actually 3 "a" elements, but only two are anchors - the
 	// other one is a link.
-	$this->assertEquals(2, $documentWith->anchors->with);
+	$this->assertEquals(2, $documentWith->anchors->length);
 }
 
 }#
