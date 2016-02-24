@@ -26,6 +26,9 @@ const HTML_MORE = <<<HTML
 		to bring modern DOM techniques to the server side.
 	</p>
 	<a name="forms"></a>
+
+	Here's some text that isn't contained within an element.
+
 	<form>
 		<input name="fieldA" type="text">
 		<button type="submit">Submit</button>

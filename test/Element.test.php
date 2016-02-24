@@ -37,4 +37,17 @@ public function testMatches() {
 	$this->assertFalse($p->matches("body>p:nth-of-type(4)"));
 }
 
+public function testChildElementCount() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	// There is 1 text node within the document.
+	$this->assertGreaterThan(
+		$document->body->childElementCount,
+		$document->body->childNodes->length
+	);
+	$this->assertEquals(
+		$document->body->children->length,
+		$document->body->childElementCount
+	);
+}
+
 }#
