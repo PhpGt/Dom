@@ -3,6 +3,9 @@ The modern DOM API for PHP 7 projects
 
 ***
 
+<a href="https://gitter.im/phpgt/dom" target="_blank">
+    <img src="https://img.shields.io/gitter/room/phpgt/dom.svg?style=flat-square" alt="Gitter chat" />
+</a>
 <a href="https://circleci.com/gh/phpgt/dom" target="_blank">
     <img src="https://img.shields.io/circleci/project/phpgt/dom/master.svg?style=flat-square" alt="Build status" />
 </a>
