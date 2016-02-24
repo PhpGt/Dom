@@ -5,3 +5,7 @@ machine:
 test:
   override:
     - vendor/bin/phpunit
+
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/22c9d06e726e91ddc7c5
