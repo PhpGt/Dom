@@ -1,4 +1,6 @@
 # phpgt dom
+
+[![Join the chat at https://gitter.im/phpgt/dom](https://badges.gitter.im/phpgt/dom.svg)](https://gitter.im/phpgt/dom?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 The modern DOM API for PHP 7 projects
 
 ***
