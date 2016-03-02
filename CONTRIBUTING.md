@@ -5,7 +5,7 @@ If you're reading this, it's likely that you are interested in contributing to t
 
 Before you contribute, please be aware of the following:
 
-+ Code of conduct.
++ [Code of conduct](#code-of-conduct).
 + Do you have a question or problem?
 + Have you found an issue?
 + Do you want a new feature or improvement?
