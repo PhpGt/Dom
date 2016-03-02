@@ -6,11 +6,11 @@ If you're reading this, it's likely that you are interested in contributing to t
 Before you contribute, please be aware of the following:
 
 + [Code of conduct](#code-of-conduct).
-+ Do you have a question or problem?
-+ Have you found an issue?
-+ Do you want a new feature or improvement?
-+ Have you found an error with the documentation?
-+ How to submit a pull request.
++ [Do you have a question or problem?](#do-you-have-a-question-or-problem)
++ [Have you found an issue?](#have-you-found-an-issue)
++ [Do you want a new feature or improvement?](#do-you-want-a-new-feature-or-improvement)
++ [Have you found an error with the documentation?](#have-you-found-an-error-with-the-documentation)
++ [How to submit a pull request.](#how-to-submit-a-pull-request)
 
 Code of conduct
 ---------------
