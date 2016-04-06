@@ -15,6 +15,9 @@ The modern DOM API for PHP 7 projects
 <a href="https://scrutinizer-ci.com/g/phpgt/dom" target="_blank">
     <img src="https://img.shields.io/scrutinizer/coverage/g/phpgt/dom/master.svg?style=flat-square" alt="Code coverage" />
 </a>
+<a href="https://packagist.org/packages/phpgt/dom" target="_blank">
+    <img src="https://img.shields.io/packagist/v/phpgt/dom.svg" alt="Current version" />
+</a>
 
 Built on top of PHP's native [DOMDocument](http://php.net/manual/en/book.dom.php), this project provides access to modern DOM APIs, as you would expect working with client-side code in the browser.
 
