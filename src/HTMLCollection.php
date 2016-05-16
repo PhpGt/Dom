@@ -82,6 +82,10 @@ private function prop_get_length():int {
 	return $length;
 }
 
+public function count():int {
+    return $this->length;
+}
+
 // Iterator implementation /////////////////////////////////////////////////////
 
 public function current():Element {
