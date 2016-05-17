@@ -22,9 +22,9 @@ public function testNonElementsRemoved() {
 
 public function testCountMethod() {
     $document = new HTMLDocument(test\Helper::HTML_MORE);
-    $children = $document->body->children;
+    $childrenCount = count($document->body->children);
     // must have 11 childrens
-    $this->assertEquals(11, $children->count());
+    $this->assertEquals(11, $childrenCount);
 }
 
 }#
