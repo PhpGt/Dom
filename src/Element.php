@@ -48,10 +48,20 @@ public function getElementsByClassName(string $names):HTMLCollection {
 	$dots = "." . implode(".", $namesArray);
 	return $this->css($dots);
 }
+/**
+ * Returns the closest ancestor of the current element (or itself)
+ * which matches the selectors.
+ * @param string $selectors css selectors
+ * @return Element|null
+ */
+public function closest(string $selectors) {
+    $collection = $this->css($selectors, 'ancestor-or-self::');
+    return $collection->item(0);
+}
 
-private function css(string $selector):HTMLCollection {
+private function css(string $selector,  string $prefix = 'descendant-or-self::'):HTMLCollection {
 	$converter = new CssSelectorConverter();
-	$xPathSelector = $converter->toXPath($selector);
+	$xPathSelector = $converter->toXPath($selector, $prefix);
 	return $this->xPath($xPathSelector);
 }
 
