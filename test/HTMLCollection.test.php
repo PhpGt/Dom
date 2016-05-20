@@ -41,4 +41,11 @@ public function testArrayAccessImplementation() {
 
 }
 
+public function testCountMethod() {
+    $document = new HTMLDocument(test\Helper::HTML_MORE);
+    $childrenCount = count($document->body->children);
+    // must have 11 childrens
+    $this->assertEquals(11, $childrenCount);
+}
+
 }#
