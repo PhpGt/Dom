@@ -113,13 +113,22 @@ private function incrementKeyToNextElement() {
 	}
 }
 
-// ArrayAccess implementation //////////////////////////////////////////////////
+/**
+ * Offset exists?
+ * @param integer $offset offset number
+ * @return boolean
+ */
 public function offsetExists($offset):bool {
-
+    return isset($offset, $this->domNodeList);
 }
 
+/**
+ * Returns the element in the offset position
+ * @param integer $offset offset number
+ * @return phpgt\dom\Element
+ */
 public function offsetGet($offset):Element {
-
+    return $this->item($offset);
 }
 
 public function offsetSet($offset, $value) {
