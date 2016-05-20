@@ -21,9 +21,13 @@ namespace phpgt\dom;
 class HTMLDocument extends Document {
 use LiveProperty, ParentNode;
 
-public function __construct($html) {
+public function __construct($document) {
 	parent::__construct();
-	$this->loadHTML($html);
+    if ($document instanceof \DOMDocument) {
+        $this->appendChild($this->importNode($document->documentElement, true));
+        return;
+    }
+    $this->loadHTML($document);
 }
 
 public function querySelector(string $selectors) {

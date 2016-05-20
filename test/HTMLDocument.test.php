@@ -3,6 +3,29 @@ namespace phpgt\dom;
 
 class HTMLDocumentTest extends \PHPUnit_Framework_TestCase {
 
+public function testConstruction()
+{
+    // test construction from raw HTML
+    $fromRawHTML = new HTMLDocument(test\Helper::HTML);
+    $this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromRawHTML);
+
+    // test construction from a DOMDocument object
+    $domDocument = (new \DOMDocument('1.0', 'UTF-8'))
+        ->loadHTML(test\Helper::HTML);
+    $fromDOMDocument = new HTMLDocument($domDocument);
+    $this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromDOMDocument);
+
+    // test construction from a HTMLDocument object, just to be sure
+    $fromHTMLDocument = new HTMLDocument($fromRawHTML);
+    $this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromHTMLDocument);
+
+    // test if elements are consistent
+    $h2FromRawHTML = $fromRawHTML->querySelector('h2');
+    $h2FromDOMDocument = $fromDOMDocument->querySelector('h2');
+    $this->assertSame($h2FromRawHTML, $h2FromDOMDocument);
+
+}
+
 public function testInheritance() {
 	$document = new HTMLDocument(test\Helper::HTML);
 	$this->assertInstanceOf("phpgt\dom\Element", $document->documentElement);
