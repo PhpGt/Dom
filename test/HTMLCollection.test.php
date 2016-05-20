@@ -20,4 +20,11 @@ public function testNonElementsRemoved() {
 	$this->assertInstanceOf("\phpgt\dom\Element", $bodyChildren->item(0));
 }
 
+public function testCountMethod() {
+    $document = new HTMLDocument(test\Helper::HTML_MORE);
+    $childrenCount = count($document->body->children);
+    // must have 11 childrens
+    $this->assertEquals(11, $childrenCount);
+}
+
 }#

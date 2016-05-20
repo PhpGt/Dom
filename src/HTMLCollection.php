@@ -3,6 +3,7 @@ namespace phpgt\dom;
 
 use Iterator;
 use ArrayAccess;
+use Countable;
 
 /**
  * Represents a Node list that can only contain Element nodes. Internally,
@@ -12,7 +13,7 @@ use ArrayAccess;
  *
  * @property-read int $length Number of Element nodes in this collection
  */
-class HTMLCollection implements Iterator, ArrayAccess {
+class HTMLCollection implements Iterator, ArrayAccess, Countable {
 use LiveProperty;
 
 private $domNodeList;
@@ -80,6 +81,10 @@ private function prop_get_length():int {
 	}
 
 	return $length;
+}
+
+public function count():int {
+    return $this->length;
 }
 
 // Iterator implementation /////////////////////////////////////////////////////
