@@ -56,10 +56,10 @@ public function getElementsByClassName(string $names):HTMLCollection {
  */
 public function closest(string $selectors) {
     $collection = $this->css($selectors, 'ancestor-or-self::');
-    return $collection->item(0);
+    return $collection->item(count($collection) - 1);
 }
 
-private function css(string $selector,  string $prefix = 'descendant-or-self::'):HTMLCollection {
+private function css(string $selector, string $prefix = 'descendant-or-self::'):HTMLCollection {
 	$converter = new CssSelectorConverter();
 	$xPathSelector = $converter->toXPath($selector, $prefix);
 	return $this->xPath($xPathSelector);

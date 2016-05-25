@@ -40,4 +40,41 @@ const HTML_MORE = <<<HTML
 </body>
 HTML;
 
+const HTML_NESTED = <<<HTML
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Test HTML</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">Lorem Header</div>
+        <div class="body">
+            <h1>Lorem Page</h1>
+            <ul class="outer-list">
+                <li class="outer-item-1">
+                    <div class="post">
+                        <h1>Lorem Title</h1>
+                        <div class="body">
+                            <p>Lorem Ipsum <a href="http://example.com">dolor sit</a></p>
+                        </div>
+                        <ul class="inner-list">
+                            <li class="inner-item-1">
+                                <div class="post">
+                                    <h1>Lorem Title</h1>
+                                    <div class="body">
+                                        <p>Curabitur finibus imperdiet felis <a href="http://anotherexample.com">dolor sit</a></p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+HTML;
+
 }#
