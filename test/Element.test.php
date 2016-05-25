@@ -51,32 +51,26 @@ public function testChildElementCount() {
 }
 
 public function testElementClosest() {
-    $document = new HTMLDocument(test\Helper::HTML_MORE);
+    $document = new HTMLDocument(test\Helper::HTML_NESTED);
 
-    $p = $document->querySelector('h2+p');
+    $p = $document->querySelector('.inner-list p');
     // test if p is an element
     $this->assertInstanceOf('\phpgt\dom\Element', $p);
 
-    $a = $document->querySelector('h2+p > a');
-    // test if a is an element
-    $this->assertInstanceOf('\phpgt\dom\Element', $a);
+    $innerList = $document->querySelector('.inner-list');
+    // test if .inner-list is an element
+    $this->assertInstanceOf('\phpgt\dom\Element', $innerList);
 
-    $itself = $a->closest('a');
-    // test if the closest element is a itself
-    $this->assertEquals($a, $itself);
+    $closestUl = $innerList->closest('ul');
+    // test if the closest element is .inner-list
+    $this->assertEquals($innerList, $closestUl);
 
     // test something far just to be sure
-    $body = $a->closest('body');
-    $this->assertEquals($body, $document->body);
-
-    $closestElement = $a->closest('p');
-    // test if closest is a valid element
-    $this->assertInstanceOf('\phpgt\dom\Element', $closestElement);
-    // test if the closest element is p
-    $this->assertEquals($p, $closestElement);
+    $container = $p->closest('.container');
+    $this->assertInstanceOf('\phpgt\dom\Element', $container);
 
     // test if closest is returning null for unknown element
-    $nonExistentClosestElement = $a->closest('br');
+    $nonExistentClosestElement = $p->closest('br');
     $this->assertNull($nonExistentClosestElement);
 }
 
