@@ -54,14 +54,14 @@ const HTML_NESTED = <<<HTML
             <h1>Lorem Page</h1>
             <ul class="outer-list">
                 <li class="outer-item-1">
-                    <div class="post">
+                    <div class="post outer">
                         <h1>Lorem Title</h1>
                         <div class="body">
                             <p>Lorem Ipsum <a href="http://example.com">dolor sit</a></p>
                         </div>
                         <ul class="inner-list">
                             <li class="inner-item-1">
-                                <div class="post">
+                                <div class="post inner">
                                     <h1>Lorem Title</h1>
                                     <div class="body">
                                         <p>Curabitur finibus imperdiet felis <a href="http://anotherexample.com">dolor sit</a></p>

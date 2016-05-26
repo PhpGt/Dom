@@ -72,6 +72,21 @@ public function testElementClosest() {
     // test if closest is returning null for unknown element
     $nonExistentClosestElement = $p->closest('br');
     $this->assertNull($nonExistentClosestElement);
+    
+	// test false-positive matches on a selector matching multiple ancestors.
+	$innerPost = $document->querySelector("div.post.inner");
+	$innerListItem = $document->querySelector(".inner-item-1");
+	$outerPost = $document->querySelector("div.post.outer");
+	$this->assertInstanceOf("\phpgt\dom\Element", $innerPost);
+	$this->assertInstanceOf("\phpgt\dom\Element", $outerPost);
+	
+	$closestDivToInnerListItem = $innerListItem->closest("div");
+	$closestDivToInnerPost = $innerPost->closest("div");
+	// ..the inner post should match itself, as it is a div.
+	$this->assertSame($closestDivToInnerPost, $innerPost);
+	// ..but the inner list item should match up the tree to the outer post
+	// ..missing the other divs in the tree.
+	$this->assertSame($closestDivToInnerListItem, $outerPost);
 }
 
 }#
