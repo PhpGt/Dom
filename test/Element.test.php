@@ -79,7 +79,6 @@ public function testElementClosest() {
 	$outerPost = $document->querySelector("div.post.outer");
 	$this->assertInstanceOf("\phpgt\dom\Element", $innerPost);
 	$this->assertInstanceOf("\phpgt\dom\Element", $outerPost);
-	$this->assertNotSame($innerPost, $outerPost);
 	
 	$closestDivToInnerListItem = $innerListItem->closest("div");
 	$closestDivToInnerPost = $innerPost->closest("div");
