@@ -22,16 +22,14 @@ class HTMLDocument extends Document {
 use LiveProperty, ParentNode;
 
 public function __construct($document) {
-	parent::__construct();
-    if ($document instanceof \DOMDocument) {
-        $this->appendChild($this->importNode($document->documentElement, true));
-        return;
+    parent::__construct($document);
+    if (!($document instanceof \DOMDocument)) {
+        $this->loadHTML($document);
     }
-    $this->loadHTML($document);
 }
 
 public function querySelector(string $selectors) {
-	return $this->documentElement->querySelector($selectors);
+    return $this->documentElement->querySelector($selectors);
 }
 
 public function querySelectorAll(string $selectors):HTMLCollection {
