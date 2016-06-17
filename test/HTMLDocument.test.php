@@ -10,8 +10,8 @@ public function testConstruction()
     $this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromRawHTML);
 
     // test construction from a DOMDocument object
-    $domDocument = (new \DOMDocument('1.0', 'UTF-8'))
-        ->loadHTML(test\Helper::HTML);
+    $domDocument = new \DOMDocument('1.0', 'UTF-8');
+    $domDocument->loadHTML(test\Helper::HTML);
     $fromDOMDocument = new HTMLDocument($domDocument);
     $this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromDOMDocument);
 
