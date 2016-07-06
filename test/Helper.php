@@ -39,6 +39,7 @@ const HTML_MORE = <<<HTML
 		<img src="bottomForm.jpg" />
 	</form>
 </body>
+</html>
 HTML;
 const HTML_NESTED = <<<HTML
 <!doctype html>
