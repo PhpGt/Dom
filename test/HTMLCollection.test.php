@@ -48,4 +48,19 @@ public function testCountMethod() {
     $this->assertEquals(11, $childrenCount);
 }
 
+public function testNamedItem() {
+    $document = new HTMLDocument(test\Helper::HTML_MORE);
+    $whoNamed = $document->body->children->namedItem("who");
+    $whoH2 = $document->getElementById("who");
+
+    $this->assertSame($whoNamed, $whoH2, 
+        "Named item should match by id first");
+
+    $formsNamed = $document->body->children->namedItem("forms");
+    $formsAnchor = $document->querySelector("a[name='forms']");
+
+    $this->assertSame($formsNamed, $formsAnchor, 
+        "Named item should match name when no id match");
+}
+
 }#

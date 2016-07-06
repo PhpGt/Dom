@@ -30,11 +30,12 @@ const HTML_MORE = <<<HTML
 	Here's some text that isn't contained within an element.
 
 	<form>
-		<input name="fieldA" type="text">
+		<input name="fieldA" type="text" />
+        <input name="who" />
 		<button type="submit">Submit</button>
 	</form>
 	<form>
-		<input name="fieldB" type="text">
+		<input name="fieldB" type="text" />
 		<img src="bottomForm.jpg" />
 	</form>
 </body>
