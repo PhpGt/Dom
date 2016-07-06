@@ -63,4 +63,12 @@ public function testNamedItem() {
         "Named item should match name when no id match");
 }
 
+public function testIteration() {
+    $document = new HTMLDocument(test\Helper::HTML_MORE);
+    foreach($document->querySelectorAll("p") as $i => $p) {
+        $paragraphItem = $document->getElementsByTagName("p")[$i];
+        $this->assertSame($paragraphItem, $p);
+    }
+}
+
 }#
