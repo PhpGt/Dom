@@ -16,6 +16,13 @@ public function testElementSiblings() {
 
 	$this->assertInstanceOf(
 		"\phpgt\dom\Element", $formsAnchor);
+
+	$firstImg = $document->querySelector("img");
+	$this->assertEquals("h1", $firstImg->previousElementSibling->tagName);
+	$this->assertNull(
+		$firstImg->previousElementSibling->previousElementSibling);
+	$this->assertNull(
+		$document->body->lastElementChild->nextElementSibling);
 }
 
 }#
