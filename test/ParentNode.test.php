@@ -14,11 +14,19 @@ public function testChildren() {
 }
 
 public function testFirstLastElementChild() {
-
+	$document = new HTMLDocument(test\Helper::HTML);
+	$this->assertInstanceOf(
+		"\phpgt\dom\Text", $document->body->firstChild);
+	$this->assertInstanceOf(
+		"\phpgt\dom\Element", $document->body->firstElementChild);
 }
 
 public function testChildElementCount() {
-
+	$document = new HTMLDocument(test\Helper::HTML);
+	$this->assertInstanceOf(
+		"\phpgt\dom\Text", $document->body->lastChild);
+	$this->assertInstanceOf(
+		"\phpgt\dom\Element", $document->body->lastElementChild);
 }
 
 }#
