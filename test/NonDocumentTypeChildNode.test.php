@@ -9,14 +9,13 @@ public function testElementSiblings() {
 	$plugParagraph = $document->querySelector("p.plug");
 	$formsAnchor = $document->querySelector("a[name='forms']");
 
-	$this->assertSame($formsAnchor, $whoHeading->nextElementSibling);
+	$this->assertEquals("p", $whoHeading->nextElementSibling->tagName);
+	$this->assertSame($formsAnchor,
+		$whoHeading->nextElementSibling->nextElementSibling);
 	$this->assertSame($plugParagraph, $whoHeading->previousElementSibling);
 
 	$this->assertInstanceOf(
 		"\phpgt\dom\Element", $formsAnchor);
-// The character data after the forms anchor is surrounded by empty text nodes.
-	$this->assertInstanceOf(
-		"\phpgt\dom\CharacterData", $formsAnchor->nextElementSibling);
 }
 
 }#

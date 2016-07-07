@@ -21,11 +21,31 @@ namespace phpgt\dom;
 trait NonDocumentTypeChildNode {
 
 private function prop_get_previousElementSibling() {
+	$element = $this;
 
+	while($element) {
+		$element = $element->previousSibling;
+
+		if($element instanceof Element) {
+			return $element;
+		}
+	}
+
+	return null;
 }
 
 private function prop_get_nextElementSibling() {
+	$element = $this;
 
+	while($element) {
+		$element = $element->nextSibling;
+
+		if($element instanceof Element) {
+			return $element;
+		}
+	}
+
+	return null;
 }
 
 }#
