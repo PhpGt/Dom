@@ -3,6 +3,10 @@ namespace phpgt\dom;
 
 class TokenListTest extends \PHPUnit_Framework_TestCase {
 
+public function testLength() {
+	$document = new HTMLDocument(test\Helper::HTML);
+	$this->assertEquals(0, $document->body->classList->length);
+}
 public function testItem() {
 	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$h2 = $document->getElementById("who");

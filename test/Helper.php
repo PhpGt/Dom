@@ -20,7 +20,7 @@ const HTML_MORE = <<<HTML
 	<p>There are a few elements in this document.</p>
 	<p>This is so we can test different traversal methods.</p>
 	<p class="plug">This package is a part of the phpgt webengine.</p>
-	<h2 id="who">Who made this?</h2>
+	<h2 id="who" class="h-who m-before-p m-test">Who made this?</h2>
 	<p>
 		<a href="https://twitter.com/g105b">Greg Bowler</a> started this project
 		to bring modern DOM techniques to the server side.
@@ -31,11 +31,11 @@ const HTML_MORE = <<<HTML
 
 	<form>
 		<input name="fieldA" type="text" />
-        <input name="who" />
+        <input name="who" class="c1 c3" />
 		<button type="submit">Submit</button>
 	</form>
 	<form>
-		<input name="fieldB" type="text" />
+		<input name="fieldB" type="text" class="c1 c2 c3 c4" />
 		<img src="bottomForm.jpg" />
 	</form>
 </body>
