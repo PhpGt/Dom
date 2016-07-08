@@ -27,4 +27,14 @@ public function testContains() {
 	$this->assertFalse($h2->classList->contains("c1"));
 }
 
+public function testAdd() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$h2 = $document->getElementById("who");
+	$classString = "h-who m-before-p m-test";
+	$this->assertEquals($classString, $h2->getAttribute("class"));
+
+	$h2->classList->add("added-here");
+	$this->assertEquals("$classString added-here", $h2->getAttribute("class"));
+}
+
 }#

@@ -34,6 +34,14 @@ private function tok() {
 	);
 }
 
+/**
+ * Untokenises $this->tokenArray to the internal element's named attribute.
+ */
+private function untok() {
+	$attributeValue = implode(" ", $this->tokenArray);
+	$this->element->setAttribute($this->attributeName, trim($attributeValue));
+}
+
 private function prop_get_length() {
 	$this->tok();
 	return count($this->tokenArray);
