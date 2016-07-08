@@ -14,7 +14,7 @@ public function testChildren() {
 }
 
 public function testFirstLastElementChild() {
-	$document = new HTMLDocument(test\Helper::HTML);
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$this->assertInstanceOf(
 		"\phpgt\dom\Text", $document->body->firstChild);
 	$this->assertInstanceOf(
@@ -22,7 +22,7 @@ public function testFirstLastElementChild() {
 }
 
 public function testChildElementCount() {
-	$document = new HTMLDocument(test\Helper::HTML);
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$this->assertInstanceOf(
 		"\phpgt\dom\Text", $document->body->lastChild);
 	$this->assertInstanceOf(
