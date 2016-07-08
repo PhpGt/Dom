@@ -18,4 +18,13 @@ public function testItem() {
 	$this->assertEquals("m-test", $tokenList->item(2));
 }
 
+public function testContains() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$h2 = $document->getElementById("who");
+	$this->assertTrue($h2->classList->contains("m-before-p"));
+	$this->assertFalse($h2->classList->contains("nothing"));
+	$this->assertFalse($h2->classList->contains(""));
+	$this->assertFalse($h2->classList->contains("c1"));
+}
+
 }#
