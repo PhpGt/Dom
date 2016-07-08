@@ -10,6 +10,8 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
 class Element extends \DOMElement {
 use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
+private $classList;
+
 public function querySelector(string $selector) {
 	$htmlCollection = $this->css($selector);
 	return $htmlCollection->item(0);
@@ -68,6 +70,14 @@ private function css(string $selector, string $prefix = 'descendant-or-self::'):
 private function xPath(string $selector):HTMLCollection {
 	$x = new DOMXPath($this->ownerDocument);
 	return new HTMLCollection($x->query($selector, $this));
+}
+
+public function prop_get_classList() {
+	if(!$this->classList) {
+		$this->classList = new TokenList($this, "class");
+	}
+
+	return $this->classList;
 }
 
 }#
