@@ -98,9 +98,6 @@ public function remove(string $token) {
 	}
 
 	$index = array_search($token, $this->tokenArray);
-	if(!$index) {
-		return;
-	}
 
 	unset($this->tokenArray[$index]);
 	$this->untok();
