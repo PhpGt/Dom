@@ -35,6 +35,9 @@ public function testAdd() {
 
 	$h2->classList->add("added-here");
 	$this->assertEquals("$classString added-here", $h2->getAttribute("class"));
+// adding the same token should not add twice.
+	$h2->classList->add("added-here");
+	$this->assertEquals("$classString added-here", $h2->getAttribute("class"));
 }
 
 }#
