@@ -40,4 +40,18 @@ public function testAdd() {
 	$this->assertEquals("$classString added-here", $h2->getAttribute("class"));
 }
 
+public function testRemove() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$h2 = $document->getElementById("who");
+	$classString = "h-who m-before-p m-test";
+	$this->assertEquals($classString, $h2->getAttribute("class"));
+
+	$h2->classList->remove("m-before-p");
+	$classString = str_replace("m-before-p ", "", $classString);
+	$this->assertEquals($classString, $h2->getAttribute("class"));
+
+	$h2->classList->remove("m-before-p");
+	$this->assertEquals($classString, $h2->getAttribute("class"));
+}
+
 }#
