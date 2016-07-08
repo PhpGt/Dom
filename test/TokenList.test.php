@@ -52,6 +52,25 @@ public function testRemove() {
 
 	$h2->classList->remove("m-before-p");
 	$this->assertEquals($classString, $h2->getAttribute("class"));
+
+	$h2->classList->remove("does-not-exist");
+	$this->assertEquals($classString, $h2->getAttribute("class"));
+}
+
+public function testToggle() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$h2 = $document->getElementById("who");
+	$classString = "h-who m-before-p m-test";
+	$this->assertEquals($classString, $h2->getAttribute("class"));
+
+	$classStringNoBefore = str_replace("m-before-p ", "", $classString);
+	$h2->classList->toggle("m-before-p");
+	$this->assertEquals($classStringNoBefore, $h2->getAttribute("class"));
+
+	$h2->classList->toggle("m-before-p");
+	$this->assertEquals("$classStringNoBefore m-before-p",
+		$h2->getAttribute("class"));
+
 }
 
 }#
