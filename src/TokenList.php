@@ -22,9 +22,6 @@ private $tokenArray;
 public function __construct(Element $element, string $attributeName) {
 	$this->element = $element;
 	$this->attributeName = $attributeName;
-
-	// $attributeValue = $element->getAttribute($attributeName);
-	// $this->tokenArray = explode(" ", $attributeValue);
 }
 
 /**
@@ -32,7 +29,9 @@ public function __construct(Element $element, string $attributeName) {
  */
 private function tok() {
 	$attributeValue = $this->element->getAttribute($this->attributeName);
-	$this->tokenArray = explode(" ", $attributeValue);
+	$this->tokenArray = array_filter(
+		explode(" ", $attributeValue)
+	);
 }
 
 private function prop_get_length() {

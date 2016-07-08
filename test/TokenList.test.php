@@ -7,7 +7,7 @@ public function testLength() {
 	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$h2 = $document->getElementById("who");
 	$this->assertEquals(0, $document->body->classList->length);
-	$this->assertEquals(0, $h2->classList->length);
+	$this->assertEquals(3, $h2->classList->length);
 }
 
 public function testItem() {
