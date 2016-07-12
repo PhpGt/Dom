@@ -1,6 +1,6 @@
 {
     "name": "phpgt/dom",
-    "description": "Enhancement to the PHP DOMDocument functionality.",
+    "description": "The modern DOM API for PHP 7 projects.",
     "type": "library",
 
     "require": {
