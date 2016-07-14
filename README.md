@@ -3,6 +3,8 @@ The modern DOM API for PHP 7 projects
 
 ***
 
+[Example Link](http://example.com){:target="_blank"}
+
 <a href="https://gitter.im/phpgt/dom" target="_blank">
     <img src="https://img.shields.io/gitter/room/phpgt/dom.svg?style=flat-square" alt="Gitter chat" />
 </a>
