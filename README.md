@@ -65,4 +65,4 @@ echo $document->saveHTML();
 
 ## Features at a glance
 
-TODO: List out DOM features with brief description.
+// TODO: List out DOM features with brief description.
