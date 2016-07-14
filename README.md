@@ -3,8 +3,6 @@ The modern DOM API for PHP 7 projects
 
 ***
 
-[Example Link](http://example.com){:target="_blank"}
-
 <a href="https://gitter.im/phpgt/dom" target="_blank">
     <img src="https://img.shields.io/gitter/room/phpgt/dom.svg?style=flat-square" alt="Gitter chat" />
 </a>
@@ -31,13 +29,12 @@ Consider a page with a form, with an input element to enter your name. When the 
 
 This is a simple example of how source HTML files can be treated as templates.This can easily be applied to more advanced template pages to provide dynamic content, without requiring non-standard techniques such as `{{curly braces}}` for placeholders, or `echo '<div class='easy-mistake'>' . $content['opa'] . '</div>'` horrible HTML construction from within PHP.
 
-### Source HTML:
+### Source HTML (`name.html`):
 
 ```html
 <!doctype html>
 <h1>
-    Hello,
-    <span id="your-name">you</span>
+    Hello, <span id="your-name">you</span> !
 </h1>
 
 <form>
@@ -46,14 +43,20 @@ This is a simple example of how source HTML files can be treated as templates.Th
 </form>
 ```
 
-### PHP used to inject your name:
+### PHP used to inject your name (`index.php`):
 
 ```php
 <?php
+require "vendor/autoload.php";
+
+$html = file_get_contents("name.html");
+$document = new \phpgt\dom\HTMLDocument($html);
+
 if(isset($_GET["name"])) {
-    $document = new \phpgt\dom\Document(file_get_contents("page.html"));
     $document->getElementById("your-name")->textContent = $_GET["name"];
 }
+
+echo $document->saveHTML();
 ```
 
 TODO: Animated GIF of this in action.
