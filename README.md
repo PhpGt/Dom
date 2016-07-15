@@ -68,20 +68,19 @@ echo $document->saveHTML();
 	+ [`HTMLDocument`][mdn-HTMLDocument].
 	+ [`Element`][mdn-Element].
 	+ [`HTMLCollection`][mdn-HTMLCollection].
-	+ and more [DOM4][mdn-DOM4] classes.
+	+ and more [extended DOM][mdn-DOM-levels] classes.
 + Standardised traits to add functionality in accordance with W3C.
-+ Reference elements using CSS selectors via [`querySelector`[`All`]][mdn-qsa].
++ Reference elements using CSS selectors via [`querySelector`][mdn-qs]([`All`]][mdn-qsa]).
 + Add/remove/toggle elements' classes using [`ClassList`][mdn-classList].
 + `Element` Nodes within the document traversable with W3C properties:
 	+ [`previousElementSibling`][mdn-pes] and [`nextElementSibling`][mdn-nes].
 	+ [`children`][mdn-children].
 	+ [`lastElementChild`][mdn-lec] and [`firstElementChild`][mdn-fec].
-+ `Element::remove()` to detach it from the document.
-+ Add elements around another using `Element::before()` and `Element::after()`.
-+ Replace an element in place using `Element::replaceWith()`.
++ [`Element::remove()`][mdn-remove] to detach it from the document.
++ Add elements around another using [`Element::before()`][mdn-before] and [`Element::after()`][mdn-after].
++ Replace an element in place using [`Element::replaceWith()`][mdn-replaceWith].
 + Standard collection properties on the `HTMLDocument`:
 	+ [`anchors`][mdn-anchors].
-	+ [`body`][mdn-body].
 	+ [`forms`][mdn-forms].
 	+ [`image`][mdn-images].
 	+ [`links`][mdn-links].
@@ -102,3 +101,26 @@ The following features are currently in development and are planned to be releas
 	+ `$container["h1"][0]->textContent = "Hello, World!";`.
 	+ `$document["body>header>nav li a"][0]->href = "/nowhere.html";`.
 	+ `foreach($myElement["input[type='checkbox']"] as $checkbox) {`.
+
+[mdn-HTMLDocument]: https://developer.mozilla.org/docs/Web/API/HTMLDocument
+[mdn-Element]: https://developer.mozilla.org/docs/Web/API/Element
+[mdn-HTMLCollection]: https://developer.mozilla.org/docs/Web/API/HTMLCollection
+[mdn-DOM-levels]: https://developer.mozilla.org/docs/DOM_Levels
+[mdn-qs]: https://developer.mozilla.org/docs/Web/API/Element/querySelector
+[mdn-qsa]: https://developer.mozilla.org/docs/Web/API/Element/querySelectorAll
+[mdn-classList]: https://developer.mozilla.org/docs/Web/API/Element/classList
+[mdn-pes]: https://developer.mozilla.org/docs/Web/API/NonDocumentTypeChildNode/previousElementSibling
+[mdn-nes]: https://developer.mozilla.org/en-US/docs/Web/API/NonDocumentTypeChildNode/nextElementSibling
+[mdn-children]: https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children
+[mdn-lec]: https://developer.mozilla.org/docs/Web/API/ParentNode/lastElementChild
+[mdn-fec]: https://developer.mozilla.org/docs/Web/API/ParentNode/firstElementChild
+[mdn-remove]: https://developer.mozilla.org/docs/Web/API/ChildNode/remove
+[mdn-before]: https://developer.mozilla.org/docs/Web/API/ChildNode/before
+[mdn-after]: https://developer.mozilla.org/docs/Web/API/ChildNode/after
+[mdn-replaceWith]: https://developer.mozilla.org/docs/Web/API/ChildNode/replaceWith
+[mdn-anchors]: https://developer.mozilla.org/docs/Web/API/Document/anchors
+[mdn-forms]: https://developer.mozilla.org/docs/Web/API/Document/forms
+[mdn-images]: https://developer.mozilla.org/docs/Web/API/Document/images
+[mdn-links]: https://developer.mozilla.org/docs/Web/API/Document/links
+[mdn-scripts]: https://developer.mozilla.org/docs/Web/API/Document/scripts
+[mdn-title]: https://developer.mozilla.org/docs/Web/API/Document/title
