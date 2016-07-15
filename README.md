@@ -58,7 +58,7 @@ if(isset($_GET["name"])) {
 echo $document->saveHTML();
 ```
 
-### Animated GIF of above example.
+### Screencast of above example
 
 ![Using DOM in PHP](https://github.com/phpgt/dom/raw/master/example.gif)
 
