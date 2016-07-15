@@ -60,7 +60,7 @@ echo $document->saveHTML();
 
 ### Animated GIF of above example.
 
-// TODO.
+![Using DOM in PHP][https://github.com/phpgt/dom/raw/master/example.gif]
 
 ## Features at a glance.
 
