@@ -58,7 +58,7 @@ if(isset($_GET["name"])) {
 echo $document->saveHTML();
 ```
 
-### Screencast of above example
+### Screencast of above exampleo
 
 ![Using DOM in PHP](https://github.com/phpgt/dom/raw/master/example.gif)
 
@@ -70,7 +70,7 @@ echo $document->saveHTML();
 	+ [`HTMLCollection`][mdn-HTMLCollection].
 	+ and more [extended DOM][mdn-DOM-levels] classes.
 + Standardised traits to add functionality in accordance with W3C.
-+ Reference elements using CSS selectors via [`querySelector`][mdn-qs]([`All`]][mdn-qsa]).
++ Reference elements using CSS selectors via [`querySelector`][mdn-qs]([`All`][mdn-qsa]).
 + Add/remove/toggle elements' classes using [`ClassList`][mdn-classList].
 + `Element` Nodes within the document traversable with W3C properties:
 	+ [`previousElementSibling`][mdn-pes] and [`nextElementSibling`][mdn-nes].
