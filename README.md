@@ -1,4 +1,4 @@
-# The modern DOM API for PHP 7 projects.
+# The modern DOM API for PHP 7 applications.
 
 ***
 
