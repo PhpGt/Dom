@@ -5,24 +5,24 @@ class HTMLDocumentTest extends \PHPUnit_Framework_TestCase {
 
 public function testConstruction()
 {
-    // test construction from raw HTML
-    $fromRawHTML = new HTMLDocument(test\Helper::HTML);
-    $this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromRawHTML);
+// test construction from raw HTML
+	$fromRawHTML = new HTMLDocument(test\Helper::HTML);
+	$this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromRawHTML);
 
-    // test construction from a DOMDocument object
-    $domDocument = new \DOMDocument('1.0', 'UTF-8');
-    $domDocument->loadHTML(test\Helper::HTML);
-    $fromDOMDocument = new HTMLDocument($domDocument);
-    $this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromDOMDocument);
+// test construction from a DOMDocument object
+	$domDocument = new \DOMDocument('1.0', 'UTF-8');
+	$domDocument->loadHTML(test\Helper::HTML);
+	$fromDOMDocument = new HTMLDocument($domDocument);
+	$this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromDOMDocument);
 
-    // test construction from a HTMLDocument object, just to be sure
-    $fromHTMLDocument = new HTMLDocument($fromRawHTML);
-    $this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromHTMLDocument);
+// test construction from a HTMLDocument object, just to be sure
+	$fromHTMLDocument = new HTMLDocument($fromRawHTML);
+	$this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromHTMLDocument);
 
-    // test if elements are consistent
-    $h2FromRawHTML = $fromRawHTML->querySelector('h2');
-    $h2FromDOMDocument = $fromDOMDocument->querySelector('h2');
-    $this->assertSame($h2FromRawHTML, $h2FromDOMDocument);
+// test if elements are consistent
+	$h2FromRawHTML = $fromRawHTML->querySelector('h2');
+	$h2FromDOMDocument = $fromDOMDocument->querySelector('h2');
+	$this->assertSame($h2FromRawHTML, $h2FromDOMDocument);
 
 }
 
@@ -72,7 +72,7 @@ public function testHeadElement() {
 }
 
 public function testHeadElementAutomaticallyCreated() {
-	// test\Helper::HTML does not explicitly define a <head>
+// test\Helper::HTML does not explicitly define a <head>
 	$document = new HTMLDocument(test\Helper::HTML);
 	$this->assertInstanceOf("\phpgt\dom\Element", $document->head);
 }
@@ -83,7 +83,7 @@ public function testBodyElement() {
 }
 
 public function testBodyElementAutomaticallyCreated() {
-	// test\Helper::HTML does not explicitly define a <body>
+// test\Helper::HTML does not explicitly define a <body>
 	$document = new HTMLDocument(test\Helper::HTML);
 	$this->assertInstanceOf("\phpgt\dom\Element", $document->body);
 }
@@ -107,8 +107,8 @@ public function testAnchorsPropertyWhenNoAnchors() {
 
 public function testAnchorsPropertyWhenAnchors() {
 	$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
-	// There are actually 3 "a" elements, but only two are anchors - the
-	// other is a link.
+// There are actually 3 "a" elements, but only two are anchors - the
+// other is a link.
 	$this->assertEquals(2, $documentWith->anchors->length);
 }
 
@@ -131,16 +131,6 @@ public function testLinksPropertyWhenLinks() {
 	$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
 	$this->assertEquals(1, $documentWith->links->length);
 }
-
-// public function testTitleGetterSetter() {
-// 	$document = new HTMLDocument(test\Helper::HTML_MORE);
-// 	$this->assertEquals("Test HTML", $document->title);
-
-// 	$newTitle = $document->title . " (New Title)";
-// 	$document->title = $newTitle;
-
-// 	$this->assertEquals($newTitle, $document->title);
-// }
 
 public function testTitleWhenNoTitle() {
 	$document = new HTMLDocument(test\Helper::HTML);

@@ -4,6 +4,7 @@ namespace phpgt\dom;
 use Iterator;
 use ArrayAccess;
 use Countable;
+use DOMNodeList;
 
 /**
  * Represents a Node list that can only contain Element nodes. Internally,
@@ -19,7 +20,7 @@ use LiveProperty;
 private $domNodeList;
 private $key = 0;
 
-public function __construct(\DOMNodeList $domNodeList) {
+public function __construct(DOMNodeList $domNodeList) {
 	$this->domNodeList = $domNodeList;
 }
 
@@ -31,7 +32,7 @@ public function __construct(\DOMNodeList $domNodeList) {
  */
 public function item(int $index) {
 	$count = 0;
-	foreach ($this as $element) {
+	foreach($this as $element) {
 		if($index === $count) {
 			return $element;
 		}
@@ -53,8 +54,8 @@ public function item(int $index) {
 public function namedItem(string $name) {
 	$namedElement = null;
 
-	// Iterating all elements is costly. Room for improvement here?
-	foreach ($this as $element) {
+// ENHANCEMENT: Iterating all elements is costly. Room for improvement here?
+	foreach($this as $element) {
 		if($element->getAttribute("id") === $name) {
 			return $element;
 		}
@@ -84,10 +85,10 @@ private function prop_get_length():int {
 }
 
 public function count():int {
-    return $this->length;
+	return $this->length;
 }
 
-// Iterator implementation /////////////////////////////////////////////////////
+// Iterator implementation -----------------------------------------------------
 
 public function current():Element {
 	return $this->domNodeList[$this->key];
@@ -124,7 +125,7 @@ private function incrementKeyToNextElement() {
  * @return boolean
  */
 public function offsetExists($offset):bool {
-    return isset($offset, $this->domNodeList);
+	return isset($offset, $this->domNodeList);
 }
 
 /**
@@ -133,7 +134,7 @@ public function offsetExists($offset):bool {
  * @return phpgt\dom\Element
  */
 public function offsetGet($offset):Element {
-    return $this->item($offset);
+	return $this->item($offset);
 }
 
 public function offsetSet($offset, $value) {

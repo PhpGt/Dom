@@ -33,7 +33,7 @@ public function matches(string $selector):bool {
 	$i = $matches->length;
 	while(--$i >= 0 && $matches->item($i) !== $this);
 
-	return ($i >= 0);
+	return($i >= 0);
 }
 
 /**
@@ -57,11 +57,12 @@ public function getElementsByClassName(string $names):HTMLCollection {
  * @return Element|null
  */
 public function closest(string $selectors) {
-    $collection = $this->css($selectors, 'ancestor-or-self::');
-    return $collection->item(count($collection) - 1);
+	$collection = $this->css($selectors, "ancestor-or-self::");
+	return $collection->item(count($collection) - 1);
 }
 
-private function css(string $selector, string $prefix = 'descendant-or-self::'):HTMLCollection {
+private function css(
+string $selector, string $prefix = "descendant-or-self::"):HTMLCollection {
 	$converter = new CssSelectorConverter();
 	$xPathSelector = $converter->toXPath($selector, $prefix);
 	return $this->xPath($xPathSelector);

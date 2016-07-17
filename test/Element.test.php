@@ -51,41 +51,35 @@ public function testChildElementCount() {
 }
 
 public function testElementClosest() {
-    $document = new HTMLDocument(test\Helper::HTML_NESTED);
+	$document = new HTMLDocument(test\Helper::HTML_NESTED);
 
-    $p = $document->querySelector('.inner-list p');
-    // test if p is an element
-    $this->assertInstanceOf('\phpgt\dom\Element', $p);
+	$p = $document->querySelector('.inner-list p');
+	$this->assertInstanceOf('\phpgt\dom\Element', $p);
 
-    $innerList = $document->querySelector('.inner-list');
-    // test if .inner-list is an element
-    $this->assertInstanceOf('\phpgt\dom\Element', $innerList);
+	$innerList = $document->querySelector('.inner-list');
+	$this->assertInstanceOf('\phpgt\dom\Element', $innerList);
 
-    $closestUl = $innerList->closest('ul');
-    // test if the closest element is .inner-list
-    $this->assertEquals($innerList, $closestUl);
+	$closestUl = $innerList->closest('ul');
+	$this->assertEquals($innerList, $closestUl);
 
-    // test something far just to be sure
-    $container = $p->closest('.container');
-    $this->assertInstanceOf('\phpgt\dom\Element', $container);
+	$container = $p->closest('.container');
+	$this->assertInstanceOf('\phpgt\dom\Element', $container);
 
-    // test if closest is returning null for unknown element
-    $nonExistentClosestElement = $p->closest('br');
-    $this->assertNull($nonExistentClosestElement);
-    
-	// test false-positive matches on a selector matching multiple ancestors.
+	$nonExistentClosestElement = $p->closest('br');
+	$this->assertNull($nonExistentClosestElement);
+
 	$innerPost = $document->querySelector("div.post.inner");
 	$innerListItem = $document->querySelector(".inner-item-1");
 	$outerPost = $document->querySelector("div.post.outer");
 	$this->assertInstanceOf("\phpgt\dom\Element", $innerPost);
 	$this->assertInstanceOf("\phpgt\dom\Element", $outerPost);
-	
+
 	$closestDivToInnerListItem = $innerListItem->closest("div");
 	$closestDivToInnerPost = $innerPost->closest("div");
-	// ..the inner post should match itself, as it is a div.
+// ..the inner post should match itself, as it is a div.
 	$this->assertSame($closestDivToInnerPost, $innerPost);
-	// ..but the inner list item should match up the tree to the outer post
-	// ..missing the other divs in the tree.
+// ..but the inner list item should match up the tree to the outer post
+// ..missing the other divs in the tree.
 	$this->assertSame($closestDivToInnerListItem, $outerPost);
 }
 

@@ -1,6 +1,8 @@
 <?php
 namespace phpgt\dom;
 
+use DOMDocument;
+
 /**
  * Provides access to special properties and methods not present by default
  * on a regular (XML) document.
@@ -22,14 +24,15 @@ class HTMLDocument extends Document {
 use LiveProperty, ParentNode;
 
 public function __construct($document) {
-    parent::__construct($document);
-    if (!($document instanceof \DOMDocument)) {
-        $this->loadHTML($document);
-    }
+	parent::__construct($document);
+
+	if(!($document instanceof DOMDocument)) {
+		$this->loadHTML($document);
+	}
 }
 
 public function querySelector(string $selectors) {
-    return $this->documentElement->querySelector($selectors);
+	return $this->documentElement->querySelector($selectors);
 }
 
 public function querySelectorAll(string $selectors):HTMLCollection {
