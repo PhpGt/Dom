@@ -78,6 +78,39 @@ const HTML_NESTED = <<<HTML
 </body>
 </html>
 HTML;
+const HTML_VALUE = <<<HTML
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Test HTML</title>
+</head>
+<body>
+
+	<select id="select">
+		<option value="1">One</option>
+		<option value="2">Two</option>
+	</select>
+
+	<select id="select_optgroup">
+		<option value="1">One</option>
+		<option value="2">Two</option>
+		<optgroup>
+			<option value="3" selected>Three</option>
+			<option value="4">Four</option>
+		</optgroup>
+	</select>
+
+	<select id="select_selected">
+		<option value="1">One</option>
+		<option value="2" selected="selected">Two</option>
+	</select>
+
+	<select id="select_empty"></select>
+
+</body>
+</html>
+HTML;
 const XML = <<<XML
 <?xml version="1.0" encoding="UTF-8" ?>
 <breakfast-menu>

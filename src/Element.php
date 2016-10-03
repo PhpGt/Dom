@@ -81,4 +81,66 @@ public function prop_get_classList() {
 	return $this->classList;
 }
 
+public function prop_get_value() {
+	$methodName = 'value_get_' . $this->tagName;
+	if(method_exists($this, $methodName)) {
+		return $this->$methodName();
+	}
+
+	return NULL;
+}
+
+public function prop_set_value($newValue) {
+	$methodName = 'value_set_' . $this->tagName;
+	if(method_exists($this, $methodName)) {
+		return $this->$methodName($newValue);
+	}
+}
+
+private function value_set_select($newValue) {
+	$options = $this->getElementsByTagName('option');
+	$selectedIndexes = [];
+	$newSelectedIndex = NULL;
+
+	for($i = $options->length - 1; $i >= 0; --$i) {
+		if(self::isSelectOptionSelected($options->item($i))) {
+			$selectedIndexes[] = $i;
+		}
+
+		if($options->item($i)->getAttribute('value') == $newValue) {
+			$newSelectedIndex = $i;
+		}
+	}
+
+	if($newSelectedIndex !== NULL) {
+		foreach ($selectedIndexes as $i) {
+			$options->item($i)->removeAttribute('selected');	
+		}
+
+		$options->item($newSelectedIndex)->setAttribute('selected', 'selected');
+	}
+}
+
+private function value_get_select() {
+	$options = $this->getElementsByTagName('option');
+	if ($options->length == 0) {
+		$value = '';
+	}
+	else {
+		$value = $options->item(0)->getAttribute('value');
+	}
+
+	foreach ($options as $option) {
+		if (self::isSelectOptionSelected($option)) {
+			$value = $option->getAttribute('value');
+			break;
+		}
+	}
+
+	return $value;
+}
+
+static public function isSelectOptionSelected(Element $option) {
+	return $option->hasAttribute('selected') && $option->getAttribute('selected');
+}
 }#
