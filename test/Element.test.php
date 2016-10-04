@@ -83,4 +83,25 @@ public function testElementClosest() {
 	$this->assertSame($closestDivToInnerListItem, $outerPost);
 }
 
+public function testValueGetter() {
+	$document = new HTMLDocument(test\Helper::HTML_VALUE);
+
+	$select = $document->getElementById('select');
+	$this->assertEquals('1', $select->value);	
+	$select->value = '2';
+	$this->assertEquals('2', $select->value);
+
+	$select = $document->getElementById('select_optgroup');
+	$this->assertEquals('3', $select->value);
+	$select->value = '4';
+	$this->assertEquals('4', $select->value);
+
+	$select = $document->getElementById('select_selected');
+	$this->assertEquals('2', $select->value);
+
+	$select = $document->getElementById('select_empty');
+	$this->assertEquals('', $select->value);
+	$select->value = 'dummy';
+	$this->assertEquals('', $select->value);
+}
 }#
