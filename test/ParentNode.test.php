@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 class ParentNodeTest extends \PHPUnit_Framework_TestCase {
 
@@ -16,17 +16,17 @@ public function testChildren() {
 public function testFirstLastElementChild() {
 	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$this->assertInstanceOf(
-		"\phpgt\dom\Text", $document->body->firstChild);
+		"\Gt\Dom\Text", $document->body->firstChild);
 	$this->assertInstanceOf(
-		"\phpgt\dom\Element", $document->body->firstElementChild);
+		"\Gt\Dom\Element", $document->body->firstElementChild);
 }
 
 public function testChildElementCount() {
 	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$this->assertInstanceOf(
-		"\phpgt\dom\Text", $document->body->lastChild);
+		"\Gt\Dom\Text", $document->body->lastChild);
 	$this->assertInstanceOf(
-		"\phpgt\dom\Element", $document->body->lastElementChild);
+		"\Gt\Dom\Element", $document->body->lastElementChild);
 }
 
 }#

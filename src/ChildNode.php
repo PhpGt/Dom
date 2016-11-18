@@ -1,7 +1,7 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
-use \DOMNode;
+use DOMNode;
 
 /**
  * Contains methods that are particular to Node objects that can have a parent.
@@ -24,6 +24,7 @@ public function remove() {
 /**
  * Inserts a Node into the children list of this ChildNode's parent,
  * just before this ChildNode.
+ * @param DOMNode $element
  * @return void
  */
 public function before(DOMNode $element) {
@@ -33,6 +34,7 @@ public function before(DOMNode $element) {
 /**
  * Inserts a Node into the children list of this ChildNode's parent,
  * just after this ChildNode.
+ * @param DOMNode $element
  * @return void
  */
 public function after(DOMNode $element) {
@@ -41,8 +43,7 @@ public function after(DOMNode $element) {
 
 /**
  * Replace this ChildNode in the children list of its parent.
- *
- * @param Node $replacement
+ * @param DOMNode $replacement
  * @return void
  */
 public function replaceWith(DOMNode $replacement) {

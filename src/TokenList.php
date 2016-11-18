@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 /**
  * Represents a set of space-separated tokens. Such a set is returned by
@@ -9,7 +9,6 @@ namespace phpgt\dom;
  * It is indexed beginning with 0 as with arrays.
  *
  * DOMTokenList is always case-sensitive.
- *
  * @property-read int $length
  */
 class TokenList {
@@ -50,7 +49,6 @@ private function prop_get_length() {
 /**
  * Returns an item in the list by its index (or null if the number is
  * greater than or equal to the length of the list).
- *
  * @param int $index
  * @return string|null
  */
@@ -61,7 +59,6 @@ public function item(int $index) {
 
 /**
  * Returns true if the underlying string contains $token, otherwise false.
- *
  * @param string $token
  * @return bool
  */
@@ -72,7 +69,6 @@ public function contains(string $token) {
 
 /**
  * Adds $token to the underlying attribute value.
- *
  * @param string $token
  * @return void
  */
@@ -88,7 +84,6 @@ public function add(string $token) {
 
 /**
  * Removes $token from the underlying attribute value.
- *
  * @param string $token
  * @return null
  */
@@ -106,7 +101,6 @@ public function remove(string $token) {
 /**
  * Removes $token from the underlying attribute value and returns false. If
  * $token doesn't exist, it's added and the function returns true.
- *
  * @param string $token
  * @return bool true if token is added, false if token is removed.
  */

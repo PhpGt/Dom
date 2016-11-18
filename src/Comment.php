@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 /**
  * Represents textual notations within markup; although it is generally not

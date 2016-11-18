@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 use DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
@@ -24,7 +24,6 @@ public function querySelectorAll(string $selector):HTMLCollection {
 /**
  * returns true if the element would be selected by the specified selector
  * string; otherwise, returns false.
- *
  * @param string $selector The CSS selector to check against
  * @return bool True if this element is selectable by provided selector
  */
@@ -40,7 +39,6 @@ public function matches(string $selector):bool {
  * Returns a live HTMLCollection containing all child elements which have all
  * of the given class names. When called on the document object, the complete
  * document is searched, including the root node.
- *
  * @param string $names a string representing the list of class names to
  *  match; class names are separated by whitespace
  * @return HTMLCollection
@@ -53,7 +51,7 @@ public function getElementsByClassName(string $names):HTMLCollection {
 /**
  * Returns the closest ancestor of the current element (or itself)
  * which matches the selectors.
- * @param string $selectors css selectors
+ * @param string $selectors CSS selectors
  * @return Element|null
  */
 public function closest(string $selectors) {
@@ -61,10 +59,15 @@ public function closest(string $selectors) {
 	return $collection->item(count($collection) - 1);
 }
 
+/**
+ * @param string $selectors CSS selectors
+ * @param string $prefix
+ * @return HTMLCollection
+ */
 private function css(
-string $selector, string $prefix = "descendant-or-self::"):HTMLCollection {
+string $selectors, string $prefix = "descendant-or-self::"):HTMLCollection {
 	$converter = new CssSelectorConverter();
-	$xPathSelector = $converter->toXPath($selector, $prefix);
+	$xPathSelector = $converter->toXPath($selectors, $prefix);
 	return $this->xPath($xPathSelector);
 }
 

@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 /**
  * Calls prop_* methods to provide live properties through the

@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 class HTMLDocumentTest extends \PHPUnit_Framework_TestCase {
 
@@ -7,17 +7,17 @@ public function testConstruction()
 {
 // test construction from raw HTML
 	$fromRawHTML = new HTMLDocument(test\Helper::HTML);
-	$this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromRawHTML);
+	$this->assertInstanceOf('Gt\Dom\HTMLDocument', $fromRawHTML);
 
 // test construction from a DOMDocument object
 	$domDocument = new \DOMDocument('1.0', 'UTF-8');
 	$domDocument->loadHTML(test\Helper::HTML);
 	$fromDOMDocument = new HTMLDocument($domDocument);
-	$this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromDOMDocument);
+	$this->assertInstanceOf('Gt\Dom\HTMLDocument', $fromDOMDocument);
 
 // test construction from a HTMLDocument object, just to be sure
 	$fromHTMLDocument = new HTMLDocument($fromRawHTML);
-	$this->assertInstanceOf('phpgt\dom\HTMLDocument', $fromHTMLDocument);
+	$this->assertInstanceOf('Gt\Dom\HTMLDocument', $fromHTMLDocument);
 
 // test if elements are consistent
 	$h2FromRawHTML = $fromRawHTML->querySelector('h2');
@@ -28,7 +28,7 @@ public function testConstruction()
 
 public function testInheritance() {
 	$document = new HTMLDocument(test\Helper::HTML);
-	$this->assertInstanceOf("phpgt\dom\Element", $document->documentElement);
+	$this->assertInstanceOf("Gt\Dom\Element", $document->documentElement);
 }
 
 public function testRemoveElement() {
@@ -68,24 +68,24 @@ public function testQuerySelectorAll() {
 
 public function testHeadElement() {
 	$document = new HTMLDocument(test\Helper::HTML_MORE);
-	$this->assertInstanceOf("\phpgt\dom\Element", $document->head);
+	$this->assertInstanceOf("\Gt\Dom\Element", $document->head);
 }
 
 public function testHeadElementAutomaticallyCreated() {
 // test\Helper::HTML does not explicitly define a <head>
 	$document = new HTMLDocument(test\Helper::HTML);
-	$this->assertInstanceOf("\phpgt\dom\Element", $document->head);
+	$this->assertInstanceOf("\Gt\Dom\Element", $document->head);
 }
 
 public function testBodyElement() {
 	$document = new HTMLDocument(test\Helper::HTML_MORE);
-	$this->assertInstanceOf("\phpgt\dom\Element", $document->body);
+	$this->assertInstanceOf("\Gt\Dom\Element", $document->body);
 }
 
 public function testBodyElementAutomaticallyCreated() {
 // test\Helper::HTML does not explicitly define a <body>
 	$document = new HTMLDocument(test\Helper::HTML);
-	$this->assertInstanceOf("\phpgt\dom\Element", $document->body);
+	$this->assertInstanceOf("\Gt\Dom\Element", $document->body);
 }
 
 // Test live properties:

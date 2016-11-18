@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 class ElementTest extends \PHPUnit_Framework_TestCase {
 
@@ -10,9 +10,9 @@ public function testQuerySelector() {
 
 	$a = $document->querySelector("p>a");
 
-	$this->assertInstanceOf("\phpgt\dom\Element", $pAfterH2);
-	$this->assertInstanceOf("\phpgt\dom\Element", $aWithinP);
-	$this->assertInstanceOf("\phpgt\dom\Element", $a);
+	$this->assertInstanceOf("\Gt\Dom\Element", $pAfterH2);
+	$this->assertInstanceOf("\Gt\Dom\Element", $aWithinP);
+	$this->assertInstanceOf("\Gt\Dom\Element", $a);
 	$this->assertSame($a, $aWithinP);
 }
 
@@ -54,16 +54,16 @@ public function testElementClosest() {
 	$document = new HTMLDocument(test\Helper::HTML_NESTED);
 
 	$p = $document->querySelector('.inner-list p');
-	$this->assertInstanceOf('\phpgt\dom\Element', $p);
+	$this->assertInstanceOf('\Gt\Dom\Element', $p);
 
 	$innerList = $document->querySelector('.inner-list');
-	$this->assertInstanceOf('\phpgt\dom\Element', $innerList);
+	$this->assertInstanceOf('\Gt\Dom\Element', $innerList);
 
 	$closestUl = $innerList->closest('ul');
 	$this->assertEquals($innerList, $closestUl);
 
 	$container = $p->closest('.container');
-	$this->assertInstanceOf('\phpgt\dom\Element', $container);
+	$this->assertInstanceOf('\Gt\Dom\Element', $container);
 
 	$nonExistentClosestElement = $p->closest('br');
 	$this->assertNull($nonExistentClosestElement);
@@ -71,8 +71,8 @@ public function testElementClosest() {
 	$innerPost = $document->querySelector("div.post.inner");
 	$innerListItem = $document->querySelector(".inner-item-1");
 	$outerPost = $document->querySelector("div.post.outer");
-	$this->assertInstanceOf("\phpgt\dom\Element", $innerPost);
-	$this->assertInstanceOf("\phpgt\dom\Element", $outerPost);
+	$this->assertInstanceOf("\Gt\Dom\Element", $innerPost);
+	$this->assertInstanceOf("\Gt\Dom\Element", $outerPost);
 
 	$closestDivToInnerListItem = $innerListItem->closest("div");
 	$closestDivToInnerPost = $innerPost->closest("div");

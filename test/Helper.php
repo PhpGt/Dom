@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom\test;
+namespace Gt\Dom\test;
 
 class Helper {
 

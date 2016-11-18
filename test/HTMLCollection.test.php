@@ -1,11 +1,11 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 class HTMLCollectionTest extends \PHPUnit_Framework_TestCase {
 
 public function testType() {
 	$document = new HTMLDocument(test\Helper::HTML);
-	$this->assertInstanceOf("\phpgt\dom\HTMLCollection", $document->children);
+	$this->assertInstanceOf("\Gt\Dom\HTMLCollection", $document->children);
 }
 
 public function testNonElementsRemoved() {
@@ -14,10 +14,10 @@ public function testNonElementsRemoved() {
 	$bodyChildren = $document->body->children;
 
 	$this->assertInstanceOf("\DOMNodeList", $bodyChildNodes);
-	$this->assertInstanceOf("\phpgt\dom\HTMLCollection", $bodyChildren);
+	$this->assertInstanceOf("\Gt\Dom\HTMLCollection", $bodyChildren);
 
-	$this->assertInstanceOf("\phpgt\dom\Text", $bodyChildNodes->item(0));
-	$this->assertInstanceOf("\phpgt\dom\Element", $bodyChildren->item(0));
+	$this->assertInstanceOf("\Gt\Dom\Text", $bodyChildNodes->item(0));
+	$this->assertInstanceOf("\Gt\Dom\Element", $bodyChildren->item(0));
 }
 
 public function testArrayAccessImplementation() {
@@ -32,7 +32,7 @@ public function testArrayAccessImplementation() {
 
 // test if the first item is an Element instance
 	$first = $collection[0];
-	$this->assertInstanceOf('\phpgt\dom\Element', $first);
+	$this->assertInstanceOf('\Gt\Dom\Element', $first);
 
 // test if the collection is read only
 	$this->setExpectedException(\BadMethodCallException::class);

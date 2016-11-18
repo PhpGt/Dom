@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 /**
  * Contains methods that are particular to Node objects that can have children.
@@ -10,7 +10,6 @@ namespace phpgt\dom;
  *  - Element
  *  - Document
  *  - DocumentFragment
- *
  * @property-read HTMLCollection $children A live HTMLCollection containing all
  *  objects of type Element that are children of this ParentNode.
  * @property-read Element|null $firstElementChild The Element that is the first

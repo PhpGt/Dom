@@ -49,7 +49,7 @@ This is a simple example of how source HTML files can be treated as templates. T
 require "vendor/autoload.php";
 
 $html = file_get_contents("name.html");
-$document = new \phpgt\dom\HTMLDocument($html);
+$document = new \Gt\Dom\HTMLDocument($html);
 
 if(isset($_GET["name"])) {
     $document->getElementById("your-name")->textContent = $_GET["name"];

@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 /**
  * A Node is an interface from which a number of DOM types inherit, and allows

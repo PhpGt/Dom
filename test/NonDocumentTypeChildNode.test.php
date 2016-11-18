@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 class NonDocumentTypeChildNodeTest extends \PHPUnit_Framework_TestCase {
 
@@ -15,7 +15,7 @@ public function testElementSiblings() {
 	$this->assertSame($plugParagraph, $whoHeading->previousElementSibling);
 
 	$this->assertInstanceOf(
-		"\phpgt\dom\Element", $formsAnchor);
+		"\Gt\Dom\Element", $formsAnchor);
 
 	$firstImg = $document->querySelector("img");
 	$this->assertEquals("h1", $firstImg->previousElementSibling->tagName);

@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 /**
  * Contains methods that are particular to Node objects that can have a parent,
@@ -10,7 +10,6 @@ namespace phpgt\dom;
  * This trait is used by the following classes:
  *  - Element
  *  - CharacterData
- *
  * @property-read Element|null $previousElementSibling The Element immediately
  *  prior to this Node in its parent's $children list, or null if there is no
  *  Element in the list prior to this Node.

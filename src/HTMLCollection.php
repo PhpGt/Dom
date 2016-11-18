@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 use Iterator;
 use ArrayAccess;
@@ -11,7 +11,6 @@ use DOMNodeList;
  * a DOMNodeList is used to store the association to the original list of
  * Nodes. The Iterator interface is used to handle the selection of Nodes
  * that are Elements.
- *
  * @property-read int $length Number of Element nodes in this collection
  */
 class HTMLCollection implements Iterator, ArrayAccess, Countable {
@@ -26,7 +25,6 @@ public function __construct(DOMNodeList $domNodeList) {
 
 /**
  * Gets the nth Element object in the internal DOMNodeList.
- *
  * @param int $index
  * @return Element|null
  */
@@ -48,7 +46,6 @@ public function item(int $index) {
  * name matches the string specified by $name. Matching by name is only done
  * as a last resort, and only if the referenced element supports the name
  * attribute.
- *
  * @return Element|null
  */
 public function namedItem(string $name) {
@@ -72,7 +69,6 @@ public function namedItem(string $name) {
 /**
  * Returns the number of Elements contained in this Collection. Exposed as the
  * $length property.
- *
  * @return int Number of Elements
  */
 private function prop_get_length():int {
@@ -88,7 +84,7 @@ public function count():int {
 	return $this->length;
 }
 
-// Iterator implementation -----------------------------------------------------
+// Iterator --------------------------------------------------------------------
 
 public function current():Element {
 	return $this->domNodeList[$this->key];
@@ -119,6 +115,8 @@ private function incrementKeyToNextElement() {
 	}
 }
 
+// ArrayAccess -----------------------------------------------------------------
+
 /**
  * Offset exists?
  * @param integer $offset offset number
@@ -131,7 +129,7 @@ public function offsetExists($offset):bool {
 /**
  * Returns the element in the offset position
  * @param integer $offset offset number
- * @return phpgt\dom\Element
+ * @return Element
  */
 public function offsetGet($offset):Element {
 	return $this->item($offset);
@@ -144,4 +142,5 @@ public function offsetSet($offset, $value) {
 public function offsetUnset($offset) {
 	throw new \BadMethodCallException("HTMLCollection's items are read only");
 }
+
 }#

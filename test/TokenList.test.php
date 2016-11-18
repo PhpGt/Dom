@@ -1,5 +1,5 @@
 <?php
-namespace phpgt\dom;
+namespace Gt\Dom;
 
 class TokenListTest extends \PHPUnit_Framework_TestCase {
 
