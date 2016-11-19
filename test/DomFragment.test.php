@@ -57,19 +57,19 @@ public function testQuerySelector() {
 	$fragment = $document->createDocumentFragment();
 
 	$p1 = $document->createElement("p");
-	$p1->className->add("test");
-	$p1->className->add("first");
+	$p1->classList->add("test");
+	$p1->classList->add("first");
 
 	$p2 = $document->createElement("p");
-	$p2->className->add("test");
-	$p2->className->add("second");
+	$p2->classList->add("test");
+	$p2->classList->add("second");
 
 	$fragment->appendChild($p1);
 	$fragment->appendChild($p2);
 
 	$this->assertSame($p1, $fragment->querySelector("p.test.first"));
 	$this->assertSame($p2, $fragment->querySelector(".second.test"));
-	$this->assertNull($fragment->getElementById(".third"));
+	$this->assertNull($fragment->querySelector(".third"));
 }
 
 }#
