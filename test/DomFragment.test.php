@@ -72,4 +72,16 @@ public function testQuerySelector() {
 	$this->assertNull($fragment->querySelector(".third"));
 }
 
+public function testQuerySelectorAll() {
+	$document = new HTMLDocument(test\Helper::HTML);
+	$fragment = $document->createDocumentFragment();
+
+	$p1 = $document->createElement("p");
+	$p2 = $document->createElement("p");
+	$fragment->appendChild($p1);
+	$fragment->appendChild($p2);
+
+	$this->assertCount(2, $fragment->querySelectorAll("p"));
+}
+
 }#
