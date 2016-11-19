@@ -34,5 +34,22 @@ public function testFragmentCreates() {
 	}
 }
 
+public function testGetElementById() {
+	$document = new HTMLDocument(test\Helper::HTML);
+	$fragment = $document->createDocumentFragment();
+
+	$p1 = $document->createElement("p");
+	$p1->id = "p1";
+
+	$p2 = $document->createElement("p");
+	$p2->id = "p2";
+
+	$fragment->appendChild($p1);
+	$fragment->appendChild($p2);
+
+	$this->assertSame($p1, $fragment->getElementById("p1"));
+	$this->assertSame($p2, $fragment->getElementById("p2"));
+	$this->assertNull($fragment->getElementById("p3"));
+}
 
 }#
