@@ -78,6 +78,13 @@ const HTML_NESTED = <<<HTML
 </body>
 </html>
 HTML;
+
+const HTML_LIST = <<<HTML
+<!doctype html>
+<ul>
+</ul>
+HTML;
+
 const HTML_VALUE = <<<HTML
 <!doctype html>
 <html>
