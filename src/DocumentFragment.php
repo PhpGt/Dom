@@ -22,6 +22,15 @@ class DocumentFragment extends \DOMDocumentFragment {
 use LiveProperty, ParentNode;
 
 /**
+ * @param string $id
+ * @return Element|null
+ */
+public function getElementById(string $id)/*:?Element*/ {
+	return $this->callMethodOnTemporaryElement(
+		"querySelector", ["#" . $id]);
+}
+
+/**
  * @param string $selectors CSS selector(s)
  * @return Element|null
  */
