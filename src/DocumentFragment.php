@@ -21,4 +21,50 @@ namespace Gt\Dom;
 class DocumentFragment extends \DOMDocumentFragment {
 use LiveProperty, ParentNode;
 
+/**
+ * @param string $id
+ * @return Element|null
+ */
+public function getElementById(string $id)/*:?Element*/ {
+	return $this->callMethodOnTemporaryElement(
+		"querySelector", ["#" . $id]);
+}
+
+/**
+ * @param string $selectors CSS selector(s)
+ * @return Element|null
+ */
+public function querySelector(string $selectors) {
+	return $this->callMethodOnTemporaryElement(
+		"querySelector", [$selectors]);
+}
+
+/**
+ * @param string $selectors CSS selector(s)
+ * @return HTMLCollection
+ */
+public function querySelectorAll(string $selectors):HTMLCollection {
+	return $this->callMethodOnTemporaryElement(
+		"querySelectorAll", [$selectors]);
+}
+
+private function callMethodOnTemporaryElement(string $methodName, array $args) {
+	$childNodes = [];
+
+	$tempElement = $this->ownerDocument->createElement("document-fragment");
+
+	while($this->firstChild) {
+		$childNodes []= $this->firstChild;
+		$tempElement->appendChild($this->firstChild);
+	}
+
+	$result = call_user_func_array([$tempElement, $methodName], $args);
+
+	foreach($childNodes as $node) {
+		$this->appendChild($node);
+	}
+
+	return $result;
+}
+
 }#

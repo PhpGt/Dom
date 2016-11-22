@@ -6,6 +6,7 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
 
 /**
  * Represents an object of a Document.
+ * @property-read string $innerHTML
  */
 class Element extends \DOMElement {
 use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
@@ -24,11 +25,11 @@ public function querySelectorAll(string $selector):HTMLCollection {
 /**
  * returns true if the element would be selected by the specified selector
  * string; otherwise, returns false.
- * @param string $selector The CSS selector to check against
+ * @param string $selectors The CSS selector(s) to check against
  * @return bool True if this element is selectable by provided selector
  */
-public function matches(string $selector):bool {
-	$matches = $this->ownerDocument->querySelectorAll($selector);
+public function matches(string $selectors):bool {
+	$matches = $this->ownerDocument->querySelectorAll($selectors);
 	$i = $matches->length;
 	while(--$i >= 0 && $matches->item($i) !== $this);
 
@@ -51,7 +52,7 @@ public function getElementsByClassName(string $names):HTMLCollection {
 /**
  * Returns the closest ancestor of the current element (or itself)
  * which matches the selectors.
- * @param string $selectors CSS selectors
+ * @param string $selectors CSS selector(s)
  * @return Element|null
  */
 public function closest(string $selectors) {
@@ -60,7 +61,7 @@ public function closest(string $selectors) {
 }
 
 /**
- * @param string $selectors CSS selectors
+ * @param string $selectors CSS selector(s)
  * @param string $prefix
  * @return HTMLCollection
  */
@@ -98,6 +99,27 @@ public function prop_set_value($newValue) {
 	if(method_exists($this, $methodName)) {
 		return $this->$methodName($newValue);
 	}
+}
+
+public function prop_get_id():string {
+	return $this->getAttribute("id");
+}
+
+public function prop_set_id($newValue) {
+	$this->setAttribute("id", $newValue);
+}
+
+public function prop_get_innerHTML():string {
+	$childHtmlArray = [];
+	foreach($this->children as $child) {
+		$childHtmlArray []= $this->ownerDocument->saveHTML($child);
+	}
+
+	return implode(PHP_EOL, $childHtmlArray);
+}
+
+public function prop_get_outerHTML():string {
+	return $this->ownerDocument->saveHTML($this);
 }
 
 private function value_set_select($newValue) {
