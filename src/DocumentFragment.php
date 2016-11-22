@@ -35,8 +35,8 @@ public function getElementById(string $id)/*:?Element*/ {
  * @return Element|null
  */
 public function querySelector(string $selectors) {
-    return $this->callMethodOnTemporaryElement(
-        "querySelector", [$selectors]);
+	return $this->callMethodOnTemporaryElement(
+		"querySelector", [$selectors]);
 }
 
 /**
@@ -44,27 +44,27 @@ public function querySelector(string $selectors) {
  * @return HTMLCollection
  */
 public function querySelectorAll(string $selectors):HTMLCollection {
-    return $this->callMethodOnTemporaryElement(
-        "querySelectorAll", [$selectors]);
+	return $this->callMethodOnTemporaryElement(
+		"querySelectorAll", [$selectors]);
 }
 
 private function callMethodOnTemporaryElement(string $methodName, array $args) {
 	$childNodes = [];
 
-    $tempElement = $this->ownerDocument->createElement("document-fragment");
+	$tempElement = $this->ownerDocument->createElement("document-fragment");
 
 	while($this->firstChild) {
 		$childNodes []= $this->firstChild;
 		$tempElement->appendChild($this->firstChild);
 	}
 
-    $result = call_user_func_array([$tempElement, $methodName], $args);
+	$result = call_user_func_array([$tempElement, $methodName], $args);
 
 	foreach($childNodes as $node) {
 		$this->appendChild($node);
 	}
 
-    return $result;
+	return $result;
 }
 
 }#
