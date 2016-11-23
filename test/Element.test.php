@@ -113,4 +113,16 @@ public function testInnerHTML() {
 	$this->assertNotContains("<p", $p->innerHTML);
 }
 
+public function testOuterHTML() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$p = $document->querySelector(".link-to-twitter");
+	$this->assertContains("<a href=", $p->outerHTML);
+	$this->assertContains("Greg Bowler", $p->outerHTML);
+	$this->assertContains("<p", $p->outerHTML);
+	$this->assertContains("</p>", $p->outerHTML);
+	$this->assertNotContains("<h2", $p->outerHTML);
+	$this->assertNotContains("name=\"forms\">", $p->outerHTML);
+
+}
+
 }#
