@@ -87,7 +87,7 @@ public function testValueGetter() {
 	$document = new HTMLDocument(test\Helper::HTML_VALUE);
 
 	$select = $document->getElementById('select');
-	$this->assertEquals('1', $select->value);	
+	$this->assertEquals('1', $select->value);
 	$select->value = '2';
 	$this->assertEquals('2', $select->value);
 
@@ -104,4 +104,5 @@ public function testValueGetter() {
 	$select->value = 'dummy';
 	$this->assertEquals('', $select->value);
 }
+
 }#
