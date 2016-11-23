@@ -91,7 +91,7 @@ public function prop_get_value() {
 		return $this->$methodName();
 	}
 
-	return NULL;
+	return null;
 }
 
 public function prop_set_value($newValue) {
