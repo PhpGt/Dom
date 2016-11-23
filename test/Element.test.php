@@ -105,4 +105,12 @@ public function testValueGetter() {
 	$this->assertEquals('', $select->value);
 }
 
+public function testInnerHTML() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$p = $document->querySelector(".link-to-twitter");
+	$this->assertContains("<a href=", $p->innerHTML);
+	$this->assertContains("Greg Bowler", $p->innerHTML);
+	$this->assertNotContains("<p", $p->innerHTML);
+}
+
 }#
