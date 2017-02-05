@@ -6,17 +6,17 @@ Performing DOM manipulation in your server-side code enhances the way dynamic pa
 
 ***
 
-<a href="https://circleci.com/gh/phpgt/dom" target="_blank">
-	<img src="https://img.shields.io/circleci/project/phpgt/dom/master.svg?style=flat-square" alt="Build status" />
+<a href="https://circleci.com/gh/PhpGt/Dom" target="_blank">
+	<img src="https://img.shields.io/circleci/project/PhpGt/Dom/master.svg?style=flat-square" alt="Build status" />
 </a>
-<a href="https://scrutinizer-ci.com/g/phpgt/dom" target="_blank">
-	<img src="https://img.shields.io/scrutinizer/g/phpgt/dom/master.svg?style=flat-square" alt="Code quality" />
+<a href="https://scrutinizer-ci.com/g/PhpGt/Dom" target="_blank">
+	<img src="https://img.shields.io/scrutinizer/g/PhpGt/Dom/master.svg?style=flat-square" alt="Code quality" />
 </a>
-<a href="https://scrutinizer-ci.com/g/phpgt/dom" target="_blank">
-	<img src="https://img.shields.io/scrutinizer/coverage/g/phpgt/dom/master.svg?style=flat-square" alt="Code coverage" />
+<a href="https://scrutinizer-ci.com/g/PhpGt/Dom" target="_blank">
+	<img src="https://img.shields.io/scrutinizer/coverage/g/PhpGt/Dom/master.svg?style=flat-square" alt="Code coverage" />
 </a>
-<a href="https://packagist.org/packages/phpgt/dom" target="_blank">
-	<img src="https://img.shields.io/packagist/v/phpgt/dom.svg?style=flat-square" alt="Current version" />
+<a href="https://packagist.org/packages/PhpGt/Dom" target="_blank">
+	<img src="https://img.shields.io/packagist/v/PhpGt/Dom.svg?style=flat-square" alt="Current version" />
 </a>
 
 ## Example usage: Hello, you!
@@ -57,7 +57,7 @@ echo $document->saveHTML();
 
 ### Screencast of above example:
 
-![Using DOM in PHP](https://github.com/phpgt/dom/raw/master/example.gif)
+![Using DOM in PHP](https://github.com/PhpGt/Dom/raw/master/example.gif)
 
 ## Features at a glance.
 
