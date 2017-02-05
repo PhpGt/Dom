@@ -1,5 +1,9 @@
 # The modern DOM API for PHP 7 projects.
 
+Built on top of PHP's native [DOMDocument](http://php.net/manual/en/book.dom.php), this project provides access to modern DOM APIs, as you would expect working with client-side code in the browser.
+
+Performing DOM manipulation in your server-side code enhances the way dynamic pages can be built. Utilising a standardised object-oriented interface means the page can be ready-processed, benefitting browsers, webservers and content delivery networks.
+
 ***
 
 <a href="https://gitter.im/phpgt/dom" target="_blank">
@@ -17,10 +21,6 @@
 <a href="https://packagist.org/packages/phpgt/dom" target="_blank">
     <img src="https://img.shields.io/packagist/v/phpgt/dom.svg?style=flat-square" alt="Current version" />
 </a>
-
-Built on top of PHP's native [DOMDocument](http://php.net/manual/en/book.dom.php), this project provides access to modern DOM APIs, as you would expect working with client-side code in the browser.
-
-Performing DOM manipulation in your server-side code enhances the way dynamic pages can be built. Utilising a standardised object-oriented interface means the page can be ready-processed, benefitting browsers, webservers and content delivery networks.
 
 ## Example usage: Hello, you!
 
