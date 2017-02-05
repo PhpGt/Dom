@@ -6,20 +6,17 @@ Performing DOM manipulation in your server-side code enhances the way dynamic pa
 
 ***
 
-<a href="https://gitter.im/phpgt/dom" target="_blank">
-    <img src="https://img.shields.io/gitter/room/phpgt/dom.svg?style=flat-square" alt="Gitter chat" />
-</a>
 <a href="https://circleci.com/gh/phpgt/dom" target="_blank">
-    <img src="https://img.shields.io/circleci/project/phpgt/dom/master.svg?style=flat-square" alt="Build status" />
+	<img src="https://img.shields.io/circleci/project/phpgt/dom/master.svg?style=flat-square" alt="Build status" />
 </a>
 <a href="https://scrutinizer-ci.com/g/phpgt/dom" target="_blank">
-    <img src="https://img.shields.io/scrutinizer/g/phpgt/dom/master.svg?style=flat-square" alt="Code quality" />
+	<img src="https://img.shields.io/scrutinizer/g/phpgt/dom/master.svg?style=flat-square" alt="Code quality" />
 </a>
 <a href="https://scrutinizer-ci.com/g/phpgt/dom" target="_blank">
-    <img src="https://img.shields.io/scrutinizer/coverage/g/phpgt/dom/master.svg?style=flat-square" alt="Code coverage" />
+	<img src="https://img.shields.io/scrutinizer/coverage/g/phpgt/dom/master.svg?style=flat-square" alt="Code coverage" />
 </a>
 <a href="https://packagist.org/packages/phpgt/dom" target="_blank">
-    <img src="https://img.shields.io/packagist/v/phpgt/dom.svg?style=flat-square" alt="Current version" />
+	<img src="https://img.shields.io/packagist/v/phpgt/dom.svg?style=flat-square" alt="Current version" />
 </a>
 
 ## Example usage: Hello, you!
@@ -33,12 +30,12 @@ This is a simple example of how source HTML files can be treated as templates. T
 ```html
 <!doctype html>
 <h1>
-    Hello, <span id="your-name">you</span> !
+	Hello, <span id="your-name">you</span> !
 </h1>
 
 <form>
-    <input name="name" placeholder="Your name, please" required />
-    <button>Submit</button>
+	<input name="name" placeholder="Your name, please" required />
+	<button>Submit</button>
 </form>
 ```
 
@@ -52,7 +49,7 @@ $html = file_get_contents("name.html");
 $document = new \Gt\Dom\HTMLDocument($html);
 
 if(isset($_GET["name"])) {
-    $document->getElementById("your-name")->textContent = $_GET["name"];
+	$document->getElementById("your-name")->textContent = $_GET["name"];
 }
 
 echo $document->saveHTML();
