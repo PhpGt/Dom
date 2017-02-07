@@ -1,4 +1,4 @@
-<img src="icon.png" alt="The modern DOM API for PHP 7 projects" style="float:right" />
+<img src="icon.png" alt="The modern DOM API for PHP 7 projects" align="right" />
 
 # The modern DOM API for PHP 7 projects.
 
