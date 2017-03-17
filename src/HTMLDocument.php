@@ -30,6 +30,7 @@ public function __construct($document) {
 	}
 }
 
+/** @return Element|null */
 public function querySelector(string $selectors) {
 	return $this->documentElement->querySelector($selectors);
 }

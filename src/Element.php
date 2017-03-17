@@ -7,12 +7,15 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
 /**
  * Represents an object of a Document.
  * @property-read string $innerHTML
+ * @property-read TokenList $classList
  */
 class Element extends \DOMElement {
 use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
-private $classList;
+/** @var  TokenList */
+private $liveProperty_classList;
 
+/** @return Element|null */
 public function querySelector(string $selector) {
 	$htmlCollection = $this->css($selector);
 	return $htmlCollection->item(0);
@@ -78,11 +81,11 @@ private function xPath(string $selector):HTMLCollection {
 }
 
 public function prop_get_classList() {
-	if(!$this->classList) {
-		$this->classList = new TokenList($this, "class");
+	if(!$this->liveProperty_classList) {
+		$this->liveProperty_classList = new TokenList($this, "class");
 	}
 
-	return $this->classList;
+	return $this->liveProperty_classList;
 }
 
 public function prop_get_value() {
@@ -139,7 +142,7 @@ private function value_set_select($newValue) {
 
 	if($newSelectedIndex !== NULL) {
 		foreach ($selectedIndexes as $i) {
-			$options->item($i)->removeAttribute('selected');	
+			$options->item($i)->removeAttribute('selected');
 		}
 
 		$options->item($newSelectedIndex)->setAttribute('selected', 'selected');
