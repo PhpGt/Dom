@@ -83,6 +83,7 @@ public function testQuerySelectorAfterAddingToDocument() {
     $document->querySelector("span#replaceWithSUT")->replaceWith($fragment);
 
     $actualResult = $fragment->querySelector("li");
+    $this->assertNotNull($actualResult);
     $this->assertEquals("inScope", $actualResult->textContent);
 }
 
