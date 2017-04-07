@@ -21,4 +21,8 @@ namespace Gt\Dom;
 class DocumentFragment extends \DOMDocumentFragment {
 use LiveProperty, ParentNode;
 
+protected function getRootDocument(): \DOMDocument
+{
+    return $this->ownerDocument;
+}
 }#

@@ -18,6 +18,8 @@ use DOMDocument;
  *  Links are <a> Elements with the `href` attribute.
  * @property-read HTMLCollection $scripts List of all <script> elements.
  * @property string $title The title of the document, defined using <title>.
+ * @method DocumentFragment createDocumentFragment(string) Create a new document fragment
+ *                         from an xml string
  */
 class HTMLDocument extends Document {
 use LiveProperty, ParentNode;
@@ -28,15 +30,6 @@ public function __construct($document) {
 	if(!($document instanceof DOMDocument)) {
 		$this->loadHTML($document);
 	}
-}
-
-/** @return Element|null */
-public function querySelector(string $selectors) {
-	return $this->documentElement->querySelector($selectors);
-}
-
-public function querySelectorAll(string $selectors):HTMLCollection {
-	return $this->documentElement->querySelectorAll($selectors);
 }
 
 public function getElementsByClassName(string $names):HTMLCollection {
@@ -90,7 +83,7 @@ private function prop_set_title($value) {
 }
 
 private function getOrCreateElement(string $tagName):Element {
-	$element = $this->documentElement->querySelector($tagName);
+	$element = $this->querySelector($tagName);
 	if(is_null($element)) {
 		$element = $this->createElement($tagName);
 		$this->documentElement->appendChild($element);
@@ -98,5 +91,4 @@ private function getOrCreateElement(string $tagName):Element {
 
 	return $element;
 }
-
 }#
