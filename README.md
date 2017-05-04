@@ -27,7 +27,7 @@ Consider a page with a form, with an input element to enter your name. When the 
 
 This is a simple example of how source HTML files can be treated as templates. This can easily be applied to more advanced template pages to provide dynamic content, without requiring non-standard techniques such as `{{curly braces}}` for placeholders, or `echo '<div class='easy-mistake'>' . $content['opa'] . '</div>'` horrible HTML construction from within PHP.
 
-### Source HTML (`name.html`).
+### Source HTML (`name.html`)
 
 ```html
 <!doctype html>
@@ -41,7 +41,7 @@ This is a simple example of how source HTML files can be treated as templates. T
 </form>
 ```
 
-### PHP used to inject your name (`index.php`).
+### PHP used to inject your name (`index.php`)
 
 ```php
 <?php
@@ -61,7 +61,7 @@ echo $document->saveHTML();
 
 ![Using DOM in PHP](https://github.com/PhpGt/Dom/raw/master/example.gif)
 
-## Features at a glance.
+## Features at a glance
 
 + Modern DOM classes available on the server:
 	+ [`HTMLDocument`][mdn-HTMLDocument].
@@ -86,7 +86,7 @@ echo $document->saveHTML();
 	+ [`scripts`][mdn-scripts].
 	+ [`title`][mdn-title].
 
-### Non-standard features.
+### Non-standard features
 
 The following features are currently in development and are planned to be released into version 2.0.
 
