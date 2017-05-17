@@ -31,7 +31,7 @@ const HTML_MORE = <<<HTML
 
 	<form>
 		<input name="fieldA" type="text" />
-		<input name="who" class="c1 c3" />
+		<input name="who" class="c1 c3" value="Scarlett" />
 		<button type="submit">Submit</button>
 	</form>
 	<form>

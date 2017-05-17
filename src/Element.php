@@ -172,6 +172,14 @@ private function value_get_select() {
 	return $value;
 }
 
+private function value_set_input(string $newValue) {
+	return $this->setAttribute("value", $newValue);
+}
+
+private function value_get_input() {
+	return $this->getAttribute("value");
+}
+
 static public function isSelectOptionSelected(Element $option) {
 	return $option->hasAttribute('selected') && $option->getAttribute('selected');
 }

@@ -150,10 +150,22 @@ public function testIdProperty() {
 	$this->assertEquals("who", $element->id);
 }
 
-public function testTagName() {
+public function testTagNameProperty() {
 	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$element = $document->getElementsByTagName("form")[0];
 	$this->assertEquals("form", $element->tagName);
+}
+
+public function testValueProperty() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$paragraph = $document->getElementById("who");
+	$this->assertNull($paragraph->value);
+
+	$input = $document->querySelector("form input[name=who]");
+	$this->assertEquals("Scarlett", $input->value);
+
+	$input->value = "Sparky";
+	$this->assertEquals("Sparky", $input->getAttribute("value"));
 }
 
 }#
