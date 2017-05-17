@@ -135,4 +135,13 @@ public function testClassListProperty() {
 	$this->assertFalse($element->classList->contains("nothing"));
 }
 
+public function testClassNameProperty() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$element = $document->getElementById("who");
+	$this->assertInternalType("string", $element->className);
+
+	$this->assertContains("m-before-p", $element->className);
+	$this->assertNotContains("nothing", $element->className);
+}
+
 }#

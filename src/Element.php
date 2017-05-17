@@ -80,6 +80,10 @@ private function xPath(string $selector):HTMLCollection {
 	return new HTMLCollection($x->query($selector, $this));
 }
 
+public function prop_get_className() {
+	return $this->getAttribute("class");
+}
+
 public function prop_get_classList() {
 	if(!$this->liveProperty_classList) {
 		$this->liveProperty_classList = new TokenList($this, "class");
