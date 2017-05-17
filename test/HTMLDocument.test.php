@@ -142,4 +142,13 @@ public function testTitleWhenNoTitle() {
 	$this->assertEquals($newTitle, $document->title);
 }
 
+public function testEmptyHTMLDocument() {
+	$document = new HTMLDocument("");
+	$nothing = $document->querySelector("div");
+	$this->assertNull($nothing);
+	$this->assertCount(2, $document->documentElement->children);
+	$this->assertNotNull($document->head);
+	$this->assertNotNull($document->body);
+}
+
 }#
