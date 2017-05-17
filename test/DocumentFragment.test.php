@@ -104,8 +104,7 @@ public function testQuerySelectorAfterAddingToDocument() {
 }
 
 public function testQuerySelectorAllAfterAddingToDocument() {
-	$document = new HTMLDocument(
-        self::DOC_CONTENT_BEFORE_INSERT);
+	$document = new HTMLDocument(self::DOC_CONTENT_BEFORE_INSERT);
 
 	$fragment = $document->createDocumentFragment();
 	$fragment->appendXML("<ul><li id='new-frag-li'>inScope</li></ul>");
@@ -114,6 +113,15 @@ public function testQuerySelectorAllAfterAddingToDocument() {
 
 	$fragLiList = $fragment->querySelectorAll("li");
 	$this->assertCount(0, $fragLiList);
+}
+
+public function testChildren() {
+	$document = new HTMLDocument(self::DOC_CONTENT_BEFORE_INSERT);
+
+	$fragment = $document->createDocumentFragment();
+	$fragment->appendXML("<p>one</p><p>two</p><p>three</p>");
+
+	$this->assertCount(3, $fragment->children);
 }
 
 }#
