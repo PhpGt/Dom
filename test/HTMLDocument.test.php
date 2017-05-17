@@ -142,4 +142,10 @@ public function testTitleWhenNoTitle() {
 	$this->assertEquals($newTitle, $document->title);
 }
 
+public function testOptionalTags() {
+	$document = new HTMLDocument(test\Helper::HTML_LESS);
+	$this->assertCount(3, $document->head->children);
+	$this->assertCount(1, $document->body->children);
+}
+
 }#

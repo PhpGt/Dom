@@ -4,6 +4,13 @@ namespace Gt\Dom\test;
 class Helper {
 
 const HTML = "<!doctype html><html><body><h1>Hello!</h1></body></html>";
+const HTML_LESS = <<<HTML
+<!doctype html>
+<meta charset="utf-8" />
+<title>Hello, World!</title>
+<link rel="stylesheet" href="/style/main.css" />
+<p>This is a test.</p>
+HTML;
 const HTML_MORE = <<<HTML
 <!doctype html>
 <html>
