@@ -92,6 +92,10 @@ public function prop_get_classList() {
 	return $this->liveProperty_classList;
 }
 
+public function prop_get_tagName() {
+	return strtoupper($this->tagName);
+}
+
 public function prop_get_value() {
 	$methodName = 'value_get_' . $this->tagName;
 	if(method_exists($this, $methodName)) {
