@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\Dom\TokenList;
+
 class ElementTest extends \PHPUnit_Framework_TestCase {
 
 public function testQuerySelector() {
@@ -122,7 +124,15 @@ public function testOuterHTML() {
 	$this->assertContains("</p>", $p->outerHTML);
 	$this->assertNotContains("<h2", $p->outerHTML);
 	$this->assertNotContains("name=\"forms\">", $p->outerHTML);
+}
 
+public function testClassListProperty() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$element = $document->getElementById("who");
+	$this->assertInstanceOf(TokenList::class, $element->classList);
+
+	$this->assertTrue($element->classList->contains("m-before-p"));
+	$this->assertFalse($element->classList->contains("nothing"));
 }
 
 }#
