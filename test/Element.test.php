@@ -168,4 +168,12 @@ public function testValueProperty() {
 	$this->assertEquals("Sparky", $input->getAttribute("value"));
 }
 
+public function testRemove() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$bodyChildrenCount = count($document->body->children);
+	$paragraph = $document->querySelector("p");
+	$paragraph->remove();
+	$this->assertCount($bodyChildrenCount - 1, $document->body->children);
+}
+
 }#
