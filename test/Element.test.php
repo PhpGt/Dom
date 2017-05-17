@@ -144,4 +144,10 @@ public function testClassNameProperty() {
 	$this->assertNotContains("nothing", $element->className);
 }
 
+public function testIdProperty() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$element = $document->getElementById("who");
+	$this->assertEquals("who", $element->id);
+}
+
 }#
