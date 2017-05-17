@@ -152,8 +152,8 @@ public function testIdProperty() {
 
 public function testTagName() {
 	$document = new HTMLDocument(test\Helper::HTML_MORE);
-	$element = $document->getElementByTagName("form");
-	$this->assertEquals("FORM", $element->tagName);
+	$element = $document->getElementsByTagName("form")[0];
+	$this->assertEquals("form", $element->tagName);
 }
 
 }#
