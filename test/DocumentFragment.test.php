@@ -124,4 +124,15 @@ public function testChildren() {
 	$this->assertCount(3, $fragment->children);
 }
 
+public function testFirstElementChild() {
+	$document = new HTMLDocument(self::DOC_CONTENT_BEFORE_INSERT);
+
+	$fragment = $document->createDocumentFragment();
+	$fragment->appendXML("this is a text node<p>this is an element node</p>");
+	$child = $fragment->firstElementChild;
+
+	$this->assertInstanceOf(Element::class, $child);
+	$this->assertEquals("p", $child->tagName);
+}
+
 }#
