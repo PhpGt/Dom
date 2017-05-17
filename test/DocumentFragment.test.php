@@ -135,4 +135,21 @@ public function testFirstElementChild() {
 	$this->assertEquals("p", $child->tagName);
 }
 
+public function testLastElementChild() {
+	$document = new HTMLDocument(self::DOC_CONTENT_BEFORE_INSERT);
+
+	$fragment = $document->createDocumentFragment();
+	$fragment->appendXML(
+		"this is a text node"
+		. "<p>this is a paragraph</p>"
+		. "<div>this is a div</div>"
+		. "this is another text node"
+	);
+
+	$child = $fragment->lastElementChild;
+
+	$this->assertInstanceOf(Element::class, $child);
+	$this->assertEquals("div", $child->tagName);
+}
+
 }#
