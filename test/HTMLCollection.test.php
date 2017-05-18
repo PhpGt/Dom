@@ -70,4 +70,11 @@ public function testIteration() {
 	}
 }
 
+public function testLengthProperty() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$nodeList = $document->querySelectorAll("form>input");
+	$this->assertCount(3, $nodeList);
+	$this->assertEquals(3, $nodeList->length);
+}
+
 }#
