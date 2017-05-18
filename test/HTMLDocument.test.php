@@ -140,6 +140,10 @@ public function testTitleWhenNoTitle() {
 	$document->title = $newTitle;
 
 	$this->assertEquals($newTitle, $document->title);
+	$this->assertEquals(
+		$newTitle,
+		$document->head->querySelector("title")->textContent
+	);
 }
 
 public function testOptionalTags() {
