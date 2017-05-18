@@ -57,10 +57,6 @@ if(isset($_GET["name"])) {
 echo $document->saveHTML();
 ```
 
-### Screencast of above example:
-
-![Using DOM in PHP](https://github.com/PhpGt/Dom/raw/master/example.gif)
-
 ## Features at a glance
 
 + Modern DOM classes available on the server:
