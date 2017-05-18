@@ -48,6 +48,11 @@ const HTML_MORE = <<<HTML
 </body>
 </html>
 HTML;
+const HTML_TEXT = <<<HTML
+<p>Thru-hiking is great!  <strong>No insipid election coverage!</strong>
+  However, <a href="http://en.wikipedia.org/wiki/Absentee_ballot">casting a
+  ballot</a> is tricky.</p>
+HTML;
 const HTML_NESTED = <<<HTML
 <!doctype html>
 <html>
