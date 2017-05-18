@@ -26,4 +26,15 @@ public function testWholeText() {
 	$this->assertContains(" However, ", $textNode->wholeText);
 }
 
+public function testSplitText() {
+	$document = new HTMLDocument(test\Helper::HTML_TEXT);
+	$para = $document->querySelector("p");
+	$textNode = $para->firstChild;
+	$textNode->splitText(4);
+
+	$this->assertEquals("Thru", $para->firstChild->textContent);
+	$this->assertContains("-hiking is great!",
+		$para->firstChild->nextSibling->textContent);
+}
+
 }#
