@@ -140,6 +140,25 @@ public function testTitleWhenNoTitle() {
 	$document->title = $newTitle;
 
 	$this->assertEquals($newTitle, $document->title);
+	$this->assertEquals(
+		$newTitle,
+		$document->head->querySelector("title")->textContent
+	);
+}
+
+public function testOptionalTags() {
+	$document = new HTMLDocument(test\Helper::HTML_LESS);
+	$this->assertCount(3, $document->head->children);
+	$this->assertCount(1, $document->body->children);
+}
+
+public function testEmptyHTMLDocument() {
+	$document = new HTMLDocument("");
+	$nothing = $document->querySelector("div");
+	$this->assertNull($nothing);
+	$this->assertCount(2, $document->documentElement->children);
+	$this->assertNotNull($document->head);
+	$this->assertNotNull($document->body);
 }
 
 }#

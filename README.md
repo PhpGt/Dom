@@ -27,7 +27,7 @@ Consider a page with a form, with an input element to enter your name. When the 
 
 This is a simple example of how source HTML files can be treated as templates. This can easily be applied to more advanced template pages to provide dynamic content, without requiring non-standard techniques such as `{{curly braces}}` for placeholders, or `echo '<div class='easy-mistake'>' . $content['opa'] . '</div>'` horrible HTML construction from within PHP.
 
-### Source HTML (`name.html`).
+### Source HTML (`name.html`)
 
 ```html
 <!doctype html>
@@ -41,7 +41,7 @@ This is a simple example of how source HTML files can be treated as templates. T
 </form>
 ```
 
-### PHP used to inject your name (`index.php`).
+### PHP used to inject your name (`index.php`)
 
 ```php
 <?php
@@ -57,49 +57,45 @@ if(isset($_GET["name"])) {
 echo $document->saveHTML();
 ```
 
-### Screencast of above example:
-
-![Using DOM in PHP](https://github.com/PhpGt/Dom/raw/master/example.gif)
-
-## Features at a glance.
+## Features at a glance
 
 + Modern DOM classes available on the server:
-	+ [`HTMLDocument`][mdn-HTMLDocument].
-	+ [`Element`][mdn-Element].
-	+ [`HTMLCollection`][mdn-HTMLCollection].
-	+ and more [extended DOM][mdn-DOM-levels] classes.
-+ Standardised traits to add functionality in accordance with W3C.
-+ Reference elements using CSS selectors via [`querySelector`][mdn-qs]([`All`][mdn-qsa]).
-+ Add/remove/toggle elements' classes using [`ClassList`][mdn-classList].
+	+ [`HTMLDocument`][mdn-HTMLDocument]
+	+ [`Element`][mdn-Element]
+	+ [`HTMLCollection`][mdn-HTMLCollection]
+	+ and more [extended DOM][mdn-DOM-levels] classes
++ Standardised traits to add functionality in accordance with W3C
++ Reference elements using CSS selectors via [`querySelector`][mdn-qs]([`All`][mdn-qsa])
++ Add/remove/toggle elements' classes using [`ClassList`][mdn-classList]
 + `Element` Nodes within the document traversable with W3C properties:
-	+ [`previousElementSibling`][mdn-pes] and [`nextElementSibling`][mdn-nes].
-	+ [`children`][mdn-children].
-	+ [`lastElementChild`][mdn-lec] and [`firstElementChild`][mdn-fec].
-+ [`Element::remove()`][mdn-remove] to detach it from the document.
-+ Add elements around another using [`Element::before()`][mdn-before] and [`Element::after()`][mdn-after].
-+ Replace an element in place using [`Element::replaceWith()`][mdn-replaceWith].
+	+ [`previousElementSibling`][mdn-pes] and [`nextElementSibling`][mdn-nes]
+	+ [`children`][mdn-children]
+	+ [`lastElementChild`][mdn-lec] and [`firstElementChild`][mdn-fec]
++ [`Element::remove()`][mdn-remove] to detach it from the document
++ Add elements around another using [`Element::before()`][mdn-before] and [`Element::after()`][mdn-after]
++ Replace an element in place using [`Element::replaceWith()`][mdn-replaceWith]
 + Standard collection properties on the `HTMLDocument`:
-	+ [`anchors`][mdn-anchors].
-	+ [`forms`][mdn-forms].
-	+ [`image`][mdn-images].
-	+ [`links`][mdn-links].
-	+ [`scripts`][mdn-scripts].
-	+ [`title`][mdn-title].
+	+ [`anchors`][mdn-anchors]
+	+ [`forms`][mdn-forms]
+	+ [`image`][mdn-images]
+	+ [`links`][mdn-links]
+	+ [`scripts`][mdn-scripts]
+	+ [`title`][mdn-title]
 
-### Non-standard features.
+### Non-standard features
 
 The following features are currently in development and are planned to be released into version 2.0.
 
 + Server-side WebComponent support:
-	+ `<calendar> <date>1988-04-05</date> <caption>My birthday</caption> </calendar>`.
-	+ `<button is="shopping-cart">Add to cart</button>`.
+	+ `<calendar> <date>1988-04-05</date> <caption>My birthday</caption> </calendar>`
+	+ `<button is="shopping-cart">Add to cart</button>`
 + Templating to ease dynamic content:
-	+ `<template id="list-item"> <li> Add this many times </li> </template>`.
-	+ `<tr data-template="table-row"> <td> Add this many times. </td> </tr>`.
+	+ `<template id="list-item"> <li> Add this many times </li> </template>`
+	+ `<tr data-template="table-row"> <td> Add this many times. </td> </tr>`
 + Reference an element's children using CSS query selectors via ArrayAccess:
-	+ `$container["h1"][0]->textContent = "Hello, World!";`.
-	+ `$document["body>header>nav li a"][0]->href = "/nowhere.html";`.
-	+ `foreach($myElement["input[type='checkbox']"] as $checkbox) {`.
+	+ `$container["h1"][0]->textContent = "Hello, World!";`
+	+ `$document["body>header>nav li a"][0]->href = "/nowhere.html";`
+	+ `foreach($myElement["input[type='checkbox']"] as $checkbox) {`
 
 [mdn-HTMLDocument]: https://developer.mozilla.org/docs/Web/API/HTMLDocument
 [mdn-Element]: https://developer.mozilla.org/docs/Web/API/Element

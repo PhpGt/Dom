@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\Dom\TokenList;
+
 class ElementTest extends \PHPUnit_Framework_TestCase {
 
 public function testQuerySelector() {
@@ -122,7 +124,56 @@ public function testOuterHTML() {
 	$this->assertContains("</p>", $p->outerHTML);
 	$this->assertNotContains("<h2", $p->outerHTML);
 	$this->assertNotContains("name=\"forms\">", $p->outerHTML);
+}
 
+public function testClassListProperty() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$element = $document->getElementById("who");
+	$this->assertInstanceOf(TokenList::class, $element->classList);
+
+	$this->assertTrue($element->classList->contains("m-before-p"));
+	$this->assertFalse($element->classList->contains("nothing"));
+}
+
+public function testClassNameProperty() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$element = $document->getElementById("who");
+	$this->assertInternalType("string", $element->className);
+
+	$this->assertContains("m-before-p", $element->className);
+	$this->assertNotContains("nothing", $element->className);
+}
+
+public function testIdProperty() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$element = $document->getElementById("who");
+	$this->assertEquals("who", $element->id);
+}
+
+public function testTagNameProperty() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$element = $document->getElementsByTagName("form")[0];
+	$this->assertEquals("form", $element->tagName);
+}
+
+public function testValueProperty() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$paragraph = $document->getElementById("who");
+	$this->assertNull($paragraph->value);
+
+	$input = $document->querySelector("form input[name=who]");
+	$this->assertEquals("Scarlett", $input->value);
+
+	$input->value = "Sparky";
+	$this->assertEquals("Sparky", $input->getAttribute("value"));
+}
+
+public function testRemove() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$bodyChildrenCount = count($document->body->children);
+	$paragraph = $document->querySelector("p");
+	$paragraph->remove();
+	$this->assertCount($bodyChildrenCount - 1, $document->body->children);
 }
 
 }#

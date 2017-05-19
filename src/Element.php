@@ -54,6 +54,10 @@ public function closest(string $selectors) {
 }
 
 
+public function prop_get_className() {
+	return $this->getAttribute("class");
+}
+
 public function prop_get_classList() {
 	if(!$this->liveProperty_classList) {
 		$this->liveProperty_classList = new TokenList($this, "class");
@@ -145,6 +149,14 @@ private function value_get_select() {
 protected  function getRootDocument(): \DOMDocument
 {
     return $this->ownerDocument;
+}
+
+private function value_set_input(string $newValue) {
+	return $this->setAttribute("value", $newValue);
+}
+
+private function value_get_input() {
+	return $this->getAttribute("value");
 }
 
 static public function isSelectOptionSelected(Element $option) {

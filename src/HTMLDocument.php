@@ -28,7 +28,12 @@ public function __construct($document) {
 	parent::__construct($document);
 
 	if(!($document instanceof DOMDocument)) {
-		$this->loadHTML($document);
+		if(empty($document)) {
+			$this->fillEmptyDocumentElement();
+		}
+		else {
+			$this->loadHTML($document);
+		}
 	}
 }
 
@@ -91,4 +96,15 @@ private function getOrCreateElement(string $tagName):Element {
 
 	return $element;
 }
+
+private function fillEmptyDocumentElement() {
+	$this->loadHTML("<!doctype html><html></html>");
+	$tagsToCreate = ["head", "body"];
+
+	foreach($tagsToCreate as $tag) {
+		$node = $this->createElement($tag);
+		$this->documentElement->appendChild($node);
+	}
+}
+
 }#

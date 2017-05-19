@@ -4,6 +4,13 @@ namespace Gt\Dom\test;
 class Helper {
 
 const HTML = "<!doctype html><html><body><h1>Hello!</h1></body></html>";
+const HTML_LESS = <<<HTML
+<!doctype html>
+<meta charset="utf-8" />
+<title>Hello, World!</title>
+<link rel="stylesheet" href="/style/main.css" />
+<p>This is a test.</p>
+HTML;
 const HTML_MORE = <<<HTML
 <!doctype html>
 <html>
@@ -31,7 +38,7 @@ const HTML_MORE = <<<HTML
 
 	<form>
 		<input name="fieldA" type="text" />
-		<input name="who" class="c1 c3" />
+		<input name="who" class="c1 c3" value="Scarlett" />
 		<button type="submit">Submit</button>
 	</form>
 	<form>
@@ -40,6 +47,11 @@ const HTML_MORE = <<<HTML
 	</form>
 </body>
 </html>
+HTML;
+const HTML_TEXT = <<<HTML
+<p>Thru-hiking is great!  <strong>No insipid election coverage!</strong>
+  However, <a href="http://en.wikipedia.org/wiki/Absentee_ballot">casting a
+  ballot</a> is tricky.</p>
 HTML;
 const HTML_NESTED = <<<HTML
 <!doctype html>

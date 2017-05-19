@@ -19,14 +19,16 @@ public function __construct($document = null) {
 	$this->registerNodeClass("\\DOMCharacterData", CharacterData::class);
 	$this->registerNodeClass("\\DOMText", Text::class);
 	$this->registerNodeClass("\\DOMComment", Comment::class);
-    if ($document instanceof \DOMDocument) {
-        $this->appendChild($this->importNode($document->documentElement, true));
-        return;
-    }
+
+	if ($document instanceof \DOMDocument) {
+		$node = $this->importNode($document->documentElement, true);
+		$this->appendChild($node);
+		return;
+	}
 }
 
-protected  function getRootDocument(): \DOMDocument
-{
-    return $this;
+protected  function getRootDocument(): \DOMDocument {
+	return $this;
 }
-};
+
+}#
