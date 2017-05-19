@@ -20,10 +20,12 @@ public function __construct($document = null) {
 	$this->registerNodeClass("\\DOMCharacterData", "\\Gt\\Dom\\CharacterData");
 	$this->registerNodeClass("\\DOMText", "\\Gt\\Dom\\Text");
 	$this->registerNodeClass("\\DOMComment", "\\Gt\\Dom\\Comment");
-    if ($document instanceof \DOMDocument) {
-        $this->appendChild($this->importNode($document->documentElement, true));
-        return;
-    }
+
+	if($document instanceof \DOMDocument) {
+		$node = $this->importNode($document->documentElement, true);
+		$this->appendChild($node);
+		return;
+	}
 }
 
 };
