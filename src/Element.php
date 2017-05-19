@@ -6,8 +6,17 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
 
 /**
  * Represents an object of a Document.
- * @property-read string $innerHTML
- * @property-read TokenList $classList
+ * @property string $className Gets and sets the value of the class attribute
+ * @property-read TokenList $classList Returns a live TokenList collection of
+ * the class attributes of the element
+ * @property string $value Gets or sets the value of the element according to
+ * its element type
+ * @property string $id Gets or sets the value of the id attribute
+ * @property string $innerHTML Gets or sets the HTML syntax describing the
+ * element's descendants
+ * @property string $outerHTML Gets or sets the HTML syntax describing the
+ * element and its descendants. It can be set to replace the element with nodes
+ * parsed from the given string
  */
 class Element extends \DOMElement {
 use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
@@ -58,6 +67,10 @@ public function prop_get_className() {
 	return $this->getAttribute("class");
 }
 
+public function prop_set_className(string $value) {
+	$this->setAttribute("class", $value);
+}
+
 public function prop_get_classList() {
 	if(!$this->liveProperty_classList) {
 		$this->liveProperty_classList = new TokenList($this, "class");
@@ -75,18 +88,18 @@ public function prop_get_value() {
 	return null;
 }
 
-public function prop_set_value($newValue) {
+public function prop_set_value(string $newValue) {
 	$methodName = 'value_set_' . $this->tagName;
 	if(method_exists($this, $methodName)) {
 		return $this->$methodName($newValue);
 	}
 }
 
-public function prop_get_id():string {
+public function prop_get_id() : string {
 	return $this->getAttribute("id");
 }
 
-public function prop_set_id($newValue) {
+public function prop_set_id(string $newValue) {
 	$this->setAttribute("id", $newValue);
 }
 
@@ -99,11 +112,30 @@ public function prop_get_innerHTML():string {
 	return implode(PHP_EOL, $childHtmlArray);
 }
 
-public function prop_get_outerHTML():string {
+public function prop_set_innerHTML(string $html) {
+	$fragment = $this->ownerDocument->createDocumentFragment();
+	$fragment->appendXML($html);
+
+	while($this->firstChild) {
+		$this->removeChild($this->firstChild);
+	}
+
+	while($fragment->firstChild) {
+		$this->appendChild($fragment->firstChild);
+	}
+}
+
+public function prop_get_outerHTML() : string {
 	return $this->ownerDocument->saveHTML($this);
 }
 
-private function value_set_select($newValue) {
+public function prop_set_outerHTML(string $html) {
+	$fragment = $this->ownerDocument->createDocumentFragment();
+	$fragment->appendXML($html);
+	$this->replaceWith($fragment);
+}
+
+private function value_set_select(string $newValue) {
 	$options = $this->getElementsByTagName('option');
 	$selectedIndexes = [];
 	$newSelectedIndex = NULL;
@@ -127,7 +159,7 @@ private function value_set_select($newValue) {
 	}
 }
 
-private function value_get_select() {
+private function value_get_select() : string {
 	$options = $this->getElementsByTagName('option');
 	if ($options->length == 0) {
 		$value = '';

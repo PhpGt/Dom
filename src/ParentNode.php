@@ -19,7 +19,7 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  *  child of this ParentNode.
  * @property-read Element|null $lastElementChild The Element that is the last
  *  child of this ParentNode.
- * @property-read int $childElementCound The amount of children that the
+ * @property-read int $childElementCount The amount of children that the
  *  ParentNode has.
  */
 trait ParentNode {

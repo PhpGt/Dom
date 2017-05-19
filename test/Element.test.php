@@ -113,6 +113,12 @@ public function testInnerHTML() {
 	$this->assertContains("<a href=", $p->innerHTML);
 	$this->assertContains("Greg Bowler", $p->innerHTML);
 	$this->assertNotContains("<p", $p->innerHTML);
+
+	$p->innerHTML = "This is <strong>very</strong> important!";
+	$this->assertInstanceOf(Element::class, $p->querySelector("strong"));
+	$this->assertContains("This is", $p->textContent);
+	$this->assertContains("very", $p->textContent);
+	$this->assertEquals("very", $p->querySelector("strong")->textContent);
 }
 
 public function testOuterHTML() {
