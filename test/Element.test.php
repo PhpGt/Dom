@@ -12,9 +12,9 @@ public function testQuerySelector() {
 
 	$a = $document->querySelector("p>a");
 
-	$this->assertInstanceOf("\Gt\Dom\Element", $pAfterH2);
-	$this->assertInstanceOf("\Gt\Dom\Element", $aWithinP);
-	$this->assertInstanceOf("\Gt\Dom\Element", $a);
+	$this->assertInstanceOf(Element::class, $pAfterH2);
+	$this->assertInstanceOf(Element::class, $aWithinP);
+	$this->assertInstanceOf(Element::class, $a);
 	$this->assertSame($a, $aWithinP);
 }
 
@@ -73,8 +73,8 @@ public function testElementClosest() {
 	$innerPost = $document->querySelector("div.post.inner");
 	$innerListItem = $document->querySelector(".inner-item-1");
 	$outerPost = $document->querySelector("div.post.outer");
-	$this->assertInstanceOf("\Gt\Dom\Element", $innerPost);
-	$this->assertInstanceOf("\Gt\Dom\Element", $outerPost);
+	$this->assertInstanceOf(Element::class, $innerPost);
+	$this->assertInstanceOf(Element::class, $outerPost);
 
 	$closestDivToInnerListItem = $innerListItem->closest("div");
 	$closestDivToInnerPost = $innerPost->closest("div");
