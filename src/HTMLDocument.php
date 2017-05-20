@@ -24,7 +24,7 @@ use DOMDocument;
 class HTMLDocument extends Document {
 use LiveProperty, ParentNode;
 
-public function __construct($document) {
+public function __construct($document = "") {
 	parent::__construct($document);
 
 	if(!($document instanceof DOMDocument)) {
@@ -32,6 +32,13 @@ public function __construct($document) {
 			$this->fillEmptyDocumentElement();
 		}
 		else {
+// loadHTML expects an ISO-8859-1 encoded string.
+// http://stackoverflow.com/questions/11309194/php-domdocument-failing-to-handle-utf-8-characters
+			$document = mb_convert_encoding(
+				$document,
+				"HTML-ENTITIES",
+				"UTF-8"
+			);
 			$this->loadHTML($document);
 		}
 	}
