@@ -73,4 +73,14 @@ public function testToggle() {
 
 }
 
+public function testCaseSensitivity() {
+	$document = new HTMLDocument(test\Helper::HTML_MORE);
+	$input = $document->querySelector("form .c1.c2.c3.c4");
+	$this->assertTrue($input->classList->contains("c1"));
+	$this->assertTrue(!$input->classList->contains("C1"));
+	$input->classList->add("C1");
+	$this->assertTrue($input->classList->contains("c1"));
+	$this->assertTrue($input->classList->contains("C1"));
+}
+
 }#
