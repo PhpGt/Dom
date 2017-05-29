@@ -105,7 +105,7 @@ public function prop_set_id(string $newValue) {
 
 public function prop_get_innerHTML():string {
 	$childHtmlArray = [];
-	foreach($this->children as $child) {
+	foreach($this->childNodes as $child) {
 		$childHtmlArray []= $this->ownerDocument->saveHTML($child);
 	}
 
