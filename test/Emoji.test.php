@@ -19,14 +19,14 @@ public function testCreation() {
 public function testGetSet() {
 	$document = new HTMLDocument();
 	$document->body->innerHTML = self::EMOJI_GRINNING_CAT_FACE;
-	
+
 	$this->assertContains(
 		self::EMOJI_GRINNING_CAT_FACE,
-		$document->body->innerText
+		$document->body->textContent
 	);
 
 	$document = new HTMLDocument();
-	$document->body->innerText = self::EMOJI_GRINNING_CAT_FACE;
+	$document->body->textContent = self::EMOJI_GRINNING_CAT_FACE;
 	$this->assertContains(
 		self::EMOJI_GRINNING_CAT_FACE,
 		$document->body->innerHTML
