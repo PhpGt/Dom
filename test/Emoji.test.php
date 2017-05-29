@@ -33,4 +33,13 @@ public function testGetSet() {
 	);
 }
 
+public function testNested() {
+    $document = new HTMLDocument(test\Helper::HTML_MORE);
+    $firstHeader = $document->querySelector("h1");
+    $span = $document->createElement("span");
+    $span->textContent = self::EMOJI_WHITE_STAR;
+    $firstHeader->appendChild($span);
+
+    $this->assertContains(self::EMOJI_WHITE_STAR, $firstHeader->textContent);
+}
 }#
