@@ -19,7 +19,7 @@ public function testCreation() {
 public function testGetSet() {
 	$document = new HTMLDocument();
 	$document->body->innerHTML = self::EMOJI_GRINNING_CAT_FACE;
-	var_dump($document->body->innerHTML);die();
+	
 	$this->assertContains(
 		self::EMOJI_GRINNING_CAT_FACE,
 		$document->body->innerText
