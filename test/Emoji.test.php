@@ -19,18 +19,27 @@ public function testCreation() {
 public function testGetSet() {
 	$document = new HTMLDocument();
 	$document->body->innerHTML = self::EMOJI_GRINNING_CAT_FACE;
-	var_dump($document->body->innerHTML);die();
+
 	$this->assertContains(
 		self::EMOJI_GRINNING_CAT_FACE,
-		$document->body->innerText
+		$document->body->textContent
 	);
 
 	$document = new HTMLDocument();
-	$document->body->innerText = self::EMOJI_GRINNING_CAT_FACE;
+	$document->body->textContent = self::EMOJI_GRINNING_CAT_FACE;
 	$this->assertContains(
 		self::EMOJI_GRINNING_CAT_FACE,
 		$document->body->innerHTML
 	);
 }
 
+public function testNested() {
+    $document = new HTMLDocument(test\Helper::HTML_MORE);
+    $firstHeader = $document->querySelector("h1");
+    $span = $document->createElement("span");
+    $span->textContent = self::EMOJI_WHITE_STAR;
+    $firstHeader->appendChild($span);
+
+    $this->assertContains(self::EMOJI_WHITE_STAR, $firstHeader->textContent);
+}
 }#
