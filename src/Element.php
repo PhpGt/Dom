@@ -105,7 +105,7 @@ public function prop_set_id(string $newValue) {
 
 public function prop_get_innerHTML():string {
 	$childHtmlArray = [];
-	foreach($this->children as $child) {
+	foreach($this->childNodes as $child) {
 		$childHtmlArray []= $this->ownerDocument->saveHTML($child);
 	}
 
@@ -114,6 +114,7 @@ public function prop_get_innerHTML():string {
 
 public function prop_set_innerHTML(string $html) {
 	$fragment = $this->ownerDocument->createDocumentFragment();
+// The wrapper DIV allows non-XML to be appended.
 	$fragment->appendXML($html);
 
 	while($this->firstChild) {
