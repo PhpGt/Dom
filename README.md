@@ -59,7 +59,7 @@ echo $document->saveHTML();
 
 ## Features at a glance
 
-+ Modern DOM classes available on the server:
++ DOM level 4 classes:
 	+ [`HTMLDocument`][mdn-HTMLDocument]
 	+ [`Element`][mdn-Element]
 	+ [`HTMLCollection`][mdn-HTMLCollection]
