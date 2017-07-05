@@ -5,7 +5,7 @@ use DOMDocument;
 
 /**
  * Provides access to special properties and methods not present by default
- * on a regular (XML) document.
+ * on a regular document.
  * @property-read HTMLCollection $anchors List of all of the anchors
  *  in the document. Anchors are <a> Elements with the `name` attribute.
  * @property-read Element $body The <body> element. Returns new Element if there

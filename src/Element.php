@@ -5,7 +5,8 @@ use DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
 /**
- * Represents an object of a Document.
+ * The most general base class from which all objects in a Document inherit.
+ *
  * @property string $className Gets and sets the value of the class attribute
  * @property-read TokenList $classList Returns a live TokenList collection of
  * the class attributes of the element
@@ -105,7 +106,7 @@ public function prop_set_id(string $newValue) {
 
 public function prop_get_innerHTML():string {
 	$childHtmlArray = [];
-	foreach($this->children as $child) {
+	foreach($this->childNodes as $child) {
 		$childHtmlArray []= $this->ownerDocument->saveHTML($child);
 	}
 
