@@ -24,25 +24,26 @@ public function remove() {
 /**
  * Inserts a Node into the children list of this ChildNode's parent,
  * just before this ChildNode.
- * @param DOMNode $element
+ * @param DOMNode $node
  * @return void
  */
-public function before(DOMNode $element) {
-	$this->parentNode->insertBefore($element, $this);
+public function before(DOMNode $node) {
+	$this->parentNode->insertBefore($node, $this);
 }
 
 /**
  * Inserts a Node into the children list of this ChildNode's parent,
  * just after this ChildNode.
- * @param DOMNode $element
+ * @param DOMNode $node
  * @return void
  */
-public function after(DOMNode $element) {
-	$this->parentNode->insertBefore($element, $this->nextSibling);
+public function after(DOMNode $node) {
+	$this->parentNode->insertBefore($node, $this->nextSibling);
 }
 
 /**
- * Replace this ChildNode in the children list of its parent.
+ * Replace this ChildNode in the children list of its parent with the
+ * supplied replacement node.
  * @param DOMNode $replacement
  * @return void
  */
