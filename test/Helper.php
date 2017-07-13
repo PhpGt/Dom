@@ -159,4 +159,29 @@ const XML = <<<XML
 </breakfast-menu>
 XML;
 
+/**
+ * Below this line is all code that is used in documentation.
+ */
+
+// https://github.com/PhpGt/Dom/wiki/Classes-that-make-up-DOM#moving-an-attribute-between-elements
+const DOCS_ATTR_GETATTRIBUTENODE = <<<HTML
+<!doctype html>
+<ul id="shop-items">
+	<li id="arduino">Arduino</li>
+	<li id="raspberry-pi" class="special-offer special-offer-two-for-one">Raspberry Pi</li>
+	<li id="class">PIC</li>
+</ul>
+HTML;
+
+// https://github.com/PhpGt/Dom/wiki/Classes-that-make-up-DOM#childnode
+const DOCS_CHILDNODE_REPLACEWITH = <<<HTML
+<!doctype html>
+<form method="post">
+	<button id="buttonA" name="order" value="A">A</button>
+	<button id="buttonB" name="order" value="B">B</button>
+	<button id="buttonC" name="order" value="C">C</button>
+</form>
+HTML;
+
+
 }#

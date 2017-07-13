@@ -49,4 +49,28 @@ public function testReplaceWithInSameDocument() {
 	$this->assertNotSame($h1, $document->firstChild);
 }
 
+/**
+ * @see https://github.com/PhpGt/Dom/wiki/Classes-that-make-up-DOM#childnode
+ */
+public function testDocsReplaceWith() {
+	$document = new HTMLDocument(test\Helper::DOCS_CHILDNODE_REPLACEWITH);
+	// Create a fake POST array to keep test as similar to docs as possible.
+	$_POST = $_POST ?? [];
+
+	foreach(["A", "B", "C"] as $order) {
+		$_POST["order"] = $order;
+		$form = $document->forms[0];
+		$firstButton = $form->firstElementChild;
+		$clickedButton = $form->querySelector("[value='" . $_POST["order"] . "']");
+
+		if($firstButton !== $clickedButton) {
+			// Move clicked button before first button.
+			$firstButton->before($clickedButton);
+		}
+
+		$this->assertSame($clickedButton, $form->firstElementChild);
+		$this->assertCount(3, $form->children);
+	}
+}
+
 }#
