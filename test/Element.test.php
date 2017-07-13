@@ -182,4 +182,17 @@ public function testRemove() {
 	$this->assertCount($bodyChildrenCount - 1, $document->body->children);
 }
 
+public function testTextContentDoesNotAffectChildElements() {
+    $document = new HTMLDocument(test\Helper::HTML_MORE);
+    $firstParagraph = $document->querySelector("p");
+    $firstParagraph->innerText = "<span>Example</span>";
+
+    $this->assertGreaterThan(0, count($firstParagraph->childNodes));
+
+    foreach($firstParagraph->childNodes as $child) {
+// There should not be any "span" elements, only text including optional whitespace.
+        $this->assertInstanceOf(Text::class, $child);
+    }
+}
+
 }#

@@ -4,6 +4,18 @@ namespace Gt\Dom\test;
 class Helper {
 
 const HTML = "<!doctype html><html><body><h1>Hello!</h1></body></html>";
+const HTML_EMOJI = <<<HTML
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Test!</title>
+</head>
+<body>
+	<h1>☆ Hello ☆ World ☆</h1>
+</body>
+</html>
+HTML;
 const HTML_LESS = <<<HTML
 <!doctype html>
 <meta charset="utf-8" />
