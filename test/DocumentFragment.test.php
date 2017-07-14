@@ -171,7 +171,8 @@ public function testTemplate() {
 	$fragment = $document->createDocumentFragment();
 	$fragment->appendXML(test\Helper::DOCS_DOCUMENTFRAGMENT_TEMPLATE);
 
-	$shopItemList = $document->getElementsByTagName("shop-item");
+	$shopItemList = $document->querySelectorAll("shop-item");
+
 	foreach($shopItemList as $shopItemElement) {
 		$shopItemParent = $shopItemElement->parentNode;
 
@@ -191,7 +192,8 @@ public function testTemplate() {
 		$this->assertNull($shopItemElement->parentNode);
 	}
 
-	var_dump($document->saveHTML());die();
+// All shop-item elements should be replaced now.
+	$this->assertNull($document->querySelector("shop-item"));
 }
 
 }#
