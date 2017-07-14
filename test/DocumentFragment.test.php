@@ -166,4 +166,32 @@ public function testGetChildElementCound() {
 	$this->assertEquals(2, $fragment->childElementCount);
 }
 
+public function testTemplate() {
+	$document = new HTMLDocument(test\Helper::DOCS_DOCUMENTFRAGMENT_PAGE);
+	$fragment = $document->createDocumentFragment();
+	$fragment->appendXML(test\Helper::DOCS_DOCUMENTFRAGMENT_TEMPLATE);
+
+	$shopItemList = $document->getElementsByTagName("shop-item");
+	foreach($shopItemList as $shopItemElement) {
+		$shopItemParent = $shopItemElement->parentNode;
+
+// Create a clone of the fragment as a template element.
+		$template = $fragment->cloneNode(true);
+// Set the elements of the fragment to their correct values.
+		$link = $template->querySelector("a");
+		$h1 = $template->querySelector("h1");
+		$h2 = $template->querySelector("h2");
+
+		$link->href .= $shopItemElement->id;
+		$h1->textContent = $shopItemElement->getAttribute("name");
+		$h2->textContent = $shopItemElement->getAttribute("price");
+// Replace the custom element with the contents of the fragment.
+		$shopItemElement->replaceWith($template);
+
+		$this->assertNull($shopItemElement->parentNode);
+	}
+
+	var_dump($document->saveHTML());die();
+}
+
 }#
