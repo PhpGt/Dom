@@ -195,4 +195,32 @@ public function testTextContentDoesNotAffectChildElements() {
     }
 }
 
+/**
+ * The test passes, but IDEs do not show the correct types.
+ */
+public function testNodeFunctionsReturnGtObjects() {
+	$objectsThatShouldBeElements = [];
+	$document = new HTMLDocument(test\Helper::HTML);
+	$h1 = $document->querySelector("h1");
+	$objectsThatShouldBeElements["h1"] = $h1;
+	$objectsThatShouldBeElements["h1Clone"] = $h1->cloneNode(true);
+	$objectsThatShouldBeElements["parent"] = $h1->parentNode;
+	$objectsThatShouldBeElements["firstChild"] = $document->body->firstChild;
+
+	$otherDocument = new HTMLDocument();
+	$otherDiv = $otherDocument->createElement("div");
+	$objectsThatShouldBeElements["imported"] = $document->importNode($otherDiv);
+	$objectsThatShouldBeElements["imported-appended"] = $document->appendChild(
+		$objectsThatShouldBeElements["imported"]);
+
+	$test = $objectsThatShouldBeElements["imported"];
+
+	foreach($objectsThatShouldBeElements as $key => $object) {
+		$this->assertInstanceOf(
+			Element::class,
+			$object,
+			"$key instance of " . gettype($object));
+	}
+}
+
 }#
