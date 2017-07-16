@@ -25,7 +25,7 @@ use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 /** @var  TokenList */
 private $liveProperty_classList;
 
-/**
+	/**
  * returns true if the element would be selected by the specified selector
  * string; otherwise, returns false.
  * @param string $selectors The CSS selector(s) to check against

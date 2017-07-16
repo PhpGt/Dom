@@ -186,7 +186,7 @@ public function testTextContentDoesNotAffectChildElements() {
     $document = new HTMLDocument(test\Helper::HTML_MORE);
     $firstParagraph = $document->querySelector("p");
     $firstParagraph->innerText = "<span>Example</span>";
-
+// TODO: Check that the childNodes property ends up as a Gt Dom HTMLCollection
     $this->assertGreaterThan(0, count($firstParagraph->childNodes));
 
     foreach($firstParagraph->childNodes as $child) {
@@ -212,8 +212,6 @@ public function testNodeFunctionsReturnGtObjects() {
 	$objectsThatShouldBeElements["imported"] = $document->importNode($otherDiv);
 	$objectsThatShouldBeElements["imported-appended"] = $document->appendChild(
 		$objectsThatShouldBeElements["imported"]);
-
-	$test = $objectsThatShouldBeElements["imported"];
 
 	foreach($objectsThatShouldBeElements as $key => $object) {
 		$this->assertInstanceOf(
