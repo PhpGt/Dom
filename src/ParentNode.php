@@ -73,6 +73,15 @@ public function xPath(string $selector): HTMLCollection
     return new HTMLCollection($x->query($selector, $this));
 }
 
+public function getElementsByTagName($name) {
+	$nodeList = parent::getElementsByTagName($name);
+	if($nodeList instanceof NodeList) {
+		return $nodeList;
+	}
+
+	return new NodeList($nodeList);
+}
+
 /**
  * Normalises access to the parent dom document, which may be located in various places
  * depending on what type of object is using the trait
