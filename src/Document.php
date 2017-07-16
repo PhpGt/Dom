@@ -1,10 +1,13 @@
 <?php
 namespace Gt\Dom;
+use DOMNode;
 
 /**
  * Represents any web page loaded in the browser and serves as an entry point
  * into the web page's content, the DOM tree (including elements such as
  * <body> or <table>).
+ *
+ * @method Node importNode(DOMNode $importedNode, bool $deep = false)
  */
 class Document extends \DOMDocument {
 use LiveProperty, ParentNode;
