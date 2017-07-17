@@ -21,4 +21,9 @@ use DOMNode;
  */
 class Node extends DOMNode {
 use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
+
+protected  function getRootDocument(): DOMDocument {
+	return $this->ownerDocument;
+}
+
 }#
