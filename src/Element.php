@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DOMElement;
 use DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
@@ -19,8 +20,7 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  * element and its descendants. It can be set to replace the element with nodes
  * parsed from the given string
  */
-class Element extends \DOMElement {
-use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
+class Element extends DOMElement {
 
 /** @var  TokenList */
 private $liveProperty_classList;

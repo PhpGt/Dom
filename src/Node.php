@@ -19,4 +19,6 @@ use DOMNode;
  * @property-read Node $previousSibling
  * @property-read Node $nextSibling
  */
-class Node extends DOMNode {}#
+class Node extends DOMNode {
+use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
+}#

@@ -7,7 +7,10 @@ use DOMNode;
  * into the web page's content, the DOM tree (including elements such as
  * <body> or <table>).
  *
+ * @method DocumentFragment createDocumentFragment(string) Create a new document fragment
+ * from an xml string
  * @method Node importNode(DOMNode $importedNode, bool $deep = false)
+ * @method NodeList getElementsByTagName(string $name)
  */
 class Document extends \DOMDocument {
 use LiveProperty, ParentNode;

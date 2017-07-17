@@ -21,6 +21,8 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  *  child of this ParentNode.
  * @property-read int $childElementCount The amount of children that the
  *  ParentNode has.
+ *
+ * @method Node getElementById(string $id)
  */
 trait ParentNode {
 
