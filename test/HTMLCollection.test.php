@@ -1,11 +1,14 @@
 <?php
 namespace Gt\Dom;
 
+use ArrayAccess;
+use DOMNodeList;
+
 class HTMLCollectionTest extends \PHPUnit_Framework_TestCase {
 
 public function testType() {
 	$document = new HTMLDocument(test\Helper::HTML);
-	$this->assertInstanceOf("\Gt\Dom\HTMLCollection", $document->children);
+	$this->assertInstanceOf(HTMLCollection::class, $document->children);
 }
 
 public function testNonElementsRemoved() {
@@ -13,11 +16,11 @@ public function testNonElementsRemoved() {
 	$bodyChildNodes = $document->body->childNodes;
 	$bodyChildren = $document->body->children;
 
-	$this->assertInstanceOf("\DOMNodeList", $bodyChildNodes);
-	$this->assertInstanceOf("\Gt\Dom\HTMLCollection", $bodyChildren);
+	$this->assertInstanceOf(DOMNodeList::class, $bodyChildNodes);
+	$this->assertInstanceOf(HTMLCollection::class, $bodyChildren);
 
-	$this->assertInstanceOf("\Gt\Dom\Text", $bodyChildNodes->item(0));
-	$this->assertInstanceOf("\Gt\Dom\Element", $bodyChildren->item(0));
+	$this->assertInstanceOf(Text::class, $bodyChildNodes->item(0));
+	$this->assertInstanceOf(Element::class, $bodyChildren->item(0));
 }
 
 public function testArrayAccessImplementation() {
@@ -25,14 +28,14 @@ public function testArrayAccessImplementation() {
 	$collection = $document->body->children;
 
 // test if the collection implements ArrayAccess
-	$this->assertInstanceOf('\ArrayAccess', $collection);
+	$this->assertInstanceOf(ArrayAccess::class, $collection);
 
 // test if offset 0 exists
 	$this->assertArrayHasKey(0, $collection);
 
 // test if the first item is an Element instance
 	$first = $collection[0];
-	$this->assertInstanceOf('\Gt\Dom\Element', $first);
+	$this->assertInstanceOf(Element::class, $first);
 
 // test if the collection is read only
 	$this->setExpectedException(\BadMethodCallException::class);
