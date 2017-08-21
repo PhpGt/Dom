@@ -56,16 +56,16 @@ public function testElementClosest() {
 	$document = new HTMLDocument(test\Helper::HTML_NESTED);
 
 	$p = $document->querySelector('.inner-list p');
-	$this->assertInstanceOf('\Gt\Dom\Element', $p);
+	$this->assertInstanceOf(Element::class, $p);
 
 	$innerList = $document->querySelector('.inner-list');
-	$this->assertInstanceOf('\Gt\Dom\Element', $innerList);
+	$this->assertInstanceOf(Element::class, $innerList);
 
 	$closestUl = $innerList->closest('ul');
 	$this->assertEquals($innerList, $closestUl);
 
 	$container = $p->closest('.container');
-	$this->assertInstanceOf('\Gt\Dom\Element', $container);
+	$this->assertInstanceOf(Element::class, $container);
 
 	$nonExistentClosestElement = $p->closest('br');
 	$this->assertNull($nonExistentClosestElement);

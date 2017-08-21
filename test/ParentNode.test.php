@@ -16,17 +16,17 @@ public function testChildren() {
 public function testFirstLastElementChild() {
 	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$this->assertInstanceOf(
-		"\Gt\Dom\Text", $document->body->firstChild);
+		Text::class, $document->body->firstChild);
 	$this->assertInstanceOf(
-		"\Gt\Dom\Element", $document->body->firstElementChild);
+		Element::class, $document->body->firstElementChild);
 }
 
 public function testChildElementCount() {
 	$document = new HTMLDocument(test\Helper::HTML_MORE);
 	$this->assertInstanceOf(
-		"\Gt\Dom\Text", $document->body->lastChild);
+		Text::class, $document->body->lastChild);
 	$this->assertInstanceOf(
-		"\Gt\Dom\Element", $document->body->lastElementChild);
+		Element::class, $document->body->lastElementChild);
 }
 
 }#
