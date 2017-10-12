@@ -17,7 +17,7 @@ trait ChildNode {
  * Removes this ChildNode from the children list of its parent.
  * @return void
  */
-public function remove() {
+public function remove() : void {
 	$this->parentNode->removeChild($this);
 }
 
@@ -27,7 +27,7 @@ public function remove() {
  * @param DOMNode $node
  * @return void
  */
-public function before(DOMNode $node) {
+public function before(DOMNode $node) : void {
 	$this->parentNode->insertBefore($node, $this);
 }
 
@@ -37,7 +37,7 @@ public function before(DOMNode $node) {
  * @param DOMNode $node
  * @return void
  */
-public function after(DOMNode $node) {
+public function after(DOMNode $node) : void{
 	$this->parentNode->insertBefore($node, $this->nextSibling);
 }
 
@@ -47,7 +47,7 @@ public function after(DOMNode $node) {
  * @param DOMNode $replacement
  * @return void
  */
-public function replaceWith(DOMNode $replacement) {
+public function replaceWith(DOMNode $replacement) : void{
 	$this->parentNode->insertBefore($replacement, $this);
 	$this->remove();
 }

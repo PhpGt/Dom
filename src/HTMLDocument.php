@@ -83,7 +83,7 @@ private function prop_get_title() {
 	}
 }
 
-private function prop_set_title($value) {
+private function prop_set_title($value):void {
 	$title = $this->head->getElementsByTagName("title")->item(0);
 
 	if(is_null($title)) {
@@ -104,7 +104,7 @@ private function getOrCreateElement(string $tagName):Element {
 	return $element;
 }
 
-private function fillEmptyDocumentElement() {
+private function fillEmptyDocumentElement():void {
 	$this->loadHTML("<!doctype html><html></html>");
 	$tagsToCreate = ["head", "body"];
 
