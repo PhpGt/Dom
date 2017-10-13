@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DOMDocument;
 use DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
@@ -25,14 +26,12 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
 trait ParentNode {
 
 /** @return Element|null */
-public function querySelector(string $selector)
-{
+public function querySelector(string $selector):?Element {
     $htmlCollection = $this->css($selector);
     return $htmlCollection->item(0);
 }
 
-public function querySelectorAll(string $selector): HTMLCollection
-{
+public function querySelectorAll(string $selector):HTMLCollection {
     return $this->css($selector);
 }
 
@@ -40,15 +39,15 @@ private function prop_get_children():HTMLCollection {
 	return new HTMLCollection($this->childNodes);
 }
 
-private function prop_get_firstElementChild() {
+private function prop_get_firstElementChild():?Element {
 	return $this->children->item(0);
 }
 
-private function prop_get_lastElementChild() {
+private function prop_get_lastElementChild():?Element {
 	return $this->children->item($this->children->length - 1);
 }
 
-private function prop_get_childElementCount() {
+private function prop_get_childElementCount():int {
 	return $this->children->length;
 }
 
@@ -61,14 +60,13 @@ private function prop_get_childElementCount() {
 public function css(
     string $selectors,
     string $prefix = "descendant-or-self::"
-): HTMLCollection {
+):HTMLCollection {
     $converter = new CssSelectorConverter();
     $xPathSelector = $converter->toXPath($selectors, $prefix);
     return $this->xPath($xPathSelector);
 }
 
-public function xPath(string $selector): HTMLCollection
-{
+public function xPath(string $selector):HTMLCollection {
     $x = new DOMXPath($this->getRootDocument());
     return new HTMLCollection($x->query($selector, $this));
 }
@@ -77,8 +75,8 @@ public function xPath(string $selector): HTMLCollection
  * Normalises access to the parent dom document, which may be located in various places
  * depending on what type of object is using the trait
  *
- * @return \DOMDocument
+ * @return DOMDocument
  */
-protected abstract function getRootDocument(): \DOMDocument;
+protected abstract function getRootDocument():DOMDocument;
 
 }#

@@ -56,23 +56,23 @@ private function prop_get_body():Element {
 	return $this->getOrCreateElement("body");
 }
 
-private function prop_get_forms() {
+private function prop_get_forms():HTMLCollection {
 	return $this->getElementsByTagName("form");
 }
 
-private function prop_get_anchors() {
+private function prop_get_anchors():HTMLCollection {
 	return $this->querySelectorAll("a[name]:not(a[name=''])");
 }
 
-private function prop_get_images() {
+private function prop_get_images():HTMLCollection {
 	return $this->getElementsByTagName("img");
 }
 
-private function prop_get_links() {
+private function prop_get_links():HTMLCollection {
 	return $this->querySelectorAll("a[href]:not(a[href=''])");
 }
 
-private function prop_get_title() {
+private function prop_get_title():string {
 	$title = $this->head->getElementsByTagName("title")->item(0);
 
 	if(is_null($title)) {

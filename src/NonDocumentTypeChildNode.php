@@ -19,7 +19,7 @@ namespace Gt\Dom;
  */
 trait NonDocumentTypeChildNode {
 
-private function prop_get_previousElementSibling() {
+private function prop_get_previousElementSibling():?Element {
 	$element = $this;
 
 	while($element) {
@@ -33,7 +33,7 @@ private function prop_get_previousElementSibling() {
 	return null;
 }
 
-private function prop_get_nextElementSibling() {
+private function prop_get_nextElementSibling():?Element {
 	$element = $this;
 
 	while($element) {

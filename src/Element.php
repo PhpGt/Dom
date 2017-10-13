@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DOMDocument;
 use DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
@@ -58,13 +59,13 @@ public function getElementsByClassName(string $names):HTMLCollection {
  * @param string $selectors CSS selector(s)
  * @return Element|null
  */
-public function closest(string $selectors) {
+public function closest(string $selectors):?Element {
 	$collection = $this->css($selectors, "ancestor-or-self::");
 	return $collection->item(count($collection) - 1);
 }
 
 
-public function prop_get_className() {
+public function prop_get_className():string {
 	return $this->getAttribute("class");
 }
 
@@ -72,7 +73,7 @@ public function prop_set_className(string $value):void{
 	$this->setAttribute("class", $value);
 }
 
-public function prop_get_classList() {
+public function prop_get_classList():TokenList {
 	if(!$this->liveProperty_classList) {
 		$this->liveProperty_classList = new TokenList($this, "class");
 	}
@@ -80,7 +81,7 @@ public function prop_get_classList() {
 	return $this->liveProperty_classList;
 }
 
-public function prop_get_value() {
+public function prop_get_value():string {
 	$methodName = 'value_get_' . $this->tagName;
 	if(method_exists($this, $methodName)) {
 		return $this->$methodName();
@@ -89,14 +90,14 @@ public function prop_get_value() {
 	return null;
 }
 
-public function prop_set_value(string $newValue) {
+public function prop_set_value(string $newValue):void {
 	$methodName = 'value_set_' . $this->tagName;
 	if(method_exists($this, $methodName)) {
-		return $this->$methodName($newValue);
+		$this->$methodName($newValue);
 	}
 }
 
-public function prop_get_id() : string {
+public function prop_get_id():string {
 	return $this->getAttribute("id");
 }
 
@@ -127,7 +128,7 @@ public function prop_set_innerHTML(string $html):void {
 	}
 }
 
-public function prop_get_outerHTML() : string {
+public function prop_get_outerHTML():string {
 	return $this->ownerDocument->saveHTML($this);
 }
 
@@ -161,7 +162,7 @@ private function value_set_select(string $newValue):void{
 	}
 }
 
-private function value_get_select() : string {
+private function value_get_select():string {
 	$options = $this->getElementsByTagName('option');
 	if ($options->length == 0) {
 		$value = '';
@@ -180,20 +181,19 @@ private function value_get_select() : string {
 	return $value;
 }
 
-protected  function getRootDocument(): \DOMDocument
-{
-    return $this->ownerDocument;
+protected  function getRootDocument():DOMDocument {
+	return $this->ownerDocument;
 }
 
-private function value_set_input(string $newValue) {
-	return $this->setAttribute("value", $newValue);
+private function value_set_input(string $newValue):void {
+	$this->setAttribute("value", $newValue);
 }
 
-private function value_get_input() {
+private function value_get_input():?string {
 	return $this->getAttribute("value");
 }
 
-static public function isSelectOptionSelected(Element $option) {
+static public function isSelectOptionSelected(Element $option):bool {
 	return $option->hasAttribute('selected') && $option->getAttribute('selected');
 }
 }#

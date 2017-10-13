@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use BadMethodCallException;
 use Iterator;
 use ArrayAccess;
 use Countable;
@@ -28,7 +29,7 @@ public function __construct(DOMNodeList $domNodeList) {
  * @param int $index
  * @return Element|null
  */
-public function item(int $index) {
+public function item(int $index):?Element {
 	$count = 0;
 	foreach($this as $element) {
 		if($index === $count) {
@@ -48,7 +49,7 @@ public function item(int $index) {
  * attribute.
  * @return Element|null
  */
-public function namedItem(string $name) {
+public function namedItem(string $name):?Element {
 	$namedElement = null;
 
 // ENHANCEMENT: Iterating all elements is costly. Room for improvement here?
@@ -135,12 +136,12 @@ public function offsetGet($offset):Element {
 	return $this->item($offset);
 }
 
-public function offsetSet($offset, $value) {
-	return $this->offsetUnset($offset);
+public function offsetSet($offset, $value):void {
+	$this->offsetUnset($offset);
 }
 
 public function offsetUnset($offset):void {
-	throw new \BadMethodCallException("HTMLCollection's items are read only");
+	throw new BadMethodCallException("HTMLCollection's items are read only");
 }
 
 }#
