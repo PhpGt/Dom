@@ -62,7 +62,7 @@ public function item(int $index):?string {
  * @param string $token
  * @return bool
  */
-public function contains(string $token):true {
+public function contains(string $token):bool {
 	$this->tok();
 	return in_array($token, $this->tokenArray);
 }
