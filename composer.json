@@ -4,7 +4,7 @@
     "type": "library",
 
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.1.0",
         "symfony/css-selector": "3.2.*"
     },
     "require-dev": {

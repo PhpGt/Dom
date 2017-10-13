@@ -94,12 +94,12 @@ public function key():int {
 	return $this->key;
 }
 
-public function next() {
+public function next():void {
 	$this->key++;
 	$this->incrementKeyToNextElement();
 }
 
-public function rewind() {
+public function rewind():void {
 	$this->key = 0;
 	$this->incrementKeyToNextElement();
 }
@@ -108,7 +108,7 @@ public function valid():bool {
 	return isset($this->domNodeList[$this->key]);
 }
 
-private function incrementKeyToNextElement() {
+private function incrementKeyToNextElement():void {
 	while($this->valid()
 	&& !$this->domNodeList[$this->key] instanceof Element) {
 		$this->key++;
@@ -139,7 +139,7 @@ public function offsetSet($offset, $value) {
 	return $this->offsetUnset($offset);
 }
 
-public function offsetUnset($offset) {
+public function offsetUnset($offset):void {
 	throw new \BadMethodCallException("HTMLCollection's items are read only");
 }
 
