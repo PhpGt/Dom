@@ -195,5 +195,22 @@ const DOCS_CHILDNODE_REPLACEWITH = <<<HTML
 </form>
 HTML;
 
+const DOCS_DOCUMENTFRAGMENT_PAGE = <<<HTML
+<ul class="shop-item-list">
+	<li>
+		<shop-item id="123" name="Raspberry Pi" price="34.44"></shop-item>
+	</li>
+	<li>
+		<shop-item id="456" name="Arduino" price="16.99"></shop-item>
+	</li>
+</ul>
+HTML;
+
+const DOCS_DOCUMENTFRAGMENT_TEMPLATE = <<<HTML
+<a href="/shop/item/">
+	<h1>ITEM NAME</h1>
+	<h2>£0.00</h2>
+</a>
+HTML;
 
 }#

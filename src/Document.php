@@ -18,6 +18,7 @@ class Document extends \DOMDocument {
 use LiveProperty, ParentNode;
 
 public function __construct($document = null) {
+	libxml_use_internal_errors(true);
 	parent::__construct("1.0", "utf-8");
 	$this->registerNodeClass(DOMNode::class, Node::class);
 	$this->registerNodeClass(DOMElement::class, Element::class);
