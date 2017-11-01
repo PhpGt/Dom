@@ -40,4 +40,8 @@ protected  function getRootDocument(): \DOMDocument {
 	return $this;
 }
 
+public function __toString(){
+    return $this->saveHTML();
+}
+
 }#

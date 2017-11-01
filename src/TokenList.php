@@ -26,7 +26,7 @@ public function __construct(Element $element, string $attributeName) {
 /**
  * Tokenises the internal element's named attribute to $this->tokenArray.
  */
-private function tok() {
+private function tok():void {
 	$attributeValue = $this->element->getAttribute($this->attributeName);
 	$this->tokenArray = array_filter(
 		explode(" ", $attributeValue)
@@ -36,7 +36,7 @@ private function tok() {
 /**
  * Untokenises $this->tokenArray to the internal element's named attribute.
  */
-private function untok() {
+private function untok():void {
 	$attributeValue = implode(" ", $this->tokenArray);
 	$this->element->setAttribute($this->attributeName, trim($attributeValue));
 }
@@ -72,7 +72,7 @@ public function contains(string $token) {
  * @param string $token
  * @return void
  */
-public function add(string $token) {
+public function add(string $token):void {
 	if($this->contains($token)) {
 		return;
 	}
@@ -87,7 +87,7 @@ public function add(string $token) {
  * @param string $token
  * @return null
  */
-public function remove(string $token) {
+public function remove(string $token):void {
 	if(!$this->contains($token)) {
 		return;
 	}
@@ -104,7 +104,7 @@ public function remove(string $token) {
  * @param string $token
  * @return bool true if token is added, false if token is removed.
  */
-public function toggle(string $token) {
+public function toggle(string $token):bool {
 	if($this->contains($token)) {
 		$this->remove($token);
 		return false;
