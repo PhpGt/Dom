@@ -41,7 +41,7 @@ private function untok():void {
 	$this->element->setAttribute($this->attributeName, trim($attributeValue));
 }
 
-private function prop_get_length() {
+private function prop_get_length():int {
 	$this->tok();
 	return count($this->tokenArray);
 }
@@ -52,7 +52,7 @@ private function prop_get_length() {
  * @param int $index
  * @return string|null
  */
-public function item(int $index) {
+public function item(int $index):?string {
 	$this->tok();
 	return $this->tokenArray[$index] ?? null;
 }
@@ -62,7 +62,7 @@ public function item(int $index) {
  * @param string $token
  * @return bool
  */
-public function contains(string $token) {
+public function contains(string $token):bool {
 	$this->tok();
 	return in_array($token, $this->tokenArray);
 }
