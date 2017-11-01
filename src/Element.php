@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom;
 
+use DOMDocument;
+use DOMElement;
 use DOMXPath;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
@@ -19,7 +21,7 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  * element and its descendants. It can be set to replace the element with nodes
  * parsed from the given string
  */
-class Element extends \DOMElement {
+class Element extends DOMElement {
 use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
 /** @var  TokenList */
@@ -137,6 +139,10 @@ public function prop_set_outerHTML(string $html):void {
 	$this->replaceWith($fragment);
 }
 
+protected  function getRootDocument():DOMDocument {
+	return $this->ownerDocument;
+}
+
 private function value_set_select(string $newValue):void{
 	$options = $this->getElementsByTagName('option');
 	$selectedIndexes = [];
@@ -178,11 +184,6 @@ private function value_get_select() : string {
 	}
 
 	return $value;
-}
-
-protected  function getRootDocument(): \DOMDocument
-{
-    return $this->ownerDocument;
 }
 
 private function value_set_input(string $newValue) {

@@ -21,6 +21,8 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  *  child of this ParentNode.
  * @property-read int $childElementCount The amount of children that the
  *  ParentNode has.
+ *
+ * @method Node getElementById(string $id)
  */
 trait ParentNode {
 
@@ -71,6 +73,15 @@ public function xPath(string $selector): HTMLCollection
 {
     $x = new DOMXPath($this->getRootDocument());
     return new HTMLCollection($x->query($selector, $this));
+}
+
+public function getElementsByTagName($name) {
+	$nodeList = parent::getElementsByTagName($name);
+	if($nodeList instanceof NodeList) {
+		return $nodeList;
+	}
+
+	return new NodeList($nodeList);
 }
 
 /**

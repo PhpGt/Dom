@@ -1,11 +1,6 @@
 <?php
 namespace Gt\Dom;
 
-use Iterator;
-use ArrayAccess;
-use Countable;
-use DOMNodeList;
-
 /**
  * Represents a Node list that can only contain Element nodes. Internally,
  * a DOMNodeList is used to store the association to the original list of
@@ -13,33 +8,7 @@ use DOMNodeList;
  * that are Elements.
  * @property-read int $length Number of Element nodes in this collection
  */
-class HTMLCollection implements Iterator, ArrayAccess, Countable {
-use LiveProperty;
-
-private $domNodeList;
-private $key = 0;
-
-public function __construct(DOMNodeList $domNodeList) {
-	$this->domNodeList = $domNodeList;
-}
-
-/**
- * Gets the nth Element object in the internal DOMNodeList.
- * @param int $index
- * @return Element|null
- */
-public function item(int $index) {
-	$count = 0;
-	foreach($this as $element) {
-		if($index === $count) {
-			return $element;
-		}
-
-		$count++;
-	}
-
-	return null;
-}
+class HTMLCollection extends NodeList {
 
 /**
  * @param string $name Returns the specific Node whose ID or, as a fallback,
@@ -64,83 +33,6 @@ public function namedItem(string $name) {
 	}
 
 	return $namedElement;
-}
-
-/**
- * Returns the number of Elements contained in this Collection. Exposed as the
- * $length property.
- * @return int Number of Elements
- */
-private function prop_get_length():int {
-	$length = 0;
-	foreach($this as $element) {
-		$length++;
-	}
-
-	return $length;
-}
-
-public function count():int {
-	return $this->length;
-}
-
-// Iterator --------------------------------------------------------------------
-
-public function current():Element {
-	return $this->domNodeList[$this->key];
-}
-
-public function key():int {
-	return $this->key;
-}
-
-public function next():void {
-	$this->key++;
-	$this->incrementKeyToNextElement();
-}
-
-public function rewind():void {
-	$this->key = 0;
-	$this->incrementKeyToNextElement();
-}
-
-public function valid():bool {
-	return isset($this->domNodeList[$this->key]);
-}
-
-private function incrementKeyToNextElement():void {
-	while($this->valid()
-	&& !$this->domNodeList[$this->key] instanceof Element) {
-		$this->key++;
-	}
-}
-
-// ArrayAccess -----------------------------------------------------------------
-
-/**
- * Offset exists?
- * @param integer $offset offset number
- * @return boolean
- */
-public function offsetExists($offset):bool {
-	return isset($offset, $this->domNodeList);
-}
-
-/**
- * Returns the element in the offset position
- * @param integer $offset offset number
- * @return Element
- */
-public function offsetGet($offset):Element {
-	return $this->item($offset);
-}
-
-public function offsetSet($offset, $value) {
-	return $this->offsetUnset($offset);
-}
-
-public function offsetUnset($offset):void {
-	throw new \BadMethodCallException("HTMLCollection's items are read only");
 }
 
 }#

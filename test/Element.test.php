@@ -186,13 +186,39 @@ public function testTextContentDoesNotAffectChildElements() {
     $document = new HTMLDocument(test\Helper::HTML_MORE);
     $firstParagraph = $document->querySelector("p");
     $firstParagraph->innerText = "<span>Example</span>";
-
+// TODO: Check that the childNodes property ends up as a Gt Dom HTMLCollection
     $this->assertGreaterThan(0, count($firstParagraph->childNodes));
 
     foreach($firstParagraph->childNodes as $child) {
 // There should not be any "span" elements, only text including optional whitespace.
         $this->assertInstanceOf(Text::class, $child);
     }
+}
+
+/**
+ * The test passes, but IDEs do not show the correct types.
+ */
+public function testNodeFunctionsReturnGtObjects() {
+	$objectsThatShouldBeElements = [];
+	$document = new HTMLDocument(test\Helper::HTML);
+	$h1 = $document->querySelector("h1");
+	$objectsThatShouldBeElements["h1"] = $h1;
+	$objectsThatShouldBeElements["h1Clone"] = $h1->cloneNode(true);
+	$objectsThatShouldBeElements["parent"] = $h1->parentNode;
+	$objectsThatShouldBeElements["firstChild"] = $document->body->firstChild;
+
+	$otherDocument = new HTMLDocument();
+	$otherDiv = $otherDocument->createElement("div");
+	$objectsThatShouldBeElements["imported"] = $document->importNode($otherDiv);
+	$objectsThatShouldBeElements["imported-appended"] = $document->appendChild(
+		$objectsThatShouldBeElements["imported"]);
+
+	foreach($objectsThatShouldBeElements as $key => $object) {
+		$this->assertInstanceOf(
+			Element::class,
+			$object,
+			"$key instance of " . gettype($object));
+	}
 }
 
 }#

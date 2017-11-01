@@ -18,8 +18,6 @@ use DOMDocument;
  *  Links are <a> Elements with the `href` attribute.
  * @property-read HTMLCollection $scripts List of all <script> elements.
  * @property string $title The title of the document, defined using <title>.
- * @method DocumentFragment createDocumentFragment(string) Create a new document fragment
- *                         from an xml string
  */
 class HTMLDocument extends Document {
 use LiveProperty, ParentNode;

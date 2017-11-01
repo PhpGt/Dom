@@ -1,5 +1,6 @@
 <?php
 namespace Gt\Dom;
+
 use DOMAttr;
 use DOMCharacterData;
 use DOMComment;
@@ -13,6 +14,11 @@ use DOMText;
  * Represents any web page loaded in the browser and serves as an entry point
  * into the web page's content, the DOM tree (including elements such as
  * <body> or <table>).
+ *
+ * @method DocumentFragment createDocumentFragment(string) Create a new document fragment
+ * from an xml string
+ * @method Node importNode(DOMNode $importedNode, bool $deep = false)
+ * @method NodeList getElementsByTagName(string $name)
  */
 class Document extends \DOMDocument {
 use LiveProperty, ParentNode;
@@ -41,7 +47,7 @@ protected  function getRootDocument(): \DOMDocument {
 }
 
 public function __toString(){
-    return $this->saveHTML();
+	return $this->saveHTML();
 }
 
 }#
