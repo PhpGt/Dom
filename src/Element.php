@@ -70,7 +70,7 @@ public function prop_get_className() {
 	return $this->getAttribute("class");
 }
 
-public function prop_set_className(string $value) {
+public function prop_set_className(string $value):void{
 	$this->setAttribute("class", $value);
 }
 
@@ -102,7 +102,7 @@ public function prop_get_id() : string {
 	return $this->getAttribute("id");
 }
 
-public function prop_set_id(string $newValue) {
+public function prop_set_id(string $newValue):void {
 	$this->setAttribute("id", $newValue);
 }
 
@@ -115,7 +115,7 @@ public function prop_get_innerHTML():string {
 	return implode(PHP_EOL, $childHtmlArray);
 }
 
-public function prop_set_innerHTML(string $html) {
+public function prop_set_innerHTML(string $html):void {
 	$fragment = $this->ownerDocument->createDocumentFragment();
 // The wrapper DIV allows non-XML to be appended.
 	$fragment->appendXML($html);
@@ -133,17 +133,17 @@ public function prop_get_outerHTML() : string {
 	return $this->ownerDocument->saveHTML($this);
 }
 
-public function prop_set_outerHTML(string $html) {
+public function prop_set_outerHTML(string $html):void {
 	$fragment = $this->ownerDocument->createDocumentFragment();
 	$fragment->appendXML($html);
 	$this->replaceWith($fragment);
 }
 
-protected  function getRootDocument(): DOMDocument {
+protected  function getRootDocument():DOMDocument {
 	return $this->ownerDocument;
 }
 
-private function value_set_select(string $newValue) {
+private function value_set_select(string $newValue):void{
 	$options = $this->getElementsByTagName('option');
 	$selectedIndexes = [];
 	$newSelectedIndex = NULL;

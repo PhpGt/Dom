@@ -14,8 +14,7 @@ public function testElementSiblings() {
 		$whoHeading->nextElementSibling->nextElementSibling);
 	$this->assertSame($plugParagraph, $whoHeading->previousElementSibling);
 
-	$this->assertInstanceOf(
-		"\Gt\Dom\Element", $formsAnchor);
+	$this->assertInstanceOf(Element::class, $formsAnchor);
 
 	$firstImg = $document->querySelector("img");
 	$this->assertEquals("h1", $firstImg->previousElementSibling->tagName);
