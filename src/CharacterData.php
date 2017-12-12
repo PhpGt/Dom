@@ -7,6 +7,5 @@ namespace Gt\Dom;
  * @inheritdoc ChildNode
  */
 class CharacterData extends \DOMCharacterData {
-use LiveProperty, NonDocumentTypeChildNode, ChildNode;
-
-}#
+	use LiveProperty, NonDocumentTypeChildNode, ChildNode;
+}

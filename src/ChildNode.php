@@ -12,44 +12,41 @@ use DOMNode;
  *  - CharacterData
  */
 trait ChildNode {
+	/**
+	 * Removes this ChildNode from the children list of its parent.
+	 */
+	public function remove():void {
+		$this->parentNode->removeChild($this);
+	}
 
-/**
- * Removes this ChildNode from the children list of its parent.
- * @return void
- */
-public function remove() : void {
-	$this->parentNode->removeChild($this);
+	/**
+	 * Inserts a Node into the children list of this ChildNode's parent,
+	 * just before this ChildNode.
+	 * @param DOMNode $node
+	 * @return void
+	 */
+	public function before(DOMNode $node):void {
+		$this->parentNode->insertBefore($node, $this);
+	}
+
+	/**
+	 * Inserts a Node into the children list of this ChildNode's parent,
+	 * just after this ChildNode.
+	 * @param DOMNode $node
+	 * @return void
+	 */
+	public function after(DOMNode $node):void {
+		$this->parentNode->insertBefore($node, $this->nextSibling);
+	}
+
+	/**
+	 * Replace this ChildNode in the children list of its parent with the
+	 * supplied replacement node.
+	 * @param DOMNode $replacement
+	 * @return void
+	 */
+	public function replaceWith(DOMNode $replacement):void {
+		$this->parentNode->insertBefore($replacement, $this);
+		$this->remove();
+	}
 }
-
-/**
- * Inserts a Node into the children list of this ChildNode's parent,
- * just before this ChildNode.
- * @param DOMNode $node
- * @return void
- */
-public function before(DOMNode $node) : void {
-	$this->parentNode->insertBefore($node, $this);
-}
-
-/**
- * Inserts a Node into the children list of this ChildNode's parent,
- * just after this ChildNode.
- * @param DOMNode $node
- * @return void
- */
-public function after(DOMNode $node) : void{
-	$this->parentNode->insertBefore($node, $this->nextSibling);
-}
-
-/**
- * Replace this ChildNode in the children list of its parent with the
- * supplied replacement node.
- * @param DOMNode $replacement
- * @return void
- */
-public function replaceWith(DOMNode $replacement) : void{
-	$this->parentNode->insertBefore($replacement, $this);
-	$this->remove();
-}
-
-}#

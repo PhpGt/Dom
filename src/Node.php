@@ -20,10 +20,9 @@ use DOMNode;
  * @property-read Node $nextSibling
  */
 class Node extends DOMNode {
-use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
+	use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
-protected  function getRootDocument(): DOMDocument {
-	return $this->ownerDocument;
+	protected function getRootDocument():DOMDocument {
+		return $this->ownerDocument;
+	}
 }
-
-}#

@@ -9,27 +9,25 @@ namespace Gt\Dom;
  * it should call the __get_live method after its own processing.
  */
 trait LiveProperty {
+	public function __get($name) {
+		return self::__get_live($name);
+	}
 
-public function __get($name) {
-	return self::__get_live($name);
-}
+	public function __set($name, $value) {
+		return self::__set_live($name, $value);
+	}
 
-public function __set($name, $value) {
-	return self::__set_live($name, $value);
-}
+	private function __get_live($name) {
+		$methodName = "prop_get_$name";
+		if(method_exists($this, $methodName)) {
+			return $this->$methodName();
+		}
+	}
 
-private function __get_live($name) {
-	$methodName = "prop_get_$name";
-	if(method_exists($this, $methodName)) {
-		return $this->$methodName();
+	private function __set_live($name, $value) {
+		$methodName = "prop_set_$name";
+		if(method_exists($this, $methodName)) {
+			return $this->$methodName($value);
+		}
 	}
 }
-
-private function __set_live($name, $value) {
-	$methodName = "prop_set_$name";
-	if(method_exists($this, $methodName)) {
-		return $this->$methodName($value);
-	}
-}
-
-}#
