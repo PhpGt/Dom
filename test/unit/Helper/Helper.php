@@ -1,10 +1,9 @@
 <?php
-namespace Gt\Dom\test;
+namespace Gt\Dom\Test\Helper;
 
 class Helper {
-
-const HTML = "<!doctype html><html><body><h1>Hello!</h1></body></html>";
-const HTML_EMOJI = <<<HTML
+	const HTML = "<!doctype html><html><body><h1>Hello!</h1></body></html>";
+	const HTML_EMOJI = <<<HTML
 <!doctype html>
 <html>
 <head>
@@ -16,14 +15,14 @@ const HTML_EMOJI = <<<HTML
 </body>
 </html>
 HTML;
-const HTML_LESS = <<<HTML
+	const HTML_LESS = <<<HTML
 <!doctype html>
 <meta charset="utf-8" />
 <title>Hello, World!</title>
 <link rel="stylesheet" href="/style/main.css" />
 <p>This is a test.</p>
 HTML;
-const HTML_MORE = <<<HTML
+	const HTML_MORE = <<<HTML
 <!doctype html>
 <html>
 <head>
@@ -60,12 +59,12 @@ const HTML_MORE = <<<HTML
 </body>
 </html>
 HTML;
-const HTML_TEXT = <<<HTML
+	const HTML_TEXT = <<<HTML
 <p>Thru-hiking is great!  <strong>No insipid election coverage!</strong>
   However, <a href="http://en.wikipedia.org/wiki/Absentee_ballot">casting a
   ballot</a> is tricky.</p>
 HTML;
-const HTML_NESTED = <<<HTML
+	const HTML_NESTED = <<<HTML
 <!doctype html>
 <html>
 <head>
@@ -102,7 +101,7 @@ const HTML_NESTED = <<<HTML
 </body>
 </html>
 HTML;
-const HTML_VALUE = <<<HTML
+	const HTML_VALUE = <<<HTML
 <!doctype html>
 <html>
 <head>
@@ -135,7 +134,7 @@ const HTML_VALUE = <<<HTML
 </body>
 </html>
 HTML;
-const XML = <<<XML
+	const XML = <<<XML
 <?xml version="1.0" encoding="UTF-8" ?>
 <breakfast-menu>
 	<food>
@@ -171,12 +170,12 @@ const XML = <<<XML
 </breakfast-menu>
 XML;
 
-/**
- * Below this line is all code that is used in documentation.
- */
+	/**
+	 * Below this line is all code that is used in documentation.
+	 */
 
 // https://github.com/PhpGt/Dom/wiki/Classes-that-make-up-DOM#moving-an-attribute-between-elements
-const DOCS_ATTR_GETATTRIBUTENODE = <<<HTML
+	const DOCS_ATTR_GETATTRIBUTENODE = <<<HTML
 <!doctype html>
 <ul id="shop-items">
 	<li id="arduino">Arduino</li>
@@ -186,7 +185,7 @@ const DOCS_ATTR_GETATTRIBUTENODE = <<<HTML
 HTML;
 
 // https://github.com/PhpGt/Dom/wiki/Classes-that-make-up-DOM#childnode
-const DOCS_CHILDNODE_REPLACEWITH = <<<HTML
+	const DOCS_CHILDNODE_REPLACEWITH = <<<HTML
 <!doctype html>
 <form method="post">
 	<button id="buttonA" name="order" value="A">A</button>
@@ -195,7 +194,7 @@ const DOCS_CHILDNODE_REPLACEWITH = <<<HTML
 </form>
 HTML;
 
-const DOCS_DOCUMENTFRAGMENT_PAGE = <<<HTML
+	const DOCS_DOCUMENTFRAGMENT_PAGE = <<<HTML
 <ul class="shop-item-list">
 	<li>
 		<shop-item id="123" name="Raspberry Pi" price="34.44"></shop-item>
@@ -206,11 +205,11 @@ const DOCS_DOCUMENTFRAGMENT_PAGE = <<<HTML
 </ul>
 HTML;
 
-const DOCS_DOCUMENTFRAGMENT_TEMPLATE = <<<HTML
+	const DOCS_DOCUMENTFRAGMENT_TEMPLATE = <<<HTML
 <a href="/shop/item/">
 	<h1>ITEM NAME</h1>
 	<h2>£0.00</h2>
 </a>
 HTML;
 
-}#
+}

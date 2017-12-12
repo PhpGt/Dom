@@ -7,116 +7,114 @@ use Countable;
 use Iterator;
 
 class NodeList implements Iterator, ArrayAccess, Countable {
+	use LiveProperty;
 
-use LiveProperty;
+	private $domNodeList;
 
-private $domNodeList;
-
-public function __construct(DOMNodeList $domNodeList) {
-	$this->domNodeList = $domNodeList;
-}
-
-/**
- * Returns the number of Elements contained in this Collection. Exposed as the
- * $length property.
- * @return int Number of Elements
- */
-private function prop_get_length():int {
-	$length = 0;
-	foreach($this as $element) {
-		$length++;
+	public function __construct(DOMNodeList $domNodeList) {
+		$this->domNodeList = $domNodeList;
 	}
 
-	return $length;
-}
-
-public function getDomNodeList():DOMNodeList {
-	return $this->domNodeList;
-}
-
-/**
- * Gets the nth Element object in the internal DOMNodeList.
- * @param int $index
- * @return Element|null
- */
-public function item($index) {
-	$count = 0;
-	foreach($this as $element) {
-		if($index === $count) {
-			return $element;
+	/**
+	 * Returns the number of Elements contained in this Collection. Exposed as the
+	 * $length property.
+	 * @return int Number of Elements
+	 */
+	private function prop_get_length():int {
+		$length = 0;
+		foreach($this as $element) {
+			$length++;
 		}
 
-		$count++;
+		return $length;
 	}
 
-	return null;
-}
+	public function getDomNodeList():DOMNodeList {
+		return $this->domNodeList;
+	}
+
+	/**
+	 * Gets the nth Element object in the internal DOMNodeList.
+	 * @param int $index
+	 * @return Element|null
+	 */
+	public function item($index) {
+		$count = 0;
+		foreach($this as $element) {
+			if($index === $count) {
+				return $element;
+			}
+
+			$count++;
+		}
+
+		return null;
+	}
 
 // Iterator --------------------------------------------------------------------
 
-private $key = 0;
+	private $key = 0;
 
-public function current():Element {
-	return $this->domNodeList[$this->key];
-}
-
-public function key():int {
-	return $this->key;
-}
-
-public function next() {
-	$this->key++;
-	$this->incrementKeyToNextElement();
-}
-
-public function rewind() {
-	$this->key = 0;
-	$this->incrementKeyToNextElement();
-}
-
-public function valid():bool {
-	return isset($this->domNodeList[$this->key]);
-}
-
-private function incrementKeyToNextElement() {
-	while($this->valid()
-	&& !$this->domNodeList[$this->key] instanceof Element) {
-		$this->key++;
+	public function current():Element {
+		return $this->domNodeList[$this->key];
 	}
-}
+
+	public function key():int {
+		return $this->key;
+	}
+
+	public function next() {
+		$this->key++;
+		$this->incrementKeyToNextElement();
+	}
+
+	public function rewind() {
+		$this->key = 0;
+		$this->incrementKeyToNextElement();
+	}
+
+	public function valid():bool {
+		return isset($this->domNodeList[$this->key]);
+	}
+
+	private function incrementKeyToNextElement() {
+		while($this->valid()
+			&& !$this->domNodeList[$this->key] instanceof Element) {
+			$this->key++;
+		}
+	}
 
 // ArrayAccess -----------------------------------------------------------------
 
-/**
- * Offset exists?
- * @param integer $offset offset number
- * @return boolean
- */
-public function offsetExists($offset):bool {
-	return isset($offset, $this->domNodeList);
-}
+	/**
+	 * Offset exists?
+	 * @param integer $offset offset number
+	 * @return boolean
+	 */
+	public function offsetExists($offset):bool {
+		return isset($offset, $this->domNodeList);
+	}
 
-/**
- * Returns the element in the offset position
- * @param integer $offset offset number
- * @return Element
- */
-public function offsetGet($offset):Element {
-	return $this->item($offset);
-}
+	/**
+	 * Returns the element in the offset position
+	 * @param integer $offset offset number
+	 * @return Element
+	 */
+	public function offsetGet($offset):Element {
+		return $this->item($offset);
+	}
 
-public function offsetSet($offset, $value) {
-	return $this->offsetUnset($offset);
-}
+	public function offsetSet($offset, $value) {
+		return $this->offsetUnset($offset);
+	}
 
-public function offsetUnset($offset) {
-	throw new \BadMethodCallException("HTMLCollection's items are read only");
-}
+	public function offsetUnset($offset) {
+		throw new \BadMethodCallException("HTMLCollection's items are read only");
+	}
 
 // Countable -------------------------------------------------------------------
 
-public function count():int {
-	return $this->length;
+	public function count():int {
+		return $this->length;
+	}
 }
-
-}#

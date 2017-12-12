@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom;
 
+use DOMText;
+
 /**
  * Represents the textual content of Element or Attr.  If an element has no
  * markup within its content, it has a single child implementing Text that
@@ -13,14 +15,12 @@ namespace Gt\Dom;
  * The Node.normalize() method merges adjacent Text objects back into a single
  * node for each block of text.
  */
-class Text extends \DOMText {
-
-/**
- * @see http://php.net/manual/en/domtext.iswhitespaceinelementcontent.php
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Text/isElementContentWhitespace
- */
-public function isElementContentWhitespace() {
-	return $this->isWhitespaceInElementContent();
+class Text extends DOMText {
+	/**
+	 * @see http://php.net/manual/en/domtext.iswhitespaceinelementcontent.php
+	 * @see https://developer.mozilla.org/en-US/docs/Web/API/Text/isElementContentWhitespace
+	 */
+	public function isElementContentWhitespace() {
+		return $this->isWhitespaceInElementContent();
+	}
 }
-
-}#

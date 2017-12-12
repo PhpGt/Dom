@@ -19,10 +19,9 @@ namespace Gt\Dom;
  * Document::createDocumentFragment() method or the constructor.
  */
 class DocumentFragment extends \DOMDocumentFragment {
-use LiveProperty, ParentNode;
+	use LiveProperty, ParentNode;
 
-protected function getRootDocument(): \DOMDocument
-{
-    return $this->ownerDocument;
+	protected function getRootDocument():\DOMDocument {
+		return $this->ownerDocument;
+	}
 }
-}#

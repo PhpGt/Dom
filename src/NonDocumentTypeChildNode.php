@@ -18,33 +18,31 @@ namespace Gt\Dom;
  *  Element in the list following this node.
  */
 trait NonDocumentTypeChildNode {
+	private function prop_get_previousElementSibling() {
+		$element = $this;
 
-private function prop_get_previousElementSibling() {
-	$element = $this;
+		while($element) {
+			$element = $element->previousSibling;
 
-	while($element) {
-		$element = $element->previousSibling;
-
-		if($element instanceof Element) {
-			return $element;
+			if($element instanceof Element) {
+				return $element;
+			}
 		}
+
+		return null;
 	}
 
-	return null;
-}
+	private function prop_get_nextElementSibling() {
+		$element = $this;
 
-private function prop_get_nextElementSibling() {
-	$element = $this;
+		while($element) {
+			$element = $element->nextSibling;
 
-	while($element) {
-		$element = $element->nextSibling;
-
-		if($element instanceof Element) {
-			return $element;
+			if($element instanceof Element) {
+				return $element;
+			}
 		}
+
+		return null;
 	}
-
-	return null;
 }
-
-}#

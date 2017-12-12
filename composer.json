@@ -1,28 +1,34 @@
 {
-    "name": "phpgt/dom",
-    "description": "The modern DOM API for PHP 7 projects.",
-    "type": "library",
+	"name": "phpgt/dom",
+	"description": "The modern DOM API for PHP 7 projects.",
+	"type": "library",
 
-    "require": {
-        "php": ">=7.1.0",
-        "symfony/css-selector": "3.2.*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "5.*"
-    },
+	"require": {
+		"php": ">=7.1.0",
+		"symfony/css-selector": "3.2.*"
+	},
 
-    "license": "MIT",
+	"require-dev": {
+		"phpunit/phpunit": "^6.4"
+	},
 
-    "authors": [
-        {
-            "name": "Greg Bowler",
-            "email": "greg.bowler@g105b.com"
-        }
-    ],
+	"license": "MIT",
 
-    "autoload": {
-        "psr-4": {
-            "Gt\\Dom\\": "./src"
-        }
-    }
+	"authors": [
+		{
+			"name": "Greg Bowler",
+			"email": "greg.bowler@g105b.com"
+		}
+	],
+
+	"autoload": {
+		"psr-4": {
+		      "Gt\\Dom\\": "./src"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+		      "Gt\\Dom\\Test\\": "./test/unit"
+		}
+	}
 }
