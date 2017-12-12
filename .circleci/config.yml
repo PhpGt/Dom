@@ -1,11 +1,33 @@
-machine:
-  php:
-    version: 7.1.9
+version: 2
 
-test:
-  override:
-    - vendor/bin/phpunit
+jobs:
+  build:
+    docker:
+      - image: circleci/php:7.1-cli
 
-notify:
-  webhooks:
-    - url: https://webhooks.gitter.im/e/22c9d06e726e91ddc7c5
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "composer.json" }}
+          - v1-dependencies-
+
+      - run: composer install -n --prefer-dist
+
+      - save_cache:
+          paths:
+            - ./vendor
+          key: v1-dependencies-{{ checksum "composer.json" }}
+
+      - run: mkdir test/unit/_junit
+      - run: vendor/bin/phpunit -c test/unit/phpunit.xml --log-junit test/unit/_junit/junit.xml -d memory_limit=512M
+
+      - store_test_results:
+          path: test/unit/_junit
+
+      - store_artifacts:
+          path: test/unit/_coverage
+          destination: TestCoverage
