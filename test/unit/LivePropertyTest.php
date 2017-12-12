@@ -1,6 +1,9 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\Test\Helper\ExampleLiveProperty;
+use Gt\Dom\Test\Helper\Helper;
 use PHPUnit\Framework\TestCase;
 
 class LivePropertyTest extends TestCase {
@@ -10,7 +13,7 @@ class LivePropertyTest extends TestCase {
 	 * prop_children function.
 	 */
 	public function testLiveProperty() {
-		$document = new HTMLDocument(test\Helper::HTML);
+		$document = new HTMLDocument(Helper::HTML);
 		$this->assertObjectNotHasAttribute("children", $document);
 		$this->assertNotEmpty($document->children);
 	}
@@ -20,7 +23,6 @@ class LivePropertyTest extends TestCase {
 	 * compatible with the trait's.
 	 */
 	public function testGetterOnClass() {
-		require "ExampleLiveProperty.php";
 		$t = new ExampleLiveProperty();
 		$this->assertEquals("from __get overload", $t->overload);
 		$this->assertEquals("from prop_example", $t->example);

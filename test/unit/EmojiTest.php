@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\Test\Helper\Helper;
 use PHPUnit\Framework\TestCase;
 
 class EmojiTest extends TestCase {
@@ -35,7 +37,7 @@ class EmojiTest extends TestCase {
 	}
 
 	public function testNested() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$firstHeader = $document->querySelector("h1");
 		$span = $document->createElement("span");
 		$span->textContent = self::EMOJI_WHITE_STAR;

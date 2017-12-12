@@ -1,12 +1,16 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\Element;
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\Test\Helper\Helper;
+use Gt\Dom\Text;
 use Gt\Dom\TokenList;
 use PHPUnit\Framework\TestCase;
 
 class ElementTest extends TestCase {
 	public function testQuerySelector() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$pAfterH2 = $document->querySelector("h2+p");
 		$aWithinP = $pAfterH2->querySelector("a");
 
@@ -19,7 +23,7 @@ class ElementTest extends TestCase {
 	}
 
 	public function testQuerySelectorAll() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$pCollection = $document->documentElement->querySelectorAll("p");
 		$pNodeList = $document->documentElement->getElementsByTagName("p");
 
@@ -27,7 +31,7 @@ class ElementTest extends TestCase {
 	}
 
 	public function testMatches() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$p = $document->getElementsByClassName("plug")->item(0);
 
 		$this->assertTrue($p->matches("p"));
@@ -40,7 +44,7 @@ class ElementTest extends TestCase {
 	}
 
 	public function testChildElementCount() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		// There is 1 text node within the document.
 		$this->assertGreaterThan(
 			$document->body->childElementCount,
@@ -53,7 +57,7 @@ class ElementTest extends TestCase {
 	}
 
 	public function testElementClosest() {
-		$document = new HTMLDocument(test\Helper::HTML_NESTED);
+		$document = new HTMLDocument(Helper::HTML_NESTED);
 
 		$p = $document->querySelector('.inner-list p');
 		$this->assertInstanceOf(Element::class, $p);
@@ -86,7 +90,7 @@ class ElementTest extends TestCase {
 	}
 
 	public function testValueGetter() {
-		$document = new HTMLDocument(test\Helper::HTML_VALUE);
+		$document = new HTMLDocument(Helper::HTML_VALUE);
 
 		$select = $document->getElementById('select');
 		$this->assertEquals('1', $select->value);
@@ -108,7 +112,7 @@ class ElementTest extends TestCase {
 	}
 
 	public function testInnerHTML() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$p = $document->querySelector(".link-to-twitter");
 		$this->assertContains("<a href=", $p->innerHTML);
 		$this->assertContains("Greg Bowler", $p->innerHTML);
@@ -122,7 +126,7 @@ class ElementTest extends TestCase {
 	}
 
 	public function testOuterHTML() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$p = $document->querySelector(".link-to-twitter");
 		$this->assertContains("<a href=", $p->outerHTML);
 		$this->assertContains("Greg Bowler", $p->outerHTML);
@@ -133,7 +137,7 @@ class ElementTest extends TestCase {
 	}
 
 	public function testClassListProperty() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$element = $document->getElementById("who");
 		$this->assertInstanceOf(TokenList::class, $element->classList);
 
@@ -142,7 +146,7 @@ class ElementTest extends TestCase {
 	}
 
 	public function testClassNameProperty() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$element = $document->getElementById("who");
 		$this->assertInternalType("string", $element->className);
 
@@ -151,19 +155,19 @@ class ElementTest extends TestCase {
 	}
 
 	public function testIdProperty() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$element = $document->getElementById("who");
 		$this->assertEquals("who", $element->id);
 	}
 
 	public function testTagNameProperty() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$element = $document->getElementsByTagName("form")[0];
 		$this->assertEquals("form", $element->tagName);
 	}
 
 	public function testValueProperty() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$paragraph = $document->getElementById("who");
 		$this->assertNull($paragraph->value);
 
@@ -175,7 +179,7 @@ class ElementTest extends TestCase {
 	}
 
 	public function testRemove() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$bodyChildrenCount = count($document->body->children);
 		$paragraph = $document->querySelector("p");
 		$paragraph->remove();
@@ -183,7 +187,7 @@ class ElementTest extends TestCase {
 	}
 
 	public function testTextContentDoesNotAffectChildElements() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$firstParagraph = $document->querySelector("p");
 		$firstParagraph->innerText = "<span>Example</span>";
 // TODO: Check that the childNodes property ends up as a Gt Dom HTMLCollection
@@ -200,7 +204,7 @@ class ElementTest extends TestCase {
 	 */
 	public function testNodeFunctionsReturnGtObjects() {
 		$objectsThatShouldBeElements = [];
-		$document = new HTMLDocument(test\Helper::HTML);
+		$document = new HTMLDocument(Helper::HTML);
 		$h1 = $document->querySelector("h1");
 		$objectsThatShouldBeElements["h1"] = $h1;
 		$objectsThatShouldBeElements["h1Clone"] = $h1->cloneNode(true);

@@ -2,17 +2,23 @@
 namespace Gt\Dom\Test;
 
 use ArrayAccess;
+use BadMethodCallException;
 use DOMNodeList;
+use Gt\Dom\Element;
+use Gt\Dom\HTMLCollection;
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\Test\Helper\Helper;
+use Gt\Dom\Text;
 use PHPUnit\Framework\TestCase;
 
 class HTMLCollectionTest extends TestCase {
 	public function testType() {
-		$document = new HTMLDocument(test\Helper::HTML);
+		$document = new HTMLDocument(Helper::HTML);
 		$this->assertInstanceOf(HTMLCollection::class, $document->children);
 	}
 
 	public function testNonElementsRemoved() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$bodyChildNodes = $document->body->childNodes;
 		$bodyChildren = $document->body->children;
 
@@ -24,7 +30,7 @@ class HTMLCollectionTest extends TestCase {
 	}
 
 	public function testArrayAccessImplementation() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$collection = $document->body->children;
 
 // test if the collection implements ArrayAccess
@@ -38,20 +44,20 @@ class HTMLCollectionTest extends TestCase {
 		$this->assertInstanceOf(Element::class, $first);
 
 // test if the collection is read only
-		$this->setExpectedException(\BadMethodCallException::class);
+		$this->expectException(BadMethodCallException::class);
 		$collection[$collection->length] = new Element('br');
 		unset($collection[0]);
 
 	}
 
 	public function testCountMethod() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$childrenCount = count($document->body->children);
 		$this->assertEquals(11, $childrenCount);
 	}
 
 	public function testNamedItem() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$whoNamed = $document->body->children->namedItem("who");
 		$whoH2 = $document->getElementById("who");
 
@@ -66,7 +72,7 @@ class HTMLCollectionTest extends TestCase {
 	}
 
 	public function testIteration() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		foreach($document->querySelectorAll("p") as $i => $p) {
 			$paragraphItem = $document->getElementsByTagName("p")[$i];
 			$this->assertSame($paragraphItem, $p);
@@ -74,14 +80,14 @@ class HTMLCollectionTest extends TestCase {
 	}
 
 	public function testLengthProperty() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$nodeList = $document->querySelectorAll("form>input");
 		$this->assertCount(3, $nodeList);
 		$this->assertEquals(3, $nodeList->length);
 	}
 
 	public function testItemProperty() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$nodeList = $document->getElementsByTagName("p");
 		$first = $nodeList->item(0);
 		$third = $nodeList->item(2);

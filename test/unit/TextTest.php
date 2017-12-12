@@ -2,11 +2,12 @@
 namespace Gt\Dom\Test;
 
 use Gt\Dom\HTMLDocument;
+use Gt\Dom\Test\Helper\Helper;
 use PHPUnit\Framework\TestCase;
 
 class TextTest extends TestCase {
 	public function testIsElementContentWhitespace() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$firstChild = $document->body->firstChild;
 		$this->assertTrue($firstChild->isElementContentWhitespace());
 
@@ -16,7 +17,7 @@ class TextTest extends TestCase {
 	}
 
 	public function testWholeText() {
-		$document = new HTMLDocument(test\Helper::HTML_TEXT);
+		$document = new HTMLDocument(Helper::HTML_TEXT);
 		$para = $document->querySelector("p");
 // Remove the <strong>
 		$para->childNodes[1]->remove();
@@ -27,7 +28,7 @@ class TextTest extends TestCase {
 	}
 
 	public function testSplitText() {
-		$document = new HTMLDocument(test\Helper::HTML_TEXT);
+		$document = new HTMLDocument(Helper::HTML_TEXT);
 		$para = $document->querySelector("p");
 		$textNode = $para->firstChild;
 		$textNode->splitText(4);

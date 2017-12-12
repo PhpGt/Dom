@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom\Test\Helper;
 
+use Gt\Dom\LiveProperty;
+
 class ExampleLiveProperty {
 	use LiveProperty;
 

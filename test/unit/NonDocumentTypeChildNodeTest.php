@@ -1,11 +1,14 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\Element;
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\Test\Helper\Helper;
 use PHPUnit\Framework\TestCase;
 
 class NonDocumentTypeChildNodeTest extends TestCase {
 	public function testElementSiblings() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$whoHeading = $document->getElementById("who");
 		$plugParagraph = $document->querySelector("p.plug");
 		$formsAnchor = $document->querySelector("a[name='forms']");

@@ -1,6 +1,9 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\Element;
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\Test\Helper\Helper;
 use PHPUnit\Framework\TestCase;
 
 class DocumentFragmentTest extends TestCase {
@@ -168,9 +171,9 @@ class DocumentFragmentTest extends TestCase {
 	}
 
 	public function testTemplate() {
-		$document = new HTMLDocument(test\Helper::DOCS_DOCUMENTFRAGMENT_PAGE);
+		$document = new HTMLDocument(Helper::DOCS_DOCUMENTFRAGMENT_PAGE);
 		$fragment = $document->createDocumentFragment();
-		$fragment->appendXML(test\Helper::DOCS_DOCUMENTFRAGMENT_TEMPLATE);
+		$fragment->appendXML(Helper::DOCS_DOCUMENTFRAGMENT_TEMPLATE);
 
 		$shopItemList = $document->querySelectorAll("shop-item");
 

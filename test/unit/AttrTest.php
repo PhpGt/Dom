@@ -1,12 +1,14 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\Test\Helper\Helper;
 use Gt\Dom\TokenList;
 use PHPUnit\Framework\TestCase;
 
 class AttrTest extends TestCase {
 	public function testAttrMove() {
-		$document = new HTMLDocument(test\Helper::DOCS_ATTR_GETATTRIBUTENODE);
+		$document = new HTMLDocument(Helper::DOCS_ATTR_GETATTRIBUTENODE);
 		$arduinoElement = $document->getElementById("arduino");
 		$raspberryPiElement = $document->getElementById("raspberry-pi");
 

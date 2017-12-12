@@ -1,12 +1,15 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\NodeList;
+use Gt\Dom\Test\Helper\Helper;
 use PHPUnit\Framework\TestCase;
 
 class NodeListTest extends TestCase {
 	public function testNodeListFunctionsReturnGtObjects() {
 		$objectsThatShouldBeNodeList = [];
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 
 		$objectsThatShouldBeNodeList["tag-name"] = $document->getElementsByTagName("p");
 

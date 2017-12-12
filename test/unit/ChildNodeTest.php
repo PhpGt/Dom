@@ -1,11 +1,13 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\Test\Helper\Helper;
 use PHPUnit\Framework\TestCase;
 
 class ChildNodeTest extends TestCase {
 	public function testBefore() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$element = $document->getElementById("who");
 		$currentBefore = $element->previousSibling;
 
@@ -17,7 +19,7 @@ class ChildNodeTest extends TestCase {
 	}
 
 	public function testAfter() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$element = $document->getElementById("who");
 		$currentAfter = $element->nextSibling;
 
@@ -29,7 +31,7 @@ class ChildNodeTest extends TestCase {
 	}
 
 	public function testReplaceWith() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$element = $document->getElementById("who");
 		$currentBefore = $element->previousSibling;
 
@@ -40,7 +42,7 @@ class ChildNodeTest extends TestCase {
 	}
 
 	public function testReplaceWithInSameDocument() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$h2 = $document->getElementById("who");
 		$beforeH2 = $h2->previousSibling;
 		$h1 = $document->firstChild;
@@ -54,7 +56,7 @@ class ChildNodeTest extends TestCase {
 	 * @see https://github.com/PhpGt/Dom/wiki/Classes-that-make-up-DOM#childnode
 	 */
 	public function testDocsReplaceWith() {
-		$document = new HTMLDocument(test\Helper::DOCS_CHILDNODE_REPLACEWITH);
+		$document = new HTMLDocument(Helper::DOCS_CHILDNODE_REPLACEWITH);
 		// Create a fake POST array to keep test as similar to docs as possible.
 		$_POST = $_POST ?? [];
 

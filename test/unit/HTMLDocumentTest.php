@@ -2,17 +2,20 @@
 namespace Gt\Dom\Test;
 
 use DOMDocument;
+use Gt\Dom\Element;
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\Test\Helper\Helper;
 use PHPUnit\Framework\TestCase;
 
 class HTMLDocumentTest extends TestCase {
 	public function testConstruction() {
 // test construction from raw HTML
-		$fromRawHTML = new HTMLDocument(test\Helper::HTML);
+		$fromRawHTML = new HTMLDocument(Helper::HTML);
 		$this->assertInstanceOf(HTMLDocument::class, $fromRawHTML);
 
 // test construction from a DOMDocument object
 		$domDocument = new DOMDocument('1.0', 'UTF-8');
-		$domDocument->loadHTML(test\Helper::HTML);
+		$domDocument->loadHTML(Helper::HTML);
 		$fromDOMDocument = new HTMLDocument($domDocument);
 		$this->assertInstanceOf(HTMLDocument::class, $fromDOMDocument);
 
@@ -28,12 +31,12 @@ class HTMLDocumentTest extends TestCase {
 	}
 
 	public function testInheritance() {
-		$document = new HTMLDocument(test\Helper::HTML);
+		$document = new HTMLDocument(Helper::HTML);
 		$this->assertInstanceOf(Element::class, $document->documentElement);
 	}
 
 	public function testRemoveElement() {
-		$document = new HTMLDocument(test\Helper::HTML);
+		$document = new HTMLDocument(Helper::HTML);
 
 		$h1List = $document->getElementsByTagName("h1");
 		$this->assertEquals(1, $h1List->length);
@@ -45,7 +48,7 @@ class HTMLDocumentTest extends TestCase {
 	}
 
 	public function testQuerySelector() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$h2TagName = $document->getElementsByTagName("h2")->item(0);
 		$h2QuerySelector = $document->querySelector("h2");
 
@@ -53,7 +56,7 @@ class HTMLDocumentTest extends TestCase {
 	}
 
 	public function testQuerySelectorAll() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$pListTagName = $document->getElementsByTagName("p");
 		$pListQuerySelector = $document->querySelectorAll("p");
 
@@ -68,73 +71,73 @@ class HTMLDocumentTest extends TestCase {
 	}
 
 	public function testHeadElement() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$this->assertInstanceOf(Element::class, $document->head);
 	}
 
 	public function testHeadElementAutomaticallyCreated() {
 // test\Helper::HTML does not explicitly define a <head>
-		$document = new HTMLDocument(test\Helper::HTML);
+		$document = new HTMLDocument(Helper::HTML);
 		$this->assertInstanceOf(Element::class, $document->head);
 	}
 
 	public function testBodyElement() {
-		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$this->assertInstanceOf(Element::class, $document->body);
 	}
 
 	public function testBodyElementAutomaticallyCreated() {
 // test\Helper::HTML does not explicitly define a <body>
-		$document = new HTMLDocument(test\Helper::HTML);
+		$document = new HTMLDocument(Helper::HTML);
 		$this->assertInstanceOf(Element::class, $document->body);
 	}
 
 // Test live properties:
 
 	public function testFormsPropertyWhenNoForms() {
-		$documentWithout = new HTMLDocument(test\Helper::HTML);
+		$documentWithout = new HTMLDocument(Helper::HTML);
 		$this->assertEquals(0, $documentWithout->forms->length);
 	}
 
 	public function testFormsPropertyWhenForms() {
-		$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
+		$documentWith = new HTMLDocument(Helper::HTML_MORE);
 		$this->assertEquals(2, $documentWith->forms->length);
 	}
 
 	public function testAnchorsPropertyWhenNoAnchors() {
-		$documentWithout = new HTMLDocument(test\Helper::HTML);
+		$documentWithout = new HTMLDocument(Helper::HTML);
 		$this->assertEquals(0, $documentWithout->anchors->length);
 	}
 
 	public function testAnchorsPropertyWhenAnchors() {
-		$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
+		$documentWith = new HTMLDocument(Helper::HTML_MORE);
 // There are actually 3 "a" elements, but only two are anchors - the
 // other is a link.
 		$this->assertEquals(2, $documentWith->anchors->length);
 	}
 
 	public function testImagesPropertyWhenNoImages() {
-		$documentWithout = new HTMLDocument(test\Helper::HTML);
+		$documentWithout = new HTMLDocument(Helper::HTML);
 		$this->assertEquals(0, $documentWithout->images->length);
 	}
 
 	public function testImagesPropertyWhenImages() {
-		$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
+		$documentWith = new HTMLDocument(Helper::HTML_MORE);
 		$this->assertEquals(2, $documentWith->images->length);
 	}
 
 	public function testLinksPropertyWhenNoLinks() {
-		$documentWithout = new HTMLDocument(test\Helper::HTML);
+		$documentWithout = new HTMLDocument(Helper::HTML);
 		$this->assertEquals(0, $documentWithout->links->length);
 	}
 
 	public function testLinksPropertyWhenLinks() {
-		$documentWith = new HTMLDocument(test\Helper::HTML_MORE);
+		$documentWith = new HTMLDocument(Helper::HTML_MORE);
 		$this->assertEquals(1, $documentWith->links->length);
 	}
 
 	public function testTitleWhenNoTitle() {
-		$document = new HTMLDocument(test\Helper::HTML);
+		$document = new HTMLDocument(Helper::HTML);
 		$this->assertEmpty($document->title);
 
 		$newTitle = "New title";
@@ -148,7 +151,7 @@ class HTMLDocumentTest extends TestCase {
 	}
 
 	public function testOptionalTags() {
-		$document = new HTMLDocument(test\Helper::HTML_LESS);
+		$document = new HTMLDocument(Helper::HTML_LESS);
 		$this->assertCount(3, $document->head->children);
 		$this->assertCount(1, $document->body->children);
 	}
