@@ -3,30 +3,29 @@ namespace Gt\Dom;
 
 class ParentNodeTest extends \PHPUnit_Framework_TestCase {
 
-public function testChildren() {
-	$document = new HTMLDocument(test\Helper::HTML_MORE);
-	$children = $document->body->children;
-	$this->assertNotSame($children, $document->body->childNodes);
-	$this->assertNotCount($document->body->childNodes->length, $children);
+	public function testChildren() {
+		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$children = $document->body->children;
+		$this->assertNotSame($children, $document->body->childNodes);
+		$this->assertNotCount($document->body->childNodes->length, $children);
 
-	$firstImg = $document->querySelector("img");
-	$this->assertSame($firstImg, $children->item(1));
+		$firstImg = $document->querySelector("img");
+		$this->assertSame($firstImg, $children->item(1));
+	}
+
+	public function testFirstLastElementChild() {
+		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$this->assertInstanceOf(
+			Text::class, $document->body->firstChild);
+		$this->assertInstanceOf(
+			Element::class, $document->body->firstElementChild);
+	}
+
+	public function testChildElementCount() {
+		$document = new HTMLDocument(test\Helper::HTML_MORE);
+		$this->assertInstanceOf(
+			Text::class, $document->body->lastChild);
+		$this->assertInstanceOf(
+			Element::class, $document->body->lastElementChild);
+	}
 }
-
-public function testFirstLastElementChild() {
-	$document = new HTMLDocument(test\Helper::HTML_MORE);
-	$this->assertInstanceOf(
-		Text::class, $document->body->firstChild);
-	$this->assertInstanceOf(
-		Element::class, $document->body->firstElementChild);
-}
-
-public function testChildElementCount() {
-	$document = new HTMLDocument(test\Helper::HTML_MORE);
-	$this->assertInstanceOf(
-		Text::class, $document->body->lastChild);
-	$this->assertInstanceOf(
-		Element::class, $document->body->lastElementChild);
-}
-
-}#

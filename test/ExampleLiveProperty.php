@@ -2,18 +2,17 @@
 namespace Gt\Dom;
 
 class ExampleLiveProperty {
-use LiveProperty;
+	use LiveProperty;
 
-public function __get($name) {
-	if($name === "overload") {
-		return "from __get overload";
+	public function __get($name) {
+		if($name === "overload") {
+			return "from __get overload";
+		}
+
+		return $this->__get_live($name);
 	}
 
-	return $this->__get_live($name);
-}
-
-private function prop_get_example() {
-	return "from prop_example";
-}
-
+	private function prop_get_example() {
+		return "from prop_example";
+	}
 }
