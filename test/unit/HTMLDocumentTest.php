@@ -1,5 +1,5 @@
 <?php
-namespace Gt\Dom;
+namespace Gt\Dom\Test;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;

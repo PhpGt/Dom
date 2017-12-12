@@ -1,5 +1,5 @@
 <?php
-namespace Gt\Dom;
+namespace Gt\Dom\Test;
 
 use ArrayAccess;
 use DOMNodeList;
