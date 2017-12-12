@@ -1,7 +1,9 @@
 <?php
 namespace Gt\Dom;
 
-class LivePropertyTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class LivePropertyTest extends TestCase {
 	/**
 	 * This assertion shows that because of the LiveProperty trait,
 	 * the non-existent attribute "children" is in fact callable, because of the

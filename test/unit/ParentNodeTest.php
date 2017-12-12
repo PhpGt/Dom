@@ -1,7 +1,9 @@
 <?php
 namespace Gt\Dom;
 
-class ParentNodeTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class ParentNodeTest extends TestCase {
 
 	public function testChildren() {
 		$document = new HTMLDocument(test\Helper::HTML_MORE);

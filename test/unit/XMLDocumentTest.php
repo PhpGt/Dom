@@ -1,7 +1,9 @@
 <?php
 namespace Gt\Dom;
 
-class XMLDocumentTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class XMLDocumentTest extends TestCase {
 	public function testConstruction() {
 		// test construction from raw XML
 		$fromRawXML = new XMLDocument(test\Helper::XML);

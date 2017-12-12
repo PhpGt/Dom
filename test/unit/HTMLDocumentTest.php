@@ -2,8 +2,9 @@
 namespace Gt\Dom;
 
 use DOMDocument;
+use PHPUnit\Framework\TestCase;
 
-class HTMLDocumentTest extends \PHPUnit_Framework_TestCase {
+class HTMLDocumentTest extends TestCase {
 	public function testConstruction() {
 // test construction from raw HTML
 		$fromRawHTML = new HTMLDocument(test\Helper::HTML);

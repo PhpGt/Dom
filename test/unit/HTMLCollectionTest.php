@@ -3,8 +3,9 @@ namespace Gt\Dom;
 
 use ArrayAccess;
 use DOMNodeList;
+use PHPUnit\Framework\TestCase;
 
-class HTMLCollectionTest extends \PHPUnit_Framework_TestCase {
+class HTMLCollectionTest extends TestCase {
 	public function testType() {
 		$document = new HTMLDocument(test\Helper::HTML);
 		$this->assertInstanceOf(HTMLCollection::class, $document->children);

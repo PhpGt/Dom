@@ -1,8 +1,9 @@
 <?php
 namespace Gt\Dom;
 
-class NodeTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
 
+class NodeTest extends TestCase {
 	public function testHasAttribute() {
 		$document = new HTMLDocument(test\Helper::HTML);
 		$this->assertFalse($document->body->hasAttribute("example"));

@@ -1,7 +1,9 @@
 <?php
 namespace Gt\Dom;
 
-class EmojiTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class EmojiTest extends TestCase {
 	const EMOJI_ONCOMING_FIST = "👊";
 	const EMOJI_GRINNING_CAT_FACE = "😸";
 	const EMOJI_WHITE_STAR = "☆";

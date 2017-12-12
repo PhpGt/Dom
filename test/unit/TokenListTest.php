@@ -1,7 +1,9 @@
 <?php
 namespace Gt\Dom;
 
-class TokenListTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class TokenListTest extends TestCase {
 	public function testLength() {
 		$document = new HTMLDocument(test\Helper::HTML_MORE);
 		$h2 = $document->getElementById("who");

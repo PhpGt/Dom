@@ -1,7 +1,9 @@
 <?php
 namespace Gt\Dom;
 
-class NonDocumentTypeChildNodeTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class NonDocumentTypeChildNodeTest extends TestCase {
 	public function testElementSiblings() {
 		$document = new HTMLDocument(test\Helper::HTML_MORE);
 		$whoHeading = $document->getElementById("who");

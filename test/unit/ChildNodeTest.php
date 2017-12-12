@@ -1,7 +1,9 @@
 <?php
 namespace Gt\Dom;
 
-class ChildNodeTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class ChildNodeTest extends TestCase {
 	public function testBefore() {
 		$document = new HTMLDocument(test\Helper::HTML_MORE);
 		$element = $document->getElementById("who");

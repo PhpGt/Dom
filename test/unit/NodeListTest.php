@@ -1,8 +1,9 @@
 <?php
 namespace Gt\Dom;
 
-class NodeListTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
 
+class NodeListTest extends TestCase {
 	public function testNodeListFunctionsReturnGtObjects() {
 		$objectsThatShouldBeNodeList = [];
 		$document = new HTMLDocument(test\Helper::HTML_MORE);

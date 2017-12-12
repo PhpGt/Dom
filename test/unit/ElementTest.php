@@ -2,8 +2,9 @@
 namespace Gt\Dom;
 
 use Gt\Dom\TokenList;
+use PHPUnit\Framework\TestCase;
 
-class ElementTest extends \PHPUnit_Framework_TestCase {
+class ElementTest extends TestCase {
 	public function testQuerySelector() {
 		$document = new HTMLDocument(test\Helper::HTML_MORE);
 		$pAfterH2 = $document->querySelector("h2+p");

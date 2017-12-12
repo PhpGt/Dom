@@ -2,6 +2,7 @@
 namespace Gt\Dom;
 
 use Gt\Dom\TokenList;
+use PHPUnit\Framework\TestCase;
 
 class AttrTest extends TestCase {
 	public function testAttrMove() {

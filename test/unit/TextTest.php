@@ -2,8 +2,9 @@
 namespace Gt\Dom;
 
 use Gt\Dom\HTMLDocument;
+use PHPUnit\Framework\TestCase;
 
-class TextTest extends \PHPUnit_Framework_TestCase {
+class TextTest extends TestCase {
 	public function testIsElementContentWhitespace() {
 		$document = new HTMLDocument(test\Helper::HTML_MORE);
 		$firstChild = $document->body->firstChild;

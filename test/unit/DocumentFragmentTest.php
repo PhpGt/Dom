@@ -1,7 +1,9 @@
 <?php
 namespace Gt\Dom;
 
-class DocumentFragmentTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class DocumentFragmentTest extends TestCase {
 	const DOC_CONTENT_BEFORE_INSERT = "<!doctype html><body>"
 	. "<div><ul><li>outOfScope</li></ul></div>"
 	. "<span id='replaceWithSUT'></span>"
