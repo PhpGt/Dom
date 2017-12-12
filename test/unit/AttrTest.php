@@ -3,8 +3,7 @@ namespace Gt\Dom;
 
 use Gt\Dom\TokenList;
 
-class AttrTest extends \PHPUnit_Framework_TestCase {
-
+class AttrTest extends TestCase {
 	public function testAttrMove() {
 		$document = new HTMLDocument(test\Helper::DOCS_ATTR_GETATTRIBUTENODE);
 		$arduinoElement = $document->getElementById("arduino");
