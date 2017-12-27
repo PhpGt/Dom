@@ -224,4 +224,17 @@ class ElementTest extends TestCase {
 				"$key instance of " . gettype($object));
 		}
 	}
+
+	public function testGetInnerText() {
+		$document = new HTMLDocument(Helper::HTML);
+		$h1 = $document->querySelector("h1");
+		$this->assertEquals("Hello!", $h1->innerText);
+	}
+
+	public function testSetInnerText() {
+		$document = new HTMLDocument(Helper::HTML);
+		$h1 = $document->querySelector("h1");
+		$h1->innerText = "Goodbye!";
+		$this->assertEquals("Goodbye!", $h1->textContent);
+	}
 }
