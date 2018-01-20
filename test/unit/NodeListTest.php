@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\Element;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\NodeList;
 use Gt\Dom\Test\Helper\Helper;
@@ -19,5 +20,20 @@ class NodeListTest extends TestCase {
 				$object,
 				"$key instance of " . gettype($object));
 		}
+	}
+
+	public function testNodeListIndexOutOfBounds() {
+		$document = new HTMLDocument(Helper::HTML_MORE);
+		$paragraphList = $document->getElementsByTagName("p");
+		$count = count($paragraphList);
+
+		for($i = 0; $i < $count; $i++) {
+			self::assertInstanceOf(
+				Element::class,
+				$paragraphList[$i]
+			);
+		}
+
+		self::assertNull($paragraphList[$count]);
 	}
 }
