@@ -17,7 +17,39 @@
 	"authors": [
 		{
 			"name": "Greg Bowler",
-			"email": "greg.bowler@g105b.com"
+			"homepage": "https://www.g105b.com",
+			"email": "greg.bowler@g105b.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Alvaro Guimaraes",
+			"homepage": "https://github.com/aguimaraes",
+			"role": "Developer"
+		},
+		{
+			"name": "James Fellows",
+			"homepage": "https://github.com/j4m3s",
+			"role": "Developer"
+		},
+		{
+			"name": "Emile Ward",
+			"homepage": "https://github.com/emileward",
+			"role": "Developer"
+		},
+		{
+			"name": "Jelmer Wijnja",
+			"homepage": "https://github.com/Jelmergu",
+			"role": "Developer"
+		},
+		{
+			"name": "Ognjen Petrovic",
+			"homepage": "https://github.com/ognjen-petrovic",
+			"role": "Developer"
+		},
+		{
+			"name": "Jacob Bearden",
+			"homepage": "https://github.com/jacobbearden",
+			"role": "Documentation contributor"
 		}
 	],
 
