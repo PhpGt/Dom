@@ -9,7 +9,8 @@ use Iterator;
 class NodeList implements Iterator, ArrayAccess, Countable {
 	use LiveProperty;
 
-	private $domNodeList;
+	protected $domNodeList;
+	protected $iteratorKey;
 
 	public function __construct(DOMNodeList $domNodeList) {
 		$this->domNodeList = $domNodeList;
@@ -21,11 +22,14 @@ class NodeList implements Iterator, ArrayAccess, Countable {
 	 * @return int Number of Elements
 	 */
 	private function prop_get_length():int {
+		$key = $this->iteratorKey;
+
 		$length = 0;
 		foreach($this as $element) {
 			$length++;
 		}
 
+		$this->iteratorKey = $key;
 		return $length;
 	}
 
@@ -53,34 +57,32 @@ class NodeList implements Iterator, ArrayAccess, Countable {
 
 // Iterator --------------------------------------------------------------------
 
-	private $key = 0;
-
 	public function current():Element {
-		return $this->domNodeList[$this->key];
+		return $this->domNodeList[$this->iteratorKey];
 	}
 
 	public function key():int {
-		return $this->key;
+		return $this->iteratorKey;
 	}
 
 	public function next() {
-		$this->key++;
+		$this->iteratorKey++;
 		$this->incrementKeyToNextElement();
 	}
 
 	public function rewind() {
-		$this->key = 0;
+		$this->iteratorKey = 0;
 		$this->incrementKeyToNextElement();
 	}
 
 	public function valid():bool {
-		return isset($this->domNodeList[$this->key]);
+		return isset($this->domNodeList[$this->iteratorKey]);
 	}
 
 	private function incrementKeyToNextElement() {
 		while($this->valid()
-			&& !$this->domNodeList[$this->key] instanceof Element) {
-			$this->key++;
+			&& !$this->domNodeList[$this->iteratorKey] instanceof Element) {
+			$this->iteratorKey++;
 		}
 	}
 
