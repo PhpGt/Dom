@@ -85,22 +85,11 @@ class NodeList implements Iterator, ArrayAccess, Countable {
 	}
 
 // ArrayAccess -----------------------------------------------------------------
-
-	/**
-	 * Offset exists?
-	 * @param integer $offset offset number
-	 * @return boolean
-	 */
 	public function offsetExists($offset):bool {
 		return isset($offset, $this->domNodeList);
 	}
 
-	/**
-	 * Returns the element in the offset position
-	 * @param integer $offset offset number
-	 * @return Element
-	 */
-	public function offsetGet($offset):Element {
+	public function offsetGet($offset):?Element {
 		return $this->item($offset);
 	}
 
@@ -113,7 +102,6 @@ class NodeList implements Iterator, ArrayAccess, Countable {
 	}
 
 // Countable -------------------------------------------------------------------
-
 	public function count():int {
 		return $this->length;
 	}
