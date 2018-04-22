@@ -59,6 +59,17 @@ HTML;
 </body>
 </html>
 HTML;
+
+	const HTML_SECTIONS_WITHIN_FORM = <<<HTML
+<!doctype html>
+<form id="example-form">
+	<section><h1>Section 1</h1></section>
+	<section><h1>Section 2</h1></section>
+	<section><h1>Section 3</h1></section>
+	<section><h1>Section 4</h1></section>
+</form>
+HTML;
+
 	const HTML_TEXT = <<<HTML
 <p>Thru-hiking is great!  <strong>No insipid election coverage!</strong>
   However, <a href="http://en.wikipedia.org/wiki/Absentee_ballot">casting a
@@ -170,9 +181,9 @@ HTML;
 </breakfast-menu>
 XML;
 
-	/**
-	 * Below this line is all code that is used in documentation.
-	 */
+/**
+ * Below this line is all code that is used in documentation.
+ */
 
 // https://github.com/PhpGt/Dom/wiki/Classes-that-make-up-DOM#moving-an-attribute-between-elements
 	const DOCS_ATTR_GETATTRIBUTENODE = <<<HTML
