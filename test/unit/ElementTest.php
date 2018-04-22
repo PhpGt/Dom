@@ -237,4 +237,17 @@ class ElementTest extends TestCase {
 		$h1->innerText = "Goodbye!";
 		$this->assertEquals("Goodbye!", $h1->textContent);
 	}
+
+    public function testGetNonExistingIdGivesNull() {
+        $document = new HTMLDocument(Helper::HTML);
+        $body = $document->getElementsByTagName("body")[0] ?? null;
+        self::assertNotNull($body);
+        /** @var Element $body */
+        $idByGetAttribute = $body->getAttribute('id');
+        self::assertNull($idByGetAttribute);
+        $idByPropGetId = $body->prop_get_id();
+        self::assertNull($idByPropGetId);
+        $idByMagicGet = $body->id;
+        self::assertNull($idByMagicGet);
+	}
 }
