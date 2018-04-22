@@ -24,6 +24,10 @@ There are many other repositories that make up the WebEngine, which you can see 
 Ways you can help
 -----------------
 
+### Do you have a question?
+
+If you have a question about using a part of PHP.Gt, or are having an issue getting something to work, the best place to ask your question is on Stack Overflow. Tag your question with `phpgt` and the repository you are using (such as `phpgt-webengine` or `phpgt-dom`), and a core contributor will answer your question as quickly as possible.
+
 ### Identify a bug and submit an issue
 
 Have you found a defect with a piece of functionality? Bugs are tracked as [Github issues](https://help.github.com/articles/about-issues/). After you've determined [which repository](#what-do-you-need-to-know-before-you-get-started) your bug is related to, create an issue within that Github repository that explains the problem. Include as much details as possible that will help maintainers reproduce the problem:
