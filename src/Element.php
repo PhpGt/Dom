@@ -113,7 +113,7 @@ class Element extends DOMElement {
 		}
 	}
 
-	public function prop_get_id():string {
+	public function prop_get_id():?string {
 		return $this->getAttribute("id");
 	}
 
