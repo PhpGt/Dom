@@ -203,7 +203,7 @@ class DocumentFragmentTest extends TestCase {
 	public function testNoAttribute() {
 		$document = new HTMLDocument(Helper::HTML_LESS);
 		$fragment = $document->createDocumentFragment();
-		$fragment->appendXML(Helper::HTML_TEMPLATE_NO_ATTRIBUTE_VALUE);
+		$fragment->appendHTML(Helper::HTML_TEMPLATE_NO_ATTRIBUTE_VALUE);
 
 		self::assertCount(1, $document->querySelectorAll("p"));
 		$document->body->appendChild($fragment);

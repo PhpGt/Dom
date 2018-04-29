@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom;
 
+use Exception;
+
 /**
  * Represents a minimal document object that has no parent. It is used as a
  * light-weight version of Document to store well-formed or potentially
@@ -20,6 +22,25 @@ namespace Gt\Dom;
  */
 class DocumentFragment extends \DOMDocumentFragment {
 	use LiveProperty, ParentNode;
+
+	public function appendHTML(string $data):bool {
+		try {
+			$tempDocument = new HTMLDocument($data);
+
+			foreach($tempDocument->body->children as $child) {
+				$node = $this->ownerDocument->importNode(
+					$child,
+					true
+				);
+				$this->appendChild($node);
+			}
+
+			return true;
+		}
+		catch(Exception $exception) {
+			return false;
+		}
+	}
 
 	protected function getRootDocument():\DOMDocument {
 		return $this->ownerDocument;
