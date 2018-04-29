@@ -145,6 +145,14 @@ HTML;
 </body>
 </html>
 HTML;
+
+	const HTML_TEMPLATE_NO_ATTRIBUTE_VALUE = <<<HTML
+<div>
+	<p>The following paragraph element has a data attribute with no value, which is not valid XML.</p>
+	<p data-example>This breaks the import of DOMDocumentFragment, so should be fixed by Gt/Dom.</p>
+</div>
+HTML;
+
 	const XML = <<<XML
 <?xml version="1.0" encoding="UTF-8" ?>
 <breakfast-menu>
