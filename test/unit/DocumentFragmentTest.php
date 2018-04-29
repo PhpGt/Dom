@@ -199,4 +199,14 @@ class DocumentFragmentTest extends TestCase {
 // All shop-item elements should be replaced now.
 		$this->assertNull($document->querySelector("shop-item"));
 	}
+
+	public function testNoAttribute() {
+		$document = new HTMLDocument(Helper::HTML_LESS);
+		$fragment = $document->createDocumentFragment();
+		$fragment->appendHTML(Helper::HTML_TEMPLATE_NO_ATTRIBUTE_VALUE);
+
+		self::assertCount(1, $document->querySelectorAll("p"));
+		$document->body->appendChild($fragment);
+		self::assertCount(3,$document->querySelectorAll("p"));
+	}
 }
