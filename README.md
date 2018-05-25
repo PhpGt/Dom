@@ -9,19 +9,19 @@ Performing DOM manipulation in your server-side code enhances the way dynamic pa
 ***
 
 <a href="https://circleci.com/gh/PhpGt/Dom" target="_blank">
-	<img src="https://img.shields.io/circleci/project/PhpGt/Dom/master.svg?style=flat-square" alt="Build status" />
+	<img src="https://badge.status.php.gt/dom-build.svg" alt="Build status" />
 </a>
 <a href="https://scrutinizer-ci.com/g/PhpGt/Dom" target="_blank">
-	<img src="https://img.shields.io/scrutinizer/g/PhpGt/Dom/master.svg?style=flat-square" alt="Code quality" />
+	<img src="https://badge.status.php.gt/dom-quality.svg" alt="Code quality" />
 </a>
 <a href="https://scrutinizer-ci.com/g/PhpGt/Dom" target="_blank">
-	<img src="https://img.shields.io/scrutinizer/coverage/g/PhpGt/Dom/master.svg?style=flat-square" alt="Code coverage" />
+	<img src="https://badge.status.php.gt/dom-coverage.svg" alt="Code coverage" />
 </a>
 <a href="https://packagist.org/packages/PhpGt/Dom" target="_blank">
-	<img src="https://img.shields.io/packagist/v/PhpGt/Dom.svg?style=flat-square" alt="Current version" />
+	<img src="https://badge.status.php.gt/dom-version.svg" alt="Current version" />
 </a>
 <a href="http://www.php.gt/dom" target="_blank">
-	<img src="https://img.shields.io/badge/docs-www.php.gt/dom-26a5e3.svg?style=flat-square" alt="PHP.G/Dom documentation" />
+	<img src="https://badge.status.php.gt/dom-docs.svg" alt="PHP.G/Dom documentation" />
 </a>
 
 ## Example usage: Hello, you!
