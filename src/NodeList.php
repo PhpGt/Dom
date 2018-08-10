@@ -57,8 +57,8 @@ class NodeList implements Iterator, ArrayAccess, Countable {
 
 // Iterator --------------------------------------------------------------------
 
-	public function current():Element {
-		return $this->domNodeList[$this->iteratorKey];
+	public function current():?Element {
+		return $this->domNodeList[$this->iteratorKey] ?? null;
 	}
 
 	public function key():int {
