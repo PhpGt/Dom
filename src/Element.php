@@ -131,17 +131,37 @@ class Element extends DOMElement {
 	}
 
 	public function prop_set_innerHTML(string $html):void {
-		$fragment = $this->ownerDocument->createDocumentFragment();
-// The wrapper DIV allows non-XML to be appended.
-		$fragment->appendXML($html);
+		$importDocument = new DOMDocument(
+			"1.0",
+			"utf-8"
+		);
+
+		$htmlWrapped = "<!doctype html><html><body>$html</body></html>";
+		$htmlWrapped = mb_convert_encoding(
+			$htmlWrapped,
+			"HTML-ENTITIES",
+			"UTF-8"
+		);
+
+		$importDocument->loadHTML($htmlWrapped);
+		$importBody = $importDocument->getElementsByTagName(
+			"body"
+		)->item(0);
+		$node = $this->ownerDocument->importNode(
+			$importBody,
+			true
+		);
 
 		while($this->firstChild) {
 			$this->removeChild($this->firstChild);
 		}
 
-		while($fragment->firstChild) {
-			$this->appendChild($fragment->firstChild);
+		$fragment = $this->ownerDocument->createDocumentFragment();
+		while($node->firstChild) {
+			$fragment->appendChild($node->firstChild);
 		}
+
+		$this->appendChild($fragment);
 	}
 
 	public function prop_get_outerHTML():string {
