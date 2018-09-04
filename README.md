@@ -1,6 +1,6 @@
 <img src="logo.png" alt="The modern DOM API for PHP 7 projects" align="right" />
 
-# The modern DOM API for PHP 7 projects.
+# Modern DOM API.
 
 Built on top of PHP's native [DOMDocument](http://php.net/manual/en/book.dom.php), this project provides access to modern DOM APIs, as you would expect working with client-side code in the browser.
 
