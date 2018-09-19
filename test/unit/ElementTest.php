@@ -264,4 +264,20 @@ class ElementTest extends TestCase {
 			$p->dataset->socialUsername
 		);
 	}
+
+	public function testDataSetCreateElement() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+		$element->dataset->name = "Example";
+		$element->dataset->multiWord = "Should be hyphenated";
+
+		self::assertEquals(
+			$element->dataset->name,
+			$element->getAttribute("data-name")
+		);
+		self::assertEquals(
+			$element->dataset->multiWord,
+			$element->getAttribute("data-multi-word")
+		);
+	}
 }
