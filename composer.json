@@ -5,6 +5,7 @@
 
 	"require": {
 		"php": ">=7.1.0",
+		"ext-dom": "*",
 		"symfony/css-selector": "3.2.*"
 	},
 
