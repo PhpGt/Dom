@@ -300,6 +300,16 @@ class ElementTest extends TestCase {
 		self::assertTrue(isset($element->dataset["name"]));
 		unset($element->dataset["name"]);
 		self::assertFalse(isset($element->dataset["name"]));
+	}
 
+	public function testDatasetIssetUnset() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+
+		self::assertFalse(isset($this->dataset->name));
+		$element->dataset->name = "Example";
+		self::assertTrue(isset($this->dataset->name));
+		unset($element->dataset->name);
+		self::assertFalse(isset($this->dataset->name));
 	}
 }
