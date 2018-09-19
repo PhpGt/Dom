@@ -291,4 +291,15 @@ class ElementTest extends TestCase {
 			$element->dataset["name"]
 		);
 	}
+
+	public function testDatasetArrayAccessIssetUnset() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+		$element->dataset->name = "Example";
+
+		self::assertTrue(isset($element->dataset["name"]));
+		unset($element->dataset["name"]);
+		self::assertFalse(isset($element->dataset["name"]));
+
+	}
 }

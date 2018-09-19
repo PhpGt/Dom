@@ -89,7 +89,7 @@ class StringMap implements ArrayAccess {
 	 * @link https://php.net/manual/en/arrayaccess.offsetexists.php
 	 */
 	public function offsetExists($offset):bool {
-		return $this->__isset($this->properties[$offset]);
+		return $this->__isset($offset);
 	}
 
 	/**
