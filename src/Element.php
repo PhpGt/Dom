@@ -9,6 +9,7 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
 /**
  * The most general base class from which all objects in a Document inherit.
  *
+ * @property-read Attr[] $attributes
  * @property string $className Gets and sets the value of the class attribute
  * @property-read TokenList $classList Returns a live TokenList collection of
  * the class attributes of the element
@@ -21,12 +22,15 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  * element and its descendants. It can be set to replace the element with nodes
  * parsed from the given string
  * @property string $innerText
+ * @property-read StringMap $dataset
  */
 class Element extends DOMElement {
 	use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
 	/** @var  TokenList */
-	private $liveProperty_classList;
+	protected $liveProperty_classList;
+	/** @var StringMap */
+	protected $liveProperty_dataset;
 
 	/**
 	 * returns true if the element would be selected by the specified selector
@@ -181,6 +185,21 @@ class Element extends DOMElement {
 	public function prop_set_innerText(string $value):string {
 		$this->textContent = $value;
 		return $this->textContent;
+	}
+
+	public function prop_get_dataset():StringMap {
+		if(empty($this->liveProperty_dataset)) {
+			$this->liveProperty_dataset = $this->createDataset();
+		}
+
+		return $this->liveProperty_dataset;
+	}
+
+	protected function createDataset():StringMap {
+		return new StringMap(
+			$this,
+			$this->attributes
+		);
 	}
 
 	protected function getRootDocument():DOMDocument {
