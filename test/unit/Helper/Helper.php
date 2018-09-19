@@ -39,7 +39,7 @@ HTML;
 	<p>This is so we can test different traversal methods.</p>
 	<p class="plug">This package is a part of the phpgt webengine.</p>
 	<h2 id="who" class="h-who m-before-p m-test">Who made this?</h2>
-	<p class="link-to-twitter">
+	<p class="link-to-twitter" data-social="twitter" data-social-username="g105b">
 		<a href="https://twitter.com/g105b">Greg Bowler</a> started this project
 		to bring modern DOM techniques to the server side.
 	</p>

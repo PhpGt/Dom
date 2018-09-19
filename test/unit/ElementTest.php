@@ -250,4 +250,18 @@ class ElementTest extends TestCase {
 		$idByMagicGet = $body->id;
 		self::assertNull($idByMagicGet);
 	}
+
+	public function testDataset() {
+		$document = new HTMLDocument(Helper::HTML_MORE);
+		$p = $document->querySelector("p.link-to-twitter");
+
+		self::assertEquals(
+			"twitter",
+			$p->dataset->social
+		);
+		self::assertEquals(
+			"g105b",
+			$p->dataset->socialUsername
+		);
+	}
 }
