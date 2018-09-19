@@ -265,7 +265,7 @@ class ElementTest extends TestCase {
 		);
 	}
 
-	public function testDataSetCreateElement() {
+	public function testDatasetCreateElement() {
 		$document = new HTMLDocument();
 		$element = $document->createElement("div");
 		$element->dataset->name = "Example";
@@ -278,6 +278,17 @@ class ElementTest extends TestCase {
 		self::assertEquals(
 			$element->dataset->multiWord,
 			$element->getAttribute("data-multi-word")
+		);
+	}
+
+	public function testDatasetArrayAccess() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+		$element->dataset->name = "Example";
+
+		self::assertEquals(
+			$element->dataset->name,
+			$element->dataset["name"]
 		);
 	}
 }
