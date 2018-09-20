@@ -82,6 +82,7 @@ class StringMap implements ArrayAccess {
 			$propName
 		);
 		array_unshift($nameParts, "data");
+		$nameParts = array_map("strtolower", $nameParts);
 		return implode("-", $nameParts);
 	}
 

@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5a1fcaac7cf7701d2c9bb1716cf6221",
+    "content-hash": "b055bdc0ccc6cc72e15866dfc7e1deda",
     "packages": [
         {
             "name": "symfony/css-selector",
@@ -1476,7 +1476,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.1.0"
+        "php": ">=7.1.0",
+        "ext-dom": "*"
     },
     "platform-dev": []
 }

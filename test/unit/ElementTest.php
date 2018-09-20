@@ -265,6 +265,18 @@ class ElementTest extends TestCase {
 		);
 	}
 
+	public function testDatasetSetGet() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+		$message = "Hello, World!";
+		$element->dataset->message = $message;
+
+		self::assertEquals(
+			$message,
+			$element->dataset->message
+		);
+	}
+
 	public function testDatasetCreateElement() {
 		$document = new HTMLDocument();
 		$element = $document->createElement("div");
@@ -306,10 +318,10 @@ class ElementTest extends TestCase {
 		$document = new HTMLDocument();
 		$element = $document->createElement("div");
 
-		self::assertFalse(isset($this->dataset->name));
+		self::assertFalse(isset($element->dataset->name));
 		$element->dataset->name = "Example";
-		self::assertTrue(isset($this->dataset->name));
+		self::assertTrue(isset($element->dataset->name));
 		unset($element->dataset->name);
-		self::assertFalse(isset($this->dataset->name));
+		self::assertFalse(isset($element->dataset->name));
 	}
 }
