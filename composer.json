@@ -5,11 +5,12 @@
 
 	"require": {
 		"php": ">=7.1.0",
+		"ext-dom": "*",
 		"symfony/css-selector": "3.2.*"
 	},
 
 	"require-dev": {
-		"phpunit/phpunit": "^6.4|^7.0"
+		"phpunit/phpunit": "^7.0"
 	},
 
 	"license": "MIT",

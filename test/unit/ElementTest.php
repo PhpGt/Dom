@@ -238,16 +238,90 @@ class ElementTest extends TestCase {
 		$this->assertEquals("Goodbye!", $h1->textContent);
 	}
 
-    public function testGetNonExistingIdGivesNull() {
-        $document = new HTMLDocument(Helper::HTML);
-        $body = $document->getElementsByTagName("body")[0] ?? null;
-        self::assertNotNull($body);
-        /** @var Element $body */
-        $idByGetAttribute = $body->getAttribute('id');
-        self::assertNull($idByGetAttribute);
-        $idByPropGetId = $body->prop_get_id();
-        self::assertNull($idByPropGetId);
-        $idByMagicGet = $body->id;
-        self::assertNull($idByMagicGet);
+	public function testGetNonExistingIdGivesNull() {
+		$document = new HTMLDocument(Helper::HTML);
+		$body = $document->getElementsByTagName("body")[0] ?? null;
+		self::assertNotNull($body);
+		/** @var Element $body */
+		$idByGetAttribute = $body->getAttribute('id');
+		self::assertNull($idByGetAttribute);
+		$idByPropGetId = $body->prop_get_id();
+		self::assertNull($idByPropGetId);
+		$idByMagicGet = $body->id;
+		self::assertNull($idByMagicGet);
+	}
+
+	public function testDataset() {
+		$document = new HTMLDocument(Helper::HTML_MORE);
+		$p = $document->querySelector("p.link-to-twitter");
+
+		self::assertEquals(
+			"twitter",
+			$p->dataset->social
+		);
+		self::assertEquals(
+			"g105b",
+			$p->dataset->socialUsername
+		);
+	}
+
+	public function testDatasetSetGet() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+		$message = "Hello, World!";
+		$element->dataset->message = $message;
+
+		self::assertEquals(
+			$message,
+			$element->dataset->message
+		);
+	}
+
+	public function testDatasetCreateElement() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+		$element->dataset->name = "Example";
+		$element->dataset->multiWord = "Should be hyphenated";
+
+		self::assertEquals(
+			$element->dataset->name,
+			$element->getAttribute("data-name")
+		);
+		self::assertEquals(
+			$element->dataset->multiWord,
+			$element->getAttribute("data-multi-word")
+		);
+	}
+
+	public function testDatasetArrayAccess() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+		$element->dataset->name = "Example";
+
+		self::assertEquals(
+			$element->dataset->name,
+			$element->dataset["name"]
+		);
+	}
+
+	public function testDatasetArrayAccessIssetUnset() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+		$element->dataset->name = "Example";
+
+		self::assertTrue(isset($element->dataset["name"]));
+		unset($element->dataset["name"]);
+		self::assertFalse(isset($element->dataset["name"]));
+	}
+
+	public function testDatasetIssetUnset() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+
+		self::assertFalse(isset($element->dataset->name));
+		$element->dataset->name = "Example";
+		self::assertTrue(isset($element->dataset->name));
+		unset($element->dataset->name);
+		self::assertFalse(isset($element->dataset->name));
 	}
 }
