@@ -21,7 +21,7 @@ Performing DOM manipulation in your server-side code enhances the way dynamic pa
 	<img src="https://badge.status.php.gt/dom-version.svg" alt="Current version" />
 </a>
 <a href="http://www.php.gt/dom" target="_blank">
-	<img src="https://badge.status.php.gt/dom-docs.svg" alt="PHP.G/Dom documentation" />
+	<img src="https://badge.status.php.gt/dom-docs.svg" alt="PHP.Gt/Dom documentation" />
 </a>
 
 ## Example usage: Hello, you!
