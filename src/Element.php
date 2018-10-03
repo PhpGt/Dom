@@ -196,7 +196,7 @@ class Element extends DOMElement {
 	}
 
 	public function prop_get_checked():bool {
-		return $this->getAttribute('checked') === 'checked';
+		return $this->hasAttribute("checked");
 	}
 
 	public function prop_set_checked(bool $checked):bool {
