@@ -6,6 +6,7 @@
 	"require": {
 		"php": ">=7.1.0",
 		"ext-dom": "*",
+		"ext-mbstring": "*",
 		"symfony/css-selector": "3.2.14"
 	},
 
