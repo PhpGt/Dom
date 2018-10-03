@@ -202,6 +202,7 @@ class Element extends DOMElement {
 	public function prop_set_checked(bool $checked):bool {
 		if ($checked) {
 			if ($this->getAttribute('type') === 'radio') {
+// TODO: Use `form` attribute when implemented: https://github.com/PhpGt/Dom/issues/161
 				$parentForm = $this->closest('form');
 				if (!is_null($parentForm)) {
 					self::formRemoveCheckedAttributeFromElementsWithName($parentForm, $this->getAttribute('name'));
