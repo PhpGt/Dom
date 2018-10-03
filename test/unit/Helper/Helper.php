@@ -271,6 +271,23 @@ const HTML_FORM_WITH_RADIOS = <<<HTML
 			</select>
 		</label>
 	</fieldset>
+	<fieldset title"Programming">
+		<label>
+			<span>What are your favourite programming languages?</span>
+			<select multiple name="languages">
+				<option value="php">PHP</option>
+				<option value="c">C / C++</option>
+				<option value="java">Java</option>
+				<option value="sql">SQL</option>
+				<option value="python">Python</option>
+				<option value="basic">BASIC</option>
+				<option value="haskell">Haskell</option>
+				<option value="go">Go</option>
+				<option value="ruby">Ruby</option>
+				<option value="csharp">C#</option>
+			</select>
+		</label>
+	</fieldset>
 	
 	<button name="do" value="submit-ethnicity">Submit</button>
 </form>

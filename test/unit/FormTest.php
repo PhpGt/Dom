@@ -49,4 +49,16 @@ class FormTest extends TestCase {
 		self::assertFalse($under18option->hasAttribute("selected"));
 		self::assertTrue($youngAdultOption->hasAttribute("selected"));
 	}
+
+	public function testMultipleSelectOptionCanBeCheckedViaPropertyWhenSelectMultiple() {
+		$document = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
+		$phpOption = $document->querySelector("option[value='php']");
+		$haskellOption = $document->querySelector("option[value='haskell']");
+
+		$phpOption->selected = true;
+		$haskellOption->selected = true;
+
+		self::assertTrue($phpOption->selected);
+		self::assertTrue($haskellOption->selected);
+	}
 }
