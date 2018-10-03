@@ -13,6 +13,7 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  * @property string $className Gets and sets the value of the class attribute
  * @property-read TokenList $classList Returns a live TokenList collection of
  * the class attributes of the element
+ * @property bool $checked Indicates whether the element is checked or not
  * @property string $value Gets or sets the value of the element according to
  * its element type
  * @property string $id Gets or sets the value of the id attribute
@@ -201,18 +202,18 @@ class Element extends DOMElement {
 
 	public function prop_set_checked(bool $checked):bool {
 		if ($checked) {
-			if ($this->getAttribute('type') === 'radio') {
+			if ($this->getAttribute("type") === "radio") {
 // TODO: Use `form` attribute when implemented: https://github.com/PhpGt/Dom/issues/161
-				$parentForm = $this->closest('form');
+				$parentForm = $this->closest("form");
 				if (!is_null($parentForm)) {
-					self::formRemoveCheckedAttributeFromElementsWithName($parentForm, $this->getAttribute('name'));
+					self::formRemoveCheckedAttributeFromElementsWithName($parentForm, $this->getAttribute("name"));
 				}
 			}
 
-			$this->setAttribute('checked', 'checked');
+			$this->setAttribute("checked", "checked");
 		}
 		else {
-			$this->removeAttribute('checked');
+			$this->removeAttribute("checked");
 		}
 
 		return $this->checked;
