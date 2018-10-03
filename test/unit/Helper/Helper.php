@@ -231,4 +231,35 @@ HTML;
 </a>
 HTML;
 
+// Ethnic groups taken from UK Government census data:
+// https://en.wikipedia.org/wiki/Classification_of_ethnicity_in_the_United_Kingdom
+const HTML_FORM_WITH_RADIOS = <<<HTML
+<!doctype>
+<form>
+	<p>What is your ethnic group?</p>
+	<label>
+		<span>White</span>
+		<input type="radio" name="ethnic-group" value="white" />
+	</label>
+	<label>
+		<span>Mixed / multiple ethnic groups</span>
+		<input type="radio" name="ethnic-group" value="mixed" />
+	</label>
+	<label>
+		<span>Asian / Asian British</span>
+		<input type="radio" name="ethnic-group" value="asian" />
+	</label>
+	<label>
+		<span>Black / African / Caribbean / Black British</span>
+		<input type="radio" name="ethnic-group" value="black" />
+	</label>
+	<label>
+		<span>Other ethnic group</span>
+		<input type="radio" name="ethnic-group" value="other" />
+	</label>
+	
+	<button name="do" value="submit-ethnicity">Submit</button>
+</form>
+HTML;
+
 }
