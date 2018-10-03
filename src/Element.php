@@ -195,6 +195,29 @@ class Element extends DOMElement {
 		return $this->liveProperty_dataset;
 	}
 
+	public function prop_get_checked():bool {
+		return $this->hasAttribute("checked");
+	}
+
+	public function prop_set_checked(bool $checked):bool {
+		if ($checked) {
+			if ($this->getAttribute('type') === 'radio') {
+// TODO: Use `form` attribute when implemented: https://github.com/PhpGt/Dom/issues/161
+				$parentForm = $this->closest('form');
+				if (!is_null($parentForm)) {
+					self::formRemoveCheckedAttributeFromElementsWithName($parentForm, $this->getAttribute('name'));
+				}
+			}
+
+			$this->setAttribute('checked', 'checked');
+		}
+		else {
+			$this->removeAttribute('checked');
+		}
+
+		return $this->checked;
+	}
+
 	protected function createDataset():StringMap {
 		return new StringMap(
 			$this,
@@ -259,5 +282,11 @@ class Element extends DOMElement {
 
 	static public function isSelectOptionSelected(Element $option) {
 		return $option->hasAttribute('selected') && $option->getAttribute('selected');
+	}
+
+	static public function formRemoveCheckedAttributeFromElementsWithName(Element $form, string $name):void {
+		foreach($form->querySelectorAll('[name="' . $name . '"]') as $element) {
+			$element->removeAttribute('checked');
+		}
 	}
 }
