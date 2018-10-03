@@ -83,6 +83,17 @@ trait ParentNode {
 		return new NodeList($nodeList);
 	}
 
+	public function removeAttributeFromNamedElementAndChildren(
+		Element $form,
+		string $name,
+		string $attribute
+	):void {
+		$selector = "[name='$name'], [name='$name'] *";
+		foreach($form->querySelectorAll($selector) as $element) {
+			$element->removeAttribute($attribute);
+		}
+	}
+
 	/**
 	 * Normalises access to the parent dom document, which may be located in various places
 	 * depending on what type of object is using the trait

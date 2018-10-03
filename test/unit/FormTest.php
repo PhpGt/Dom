@@ -33,4 +33,20 @@ class FormTest extends TestCase {
 			"Checked attribute should be present on black after setting property on black."
 		);
 	}
+
+	public function testMultipleSelectOptionCanNotBeCheckedViaProperty() {
+		$document = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
+		$under18option = $document->querySelector("option[value='0-17']");
+		$youngAdultOption = $document->querySelector("option[value='18-35']");
+
+		$under18option->selected = true;
+
+		self::assertTrue($under18option->hasAttribute("selected"));
+		self::assertFalse($youngAdultOption->hasAttribute("selected"));
+
+		$youngAdultOption->selected = true;
+
+		self::assertFalse($under18option->hasAttribute("selected"));
+		self::assertTrue($youngAdultOption->hasAttribute("selected"));
+	}
 }

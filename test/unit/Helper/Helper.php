@@ -236,27 +236,41 @@ HTML;
 const HTML_FORM_WITH_RADIOS = <<<HTML
 <!doctype>
 <form>
-	<p>What is your ethnic group?</p>
-	<label>
-		<span>White</span>
-		<input type="radio" name="ethnic-group" value="white" />
-	</label>
-	<label>
-		<span>Mixed / multiple ethnic groups</span>
-		<input type="radio" name="ethnic-group" value="mixed" />
-	</label>
-	<label>
-		<span>Asian / Asian British</span>
-		<input type="radio" name="ethnic-group" value="asian" />
-	</label>
-	<label>
-		<span>Black / African / Caribbean / Black British</span>
-		<input type="radio" name="ethnic-group" value="black" />
-	</label>
-	<label>
-		<span>Other ethnic group</span>
-		<input type="radio" name="ethnic-group" value="other" />
-	</label>
+	<fieldset title="Ethnicity">
+		<p>What is your ethnic group?</p>
+		<label>
+			<span>White</span>
+			<input type="radio" name="ethnic-group" value="white" />
+		</label>
+		<label>
+			<span>Mixed / multiple ethnic groups</span>
+			<input type="radio" name="ethnic-group" value="mixed" />
+		</label>
+		<label>
+			<span>Asian / Asian British</span>
+			<input type="radio" name="ethnic-group" value="asian" />
+		</label>
+		<label>
+			<span>Black / African / Caribbean / Black British</span>
+			<input type="radio" name="ethnic-group" value="black" />
+		</label>
+		<label>
+			<span>Other ethnic group</span>
+			<input type="radio" name="ethnic-group" value="other" />
+		</label>
+	</fieldset>
+	<fieldset title="Age Range">
+		<label>
+			<span>What is your age range?</span>
+			<select name="age">
+				<option value="0-17">Under 18</option>
+				<option value="18-35">18 - 35</option>
+				<option value="36-50">36 - 50</option>
+				<option value="51-75">51 - 75</option>
+				<option value="76-100">Over 75</option>
+			</select>
+		</label>
+	</fieldset>
 	
 	<button name="do" value="submit-ethnicity">Submit</button>
 </form>
