@@ -7,7 +7,7 @@
 		"php": ">=7.1.0",
 		"ext-dom": "*",
 		"ext-mbstring": "*",
-		"symfony/css-selector": "3.2.14"
+		"symfony/css-selector": "4.1.6"
 	},
 
 	"require-dev": {
