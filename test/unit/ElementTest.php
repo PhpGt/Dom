@@ -324,4 +324,65 @@ class ElementTest extends TestCase {
 		unset($element->dataset->name);
 		self::assertFalse(isset($element->dataset->name));
 	}
+
+	public function testFormControlElementsCanHaveFormProperty() {
+		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
+		$form = $document->getElementById('form_2');
+
+		$input = $document->getElementById('f2');
+		self::assertEquals($form, $input->form);
+
+		$button = $document->getElementById('f4');
+		self::assertEquals($form, $button->form);
+
+		$fieldset = $document->getElementById('f5');
+		self::assertEquals($form, $fieldset->form);
+
+		$input = $document->getElementById('f6');
+		self::assertEquals($form, $input->form);
+
+		$object = $document->getElementById('f7');
+		self::assertEquals($form, $object->form);
+
+		$output = $document->getElementById('f8');
+		self::assertEquals($form, $output->form);
+
+		$select = $document->getElementById('f9');
+		self::assertEquals($form, $select->form);
+	}
+
+	public function testFormControlElementReturnsParentFormAsFormPropertyIfItDoesNotHaveFormAttribute() {
+		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
+		$form = $document->getElementById('form_1');
+
+		$input = $document->getElementById('f1');
+		self::assertEquals($form, $input->form);
+
+		$button = $document->getElementById('f3');
+		self::assertEquals($form, $button->form);
+	}
+
+	public function testFormControlElementReturnsNullIfItDoesNotHaveFormAttributeAndDoesNotHaveParentForm() {
+		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
+
+		$input = $document->getElementById('f11');
+		self::assertEquals(NULL, $input->form);
+	}
+
+	public function testNonControlElementRetursNullAsFormProperty() {
+		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
+
+		$span = $document->getElementById('non_form_control_1');
+		self::assertEquals(NULL, $span->form);
+
+		$span = $document->getElementById('non_form_control_2');
+		self::assertEquals(NULL, $span->form);
+	}
+
+	public function testInputElementWithTypeImagetReturnsNullAsFormProperty() {
+		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
+
+		$input = $document->getElementById('f12');
+		self::assertEquals(NULL, $input->form);
+	}
 }
