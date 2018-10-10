@@ -33,8 +33,11 @@ class Element extends DOMElement {
 	protected $liveProperty_classList;
 	/** @var StringMap */
 	protected $liveProperty_dataset;
-	/** @var Array */
-	static public $formControlElements = ['button', 'fieldset', 'input', 'object', 'output', 'select', 'textarea'];
+	/**
+	 * @const Array
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement#Elements_that_are_considered_form_controls
+	 */
+	const FORM_CONTROL_ELEMENTS = ['button', 'fieldset', 'input', 'object', 'output', 'select', 'textarea'];
 
 	/**
 	 * returns true if the element would be selected by the specified selector
@@ -251,9 +254,10 @@ class Element extends DOMElement {
 	}
 
 	public function prop_get_form() {
-		if (\in_array($this->tagName, self::$formControlElements)) {
-			if ($this->tagName === "input" && $this->getAttribute("type") === "image")
+		if (in_array($this->tagName, self::FORM_CONTROL_ELEMENTS)) {
+			if ($this->tagName === "input" && $this->getAttribute("type") === "image") {
 				return null;
+			}
 
 			if ($this->hasAttribute("form")) {
 				return $this->getRootDocument()->getElementById($this->getAttribute("form"));
