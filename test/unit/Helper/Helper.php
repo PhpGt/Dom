@@ -293,4 +293,39 @@ const HTML_FORM_WITH_RADIOS = <<<HTML
 </form>
 HTML;
 
+const HTML_FORM_PROPERTY = <<<HTML
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Test HTML</title>
+</head>
+<body>
+
+	<form action="" id="form_1">
+		<input  id="f1">
+		<input  id="f2" form="form_2">
+		<button id="f3">button</button>
+		<span id="non_form_control_1"></span>
+	</form>
+
+	<form action="" id="form_2"></form>
+
+	<BUTTON   id="f4"  form="form_2"></BUTTON>
+	<fieldset id="f5"  form="form_2"></fieldset>
+	<input    id="f6"  form="form_2">
+	<object   id="f7"  form="form_2"></object>
+	<output   id="f8"  form="form_2"></output>
+	<select   id="f9"  form="form_2"></select>
+	<textarea id="f10" form="form_2"></textarea>
+
+	<input    id="f11">
+	<input    id="f12" type="image" form="form_2">
+
+	<span id="non_form_control_2" form="form_2"></span>
+	
+</body>
+</html>
+HTML;
+
 }
