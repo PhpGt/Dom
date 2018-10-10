@@ -26,6 +26,8 @@ Performing DOM manipulation in your server-side code enhances the way dynamic pa
 
 ## Example usage: Hello, you!
 
+> **Important note:** the example shown here is for illustrative purposes, but using the DOM to directly set data to elements' values tightly couples the logic to the view, which is considered bad practice. Please see the [DomTemplate](https://php.gt/domtemplate) library for a more robust solution to binding data to the DOM.
+
 Consider a page with a form, with an input element to enter your name. When the form is submitted, the page should greet you by your name.
 
 This is a simple example of how source HTML files can be treated as templates. This can easily be applied to more advanced template pages to provide dynamic content, without requiring non-standard techniques such as `{{curly braces}}` for placeholders, or `echo '<div class='easy-mistake'>' . $content['opa'] . '</div>'` horrible HTML construction from within PHP.
