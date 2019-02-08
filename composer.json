@@ -4,14 +4,14 @@
 	"type": "library",
 
 	"require": {
-		"php": ">=7.1.0",
+		"php": ">=7.2.0",
 		"ext-dom": "*",
 		"ext-mbstring": "*",
 		"symfony/css-selector": "3.2.14"
 	},
 
 	"require-dev": {
-		"phpunit/phpunit": "^7.0"
+		"phpunit/phpunit": "7.*"
 	},
 
 	"license": "MIT",
