@@ -114,26 +114,26 @@ class ElementTest extends TestCase {
 	public function testInnerHTML() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
 		$p = $document->querySelector(".link-to-twitter");
-		$this->assertContains("<a href=", $p->innerHTML);
-		$this->assertContains("Greg Bowler", $p->innerHTML);
-		$this->assertNotContains("<p", $p->innerHTML);
+		$this->assertStringContainsString("<a href=", $p->innerHTML);
+		$this->assertStringContainsString("Greg Bowler", $p->innerHTML);
+		$this->assertStringNotContainsString("<p", $p->innerHTML);
 
 		$p->innerHTML = "This is <strong>very</strong> important!";
 		$this->assertInstanceOf(Element::class, $p->querySelector("strong"));
-		$this->assertContains("This is", $p->textContent);
-		$this->assertContains("very", $p->textContent);
+		$this->assertStringContainsString("This is", $p->textContent);
+		$this->assertStringContainsString("very", $p->textContent);
 		$this->assertEquals("very", $p->querySelector("strong")->textContent);
 	}
 
 	public function testOuterHTML() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
 		$p = $document->querySelector(".link-to-twitter");
-		$this->assertContains("<a href=", $p->outerHTML);
-		$this->assertContains("Greg Bowler", $p->outerHTML);
-		$this->assertContains("<p", $p->outerHTML);
-		$this->assertContains("</p>", $p->outerHTML);
-		$this->assertNotContains("<h2", $p->outerHTML);
-		$this->assertNotContains("name=\"forms\">", $p->outerHTML);
+		$this->assertStringContainsString("<a href=", $p->outerHTML);
+		$this->assertStringContainsString("Greg Bowler", $p->outerHTML);
+		$this->assertStringContainsString("<p", $p->outerHTML);
+		$this->assertStringContainsString("</p>", $p->outerHTML);
+		$this->assertStringNotContainsString("<h2", $p->outerHTML);
+		$this->assertStringNotContainsString("name=\"forms\">", $p->outerHTML);
 	}
 
 	public function testClassListProperty() {
@@ -148,10 +148,10 @@ class ElementTest extends TestCase {
 	public function testClassNameProperty() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
 		$element = $document->getElementById("who");
-		$this->assertInternalType("string", $element->className);
+		$this->assertIsString($element->className);
 
-		$this->assertContains("m-before-p", $element->className);
-		$this->assertNotContains("nothing", $element->className);
+		$this->assertStringContainsString("m-before-p", $element->className);
+		$this->assertStringNotContainsString("nothing", $element->className);
 	}
 
 	public function testIdProperty() {

@@ -92,7 +92,7 @@ class HTMLCollectionTest extends TestCase {
 		$first = $nodeList->item(0);
 		$third = $nodeList->item(2);
 
-		$this->assertContains("There are a few elements", $first->textContent);
+		$this->assertStringContainsString("There are a few elements", $first->textContent);
 		$this->assertTrue($third->classList->contains("plug"));
 	}
 }
