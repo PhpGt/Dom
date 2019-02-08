@@ -23,8 +23,8 @@ class TextTest extends TestCase {
 		$para->childNodes[1]->remove();
 // WholeText should contain all text up to the link.
 		$textNode = $para->firstChild;
-		$this->assertContains("Thru-hiking is great!", $textNode->wholeText);
-		$this->assertContains(" However, ", $textNode->wholeText);
+		$this->assertStringContainsString("Thru-hiking is great!", $textNode->wholeText);
+		$this->assertStringContainsString(" However, ", $textNode->wholeText);
 	}
 
 	public function testSplitText() {
@@ -34,7 +34,7 @@ class TextTest extends TestCase {
 		$textNode->splitText(4);
 
 		$this->assertEquals("Thru", $para->firstChild->textContent);
-		$this->assertContains("-hiking is great!",
+		$this->assertStringContainsString("-hiking is great!",
 			$para->firstChild->nextSibling->textContent);
 	}
 }
