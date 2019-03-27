@@ -37,7 +37,7 @@ This is a simple example of how source HTML files can be treated as templates. T
 ```html
 <!doctype html>
 <h1>
-	Hello, <span id="your-name">you</span> !
+	Hello, <span class="name-output">you</span> !
 </h1>
 
 <form>
@@ -56,7 +56,7 @@ $html = file_get_contents("name.html");
 $document = new \Gt\Dom\HTMLDocument($html);
 
 if(isset($_GET["name"])) {
-	$document->getElementById("your-name")->textContent = $_GET["name"];
+	$document->querySelector(".name-output")->innerText = $_GET["name"];
 }
 
 echo $document->saveHTML();
