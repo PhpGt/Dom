@@ -125,6 +125,40 @@ class ElementTest extends TestCase {
 		$this->assertEquals("very", $p->querySelector("strong")->textContent);
 	}
 
+	public function testInnerHTMLWithJson() {
+// This test comes from a real world use-case, where the value of a JSON
+// property within a <script> tag needed updating on the fly. It didn't make
+// practical sense to encode/decode the JSON, so str_replace was used to update
+// a placeholder. In the wild, this caused HTML entities to appear everywhere,
+// incorrectly.
+		$document = new HTMLDocument(Helper::HTML_JSON_HEAD);
+		$ratingValue = "4.5";
+		$ratingCount = 1337;
+		$script = $document->querySelector(".php-schema-rating");
+
+		self::assertStringContainsString(
+			"\"aggregateRating\": {",
+			$script->innerHTML
+		);
+
+		$script->innerHTML = str_replace([
+			"__RATING_VALUE__",
+			"__RATING_COUNT__",
+		], [
+			$ratingValue,
+			$ratingCount
+		], $script->innerHTML);
+
+		self::assertStringContainsString(
+			"\"aggregateRating\": {",
+			$script->innerHTML
+		);
+
+		$json = json_decode($script->innerHTML);
+		self::assertEquals($ratingValue, $json->aggregateRating->ratingValue);
+		self::assertEquals($ratingCount, $json->aggregateRating->ratingCount);
+	}
+
 	public function testOuterHTML() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
 		$p = $document->querySelector(".link-to-twitter");

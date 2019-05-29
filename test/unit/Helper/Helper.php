@@ -328,4 +328,32 @@ const HTML_FORM_PROPERTY = <<<HTML
 </html>
 HTML;
 
+	const HTML_JSON_HEAD = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" content=""><meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1">
+	<script type="application/ld+json" class="php-schema-rating">
+	{
+		"@context": "http://schema.org",
+		"@id": "https://www.example.com#organisation",
+		"@type": "Organization",
+		"aggregateRating": {
+			"@type": "AggregateRating",
+			"ratingValue": "__RATING_VALUE__",
+			"ratingCount": "__RATING_COUNT__"
+		},
+		"additionalType": [
+			"http://www.productontology.org/doc/Example"
+		]
+	}
+	</script>
+</head>
+<body>
+	<h1>JSON is in the head!</h1>
+</body>
+</html>
+HTML;
+
+
 }
