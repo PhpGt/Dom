@@ -2,6 +2,7 @@
 namespace Gt\Dom;
 
 use DOMXPath;
+use Gt\CssXPath\Translator;
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
 /**
@@ -59,18 +60,14 @@ trait ParentNode {
 	 * @return HTMLCollection
 	 */
 	public function css(
-		string $selectors,
-		string $prefix = "descendant-or-self::"
+		string $selectors
 	):HTMLCollection {
-		$converter = new CssSelectorConverter();
-		$xPathSelector = $converter->toXPath($selectors, $prefix);
-
-		return $this->xPath($xPathSelector);
+		$translator = new Translator($selectors);
+		return $this->xPath($translator);
 	}
 
 	public function xPath(string $selector):HTMLCollection {
 		$x = new DOMXPath($this->getRootDocument());
-
 		return new HTMLCollection($x->query($selector, $this));
 	}
 

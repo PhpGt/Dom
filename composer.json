@@ -1,4 +1,12 @@
 {
+	"repositories": [
+		{
+			"type": "path",
+			"url": "/home/g105b/Code/PhpGt/*"
+		}
+	],
+	"minimum-stability": "dev",
+
 	"name": "phpgt/dom",
 	"description": "The modern DOM API for PHP 7 projects.",
 	"type": "library",
@@ -7,7 +15,7 @@
 		"php": ">=7.2.0",
 		"ext-dom": "*",
 		"ext-mbstring": "*",
-		"symfony/css-selector": "3.2.14"
+		"phpgt/cssxpath": "*"
 	},
 
 	"require-dev": {
