@@ -9,16 +9,22 @@
         {
             "name": "phpgt/cssxpath",
             "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "/home/g105b/Code/PhpGt/CssXPath",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PhpGt/CssXPath.git",
                 "reference": "22b74d06785625b52ba051201ed0ffb2bd806e29"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PhpGt/CssXPath/zipball/22b74d06785625b52ba051201ed0ffb2bd806e29",
+                "reference": "22b74d06785625b52ba051201ed0ffb2bd806e29",
+                "shasum": ""
             },
             "require": {
                 "php": ">=7.2.0"
             },
             "require-dev": {
-                "phpgt/dom": "*",
+                "phpgt/dom": "1.*",
                 "phpunit/phpunit": "8.*"
             },
             "type": "library",
@@ -27,15 +33,12 @@
                     "Gt\\CssXPath\\": "./src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Gt\\CssXPath\\Test\\": "./test/unit"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "description": "Convert CSS selectors to XPath queries."
+            "description": "Convert CSS selectors to XPath queries.",
+            "time": "2019-05-29T12:47:10+00:00"
         }
     ],
     "packages-dev": [
@@ -466,12 +469,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "d720d14ef701c38cc7d50be1843a34d744e919f6"
+                "reference": "1efa47062cc142ee3bf5b2b84e1abc3f4b25e318"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/d720d14ef701c38cc7d50be1843a34d744e919f6",
-                "reference": "d720d14ef701c38cc7d50be1843a34d744e919f6",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/1efa47062cc142ee3bf5b2b84e1abc3f4b25e318",
+                "reference": "1efa47062cc142ee3bf5b2b84e1abc3f4b25e318",
                 "shasum": ""
             },
             "require": {
@@ -521,7 +524,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-05-29T11:51:37+00:00"
+            "time": "2019-06-03T11:17:03+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -718,12 +721,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "e4390fae89bf940f430604f6fd4b58804a530816"
+                "reference": "04019b9743dd1417d4e537b5d0b96d357f42336c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e4390fae89bf940f430604f6fd4b58804a530816",
-                "reference": "e4390fae89bf940f430604f6fd4b58804a530816",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/04019b9743dd1417d4e537b5d0b96d357f42336c",
+                "reference": "04019b9743dd1417d4e537b5d0b96d357f42336c",
                 "shasum": ""
             },
             "require": {
@@ -793,7 +796,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-05-29T04:38:41+00:00"
+            "time": "2019-05-31T08:55:35+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
