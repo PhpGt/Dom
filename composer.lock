@@ -12,14 +12,14 @@
             "dist": {
                 "type": "path",
                 "url": "/home/g105b/Code/PhpGt/CssXPath",
-                "reference": "371743faba36705ce607b670d976eee994efd4e7"
+                "reference": "22b74d06785625b52ba051201ed0ffb2bd806e29"
             },
             "require": {
-                "php": ">=7.1.0"
+                "php": ">=7.2.0"
             },
             "require-dev": {
-                "phpgt/dom": "^1.0",
-                "phpunit/phpunit": "^7.4 || ^8.0"
+                "phpgt/dom": "*",
+                "phpunit/phpunit": "8.*"
             },
             "type": "library",
             "autoload": {
@@ -466,12 +466,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "6024c8a6cb962d496b7bd049ed8f48473824176d"
+                "reference": "d720d14ef701c38cc7d50be1843a34d744e919f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/6024c8a6cb962d496b7bd049ed8f48473824176d",
-                "reference": "6024c8a6cb962d496b7bd049ed8f48473824176d",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/d720d14ef701c38cc7d50be1843a34d744e919f6",
+                "reference": "d720d14ef701c38cc7d50be1843a34d744e919f6",
                 "shasum": ""
             },
             "require": {
@@ -521,7 +521,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-05-29T09:59:31+00:00"
+            "time": "2019-05-29T11:51:37+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",

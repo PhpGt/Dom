@@ -3,7 +3,6 @@ namespace Gt\Dom;
 
 use DOMXPath;
 use Gt\CssXPath\Translator;
-use Symfony\Component\CssSelector\CssSelectorConverter;
 
 /**
  * Contains methods that are particular to Node objects that can have children.
@@ -53,16 +52,11 @@ trait ParentNode {
 		return $this->children->length;
 	}
 
-	/**
-	 * @param string $selectors CSS selector(s)
-	 * @param string $prefix
-	 *
-	 * @return HTMLCollection
-	 */
 	public function css(
-		string $selectors
+		string $selectors,
+		string $prefix = "descendant-or-self::"
 	):HTMLCollection {
-		$translator = new Translator($selectors);
+		$translator = new Translator($selectors, $prefix);
 		return $this->xPath($translator);
 	}
 

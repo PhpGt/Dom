@@ -59,7 +59,7 @@ class HTMLDocument extends Document {
 	}
 
 	private function prop_get_anchors() {
-		return $this->querySelectorAll("a[name]:not(a[name=''])");
+		return $this->querySelectorAll("a[name]");
 	}
 
 	private function prop_get_images() {
@@ -67,7 +67,7 @@ class HTMLDocument extends Document {
 	}
 
 	private function prop_get_links() {
-		return $this->querySelectorAll("a[href]:not(a[href=''])");
+		return $this->querySelectorAll("a[href]");
 	}
 
 	private function prop_get_title() {
