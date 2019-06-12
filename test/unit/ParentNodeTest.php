@@ -33,4 +33,11 @@ class ParentNodeTest extends TestCase {
 		$this->assertInstanceOf(
 			Element::class, $document->body->lastElementChild);
 	}
+
+	public function testQuerySelectorNotSelectSelf() {
+		$document = new HTMLDocument(Helper::HTML_LESS);
+		$p = $document->querySelector("p");
+		$innerP = $p->querySelector("p");
+		self::assertNull($innerP);
+	}
 }

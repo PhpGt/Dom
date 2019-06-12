@@ -54,7 +54,7 @@ trait ParentNode {
 
 	public function css(
 		string $selectors,
-		string $prefix = "descendant-or-self::"
+		string $prefix = ".//"
 	):HTMLCollection {
 		$translator = new Translator($selectors, $prefix);
 		return $this->xPath($translator);
