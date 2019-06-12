@@ -475,6 +475,5 @@ class ElementTest extends TestCase {
 		$input->value = "123.456";
 		self::assertEquals(123.456, $input->valueAsNumber);
 		self::assertIsFloat($input->valueAsNumber);
-
 	}
 }

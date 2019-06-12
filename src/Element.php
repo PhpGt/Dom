@@ -5,7 +5,6 @@ use DateTime;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
-use Symfony\Component\CssSelector\CssSelectorConverter;
 
 /**
  * The most general base class from which all objects in a Document inherit.
@@ -30,7 +29,7 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
 class Element extends DOMElement implements PropertyAttribute {
 	use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
-	/** @var  TokenList */
+	/** @var TokenList */
 	protected $liveProperty_classList;
 	/** @var StringMap */
 	protected $liveProperty_dataset;
@@ -95,7 +94,6 @@ class Element extends DOMElement implements PropertyAttribute {
 
 		return $value;
 	}
-
 
 	public function prop_get_className() {
 		return $this->getAttribute("class");
