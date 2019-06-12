@@ -14,9 +14,8 @@ class HTMLCollection extends NodeList {
 	 * name matches the string specified by $name. Matching by name is only done
 	 * as a last resort, and only if the referenced element supports the name
 	 * attribute.
-	 * @return Element|null
 	 */
-	public function namedItem(string $name) {
+	public function namedItem(string $name):?Element {
 		$namedElement = null;
 
 // ENHANCEMENT: Iterating all elements is costly. Room for improvement here?

@@ -4,28 +4,22 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2bc6085a760a517e2fedac4a3984e453",
+    "content-hash": "4d34f54656a619e3d7667b5c0415f9e6",
     "packages": [
         {
             "name": "phpgt/cssxpath",
             "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PhpGt/CssXPath.git",
-                "reference": "22b74d06785625b52ba051201ed0ffb2bd806e29"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PhpGt/CssXPath/zipball/22b74d06785625b52ba051201ed0ffb2bd806e29",
-                "reference": "22b74d06785625b52ba051201ed0ffb2bd806e29",
-                "shasum": ""
+                "type": "path",
+                "url": "/home/g105b/Code/PhpGt/CssXPath",
+                "reference": "57e9a9e40b9df2acaef1b9194d6f9451d50b9394"
             },
             "require": {
-                "php": ">=7.2.0"
+                "php": ">=7.2"
             },
             "require-dev": {
-                "phpgt/dom": "1.*",
-                "phpunit/phpunit": "8.*"
+                "phpgt/dom": "*",
+                "phpunit/phpunit": "^8.0"
             },
             "type": "library",
             "autoload": {
@@ -33,12 +27,15 @@
                     "Gt\\CssXPath\\": "./src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Gt\\CssXPath\\Test\\": "./test/unit"
+                }
+            },
             "license": [
                 "MIT"
             ],
-            "description": "Convert CSS selectors to XPath queries.",
-            "time": "2019-05-29T12:47:10+00:00"
+            "description": "Convert CSS selectors to XPath queries."
         }
     ],
     "packages-dev": [
@@ -469,12 +466,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "1efa47062cc142ee3bf5b2b84e1abc3f4b25e318"
+                "reference": "6e6a9ee29ad875c5154f959e32287e65a64cd50a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/1efa47062cc142ee3bf5b2b84e1abc3f4b25e318",
-                "reference": "1efa47062cc142ee3bf5b2b84e1abc3f4b25e318",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/6e6a9ee29ad875c5154f959e32287e65a64cd50a",
+                "reference": "6e6a9ee29ad875c5154f959e32287e65a64cd50a",
                 "shasum": ""
             },
             "require": {
@@ -524,7 +521,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-06-03T11:17:03+00:00"
+            "time": "2019-06-12T04:49:19+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -623,12 +620,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-timer.git",
-                "reference": "e826e3ab11b1ca789b10a00b1a2188feb381beb5"
+                "reference": "29995fbf33aabda1b53b65ada13737d42ccaf53a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/e826e3ab11b1ca789b10a00b1a2188feb381beb5",
-                "reference": "e826e3ab11b1ca789b10a00b1a2188feb381beb5",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/29995fbf33aabda1b53b65ada13737d42ccaf53a",
+                "reference": "29995fbf33aabda1b53b65ada13737d42ccaf53a",
                 "shasum": ""
             },
             "require": {
@@ -664,7 +661,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2019-05-24T06:37:41+00:00"
+            "time": "2019-06-10T14:27:16+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -721,39 +718,39 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "04019b9743dd1417d4e537b5d0b96d357f42336c"
+                "reference": "d4b252c0413b18c2a046932fdef99c0bfc0ae4a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/04019b9743dd1417d4e537b5d0b96d357f42336c",
-                "reference": "04019b9743dd1417d4e537b5d0b96d357f42336c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d4b252c0413b18c2a046932fdef99c0bfc0ae4a3",
+                "reference": "d4b252c0413b18c2a046932fdef99c0bfc0ae4a3",
                 "shasum": ""
             },
             "require": {
-                "doctrine/instantiator": "^1.1",
+                "doctrine/instantiator": "^1.2.0",
                 "ext-dom": "*",
                 "ext-json": "*",
                 "ext-libxml": "*",
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
-                "myclabs/deep-copy": "^1.7",
-                "phar-io/manifest": "^1.0.2",
-                "phar-io/version": "^2.0",
+                "myclabs/deep-copy": "^1.9.1",
+                "phar-io/manifest": "^1.0.3",
+                "phar-io/version": "^2.0.1",
                 "php": "^7.2",
-                "phpspec/prophecy": "^1.7",
-                "phpunit/php-code-coverage": "^7.0",
-                "phpunit/php-file-iterator": "^2.0.1",
+                "phpspec/prophecy": "^1.8.0",
+                "phpunit/php-code-coverage": "^7.0.5",
+                "phpunit/php-file-iterator": "^2.0.2",
                 "phpunit/php-text-template": "^1.2.1",
-                "phpunit/php-timer": "^2.1",
-                "sebastian/comparator": "^3.0",
-                "sebastian/diff": "^3.0",
-                "sebastian/environment": "^4.2.1",
-                "sebastian/exporter": "^3.1",
-                "sebastian/global-state": "^3.0",
+                "phpunit/php-timer": "^2.1.2",
+                "sebastian/comparator": "^3.0.2",
+                "sebastian/diff": "^3.0.2",
+                "sebastian/environment": "^4.2.2",
+                "sebastian/exporter": "^3.1.0",
+                "sebastian/global-state": "^3.0.0",
                 "sebastian/object-enumerator": "^3.0.3",
-                "sebastian/resource-operations": "^2.0",
-                "sebastian/type": "^1.0",
+                "sebastian/resource-operations": "^2.0.1",
+                "sebastian/type": "^1.1.0",
                 "sebastian/version": "^2.0.1"
             },
             "require-dev": {
@@ -762,7 +759,7 @@
             "suggest": {
                 "ext-soap": "*",
                 "ext-xdebug": "*",
-                "phpunit/php-invoker": "^2.0"
+                "phpunit/php-invoker": "^2.0.0"
             },
             "bin": [
                 "phpunit"
@@ -770,7 +767,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "8.2-dev"
+                    "dev-master": "8.3-dev"
                 }
             },
             "autoload": {
@@ -796,7 +793,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-05-31T08:55:35+00:00"
+            "time": "2019-06-10T04:57:37+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1330,12 +1327,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/type.git",
-                "reference": "5de1c9e0753b992b0e6d711a3bb6f8f94ed56d62"
+                "reference": "b2a7f9aac51ce18cd7ac8b31e37c8ce5646fc741"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/5de1c9e0753b992b0e6d711a3bb6f8f94ed56d62",
-                "reference": "5de1c9e0753b992b0e6d711a3bb6f8f94ed56d62",
+                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/b2a7f9aac51ce18cd7ac8b31e37c8ce5646fc741",
+                "reference": "b2a7f9aac51ce18cd7ac8b31e37c8ce5646fc741",
                 "shasum": ""
             },
             "require": {
@@ -1347,7 +1344,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "1.1-dev"
                 }
             },
             "autoload": {
@@ -1368,7 +1365,7 @@
             ],
             "description": "Collection of value objects that represent the types of the PHP type system",
             "homepage": "https://github.com/sebastianbergmann/type",
-            "time": "2019-05-26T06:11:23+00:00"
+            "time": "2019-06-08T04:53:27+00:00"
         },
         {
             "name": "sebastian/version",
@@ -1569,8 +1566,9 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.2.0",
+        "php": ">=7.2",
         "ext-dom": "*",
+        "ext-libxml": "*",
         "ext-mbstring": "*"
     },
     "platform-dev": []

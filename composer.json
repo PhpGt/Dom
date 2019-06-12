@@ -12,8 +12,9 @@
 	"type": "library",
 
 	"require": {
-		"php": ">=7.2.0",
+		"php": ">=7.2",
 		"ext-dom": "*",
+		"ext-libxml": "*",
 		"ext-mbstring": "*",
 		"phpgt/cssxpath": "*"
 	},
