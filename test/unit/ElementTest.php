@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test;
 
+use DateTime;
 use Gt\Dom\Element;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\Test\Helper\Helper;
@@ -442,5 +443,38 @@ class ElementTest extends TestCase {
 		$input->autofocus = true;
 		self::assertTrue($input->autofocus);
 		self::assertNull($input->getAttribute("autofocus"));
+	}
+
+	public function testPropertyDataset() {
+		$document = new HTMLDocument(Helper::HTML_LESS);
+		$p = $document->querySelector("p");
+		$p->dataset->test = "Test Value";
+		self::assertEquals("Test Value", $p->getAttribute("data-test"));
+
+		$p->dataset->another = "Another test value";
+		self::assertEquals("Test Value", $p->getAttribute("data-test"));
+		self::assertEquals("Another test value", $p->getAttribute("data-another"));
+
+		$p->dataset->propWithCamelCase = "Should be hyphenated";
+		self::assertEquals("Should be hyphenated", $p->getAttribute("data-prop-with-camel-case"));
+	}
+
+	public function testPropertyValueAsDate() {
+		$document = new HTMLDocument(Helper::HTML_FORM_WITH_DATES);
+		$input = $document->querySelector("input");
+		$input->value = "1988-04-05";
+		$sut = $input->valueAsDate;
+		self::assertInstanceOf(DateTime::class, $sut);
+		self::assertEquals(new DateTime("1988-04-05"), $sut);
+	}
+
+	public function testPropertyValueAsNumber() {
+		$document = new HTMLDocument(Helper::HTML_MORE);
+		$input = $document->querySelector("input");
+		self::assertEquals(0, $input->valueAsNumber);
+		$input->value = "123.456";
+		self::assertEquals(123.456, $input->valueAsNumber);
+		self::assertIsFloat($input->valueAsNumber);
+
 	}
 }

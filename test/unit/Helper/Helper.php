@@ -356,5 +356,15 @@ HTML;
 </html>
 HTML;
 
+	const HTML_FORM_WITH_DATES = <<<HTML
+<!doctype html>
+<form>
+	<label>
+		<span>Date of birth</span>
+		<input name="dob" type="date" />
+	</label>
+</form>
+HTML;
+
 
 }

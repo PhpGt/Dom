@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DateTime;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
@@ -33,6 +34,10 @@ class Element extends DOMElement implements PropertyAttribute {
 	protected $liveProperty_classList;
 	/** @var StringMap */
 	protected $liveProperty_dataset;
+	/** @var ?DateTime */
+	protected $liveProperty_valueAsDate;
+	/** @var ?float */
+	protected $liveProperty_valueAsNumber;
 	/**
 	 * @const Array
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement#Elements_that_are_considered_form_controls
@@ -268,6 +273,18 @@ class Element extends DOMElement implements PropertyAttribute {
 		}
 
 		return null;
+	}
+
+	public function prop_get_valueAsDate() {
+		if($this->tagName === "input") {
+			return new DateTime($this->value);
+		}
+	}
+
+	public function prop_get_valueAsNumber() {
+		if($this->tagName === "input") {
+			return (float)$this->value;
+		}
 	}
 
 	protected function createDataset():StringMap {
