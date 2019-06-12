@@ -2,6 +2,7 @@
 namespace Gt\Dom;
 
 use DateTime;
+use DOMAttr;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
@@ -25,6 +26,10 @@ use DOMXPath;
  * parsed from the given string
  * @property string $innerText
  * @property-read StringMap $dataset
+ *
+ * @method Attr setAttribute(string $name, string $value)
+ * @method Attr setAttributeNode(DOMAttr $attr)
+ * @method Attr getAttributeNode(string $name)
  */
 class Element extends DOMElement implements PropertyAttribute {
 	use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
