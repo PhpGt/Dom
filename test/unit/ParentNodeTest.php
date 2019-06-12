@@ -40,4 +40,25 @@ class ParentNodeTest extends TestCase {
 		$innerP = $p->querySelector("p");
 		self::assertNull($innerP);
 	}
+
+	public function testIterateOverChildNodes() {
+		$document = new HTMLDocument(Helper::HTML_MORE);
+
+		$form = $document->querySelector("form");
+		$originalChildNodeCount = $form->childNodes->length;
+		$childNodes = [];
+		for($i = 0, $len = $originalChildNodeCount; $i < $len; $i++) {
+			$childNodes []= $form->childNodes->item($i);
+		}
+
+		$fragment = $document->createDocumentFragment();
+		foreach($childNodes as $child) {
+			$fragment->appendChild($child);
+		}
+
+		self::assertEquals(
+			$originalChildNodeCount,
+			$fragment->childNodes->length
+		);
+	}
 }
