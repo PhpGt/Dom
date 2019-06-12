@@ -26,7 +26,7 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  * @property string $innerText
  * @property-read StringMap $dataset
  */
-class Element extends DOMElement {
+class Element extends DOMElement implements PropertyAttribute {
 	use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
 	/** @var  TokenList */

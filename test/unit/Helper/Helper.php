@@ -235,6 +235,7 @@ HTML;
 // https://en.wikipedia.org/wiki/Classification_of_ethnicity_in_the_United_Kingdom
 const HTML_FORM_WITH_RADIOS = <<<HTML
 <!doctype>
+<a href="/homepage">Go to homepage</a>
 <form>
 	<fieldset title="Ethnicity">
 		<p>What is your ethnic group?</p>

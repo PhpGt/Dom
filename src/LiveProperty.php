@@ -22,12 +22,38 @@ trait LiveProperty {
 		if(method_exists($this, $methodName)) {
 			return $this->$methodName();
 		}
+
+		if(isset(self::PROPERTY_ATTRIBUTE_MAP[$name])) {
+			$attribute = self::PROPERTY_ATTRIBUTE_MAP[$name];
+			if($attribute === true) {
+				return $this->hasAttribute($name);
+			}
+
+			return $this->getAttribute($name);
+		}
 	}
 
 	private function __set_live($name, $value) {
 		$methodName = "prop_set_$name";
 		if(method_exists($this, $methodName)) {
 			return $this->$methodName($value);
+		}
+
+		if(isset(self::PROPERTY_ATTRIBUTE_MAP[$name])) {
+			$attribute = self::PROPERTY_ATTRIBUTE_MAP[$name];
+			if($attribute === true) {
+				$newAttr = $this->ownerDocument->createAttribute($name);
+
+				if($value) {
+					$this->setAttributeNode($newAttr);
+				}
+				else {
+					$this->removeAttribute($name);
+				}
+			}
+			else {
+				$this->setAttribute($attribute, $value);
+			}
 		}
 	}
 }

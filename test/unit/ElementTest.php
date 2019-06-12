@@ -419,4 +419,28 @@ class ElementTest extends TestCase {
 		$input = $document->getElementById('f12');
 		self::assertEquals(NULL, $input->form);
 	}
+
+	public function testPropertyAttributeCorrelationFormEncoding() {
+		$document = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
+		$form = $document->querySelector("form");
+		$form->encoding = "phpgt/test";
+		self::assertEquals("phpgt/test", $form->getAttribute("enctype"));
+		self::assertEquals("phpgt/test", $form->enctype);
+	}
+
+	public function testPropertyAttributeCorrelationNormalAttribute() {
+		$document = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
+		$link = $document->querySelector("a");
+		$link->href = "/test";
+		self::assertEquals("/test", $link->getAttribute("href"));
+		self::assertEquals("/test", $link->href);
+	}
+
+	public function testPropertyAttributeCorrelationBoolean() {
+		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
+		$input = $document->querySelector("input");
+		$input->autofocus = true;
+		self::assertTrue($input->autofocus);
+		self::assertNull($input->getAttribute("autofocus"));
+	}
 }
