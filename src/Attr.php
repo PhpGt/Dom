@@ -24,4 +24,8 @@ use DOMNode;
  * @method Element removeChild(DOMNode $oldnode)
  * @method Element replaceChild(DOMNode $newnode, DOMNode $oldnode)
  */
-class Attr extends \DOMAttr {}
+class Attr extends \DOMAttr {
+	public function remove():self {
+		return $this->ownerElement->removeAttributeNode($this);
+	}
+}
