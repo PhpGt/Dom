@@ -26,6 +26,7 @@ use DOMNode;
  */
 class Attr extends \DOMAttr {
 	public function remove():self {
-		return $this->ownerElement->removeAttributeNode($this);
+		$this->ownerElement->removeAttributeNode($this);
+		return $this;
 	}
 }
