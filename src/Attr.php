@@ -8,4 +8,4 @@ namespace Gt\Dom;
  * string (e.g., Element::getAttribute()), but certain functions (e.g.,
  * Element::getAttributeNode()) or means of iterating give Attr types.
  */
-class Attr extends \DOMAttr {}#
+class Attr extends \DOMAttr {}

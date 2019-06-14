@@ -235,6 +235,7 @@ HTML;
 // https://en.wikipedia.org/wiki/Classification_of_ethnicity_in_the_United_Kingdom
 const HTML_FORM_WITH_RADIOS = <<<HTML
 <!doctype>
+<a href="/homepage">Go to homepage</a>
 <form>
 	<fieldset title="Ethnicity">
 		<p>What is your ethnic group?</p>
@@ -327,5 +328,43 @@ const HTML_FORM_PROPERTY = <<<HTML
 </body>
 </html>
 HTML;
+
+	const HTML_JSON_HEAD = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" content=""><meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1">
+	<script type="application/ld+json" class="php-schema-rating">
+	{
+		"@context": "http://schema.org",
+		"@id": "https://www.example.com#organisation",
+		"@type": "Organization",
+		"aggregateRating": {
+			"@type": "AggregateRating",
+			"ratingValue": "__RATING_VALUE__",
+			"ratingCount": "__RATING_COUNT__"
+		},
+		"additionalType": [
+			"http://www.productontology.org/doc/Example"
+		]
+	}
+	</script>
+</head>
+<body>
+	<h1>JSON is in the head!</h1>
+</body>
+</html>
+HTML;
+
+	const HTML_FORM_WITH_DATES = <<<HTML
+<!doctype html>
+<form>
+	<label>
+		<span>Date of birth</span>
+		<input name="dob" type="date" />
+	</label>
+</form>
+HTML;
+
 
 }

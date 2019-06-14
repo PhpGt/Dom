@@ -1,10 +1,11 @@
 <?php
 namespace Gt\Dom;
 
+use DateTime;
+use DOMAttr;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
-use Symfony\Component\CssSelector\CssSelectorConverter;
 
 /**
  * The most general base class from which all objects in a Document inherit.
@@ -25,14 +26,22 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  * parsed from the given string
  * @property string $innerText
  * @property-read StringMap $dataset
+ *
+ * @method Attr setAttribute(string $name, string $value)
+ * @method Attr setAttributeNode(DOMAttr $attr)
+ * @method Attr getAttributeNode(string $name)
  */
-class Element extends DOMElement {
+class Element extends DOMElement implements PropertyAttribute {
 	use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
-	/** @var  TokenList */
+	/** @var TokenList */
 	protected $liveProperty_classList;
 	/** @var StringMap */
 	protected $liveProperty_dataset;
+	/** @var ?DateTime */
+	protected $liveProperty_valueAsDate;
+	/** @var ?float */
+	protected $liveProperty_valueAsNumber;
 	/**
 	 * @const Array
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement#Elements_that_are_considered_form_controls
@@ -90,7 +99,6 @@ class Element extends DOMElement {
 
 		return $value;
 	}
-
 
 	public function prop_get_className() {
 		return $this->getAttribute("class");
@@ -268,6 +276,18 @@ class Element extends DOMElement {
 		}
 
 		return null;
+	}
+
+	public function prop_get_valueAsDate() {
+		if($this->tagName === "input") {
+			return new DateTime($this->value);
+		}
+	}
+
+	public function prop_get_valueAsNumber() {
+		if($this->tagName === "input") {
+			return (float)$this->value;
+		}
 	}
 
 	protected function createDataset():StringMap {

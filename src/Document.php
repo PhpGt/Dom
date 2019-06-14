@@ -16,10 +16,16 @@ use DOMText;
  * into the web page's content, the DOM tree (including elements such as
  * <body> or <table>).
  *
- * @method DocumentFragment createDocumentFragment(string) Create a new document fragment
- * from an xml string
- * @method Node importNode(DOMNode $importedNode, bool $deep = false)
- * @method NodeList getElementsByTagName(string $name)
+ * @property-read DocumentType $doctype;
+ * @property-read Element $documentElement
+ * @property-read Document $ownerDocument
+ *
+ * @method Attr createAttribute(string $name)
+ * @method Comment createComment(string $data)
+ * @method DocumentFragment createDocumentFragment()
+ * @method Element createElement(string $name)
+ * @method Element createTextNode(string $content)
+ * @method ?Element getElementById(string $id)
  */
 class Document extends DOMDocument {
 	use LiveProperty, ParentNode;
