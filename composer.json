@@ -1,12 +1,4 @@
 {
-	"repositories": [
-		{
-			"type": "path",
-			"url": "/home/g105b/Code/PhpGt/*"
-		}
-	],
-	"minimum-stability": "dev",
-
 	"name": "phpgt/dom",
 	"description": "The modern DOM API for PHP 7 projects.",
 	"type": "library",
