@@ -42,7 +42,7 @@ class NodeList implements Iterator, ArrayAccess, Countable {
 	 * @param int $index
 	 * @return Element|null
 	 */
-	public function item($index) {
+	public function item(int $index):?Element {
 		$count = 0;
 		foreach($this as $element) {
 			if($index === $count) {
@@ -65,12 +65,12 @@ class NodeList implements Iterator, ArrayAccess, Countable {
 		return $this->iteratorKey;
 	}
 
-	public function next() {
+	public function next():void {
 		$this->iteratorKey++;
 		$this->incrementKeyToNextElement();
 	}
 
-	public function rewind() {
+	public function rewind():void {
 		$this->iteratorKey = 0;
 		$this->incrementKeyToNextElement();
 	}
@@ -95,11 +95,11 @@ class NodeList implements Iterator, ArrayAccess, Countable {
 		return $this->item($offset);
 	}
 
-	public function offsetSet($offset, $value) {
-		return $this->offsetUnset($offset);
+	public function offsetSet($offset, $value):void {
+		$this->offsetUnset($offset);
 	}
 
-	public function offsetUnset($offset) {
+	public function offsetUnset($offset):void {
 		throw new \BadMethodCallException("HTMLCollection's items are read only");
 	}
 
