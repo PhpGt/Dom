@@ -336,12 +336,13 @@ class Element extends DOMElement implements PropertyAttribute {
 
 		foreach($options as $option) {
 			if($this->isSelectOptionSelected($option)) {
-				$value = $option->getAttribute('value');
+				$value = $option->getAttribute('value')
+					?? trim($option->innerText);
 				break;
 			}
 		}
 
-		return $value;
+		return $value ?? "";
 	}
 
 	private function value_set_input(string $newValue) {

@@ -110,6 +110,19 @@ class ElementTest extends TestCase {
 		$this->assertEquals('', $select->value);
 		$select->value = 'dummy';
 		$this->assertEquals('', $select->value);
+
+// For #201:
+		$select = $document->getElementById("select_inferred_value");
+		$this->assertEquals("Two", $select->value);
+	}
+
+// For #201:
+	public function testSelectValueSetterToValueAttribute() {
+		$document = new HTMLDocument(Helper::HTML_VALUE);
+		$select = $document->getElementById("select_inferred_value");
+		$this->assertEquals("Two", $select->value);
+		$select->value = "Three";
+		$this->assertEquals("Three", $select->value);
 	}
 
 	public function testInnerHTML() {

@@ -55,6 +55,7 @@ class Document extends DOMDocument {
 	}
 
 	public function __toString() {
+		$this->formatOutput = true;
 		return $this->saveHTML();
 	}
 }
