@@ -141,6 +141,12 @@ HTML;
 	</select>
 
 	<select id="select_empty"></select>
+	
+	<select id="select_inferred_value">
+		<option>One</option>
+		<option selected>Two</option>
+		<option>Three</option>
+	</select>
 
 </body>
 </html>

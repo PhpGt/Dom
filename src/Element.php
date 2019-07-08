@@ -307,12 +307,21 @@ class Element extends DOMElement implements PropertyAttribute {
 		$newSelectedIndex = null;
 
 		for($i = $options->length - 1; $i >= 0; --$i) {
-			if($this->isSelectOptionSelected($options->item($i))) {
-				$selectedIndexes[] = $i;
+			$option = $options->item($i);
+
+			if($this->isSelectOptionSelected($option)) {
+				$selectedIndexes []= $i;
 			}
 
-			if($options->item($i)->getAttribute('value') == $newValue) {
-				$newSelectedIndex = $i;
+			if($option->hasAttribute("value")) {
+				if($option->getAttribute("value") == $newValue) {
+					$newSelectedIndex = $i;
+				}
+			}
+			else {
+				if(trim($option->innerText) === $newValue) {
+					$newSelectedIndex = $i;
+				}
 			}
 		}
 
@@ -336,12 +345,13 @@ class Element extends DOMElement implements PropertyAttribute {
 
 		foreach($options as $option) {
 			if($this->isSelectOptionSelected($option)) {
-				$value = $option->getAttribute('value');
+				$value = $option->getAttribute('value')
+					?? trim($option->innerText);
 				break;
 			}
 		}
 
-		return $value;
+		return $value ?? "";
 	}
 
 	private function value_set_input(string $newValue) {
