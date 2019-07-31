@@ -5,7 +5,6 @@ use DateTime;
 use DOMAttr;
 use DOMDocument;
 use DOMElement;
-use DOMXPath;
 
 /**
  * The most general base class from which all objects in a Document inherit.
@@ -122,11 +121,11 @@ class Element extends DOMElement implements PropertyAttribute {
 			return $this->$methodName();
 		}
 
-		return null;
+		return $this->getAttribute("value");
 	}
 
 	public function prop_set_value(string $newValue) {
-		$methodName = 'value_set_' . $this->tagName;
+		$methodName = 'value_set_' . strtolower($this->tagName);
 		if(method_exists($this, $methodName)) {
 			return $this->$methodName($newValue);
 		}
