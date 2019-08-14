@@ -121,14 +121,16 @@ class Element extends DOMElement implements PropertyAttribute {
 			return $this->$methodName();
 		}
 
-		return $this->getAttribute("value");
+		return $this->nodeValue;
 	}
 
 	public function prop_set_value(string $newValue) {
-		$methodName = 'value_set_' . strtolower($this->tagName);
+		$methodName = 'value_set_' . $this->tagName;
 		if(method_exists($this, $methodName)) {
 			return $this->$methodName($newValue);
 		}
+
+		$this->nodeValue = $newValue;
 	}
 
 	public function prop_get_id():?string {
