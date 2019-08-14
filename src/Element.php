@@ -33,6 +33,8 @@ use DOMElement;
 class Element extends DOMElement implements PropertyAttribute {
 	use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
+	const VALUE_ELEMENTS = ["BUTTON", "INPUT", "METER", "OPTION", "PROGRESS", "PARAM"];
+
 	/** @var TokenList */
 	protected $liveProperty_classList;
 	/** @var StringMap */
@@ -121,7 +123,11 @@ class Element extends DOMElement implements PropertyAttribute {
 			return $this->$methodName();
 		}
 
-		return $this->nodeValue;
+		if(in_array(strtoupper($this->tagName), self::VALUE_ELEMENTS)) {
+			return $this->nodeValue;
+		}
+
+		return null;
 	}
 
 	public function prop_set_value(string $newValue) {
