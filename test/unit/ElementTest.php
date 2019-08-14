@@ -489,4 +489,14 @@ class ElementTest extends TestCase {
 		self::assertEquals(123.456, $input->valueAsNumber);
 		self::assertIsFloat($input->valueAsNumber);
 	}
+
+	public function testAttributeValueSelection() {
+		$document = new HTMLDocument(Helper::HTML_MORE);
+		$input1 = $document->querySelector("input[name='who']");
+		$input2 = $document->querySelector("input[name=who]");
+		self::assertNotNull($input1);
+		self::assertNotNull($input2);
+		self::assertSame($input1, $input2);
+		self::assertEquals("Scarlett", $input1->value);
+	}
 }
