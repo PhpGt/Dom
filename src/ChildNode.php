@@ -10,6 +10,8 @@ use DOMNode;
  *  - Element
  *  - DocumentType
  *  - CharacterData
+ *
+ * @property-read Node|Element $parentNode
  */
 trait ChildNode {
 	/**

@@ -163,5 +163,6 @@ class HTMLDocumentTest extends TestCase {
 		$this->assertCount(2, $document->documentElement->children);
 		$this->assertNotNull($document->head);
 		$this->assertNotNull($document->body);
+		$this->assertCount(1, $document->querySelectorAll("body"));
 	}
 }

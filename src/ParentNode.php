@@ -1,8 +1,9 @@
 <?php
 namespace Gt\Dom;
 
+use DOMNode;
 use DOMXPath;
-use Symfony\Component\CssSelector\CssSelectorConverter;
+use Gt\CssXPath\Translator;
 
 /**
  * Contains methods that are particular to Node objects that can have children.
@@ -15,18 +16,23 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  *  - DocumentFragment
  * @property-read HTMLCollection $children A live HTMLCollection containing all
  *  objects of type Element that are children of this ParentNode.
+ * @property-read Node|Element|null $firstChild
  * @property-read Element|null $firstElementChild The Element that is the first
  *  child of this ParentNode.
+ * @property-read Node|Element|null $lastChild
  * @property-read Element|null $lastElementChild The Element that is the last
  *  child of this ParentNode.
  * @property-read int $childElementCount The amount of children that the
  *  ParentNode has.
  *
- * @method Node getElementById(string $id)
+ * @method Element getElementById(string $id)
+ * @method Node|Element importNode(DOMNode $importedNode, bool $deep = false)
+ * @method Node|Element insertBefore(DOMNode $newNode, DOMNode $refNode = false)
+ * @method Node|Element removeChild(DOMNode $oldNode)
+ * @method Node|Element replaceChild(DOMNode $newNode, DOMNode $oldNode)
  */
 trait ParentNode {
-	/** @return Element|null */
-	public function querySelector(string $selector) {
+	public function querySelector(string $selector):?Element {
 		$htmlCollection = $this->css($selector);
 
 		return $htmlCollection->item(0);
@@ -40,47 +46,38 @@ trait ParentNode {
 		return new HTMLCollection($this->childNodes);
 	}
 
-	private function prop_get_firstElementChild() {
+	private function prop_get_firstElementChild():?Element {
 		return $this->children->item(0);
 	}
 
-	private function prop_get_lastElementChild() {
+	private function prop_get_lastElementChild():?Element {
 		return $this->children->item($this->children->length - 1);
 	}
 
-	private function prop_get_childElementCount() {
+	private function prop_get_childElementCount():int {
 		return $this->children->length;
 	}
 
-	/**
-	 * @param string $selectors CSS selector(s)
-	 * @param string $prefix
-	 *
-	 * @return HTMLCollection
-	 */
 	public function css(
 		string $selectors,
-		string $prefix = "descendant-or-self::"
+		string $prefix = ".//"
 	):HTMLCollection {
-		$converter = new CssSelectorConverter();
-		$xPathSelector = $converter->toXPath($selectors, $prefix);
-
-		return $this->xPath($xPathSelector);
+		$translator = new Translator($selectors, $prefix);
+		return $this->xPath($translator);
 	}
 
 	public function xPath(string $selector):HTMLCollection {
 		$x = new DOMXPath($this->getRootDocument());
-
 		return new HTMLCollection($x->query($selector, $this));
 	}
 
-	public function getElementsByTagName($name) {
+	public function getElementsByTagName($name):HTMLCollection {
 		$nodeList = parent::getElementsByTagName($name);
 		if($nodeList instanceof NodeList) {
 			return $nodeList;
 		}
 
-		return new NodeList($nodeList);
+		return new HTMLCollection($nodeList);
 	}
 
 	public function removeAttributeFromNamedElementAndChildren(

@@ -6,35 +6,27 @@ use ArrayAccess;
 use Countable;
 use Iterator;
 
+/**
+ * @property-read int $length
+ */
 class NodeList implements Iterator, ArrayAccess, Countable {
 	use LiveProperty;
 
-	protected $domNodeList;
+	protected $list;
 	protected $iteratorKey;
 
 	public function __construct(DOMNodeList $domNodeList) {
-		$this->domNodeList = $domNodeList;
+		$this->list = $domNodeList;
 	}
 
 	/**
-	 * Returns the number of Elements contained in this Collection. Exposed as the
-	 * $length property.
+	 * Returns the number of Nodes contained in this Collection. On the
+	 * NodeList class this counts all types of Node object,
+	 * not just Elements.
 	 * @return int Number of Elements
 	 */
 	private function prop_get_length():int {
-		$key = $this->iteratorKey;
-
-		$length = 0;
-		foreach($this as $element) {
-			$length++;
-		}
-
-		$this->iteratorKey = $key;
-		return $length;
-	}
-
-	public function getDomNodeList():DOMNodeList {
-		return $this->domNodeList;
+		return $this->list->length;
 	}
 
 	/**
@@ -42,65 +34,49 @@ class NodeList implements Iterator, ArrayAccess, Countable {
 	 * @param int $index
 	 * @return Element|null
 	 */
-	public function item($index) {
-		$count = 0;
-		foreach($this as $element) {
-			if($index === $count) {
-				return $element;
-			}
-
-			$count++;
-		}
-
-		return null;
+	public function item(int $index):?Element {
+		/** @noinspection PhpIncompatibleReturnTypeInspection */
+		return $this->list->item($index) ?? null;
 	}
 
 // Iterator --------------------------------------------------------------------
 
-	public function current():?Element {
-		return $this->domNodeList[$this->iteratorKey] ?? null;
+	public function rewind():void {
+		$this->iteratorKey = 0;
 	}
 
 	public function key():int {
 		return $this->iteratorKey;
 	}
 
-	public function next() {
-		$this->iteratorKey++;
-		$this->incrementKeyToNextElement();
-	}
-
-	public function rewind() {
-		$this->iteratorKey = 0;
-		$this->incrementKeyToNextElement();
-	}
-
 	public function valid():bool {
-		return isset($this->domNodeList[$this->iteratorKey]);
+		return isset($this->list[$this->key()]);
 	}
 
-	private function incrementKeyToNextElement() {
-		while($this->valid()
-			&& !$this->domNodeList[$this->iteratorKey] instanceof Element) {
-			$this->iteratorKey++;
-		}
+	public function next():void {
+		$this->iteratorKey++;
+	}
+
+	/** @return Node|null */
+	public function current() {
+		return $this->list[$this->key()] ?? null;
 	}
 
 // ArrayAccess -----------------------------------------------------------------
 	public function offsetExists($offset):bool {
-		return isset($offset, $this->domNodeList);
+		return isset($offset, $this->list);
 	}
 
 	public function offsetGet($offset):?Element {
 		return $this->item($offset);
 	}
 
-	public function offsetSet($offset, $value) {
-		return $this->offsetUnset($offset);
+	public function offsetSet($offset, $value):void {
+		throw new \BadMethodCallException("NodeList's items are read only");
 	}
 
-	public function offsetUnset($offset) {
-		throw new \BadMethodCallException("HTMLCollection's items are read only");
+	public function offsetUnset($offset):void {
+		throw new \BadMethodCallException("NodeList's items are read only");
 	}
 
 // Countable -------------------------------------------------------------------
