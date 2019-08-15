@@ -18,6 +18,7 @@ class HTMLCollection extends NodeList {
 	/** @noinspection PhpMissingParentConstructorInspection */
 	public function __construct(DOMNodeList $domNodeList) {
 		$this->list = [];
+		$this->rewind();
 
 		for($i = 0, $n = $domNodeList->length; $i < $n; $i++) {
 			$item = $domNodeList->item($i);
