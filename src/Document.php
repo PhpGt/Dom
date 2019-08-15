@@ -63,7 +63,6 @@ class Document extends DOMDocument implements StreamInterface {
 	}
 
 	public function __toString() {
-		$this->formatOutput = true;
 		return $this->saveHTML();
 	}
 
