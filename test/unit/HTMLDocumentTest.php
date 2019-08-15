@@ -6,6 +6,7 @@ use Gt\Dom\Element;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\Test\Helper\Helper;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\StreamInterface;
 
 class HTMLDocumentTest extends TestCase {
 	public function testConstruction() {
@@ -164,5 +165,13 @@ class HTMLDocumentTest extends TestCase {
 		$this->assertNotNull($document->head);
 		$this->assertNotNull($document->body);
 		$this->assertCount(1, $document->querySelectorAll("body"));
+	}
+
+	public function testPsr7StreamInterface() {
+		$document = new HTMLDocument("");
+		self::assertTrue(is_subclass_of(
+			$document,
+			StreamInterface::class
+		));
 	}
 }
