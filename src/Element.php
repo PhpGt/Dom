@@ -124,7 +124,7 @@ class Element extends DOMElement implements PropertyAttribute {
 		}
 
 		if(in_array(strtoupper($this->tagName), self::VALUE_ELEMENTS)) {
-			return $this->nodeValue;
+			return $this->getAttribute("value");
 		}
 
 		return null;
@@ -136,7 +136,7 @@ class Element extends DOMElement implements PropertyAttribute {
 			return $this->$methodName($newValue);
 		}
 
-		$this->nodeValue = $newValue;
+		$this->setAttribute("value");
 	}
 
 	public function prop_get_id():?string {
