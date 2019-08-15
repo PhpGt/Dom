@@ -8,7 +8,8 @@
 		"ext-dom": "*",
 		"ext-libxml": "*",
 		"ext-mbstring": "*",
-		"phpgt/cssxpath": "*"
+		"phpgt/cssxpath": "*",
+		"psr/http-message": "1.*"
 	},
 
 	"require-dev": {
