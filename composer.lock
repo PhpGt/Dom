@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "phpgt/cssxpath",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PhpGt/CssXPath.git",
-                "reference": "99184374bd3b9565373c09e3c7be179a5d2298bb"
+                "reference": "af4b9583ad4a950225f10a0b9c97d8dc4f14e22d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PhpGt/CssXPath/zipball/99184374bd3b9565373c09e3c7be179a5d2298bb",
-                "reference": "99184374bd3b9565373c09e3c7be179a5d2298bb",
+                "url": "https://api.github.com/repos/PhpGt/CssXPath/zipball/af4b9583ad4a950225f10a0b9c97d8dc4f14e22d",
+                "reference": "af4b9583ad4a950225f10a0b9c97d8dc4f14e22d",
                 "shasum": ""
             },
             "require": {
@@ -37,8 +37,16 @@
             "license": [
                 "MIT"
             ],
+            "authors": [
+                {
+                    "name": "Greg Bowler",
+                    "role": "Developer",
+                    "email": "greg.bowler@g105b.com",
+                    "homepage": "https://www.g105b.com"
+                }
+            ],
             "description": "Convert CSS selectors to XPath queries.",
-            "time": "2019-08-09T15:24:18+00:00"
+            "time": "2019-08-15T09:48:36+00:00"
         },
         {
             "name": "psr/http-message",

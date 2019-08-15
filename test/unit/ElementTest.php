@@ -499,4 +499,15 @@ class ElementTest extends TestCase {
 		self::assertSame($input1, $input2);
 		self::assertEquals("Scarlett", $input1->value);
 	}
+
+	public function testOptionValueGetSet() {
+		$document = new HTMLDocument(Helper::HTML_SELECTS);
+		foreach($document->querySelectorAll("[name=from] option") as $fromOption) {
+			self::assertIsNumeric($fromOption->value);
+		}
+
+		foreach($document->querySelectorAll("[name=to] option") as $toOption) {
+			self::assertIsNumeric($toOption->value);
+		}
+	}
 }
