@@ -23,7 +23,8 @@ trait LiveProperty {
 			return $this->$methodName();
 		}
 
-		if(isset(self::PROPERTY_ATTRIBUTE_MAP[$name])) {
+		if(defined("static::PROPERTY_ATTRIBUTE_MAP")
+		&& isset(self::PROPERTY_ATTRIBUTE_MAP[$name])) {
 			$attribute = self::PROPERTY_ATTRIBUTE_MAP[$name];
 			if($attribute === true) {
 				return $this->hasAttribute($name);
