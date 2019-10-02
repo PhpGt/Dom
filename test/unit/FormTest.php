@@ -34,6 +34,23 @@ class FormTest extends TestCase {
 		);
 	}
 
+	public function testIfRadioChangesToUncheckedWhenSettingCheckedToFalse() {
+        $document = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
+        $whiteRadio = $document->querySelector("input[value=white]");
+
+        $whiteRadio->checked = true;
+
+        self::assertTrue(
+            $whiteRadio->hasAttribute("checked"),
+            "Checked attribute should be present on white radio after setting property on white."
+        );
+
+        $whiteRadio->checked = false;
+
+        self::assertFalse($whiteRadio->hasAttribute("checked"),
+            "Checked attribute should not be present on white radio after unsetting property on white.");
+    }
+
 	public function testMultipleSelectOptionCanNotBeCheckedViaProperty() {
 		$document = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
 		$under18option = $document->querySelector("option[value='0-17']");
@@ -49,6 +66,20 @@ class FormTest extends TestCase {
 		self::assertFalse($under18option->hasAttribute("selected"));
 		self::assertTrue($youngAdultOption->hasAttribute("selected"));
 	}
+
+	public function testIfSelectOptionChangesToUnselectedWhenSettingSelectedToFalse() {
+        $document = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
+        $under18option = $document->querySelector("option[value='0-17']");
+
+        $under18option->selected = true;
+
+        self::assertTrue($under18option->hasAttribute("selected"));
+
+        $under18option->selected = false;
+
+        self::assertFalse($under18option->hasAttribute("selected"));
+
+    }
 
 	public function testMultipleSelectOptionCanBeCheckedViaPropertyWhenSelectMultiple() {
 		$document = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
