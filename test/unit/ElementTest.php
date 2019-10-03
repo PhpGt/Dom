@@ -510,4 +510,60 @@ class ElementTest extends TestCase {
 			self::assertIsNumeric($toOption->value);
 		}
 	}
+
+	public function testSetClassNameProperty() {
+        $document = new HTMLDocument();
+        $element = $document->createElement("div");
+
+        $element->className = "test";
+        self::assertEquals("test", $element->getAttribute("class"));
+    }
+
+    public function testSetIdProperty() {
+        $document = new HTMLDocument();
+        $element = $document->createElement("div");
+
+        $element->id = "test";
+        self::assertEquals("test", $element->id);
+    }
+
+    public function testSetValueOnButton() {
+        $document = new HTMLDocument();
+        $element = $document->createElement("button");
+
+        $element->value = "test";
+        self::assertEquals("test", $element->value);
+    }
+
+    public function testSetOuterHTMLChangesElementInDocument() {
+        $document = new HTMLDocument(Helper::HTML);
+        $element = $document->querySelector("h1");
+        $element->outerHTML = "<p>Hello!</p>";
+
+        $newElement = $document->querySelector("p");
+
+        self::assertNull($document->querySelector("h1"));
+        self::assertNotNull($newElement);
+        self::assertEquals("Hello!", $newElement->innerHTML);
+        self::assertStringContainsString("<p>", $newElement->outerHTML);
+    }
+
+    public function testGetValueAsDateDoesNothingOnNonInputElements() {
+        $document = new HTMLDocument(Helper::HTML_SELECTS);
+	    $element = $document->querySelector("select");
+
+	    $sut = $element->valueAsDate;
+
+	    self::assertNull($sut);
+    }
+
+    public function testGetValueAsNumberDoesNothingOnNonInputElements() {
+        $document = new HTMLDocument(Helper::HTML_SELECTS);
+        $element = $document->querySelector("select");
+
+        $sut = $element->valueAsNumber;
+
+        self::assertNull($sut);
+    }
+
 }
