@@ -623,13 +623,8 @@ class ElementTest extends TestCase
 
         $expected = [
             'nodeName'  => "select",
-            'nodeValue' => "Zero\nOne\nTwo\nThree\nFour\nFive",
-            'innerHTML' => "\n<option value=\"0\">Zero</option>\n".
-                           "<option value=\"1\">One</option>\n".
-                           "<option value=\"2\">Two</option>\n".
-                           "<option value=\"3\">Three</option>\n".
-                           "<option value=\"4\">Four</option>\n".
-                           "<option value=\"5\">Five</option>\n",
+            'nodeValue' => "ZeroOneTwoThreeFourFive",
+            'innerHTML' => '<option value="0">Zero</option><option value="1">One</option><option value="2">Two</option><option value="3">Three</option><option value="4">Four</option><option value="5">Five</option>',
             "class"     => null,
             "name"      => "from",
             "type"      => null,
@@ -637,7 +632,16 @@ class ElementTest extends TestCase
             "src"       => null,
             "href"      => null
         ];
-        self::assertEquals($expected, $sut);
+        
+        self::assertEquals($expected["nodeName"], $sut["nodeName"]);
+        self::assertEquals($expected["nodeValue"], trim(strtr($sut["nodeValue"], ["\t" => '', "\r" => '', "\n" => ''])));
+        self::assertEquals($expected["innerHTML"], trim(strtr($sut["innerHTML"], ["\t" => '', "\r" => '', "\n" => ''])));
+        self::assertEquals($expected['class'], $sut['class']);
+        self::assertEquals($expected["name"], $sut["name"]);
+        self::assertEquals($expected["type"], $sut["type"]);
+        self::assertEquals($expected["id"], $sut["id"]);
+        self::assertEquals($expected["src"], $sut["src"]);
+        self::assertEquals($expected["href"], $sut["href"]);
     }
 
     public function testDebugInfoInput()
@@ -659,6 +663,7 @@ class ElementTest extends TestCase
             "href"      => null,
 
         ];
+        // die(var_dump($sut));
         self::assertEquals($expected, $sut);
     }
 

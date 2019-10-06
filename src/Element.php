@@ -377,8 +377,8 @@ class Element extends DOMElement implements PropertyAttribute {
     {
         return [
             'nodeName' => $this->nodeName,
-            'nodeValue' => trim(strtr($this->nodeValue, ["\t" => ""])),
-            'innerHTML' => strtr($this->innerHTML, ["\t" => '', "\r\n" => '']),
+            'nodeValue' => $this->nodeValue,
+            'innerHTML' => $this->innerHTML,
             "class" => $this->className,
             "id" => $this->id,
             "name" => $this->getAttribute("name"),
