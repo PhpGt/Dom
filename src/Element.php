@@ -372,4 +372,19 @@ class Element extends DOMElement implements PropertyAttribute {
 	public function isSelectOptionSelected(Element $option) {
 		return $option->hasAttribute('selected') && $option->getAttribute('selected');
 	}
+
+	public function __debugInfo()
+    {
+        return [
+            'nodeName' => $this->nodeName,
+            'nodeValue' => trim(strtr($this->nodeValue, ["\t" => ""])),
+            'innerHTML' => strtr($this->innerHTML, ["\t" => '', "\r\n" => '']),
+            "class" => $this->className,
+            "id" => $this->id,
+            "name" => $this->getAttribute("name"),
+            "type" => $this->getAttribute("type"),
+            "src"   => $this->getAttribute("src"),
+            "href"  => $this->getAttribute("href"),
+        ];
+    }
 }
