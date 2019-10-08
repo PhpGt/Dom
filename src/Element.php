@@ -374,17 +374,17 @@ class Element extends DOMElement implements PropertyAttribute {
 	}
 
 	public function __debugInfo()
-    {
-        return [
-            'nodeName' => $this->nodeName,
-            'nodeValue' => $this->nodeValue,
-            'innerHTML' => $this->innerHTML,
-            "class" => $this->className,
-            "id" => $this->id,
-            "name" => $this->getAttribute("name"),
-            "type" => $this->getAttribute("type"),
-            "src"   => $this->getAttribute("src"),
-            "href"  => $this->getAttribute("href"),
-        ];
-    }
+	{
+		return [
+			'nodeName' => $this->nodeName,
+			'nodeValue' => $this->nodeValue,
+			'innerHTML' => $this->innerHTML,
+			"class" => $this->className,
+			"id" => $this->id,
+			"name" => $this->getAttribute("name"),
+			"type" => $this->getAttribute("type"),
+			"src"   => $this->getAttribute("src"),
+			"href"  => $this->getAttribute("href"),
+		];
+	}
 }
