@@ -164,15 +164,13 @@ class Document extends DOMDocument implements StreamInterface {
 	 *     SEEK_END: Set position to end-of-stream plus offset.
 	 * @throws RuntimeException on failure.
 	 */
-	public function seek($offset, $whence = SEEK_SET) {
+	public function seek($offset, $whence = SEEK_SET):void {
 		$this->fillStream();
 		$result = fseek($this->stream, $offset, $whence);
 
-		if($result === false) {
+		if($result === -1) {
 			throw new RuntimeException("Error seeking Document Stream");
 		}
-
-		return $result;
 	}
 
 	/**

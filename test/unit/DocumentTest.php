@@ -68,4 +68,24 @@ HTML;
 		$sut->loadHTML($this->testHTML);
 		self::assertFalse($sut->eof());
 	}
+
+	public function testIsSeekable() {
+		$sut = new Document();
+		self::assertTrue($sut->isSeekable());
+	}
+
+	public function testSeekError() {
+		$sut = new Document();
+		self::expectException(RuntimeException::class);
+		self::expectExceptionMessage("Error seeking Document Stream");
+		$sut->seek(PHP_INT_MAX);
+	}
+
+	public function testSeek() {
+		$sut = new Document();
+		$sut->loadHTML($this->testHTML);
+		$sut->seek(12);
+		$stream = $sut->detach();
+		self::assertEquals(12, ftell($stream));
+	}
 }
