@@ -1,5 +1,4 @@
 <?php
-
 namespace Gt\Dom\Test;
 
 use DateTime;
@@ -10,10 +9,8 @@ use Gt\Dom\Text;
 use Gt\Dom\TokenList;
 use PHPUnit\Framework\TestCase;
 
-class ElementTest extends TestCase
-{
-	public function testQuerySelector()
-	{
+class ElementTest extends TestCase {
+	public function testQuerySelector() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
 		$pAfterH2 = $document->querySelector("h2+p");
 		$aWithinP = $pAfterH2->querySelector("a");
@@ -26,19 +23,17 @@ class ElementTest extends TestCase
 		$this->assertSame($a, $aWithinP);
 	}
 
-	public function testQuerySelectorAll()
-	{
-		$document    = new HTMLDocument(Helper::HTML_MORE);
+	public function testQuerySelectorAll() {
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$pCollection = $document->documentElement->querySelectorAll("p");
-		$pNodeList   = $document->documentElement->getElementsByTagName("p");
+		$pNodeList = $document->documentElement->getElementsByTagName("p");
 
 		$this->assertEquals($pNodeList->length, $pCollection->length);
 	}
 
-	public function testMatches()
-	{
+	public function testMatches() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
-		$p        = $document->getElementsByClassName("plug")->item(0);
+		$p = $document->getElementsByClassName("plug")->item(0);
 
 		$this->assertTrue($p->matches("p"));
 		$this->assertTrue($p->matches("p.plug"));
@@ -49,8 +44,7 @@ class ElementTest extends TestCase
 		$this->assertFalse($p->matches("body>p:nth-of-type(4)"));
 	}
 
-	public function testChildElementCount()
-	{
+	public function testChildElementCount() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
 		// There is 1 text node within the document.
 		$this->assertGreaterThan(
@@ -63,8 +57,7 @@ class ElementTest extends TestCase
 		);
 	}
 
-	public function testElementClosest()
-	{
+	public function testElementClosest() {
 		$document = new HTMLDocument(Helper::HTML_NESTED);
 
 		$p = $document->querySelector('.inner-list p');
@@ -82,23 +75,22 @@ class ElementTest extends TestCase
 		$nonExistentClosestElement = $p->closest('br');
 		$this->assertNull($nonExistentClosestElement);
 
-		$innerPost     = $document->querySelector("div.post.inner");
+		$innerPost = $document->querySelector("div.post.inner");
 		$innerListItem = $document->querySelector(".inner-item-1");
-		$outerPost     = $document->querySelector("div.post.outer");
+		$outerPost = $document->querySelector("div.post.outer");
 		$this->assertInstanceOf(Element::class, $innerPost);
 		$this->assertInstanceOf(Element::class, $outerPost);
 
 		$closestDivToInnerListItem = $innerListItem->closest("div");
-		$closestDivToInnerPost     = $innerPost->closest("div");
-		// ..the inner post should match itself, as it is a div.
+		$closestDivToInnerPost = $innerPost->closest("div");
+// ..the inner post should match itself, as it is a div.
 		$this->assertSame($closestDivToInnerPost, $innerPost);
-		// ..but the inner list item should match up the tree to the outer post
-		// ..missing the other divs in the tree.
+// ..but the inner list item should match up the tree to the outer post
+// ..missing the other divs in the tree.
 		$this->assertSame($closestDivToInnerListItem, $outerPost);
 	}
 
-	public function testValueGetter()
-	{
+	public function testValueGetter() {
 		$document = new HTMLDocument(Helper::HTML_VALUE);
 
 		$select = $document->getElementById('select');
@@ -119,25 +111,23 @@ class ElementTest extends TestCase
 		$select->value = 'dummy';
 		$this->assertEquals('', $select->value);
 
-		// For #201:
+// For #201:
 		$select = $document->getElementById("select_inferred_value");
 		$this->assertEquals("Two", $select->value);
 	}
 
-	// For #201:
-	public function testSelectValueSetterToValueAttribute()
-	{
+// For #201:
+	public function testSelectValueSetterToValueAttribute() {
 		$document = new HTMLDocument(Helper::HTML_VALUE);
-		$select   = $document->getElementById("select_inferred_value");
+		$select = $document->getElementById("select_inferred_value");
 		$this->assertEquals("Two", $select->value);
 		$select->value = "Three";
 		$this->assertEquals("Three", $select->value);
 	}
 
-	public function testInnerHTML()
-	{
+	public function testInnerHTML() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
-		$p        = $document->querySelector(".link-to-twitter");
+		$p = $document->querySelector(".link-to-twitter");
 		$this->assertStringContainsString("<a href=", $p->innerHTML);
 		$this->assertStringContainsString("Greg Bowler", $p->innerHTML);
 		$this->assertStringNotContainsString("<p", $p->innerHTML);
@@ -149,17 +139,16 @@ class ElementTest extends TestCase
 		$this->assertEquals("very", $p->querySelector("strong")->textContent);
 	}
 
-	public function testInnerHTMLWithJson()
-	{
-		// This test comes from a real world use-case, where the value of a JSON
-		// property within a <script> tag needed updating on the fly. It didn't make
-		// practical sense to encode/decode the JSON, so str_replace was used to update
-		// a placeholder. In the wild, this caused HTML entities to appear everywhere,
-		// incorrectly.
-		$document    = new HTMLDocument(Helper::HTML_JSON_HEAD);
+	public function testInnerHTMLWithJson() {
+// This test comes from a real world use-case, where the value of a JSON
+// property within a <script> tag needed updating on the fly. It didn't make
+// practical sense to encode/decode the JSON, so str_replace was used to update
+// a placeholder. In the wild, this caused HTML entities to appear everywhere,
+// incorrectly.
+		$document = new HTMLDocument(Helper::HTML_JSON_HEAD);
 		$ratingValue = "4.5";
 		$ratingCount = 1337;
-		$script      = $document->querySelector(".php-schema-rating");
+		$script = $document->querySelector(".php-schema-rating");
 
 		self::assertStringContainsString(
 			"\"aggregateRating\": {",
@@ -184,10 +173,9 @@ class ElementTest extends TestCase
 		self::assertEquals($ratingCount, $json->aggregateRating->ratingCount);
 	}
 
-	public function testOuterHTML()
-	{
+	public function testOuterHTML() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
-		$p        = $document->querySelector(".link-to-twitter");
+		$p = $document->querySelector(".link-to-twitter");
 		$this->assertStringContainsString("<a href=", $p->outerHTML);
 		$this->assertStringContainsString("Greg Bowler", $p->outerHTML);
 		$this->assertStringContainsString("<p", $p->outerHTML);
@@ -196,43 +184,38 @@ class ElementTest extends TestCase
 		$this->assertStringNotContainsString("name=\"forms\">", $p->outerHTML);
 	}
 
-	public function testClassListProperty()
-	{
+	public function testClassListProperty() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
-		$element  = $document->getElementById("who");
+		$element = $document->getElementById("who");
 		$this->assertInstanceOf(TokenList::class, $element->classList);
 
 		$this->assertTrue($element->classList->contains("m-before-p"));
 		$this->assertFalse($element->classList->contains("nothing"));
 	}
 
-	public function testClassNameProperty()
-	{
+	public function testClassNameProperty() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
-		$element  = $document->getElementById("who");
+		$element = $document->getElementById("who");
 		$this->assertIsString($element->className);
 
 		$this->assertStringContainsString("m-before-p", $element->className);
 		$this->assertStringNotContainsString("nothing", $element->className);
 	}
 
-	public function testIdProperty()
-	{
+	public function testIdProperty() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
-		$element  = $document->getElementById("who");
+		$element = $document->getElementById("who");
 		$this->assertEquals("who", $element->id);
 	}
 
-	public function testTagNameProperty()
-	{
+	public function testTagNameProperty() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
-		$element  = $document->getElementsByTagName("form")[0];
+		$element = $document->getElementsByTagName("form")[0];
 		$this->assertEquals("form", $element->tagName);
 	}
 
-	public function testValueProperty()
-	{
-		$document  = new HTMLDocument(Helper::HTML_MORE);
+	public function testValueProperty() {
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$paragraph = $document->getElementById("who");
 		$this->assertNull($paragraph->value);
 
@@ -243,25 +226,23 @@ class ElementTest extends TestCase
 		$this->assertEquals("Sparky", $input->getAttribute("value"));
 	}
 
-	public function testRemove()
-	{
-		$document          = new HTMLDocument(Helper::HTML_MORE);
+	public function testRemove() {
+		$document = new HTMLDocument(Helper::HTML_MORE);
 		$bodyChildrenCount = count($document->body->children);
-		$paragraph         = $document->querySelector("p");
+		$paragraph = $document->querySelector("p");
 		$paragraph->remove();
 		$this->assertCount($bodyChildrenCount - 1, $document->body->children);
 	}
 
-	public function testTextContentDoesNotAffectChildElements()
-	{
-		$document                  = new HTMLDocument(Helper::HTML_MORE);
-		$firstParagraph            = $document->querySelector("p");
+	public function testTextContentDoesNotAffectChildElements() {
+		$document = new HTMLDocument(Helper::HTML_MORE);
+		$firstParagraph = $document->querySelector("p");
 		$firstParagraph->innerText = "<span>Example</span>";
-		// TODO: Check that the childNodes property ends up as a Gt Dom HTMLCollection
+// TODO: Check that the childNodes property ends up as a Gt Dom HTMLCollection
 		$this->assertGreaterThan(0, count($firstParagraph->childNodes));
 
-		foreach ($firstParagraph->childNodes as $child) {
-			// There should not be any "span" elements, only text including optional whitespace.
+		foreach($firstParagraph->childNodes as $child) {
+// There should not be any "span" elements, only text including optional whitespace.
 			$this->assertInstanceOf(Text::class, $child);
 		}
 	}
@@ -269,49 +250,45 @@ class ElementTest extends TestCase
 	/**
 	 * The test passes, but IDEs do not show the correct types.
 	 */
-	public function testNodeFunctionsReturnGtObjects()
-	{
-		$objectsThatShouldBeElements               = [];
-		$document                                  = new HTMLDocument(Helper::HTML);
-		$h1                                        = $document->querySelector("h1");
-		$objectsThatShouldBeElements["h1"]         = $h1;
-		$objectsThatShouldBeElements["h1Clone"]    = $h1->cloneNode(true);
-		$objectsThatShouldBeElements["parent"]     = $h1->parentNode;
+	public function testNodeFunctionsReturnGtObjects() {
+		$objectsThatShouldBeElements = [];
+		$document = new HTMLDocument(Helper::HTML);
+		$h1 = $document->querySelector("h1");
+		$objectsThatShouldBeElements["h1"] = $h1;
+		$objectsThatShouldBeElements["h1Clone"] = $h1->cloneNode(true);
+		$objectsThatShouldBeElements["parent"] = $h1->parentNode;
 		$objectsThatShouldBeElements["firstChild"] = $document->body->firstChild;
 
-		$otherDocument                                    = new HTMLDocument();
-		$otherDiv                                         = $otherDocument->createElement("div");
-		$objectsThatShouldBeElements["imported"]          = $document->importNode($otherDiv);
+		$otherDocument = new HTMLDocument();
+		$otherDiv = $otherDocument->createElement("div");
+		$objectsThatShouldBeElements["imported"] = $document->importNode($otherDiv);
 		$objectsThatShouldBeElements["imported-appended"] = $document->appendChild(
 			$objectsThatShouldBeElements["imported"]);
 
-		foreach ($objectsThatShouldBeElements as $key => $object) {
+		foreach($objectsThatShouldBeElements as $key => $object) {
 			$this->assertInstanceOf(
 				Element::class,
 				$object,
-				"$key instance of ".gettype($object));
+				"$key instance of " . gettype($object));
 		}
 	}
 
-	public function testGetInnerText()
-	{
+	public function testGetInnerText() {
 		$document = new HTMLDocument(Helper::HTML);
-		$h1       = $document->querySelector("h1");
+		$h1 = $document->querySelector("h1");
 		$this->assertEquals("Hello!", $h1->innerText);
 	}
 
-	public function testSetInnerText()
-	{
-		$document      = new HTMLDocument(Helper::HTML);
-		$h1            = $document->querySelector("h1");
+	public function testSetInnerText() {
+		$document = new HTMLDocument(Helper::HTML);
+		$h1 = $document->querySelector("h1");
 		$h1->innerText = "Goodbye!";
 		$this->assertEquals("Goodbye!", $h1->textContent);
 	}
 
-	public function testGetNonExistingIdGivesNull()
-	{
+	public function testGetNonExistingIdGivesNull() {
 		$document = new HTMLDocument(Helper::HTML);
-		$body     = $document->getElementsByTagName("body")[0] ?? null;
+		$body = $document->getElementsByTagName("body")[0] ?? null;
 		self::assertNotNull($body);
 		/** @var Element $body */
 		$idByGetAttribute = $body->getAttribute('id');
@@ -322,10 +299,9 @@ class ElementTest extends TestCase
 		self::assertNull($idByMagicGet);
 	}
 
-	public function testDataset()
-	{
+	public function testDataset() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
-		$p        = $document->querySelector("p.link-to-twitter");
+		$p = $document->querySelector("p.link-to-twitter");
 
 		self::assertEquals(
 			"twitter",
@@ -337,11 +313,10 @@ class ElementTest extends TestCase
 		);
 	}
 
-	public function testDatasetSetGet()
-	{
-		$document                  = new HTMLDocument();
-		$element                   = $document->createElement("div");
-		$message                   = "Hello, World!";
+	public function testDatasetSetGet() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+		$message = "Hello, World!";
 		$element->dataset->message = $message;
 
 		self::assertEquals(
@@ -350,11 +325,10 @@ class ElementTest extends TestCase
 		);
 	}
 
-	public function testDatasetCreateElement()
-	{
-		$document                    = new HTMLDocument();
-		$element                     = $document->createElement("div");
-		$element->dataset->name      = "Example";
+	public function testDatasetCreateElement() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+		$element->dataset->name = "Example";
 		$element->dataset->multiWord = "Should be hyphenated";
 
 		self::assertEquals(
@@ -367,10 +341,9 @@ class ElementTest extends TestCase
 		);
 	}
 
-	public function testDatasetArrayAccess()
-	{
-		$document               = new HTMLDocument();
-		$element                = $document->createElement("div");
+	public function testDatasetArrayAccess() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
 		$element->dataset->name = "Example";
 
 		self::assertEquals(
@@ -379,10 +352,9 @@ class ElementTest extends TestCase
 		);
 	}
 
-	public function testDatasetArrayAccessIssetUnset()
-	{
-		$document               = new HTMLDocument();
-		$element                = $document->createElement("div");
+	public function testDatasetArrayAccessIssetUnset() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
 		$element->dataset->name = "Example";
 
 		self::assertTrue(isset($element->dataset["name"]));
@@ -390,10 +362,9 @@ class ElementTest extends TestCase
 		self::assertFalse(isset($element->dataset["name"]));
 	}
 
-	public function testDatasetIssetUnset()
-	{
+	public function testDatasetIssetUnset() {
 		$document = new HTMLDocument();
-		$element  = $document->createElement("div");
+		$element = $document->createElement("div");
 
 		self::assertFalse(isset($element->dataset->name));
 		$element->dataset->name = "Example";
@@ -402,10 +373,9 @@ class ElementTest extends TestCase
 		self::assertFalse(isset($element->dataset->name));
 	}
 
-	public function testFormControlElementsCanHaveFormProperty()
-	{
+	public function testFormControlElementsCanHaveFormProperty() {
 		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
-		$form     = $document->getElementById('form_2');
+		$form = $document->getElementById('form_2');
 
 		$input = $document->getElementById('f2');
 		self::assertEquals($form, $input->form);
@@ -429,10 +399,9 @@ class ElementTest extends TestCase
 		self::assertEquals($form, $select->form);
 	}
 
-	public function testFormControlElementReturnsParentFormAsFormPropertyIfItDoesNotHaveFormAttribute()
-	{
+	public function testFormControlElementReturnsParentFormAsFormPropertyIfItDoesNotHaveFormAttribute() {
 		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
-		$form     = $document->getElementById('form_1');
+		$form = $document->getElementById('form_1');
 
 		$input = $document->getElementById('f1');
 		self::assertEquals($form, $input->form);
@@ -441,16 +410,14 @@ class ElementTest extends TestCase
 		self::assertEquals($form, $button->form);
 	}
 
-	public function testFormControlElementReturnsNullIfItDoesNotHaveFormAttributeAndDoesNotHaveParentForm()
-	{
+	public function testFormControlElementReturnsNullIfItDoesNotHaveFormAttributeAndDoesNotHaveParentForm() {
 		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
 
 		$input = $document->getElementById('f11');
 		self::assertEquals(null, $input->form);
 	}
 
-	public function testNonControlElementRetursNullAsFormProperty()
-	{
+	public function testNonControlElementRetursNullAsFormProperty() {
 		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
 
 		$span = $document->getElementById('non_form_control_1');
@@ -460,45 +427,40 @@ class ElementTest extends TestCase
 		self::assertEquals(null, $span->form);
 	}
 
-	public function testInputElementWithTypeImagetReturnsNullAsFormProperty()
-	{
+	public function testInputElementWithTypeImagetReturnsNullAsFormProperty() {
 		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
 
 		$input = $document->getElementById('f12');
 		self::assertEquals(null, $input->form);
 	}
 
-	public function testPropertyAttributeCorrelationFormEncoding()
-	{
-		$document       = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
-		$form           = $document->querySelector("form");
+	public function testPropertyAttributeCorrelationFormEncoding() {
+		$document = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
+		$form = $document->querySelector("form");
 		$form->encoding = "phpgt/test";
 		self::assertEquals("phpgt/test", $form->getAttribute("enctype"));
 		self::assertEquals("phpgt/test", $form->enctype);
 	}
 
-	public function testPropertyAttributeCorrelationNormalAttribute()
-	{
-		$document   = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
-		$link       = $document->querySelector("a");
+	public function testPropertyAttributeCorrelationNormalAttribute() {
+		$document = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
+		$link = $document->querySelector("a");
 		$link->href = "/test";
 		self::assertEquals("/test", $link->getAttribute("href"));
 		self::assertEquals("/test", $link->href);
 	}
 
-	public function testPropertyAttributeCorrelationBoolean()
-	{
-		$document         = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
-		$input            = $document->querySelector("input");
+	public function testPropertyAttributeCorrelationBoolean() {
+		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
+		$input = $document->querySelector("input");
 		$input->autofocus = true;
 		self::assertTrue($input->autofocus);
 		self::assertNull($input->getAttribute("autofocus"));
 	}
 
-	public function testPropertyDataset()
-	{
-		$document         = new HTMLDocument(Helper::HTML_LESS);
-		$p                = $document->querySelector("p");
+	public function testPropertyDataset() {
+		$document = new HTMLDocument(Helper::HTML_LESS);
+		$p = $document->querySelector("p");
 		$p->dataset->test = "Test Value";
 		self::assertEquals("Test Value", $p->getAttribute("data-test"));
 
@@ -510,80 +472,72 @@ class ElementTest extends TestCase
 		self::assertEquals("Should be hyphenated", $p->getAttribute("data-prop-with-camel-case"));
 	}
 
-	public function testPropertyValueAsDate()
-	{
-		$document     = new HTMLDocument(Helper::HTML_FORM_WITH_DATES);
-		$input        = $document->querySelector("input");
+	public function testPropertyValueAsDate() {
+		$document = new HTMLDocument(Helper::HTML_FORM_WITH_DATES);
+		$input = $document->querySelector("input");
 		$input->value = "1988-04-05";
-		$sut          = $input->valueAsDate;
+		$sut = $input->valueAsDate;
 		self::assertInstanceOf(DateTime::class, $sut);
 		self::assertEquals(new DateTime("1988-04-05"), $sut);
 	}
 
-	public function testPropertyValueAsNumber()
-	{
+	public function testPropertyValueAsNumber() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
-		$input    = $document->querySelector("input");
+		$input = $document->querySelector("input");
 		self::assertEquals(0, $input->valueAsNumber);
 		$input->value = "123.456";
 		self::assertEquals(123.456, $input->valueAsNumber);
 		self::assertIsFloat($input->valueAsNumber);
 	}
 
-	public function testAttributeValueSelection()
-	{
+	public function testAttributeValueSelection() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
-		$input1   = $document->querySelector("input[name='who']");
-		$input2   = $document->querySelector("input[name=who]");
+		$input1 = $document->querySelector("input[name='who']");
+		$input2 = $document->querySelector("input[name=who]");
 		self::assertNotNull($input1);
 		self::assertNotNull($input2);
 		self::assertSame($input1, $input2);
 		self::assertEquals("Scarlett", $input1->value);
 	}
 
-	public function testOptionValueGetSet()
-	{
+	public function testOptionValueGetSet() {
 		$document = new HTMLDocument(Helper::HTML_SELECTS);
-		foreach ($document->querySelectorAll("[name=from] option") as $fromOption) {
+		foreach($document->querySelectorAll("[name=from] option") as $fromOption) {
 			self::assertIsNumeric($fromOption->value);
 		}
 
-		foreach ($document->querySelectorAll("[name=to] option") as $toOption) {
+		foreach($document->querySelectorAll("[name=to] option") as $toOption) {
 			self::assertIsNumeric($toOption->value);
 		}
 	}
 
-	public function testSetClassNameProperty()
-	{
+	public function testSetClassNameProperty() {
 		$document = new HTMLDocument();
-		$element  = $document->createElement("div");
+		$element = $document->createElement("div");
 
 		$element->className = "test";
 		self::assertEquals("test", $element->getAttribute("class"));
 	}
 
-	public function testSetIdProperty()
-	{
+	public function testSetIdProperty() {
 		$document = new HTMLDocument();
-		$element  = $document->createElement("div");
+		$element = $document->createElement("div");
 
 		$element->id = "test";
 		self::assertEquals("test", $element->id);
 	}
 
-	public function testSetValueOnButton()
-	{
+	public function testSetValueOnButton() {
 		$document = new HTMLDocument();
-		$element  = $document->createElement("button");
+		$element = $document->createElement("button");
 
 		$element->value = "test";
 		self::assertEquals("test", $element->value);
 	}
 
-	public function testSetOuterHTMLChangesElementInDocument()
-	{
-		$document           = new HTMLDocument(Helper::HTML);
-		$element            = $document->querySelector("h1");
+	public function testSetOuterHTMLChangesElementInDocument() {
+		$document = new HTMLDocument(Helper::HTML);
+		$element = $document->querySelector("h1");
 		$element->outerHTML = "<p>Hello!</p>";
 
 		$newElement = $document->querySelector("p");
@@ -594,43 +548,40 @@ class ElementTest extends TestCase
 		self::assertStringContainsString("<p>", $newElement->outerHTML);
 	}
 
-	public function testGetValueAsDateDoesNothingOnNonInputElements()
-	{
+	public function testGetValueAsDateDoesNothingOnNonInputElements() {
 		$document = new HTMLDocument(Helper::HTML_SELECTS);
-		$element  = $document->querySelector("select");
+		$element = $document->querySelector("select");
 
 		$sut = $element->valueAsDate;
 
 		self::assertNull($sut);
 	}
 
-	public function testGetValueAsNumberDoesNothingOnNonInputElements()
-	{
+	public function testGetValueAsNumberDoesNothingOnNonInputElements() {
 		$document = new HTMLDocument(Helper::HTML_SELECTS);
-		$element  = $document->querySelector("select");
+		$element = $document->querySelector("select");
 
 		$sut = $element->valueAsNumber;
 
 		self::assertNull($sut);
 	}
 
-	public function testDebugInfoSelect()
-	{
+	public function testDebugInfoSelect() {
 		$document = new HTMLDocument(Helper::HTML_SELECTS);
-		$element  = $document->querySelector("select");
+		$element = $document->querySelector("select");
 
 		$sut = $element->__debugInfo();
 
 		$expected = [
-			'nodeName'  => "select",
+			'nodeName' => "select",
 			'nodeValue' => "ZeroOneTwoThreeFourFive",
 			'innerHTML' => '<option value="0">Zero</option><option value="1">One</option><option value="2">Two</option><option value="3">Three</option><option value="4">Four</option><option value="5">Five</option>',
-			"class"     => null,
-			"name"      => "from",
-			"type"      => null,
-			"id"        => null,
-			"src"       => null,
-			"href"      => null
+			"class" => null,
+			"name" => "from",
+			"type" => null,
+			"id" => null,
+			"src" => null,
+			"href" => null
 		];
 
 		self::assertEquals($expected["nodeName"], $sut["nodeName"]);
@@ -644,49 +595,46 @@ class ElementTest extends TestCase
 		self::assertEquals($expected["href"], $sut["href"]);
 	}
 
-	public function testDebugInfoInput()
-	 {
+	public function testDebugInfoInput() {
 		$document = new HTMLDocument(Helper::HTML_MORE);
-		$element  = $document->querySelector("input[name='who']");
+		$element = $document->querySelector("input[name='who']");
 
 		$sut = $element->__debugInfo();
 
 		$expected = [
-			'nodeName'  => "input",
+			'nodeName' => "input",
 			'nodeValue' => "",
 			'innerHTML' => "",
-			"class"     => 'c1 c3',
-			"name"      => "who",
-			"type"      => null,
-			"id"        => null,
-			"src"       => null,
-			"href"      => null,
+			"class" => 'c1 c3',
+			"name" => "who",
+			"type" => null,
+			"id" => null,
+			"src" => null,
+			"href" => null,
 
 		];
 		// die(var_dump($sut));
 		self::assertEquals($expected, $sut);
 	}
 
-	public function testDebugInfoAnchor()
-	{
+	public function testDebugInfoAnchor() {
 		$document = new HTMLDocument(Helper::HTML_TEXT);
-		$element  = $document->querySelector("a");
+		$element = $document->querySelector("a");
 
 		$sut = $element->__debugInfo();
 
 		$expected = [
-			'nodeName'  => "a",
+			'nodeName' => "a",
 			'nodeValue' => "casting a\n  ballot",
 			'innerHTML' => "casting a\n  ballot",
-			"class"     => null,
-			"name"      => null,
-			"type"      => null,
-			"id"        => null,
-			"src"       => null,
-			"href"      => "http://en.wikipedia.org/wiki/Absentee_ballot",
+			"class" => null,
+			"name" => null,
+			"type" => null,
+			"id" => null,
+			"src" => null,
+			"href" => "http://en.wikipedia.org/wiki/Absentee_ballot",
 
 		];
 		self::assertEquals($expected, $sut);
 	}
-
 }
