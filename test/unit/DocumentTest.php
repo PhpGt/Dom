@@ -51,4 +51,13 @@ HTML;
 		$output = $sut->saveHTML();
 		self::assertEquals(strlen($output), $sut->getSize());
 	}
+
+	public function testTell() {
+		$sut = new Document();
+		$sut->loadHTML($this->testHTML);
+		self::assertEquals(0, $sut->tell());
+		self::assertEquals(0, $sut->tell());
+		$sut->saveHTML();
+		self::assertGreaterThan(1, $sut->tell());
+	}
 }

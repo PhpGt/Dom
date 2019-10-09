@@ -67,6 +67,16 @@ class Document extends DOMDocument implements StreamInterface {
 		return $this->saveHTML();
 	}
 
+	public function saveHTML(DOMNode $node = null):string {
+		if(is_null($this->streamFilled)) {
+			$this->fillStream();
+		}
+		else {
+			fseek($this->stream, $this->streamFilled);
+		}
+		return parent::saveHTML($node);
+	}
+
 	/**
 	 * Closes the stream and any underlying resources.
 	 *
@@ -107,8 +117,20 @@ class Document extends DOMDocument implements StreamInterface {
 	 * @throws RuntimeException on error.
 	 */
 	public function tell() {
+		$tell = null;
+
+		if(!is_null($this->stream)) {
+			$tell = ftell($this->stream);
+		}
+
 		$this->fillStream();
-		$tell = ftell($this->stream);
+
+		if(is_null($tell)) {
+			$tell = ftell($this->stream);
+		}
+		else {
+			fseek($this->stream, $tell);
+		}
 
 		if($tell === false) {
 			throw new RuntimeException("Error getting position of Document Stream");
@@ -281,7 +303,7 @@ class Document extends DOMDocument implements StreamInterface {
 	}
 
 	private function fillStream():void {
-		if($this->streamFilled) {
+		if(!is_null($this->streamFilled)) {
 			return;
 		}
 
@@ -289,6 +311,7 @@ class Document extends DOMDocument implements StreamInterface {
 			throw new RuntimeException("Stream is closed");
 		}
 
+		$this->streamFilled = 0;
 		$this->streamFilled = fwrite($this->stream, $this->__toString());
 	}
 }
