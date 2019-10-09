@@ -119,6 +119,13 @@ HTML;
 		self::assertStringContainsString($testString, $html);
 	}
 
+	public function testRead() {
+		$sut = new Document();
+		$sut->loadHTML($this->testHTML);
+		$readBytes = $sut->read(1024);
+		self::assertStringContainsString($this->testHTML, $readBytes);
+	}
+
 	public function testGetMetadataSingleKey() {
 		$sut = new Document();
 		$mode = $sut->getMetadata("mode");
