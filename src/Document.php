@@ -116,7 +116,7 @@ class Document extends DOMDocument implements StreamInterface {
 	 * @return int Position of the file pointer
 	 * @throws RuntimeException on error.
 	 */
-	public function tell() {
+	public function tell():int {
 		$tell = null;
 
 		if(!is_null($this->stream)) {
@@ -125,15 +125,8 @@ class Document extends DOMDocument implements StreamInterface {
 
 		$this->fillStream();
 
-		if(is_null($tell)) {
-			$tell = ftell($this->stream);
-		}
-		else {
+		if(!is_null($tell)) {
 			fseek($this->stream, $tell);
-		}
-
-		if($tell === false) {
-			throw new RuntimeException("Error getting position of Document Stream");
 		}
 
 		return $tell;
@@ -313,5 +306,6 @@ class Document extends DOMDocument implements StreamInterface {
 
 		$this->streamFilled = 0;
 		$this->streamFilled = fwrite($this->stream, $this->__toString());
+		fseek($this->stream, 0);
 	}
 }

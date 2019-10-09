@@ -58,6 +58,14 @@ HTML;
 		self::assertEquals(0, $sut->tell());
 		self::assertEquals(0, $sut->tell());
 		$sut->saveHTML();
-		self::assertGreaterThan(1, $sut->tell());
+		$sut->saveHTML();
+		$tell = $sut->tell();
+		self::assertGreaterThan(1, $tell);
+	}
+
+	public function testFeof() {
+		$sut = new Document();
+		$sut->loadHTML($this->testHTML);
+		self::assertFalse($sut->eof());
 	}
 }
