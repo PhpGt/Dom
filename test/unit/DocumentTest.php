@@ -102,4 +102,15 @@ HTML;
 		$stream = $sut->detach();
 		self::assertEquals(0, ftell($stream));
 	}
+
+	public function testWrite() {
+		$testString = "This is a test";
+
+		$sut = new Document();
+		$bytesWritten = $sut->write($testString);
+		self::assertEquals(strlen($testString), $bytesWritten);
+
+		$html = $sut->saveHTML();
+		self::assertStringContainsString($testString, $html);
+	}
 }

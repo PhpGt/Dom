@@ -74,6 +74,7 @@ class Document extends DOMDocument implements StreamInterface {
 		else {
 			fseek($this->stream, $this->streamFilled);
 		}
+
 		return parent::saveHTML($node);
 	}
 
@@ -216,12 +217,8 @@ class Document extends DOMDocument implements StreamInterface {
 	 */
 	public function write($string):int {
 		$this->fillStream();
+		$this->loadHTML($this->getContents() . $string);
 		$bytesWritten = fwrite($this->stream, $string);
-
-		if($bytesWritten === false) {
-			throw new RuntimeException("Error writing to Document Stream");
-		}
-
 		return $bytesWritten;
 	}
 
