@@ -199,9 +199,7 @@ class Document extends DOMDocument implements StreamInterface {
 		$mode = $this->getMetadata("mode");
 		$writable = false;
 
-		if(strstr($mode, "w")
-		|| strstr($mode, "+")
-		|| strstr($mode, "a")) {
+		if(strstr($mode, "w") || strstr($mode, "+") || strstr($mode, "a")) {
 			$writable = true;
 		}
 
@@ -253,10 +251,6 @@ class Document extends DOMDocument implements StreamInterface {
 	public function read($length):string {
 		$this->fillStream();
 		$bytesRead = fread($this->stream, $length);
-
-		if($bytesRead === false) {
-			throw new RuntimeException("Error reading from Document Stream");
-		}
 
 		return $bytesRead;
 	}
