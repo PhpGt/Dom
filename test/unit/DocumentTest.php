@@ -79,6 +79,11 @@ HTML;
 		self::assertTrue($sut->isWritable());
 	}
 
+	public function testReadable() {
+		$sut = new Document();
+		self::assertTrue($sut->isReadable());
+	}
+
 	public function testSeekError() {
 		$sut = new Document();
 		self::expectException(RuntimeException::class);

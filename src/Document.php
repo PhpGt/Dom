@@ -229,7 +229,15 @@ class Document extends DOMDocument implements StreamInterface {
 	 */
 	public function isReadable():bool {
 		$this->fillStream();
-		return is_readable($this->getMetadata("uri"));
+		$mode = $this->getMetadata("mode");
+		$readable = false;
+
+		if(strstr($mode, "r")
+			|| strstr($mode, "+")) {
+			$readable = true;
+		}
+
+		return $readable;
 	}
 
 	/**
