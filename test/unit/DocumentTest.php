@@ -21,4 +21,12 @@ HTML;
 		$sut->loadHTML($html);
 		self::assertStringContainsString($html, $sut);
 	}
+
+	public function testClose() {
+		$sut = new Document();
+		$sut->close();
+		self::expectException(RuntimeException::class);
+		self::expectExceptionMessage("Stream is closed");
+		$sut->getContents();
+	}
 }
