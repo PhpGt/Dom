@@ -269,13 +269,16 @@ class Element extends DOMElement implements PropertyAttribute {
 	}
 
 	public function prop_get_form() {
-		if (in_array($this->tagName, self::FORM_CONTROL_ELEMENTS)) {
-			if ($this->tagName === "input" && $this->getAttribute("type") === "image") {
+		if(in_array($this->tagName, self::FORM_CONTROL_ELEMENTS)) {
+			if($this->tagName === "input"
+			&& $this->getAttribute("type") === "image") {
 				return null;
 			}
 
-			if ($this->hasAttribute("form")) {
-				return $this->getRootDocument()->getElementById($this->getAttribute("form"));
+			if($this->hasAttribute("form")) {
+				return $this->getRootDocument()->getElementById(
+					$this->getAttribute("form")
+				);
 			}
 			else {
 				return $this->closest('form');
@@ -371,5 +374,19 @@ class Element extends DOMElement implements PropertyAttribute {
 
 	public function isSelectOptionSelected(Element $option) {
 		return $option->hasAttribute('selected') && $option->getAttribute('selected');
+	}
+
+	public function __debugInfo() {
+		return [
+			'nodeName' => $this->nodeName,
+			'nodeValue' => $this->nodeValue,
+			'innerHTML' => $this->innerHTML,
+			"class" => $this->className,
+			"id" => $this->id,
+			"name" => $this->getAttribute("name"),
+			"type" => $this->getAttribute("type"),
+			"src" => $this->getAttribute("src"),
+			"href" => $this->getAttribute("href"),
+		];
 	}
 }
