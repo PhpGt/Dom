@@ -88,4 +88,13 @@ HTML;
 		$stream = $sut->detach();
 		self::assertEquals(12, ftell($stream));
 	}
+
+	public function testRewind() {
+		$sut = new Document();
+		$sut->loadHTML($this->testHTML);
+		$sut->seek(12);
+		$sut->rewind();
+		$stream = $sut->detach();
+		self::assertEquals(0, ftell($stream));
+	}
 }
