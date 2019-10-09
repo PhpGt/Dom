@@ -278,6 +278,10 @@ class Document extends DOMDocument implements StreamInterface {
 			return;
 		}
 
+		if(!is_resource($this->stream)) {
+			throw new RuntimeException("Stream is closed");
+		}
+
 		fwrite($this->stream, $this->__toString());
 		$this->streamFilled = true;
 	}

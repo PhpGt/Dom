@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DOMDocument;
 use DOMNode;
 use DOMXPath;
 use Gt\CssXPath\Translator;
@@ -95,7 +96,7 @@ trait ParentNode {
 	 * Normalises access to the parent dom document, which may be located in various places
 	 * depending on what type of object is using the trait
 	 *
-	 * @return \DOMDocument
+	 * @return DOMDocument
 	 */
-	protected abstract function getRootDocument():\DOMDocument;
+	protected abstract function getRootDocument():DOMDocument;
 }
