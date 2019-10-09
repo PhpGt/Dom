@@ -76,7 +76,7 @@ HTML;
 
 	public function testIsWritable() {
 		$sut = new Document();
-		self::assertFalse($sut->isWritable());
+		self::assertTrue($sut->isWritable());
 	}
 
 	public function testSeekError() {

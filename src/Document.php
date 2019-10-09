@@ -195,7 +195,16 @@ class Document extends DOMDocument implements StreamInterface {
 	 */
 	public function isWritable():bool {
 		$this->fillStream();
-		return is_writable($this->getMetadata("uri"));
+		$mode = $this->getMetadata("mode");
+		$writable = false;
+
+		if(strstr($mode, "w")
+		|| strstr($mode, "+")
+		|| strstr($mode, "a")) {
+			$writable = true;
+		}
+
+		return $writable;
 	}
 
 	/**
