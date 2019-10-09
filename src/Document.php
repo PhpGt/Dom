@@ -276,11 +276,6 @@ class Document extends DOMDocument implements StreamInterface {
 		}
 
 		$string = stream_get_contents($this->stream);
-
-		if($string === false) {
-			throw new RuntimeException("Error getting Document Stream contents");
-		}
-
 		return $string;
 	}
 

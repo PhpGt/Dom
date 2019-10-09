@@ -118,4 +118,22 @@ HTML;
 		$html = $sut->saveHTML();
 		self::assertStringContainsString($testString, $html);
 	}
+
+	public function testGetMetadataSingleKey() {
+		$sut = new Document();
+		$mode = $sut->getMetadata("mode");
+		self::assertIsString($mode);
+	}
+
+	public function testGetMetadataMissingKey() {
+		$sut = new Document();
+		$missing = $sut->getMetadata("missing");
+		self::assertNull($missing);
+	}
+
+	public function testGetMetadata() {
+		$sut = new Document();
+		$array = $sut->getMetadata();
+		self::assertIsArray($array);
+	}
 }
