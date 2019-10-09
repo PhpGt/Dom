@@ -74,6 +74,11 @@ HTML;
 		self::assertTrue($sut->isSeekable());
 	}
 
+	public function testIsWritable() {
+		$sut = new Document();
+		self::assertFalse($sut->isWritable());
+	}
+
 	public function testSeekError() {
 		$sut = new Document();
 		self::expectException(RuntimeException::class);
