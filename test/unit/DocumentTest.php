@@ -6,20 +6,20 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 class DocumentTest extends TestCase {
+	private $testHTML = <<<HTML
+<h1>This is a test</h1>
+<p>A very simple test</p>
+HTML;
+
 	public function testToStringEmpty() {
 		$sut = new Document();
 		self::assertEquals(PHP_EOL, $sut);
 	}
 
 	public function testToString() {
-		$html = <<<HTML
-<h1>This is a test</h1>
-<p>A very simple test</p>
-HTML;
-
 		$sut = new Document();
-		$sut->loadHTML($html);
-		self::assertStringContainsString($html, $sut);
+		$sut->loadHTML($this->testHTML);
+		self::assertStringContainsString($this->testHTML, $sut);
 	}
 
 	public function testClose() {
@@ -37,5 +37,18 @@ HTML;
 		self::expectException(RuntimeException::class);
 		self::expectExceptionMessage("Stream is not available");
 		$sut->getContents();
+	}
+
+	public function testGetSizeEmpty() {
+		$sut = new Document();
+		self::assertEquals(1, $sut->getSize());
+	}
+
+	public function testGetSize() {
+		$sut = new Document();
+		$sut->loadHTML($this->testHTML);
+		$size = $sut->getSize();
+		$output = $sut->saveHTML();
+		self::assertEquals(strlen($output), $sut->getSize());
 	}
 }

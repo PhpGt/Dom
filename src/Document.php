@@ -32,7 +32,9 @@ use RuntimeException;
 class Document extends DOMDocument implements StreamInterface {
 	use LiveProperty, ParentNode;
 
+	/** @var resource */
 	protected $stream;
+	/** @var ?int number of bytes filled */
 	protected $streamFilled;
 
 	public function __construct($document = null) {
@@ -95,7 +97,7 @@ class Document extends DOMDocument implements StreamInterface {
 	 */
 	public function getSize() {
 		$this->fillStream();
-		return $this->getMetadata("unread_bytes");
+		return $this->streamFilled;
 	}
 
 	/**
@@ -287,7 +289,6 @@ class Document extends DOMDocument implements StreamInterface {
 			throw new RuntimeException("Stream is closed");
 		}
 
-		fwrite($this->stream, $this->__toString());
-		$this->streamFilled = true;
+		$this->streamFilled = fwrite($this->stream, $this->__toString());
 	}
 }
