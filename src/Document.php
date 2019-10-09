@@ -12,7 +12,6 @@ use DOMNode;
 use DOMText;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
-use SplTempFileObject;
 
 /**
  * Represents any web page loaded in the browser and serves as an entry point
