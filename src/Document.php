@@ -241,6 +241,11 @@ class Document extends DOMDocument implements StreamInterface {
 	 */
 	public function getContents() {
 		$this->fillStream();
+
+		if(!is_resource($this->stream)) {
+			throw new RuntimeException("Stream is not available");
+		}
+
 		$string = stream_get_contents($this->stream);
 
 		if($string === false) {

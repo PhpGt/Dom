@@ -29,4 +29,13 @@ HTML;
 		self::expectExceptionMessage("Stream is closed");
 		$sut->getContents();
 	}
+
+	public function testDetach() {
+		$sut = new Document();
+		$stream = $sut->detach();
+		self::assertIsResource($stream);
+		self::expectException(RuntimeException::class);
+		self::expectExceptionMessage("Stream is not available");
+		$sut->getContents();
+	}
 }
