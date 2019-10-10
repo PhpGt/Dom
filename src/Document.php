@@ -12,7 +12,6 @@ use DOMNode;
 use DOMText;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
-use SplTempFileObject;
 
 /**
  * Represents any web page loaded in the browser and serves as an entry point
@@ -33,7 +32,9 @@ use SplTempFileObject;
 class Document extends DOMDocument implements StreamInterface {
 	use LiveProperty, ParentNode;
 
+	/** @var resource */
 	protected $stream;
+	/** @var ?int number of bytes filled */
 	protected $streamFilled;
 
 	public function __construct($document = null) {
@@ -66,6 +67,17 @@ class Document extends DOMDocument implements StreamInterface {
 		return $this->saveHTML();
 	}
 
+	public function saveHTML(DOMNode $node = null):string {
+		if(is_null($this->streamFilled)) {
+			$this->fillStream();
+		}
+		else {
+			fseek($this->stream, $this->streamFilled);
+		}
+
+		return parent::saveHTML($node);
+	}
+
 	/**
 	 * Closes the stream and any underlying resources.
 	 *
@@ -96,7 +108,7 @@ class Document extends DOMDocument implements StreamInterface {
 	 */
 	public function getSize() {
 		$this->fillStream();
-		return $this->getMetadata("unread_bytes");
+		return $this->streamFilled;
 	}
 
 	/**
@@ -105,12 +117,17 @@ class Document extends DOMDocument implements StreamInterface {
 	 * @return int Position of the file pointer
 	 * @throws RuntimeException on error.
 	 */
-	public function tell() {
-		$this->fillStream();
-		$tell = ftell($this->stream);
+	public function tell():int {
+		$tell = null;
 
-		if($tell === false) {
-			throw new RuntimeException("Error getting position of Document Stream");
+		if(!is_null($this->stream)) {
+			$tell = ftell($this->stream);
+		}
+
+		$this->fillStream();
+
+		if(!is_null($tell)) {
+			fseek($this->stream, $tell);
 		}
 
 		return $tell;
@@ -148,15 +165,13 @@ class Document extends DOMDocument implements StreamInterface {
 	 *     SEEK_END: Set position to end-of-stream plus offset.
 	 * @throws RuntimeException on failure.
 	 */
-	public function seek($offset, $whence = SEEK_SET) {
+	public function seek($offset, $whence = SEEK_SET):void {
 		$this->fillStream();
 		$result = fseek($this->stream, $offset, $whence);
 
-		if($result === false) {
+		if($result === -1) {
 			throw new RuntimeException("Error seeking Document Stream");
 		}
-
-		return $result;
 	}
 
 	/**
@@ -169,9 +184,9 @@ class Document extends DOMDocument implements StreamInterface {
 	 * @link http://www.php.net/manual/en/function.fseek.php
 	 * @see seek()
 	 */
-	public function rewind() {
+	public function rewind():void {
 		$this->fillStream();
-		return $this->seek(0);
+		$this->seek(0);
 	}
 
 	/**
@@ -179,9 +194,16 @@ class Document extends DOMDocument implements StreamInterface {
 	 *
 	 * @return bool
 	 */
-	public function isWritable() {
+	public function isWritable():bool {
 		$this->fillStream();
-		return is_writable($this->getMetadata("uri"));
+		$mode = $this->getMetadata("mode");
+		$writable = false;
+
+		if(strstr($mode, "w") || strstr($mode, "+") || strstr($mode, "a")) {
+			$writable = true;
+		}
+
+		return $writable;
 	}
 
 	/**
@@ -191,14 +213,10 @@ class Document extends DOMDocument implements StreamInterface {
 	 * @return int Returns the number of bytes written to the stream.
 	 * @throws RuntimeException on failure.
 	 */
-	public function write($string) {
+	public function write($string):int {
 		$this->fillStream();
+		$this->loadHTML($this->getContents() . $string);
 		$bytesWritten = fwrite($this->stream, $string);
-
-		if($bytesWritten === false) {
-			throw new RuntimeException("Error writing to Document Stream");
-		}
-
 		return $bytesWritten;
 	}
 
@@ -207,9 +225,17 @@ class Document extends DOMDocument implements StreamInterface {
 	 *
 	 * @return bool
 	 */
-	public function isReadable() {
+	public function isReadable():bool {
 		$this->fillStream();
-		return is_readable($this->getMetadata("uri"));
+		$mode = $this->getMetadata("mode");
+		$readable = false;
+
+		if(strstr($mode, "r")
+			|| strstr($mode, "+")) {
+			$readable = true;
+		}
+
+		return $readable;
 	}
 
 	/**
@@ -222,13 +248,9 @@ class Document extends DOMDocument implements StreamInterface {
 	 *     if no bytes are available.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	public function read($length) {
+	public function read($length):string {
 		$this->fillStream();
 		$bytesRead = fread($this->stream, $length);
-
-		if($bytesRead === false) {
-			throw new RuntimeException("Error reading from Document Stream");
-		}
 
 		return $bytesRead;
 	}
@@ -240,14 +262,14 @@ class Document extends DOMDocument implements StreamInterface {
 	 * @throws RuntimeException if unable to read or an error occurs while
 	 *     reading.
 	 */
-	public function getContents() {
+	public function getContents():string {
 		$this->fillStream();
-		$string = stream_get_contents($this->stream);
 
-		if($string === false) {
-			throw new RuntimeException("Error getting Document Stream contents");
+		if(!is_resource($this->stream)) {
+			throw new RuntimeException("Stream is not available");
 		}
 
+		$string = stream_get_contents($this->stream);
 		return $string;
 	}
 
@@ -275,11 +297,16 @@ class Document extends DOMDocument implements StreamInterface {
 	}
 
 	private function fillStream():void {
-		if($this->streamFilled) {
+		if(!is_null($this->streamFilled)) {
 			return;
 		}
 
-		fwrite($this->stream, $this->__toString());
-		$this->streamFilled = true;
+		if(!is_resource($this->stream)) {
+			throw new RuntimeException("Stream is closed");
+		}
+
+		$this->streamFilled = 0;
+		$this->streamFilled = fwrite($this->stream, $this->__toString());
+		fseek($this->stream, 0);
 	}
 }

@@ -118,4 +118,8 @@ class TokenList {
 
 		return true;
 	}
+
+	public function __toString() {
+		return join(" ", $this->tokenArray);
+	}
 }
