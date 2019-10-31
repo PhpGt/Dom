@@ -46,31 +46,31 @@ class HTMLDocument extends Document {
 		return $this->documentElement->getElementsByClassName($names);
 	}
 
-	private function prop_get_head():Element {
+	protected function prop_get_head():Element {
 		return $this->getOrCreateElement("head");
 	}
 
-	private function prop_get_body():Element {
+	protected function prop_get_body():Element {
 		return $this->getOrCreateElement("body");
 	}
 
-	private function prop_get_forms() {
+	protected function prop_get_forms() {
 		return $this->getElementsByTagName("form");
 	}
 
-	private function prop_get_anchors() {
+	protected function prop_get_anchors() {
 		return $this->querySelectorAll("a[name]");
 	}
 
-	private function prop_get_images() {
+	protected function prop_get_images() {
 		return $this->getElementsByTagName("img");
 	}
 
-	private function prop_get_links() {
+	protected function prop_get_links() {
 		return $this->querySelectorAll("a[href]");
 	}
 
-	private function prop_get_title() {
+	protected function prop_get_title() {
 		$title = $this->head->getElementsByTagName("title")->item(0);
 
 		if(is_null($title)) {
@@ -81,7 +81,7 @@ class HTMLDocument extends Document {
 		}
 	}
 
-	private function prop_set_title($value):void {
+	protected function prop_set_title($value):void {
 		$title = $this->head->getElementsByTagName("title")->item(0);
 
 		if(is_null($title)) {
