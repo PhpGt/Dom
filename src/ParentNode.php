@@ -43,19 +43,19 @@ trait ParentNode {
 		return $this->css($selector);
 	}
 
-	private function prop_get_children():HTMLCollection {
+	protected function prop_get_children():HTMLCollection {
 		return new HTMLCollection($this->childNodes);
 	}
 
-	private function prop_get_firstElementChild():?Element {
+	protected function prop_get_firstElementChild():?Element {
 		return $this->children->item(0);
 	}
 
-	private function prop_get_lastElementChild():?Element {
+	protected function prop_get_lastElementChild():?Element {
 		return $this->children->item($this->children->length - 1);
 	}
 
-	private function prop_get_childElementCount():int {
+	protected function prop_get_childElementCount():int {
 		return $this->children->length;
 	}
 

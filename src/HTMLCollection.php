@@ -36,7 +36,7 @@ class HTMLCollection extends NodeList {
 	 * Exposed as the $length property.
 	 * @return int Number of Elements
 	 */
-	private function prop_get_length():int {
+	protected function prop_get_length():int {
 		return count($this->list);
 	}
 
