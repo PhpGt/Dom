@@ -10,6 +10,6 @@ jobs:
     - uses: actions/checkout@v1
     - uses: php-actions/composer@master
     - name: DEBUG SSH
-        uses: mxschmitt/action-tmate@v1
+      uses: mxschmitt/action-tmate@v1
     - name: Install dependencies
       run: composer install
