@@ -11,6 +11,3 @@ jobs:
     - uses: php-actions/composer@master
     - name: Install dependencies
       run: composer install
-    - uses: php-actions/phpunit@master
-    - name: PHPUnit
-      run: vendor/bin/phpunit -c test/unit/phpunit.xml --log-junit test/unit/_junit/junit.xml -d memory_limit=512M
