@@ -3,9 +3,10 @@ name: CI
 on: [push]
 
 jobs:
-  build:
+  build-test:
     runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v1
     - uses: php-actions/composer@master
+    - uses: php-actions/phpunit@master
