@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "phpgt/cssxpath",
-            "version": "v1.1.1",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PhpGt/CssXPath.git",
-                "reference": "af4b9583ad4a950225f10a0b9c97d8dc4f14e22d"
+                "reference": "cca4df1a33e18aff1bb775372ece5fddb032ba67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PhpGt/CssXPath/zipball/af4b9583ad4a950225f10a0b9c97d8dc4f14e22d",
-                "reference": "af4b9583ad4a950225f10a0b9c97d8dc4f14e22d",
+                "url": "https://api.github.com/repos/PhpGt/CssXPath/zipball/cca4df1a33e18aff1bb775372ece5fddb032ba67",
+                "reference": "cca4df1a33e18aff1bb775372ece5fddb032ba67",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 }
             ],
             "description": "Convert CSS selectors to XPath queries.",
-            "time": "2019-08-15T09:48:36+00:00"
+            "time": "2019-11-08T13:40:04+00:00"
         },
         {
             "name": "psr/http-message",
