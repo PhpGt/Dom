@@ -30,7 +30,7 @@ use DOMElement;
  * @method Attr setAttributeNode(DOMAttr $attr)
  * @method Attr getAttributeNode(string $name)
  */
-class Element extends DOMElement implements PropertyAttribute {
+class Element extends DOMElement {
 	use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
 	const VALUE_ELEMENTS = ["BUTTON", "INPUT", "METER", "OPTION", "PROGRESS", "PARAM"];
