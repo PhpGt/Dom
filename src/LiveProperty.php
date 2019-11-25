@@ -25,9 +25,8 @@ trait LiveProperty {
 			return $this->$methodName();
 		}
 
-		if(defined("static::PROPERTY_ATTRIBUTE_MAP")
-		&& isset(static::PROPERTY_ATTRIBUTE_MAP[$name])) {
-			$attribute = static::PROPERTY_ATTRIBUTE_MAP[$name];
+		if(isset(PropertyAttribute::PROPERTY_ATTRIBUTE_MAP[$name])) {
+			$attribute = PropertyAttribute::PROPERTY_ATTRIBUTE_MAP[$name];
 			if($attribute === true) {
 				return $this->hasAttribute($name);
 			}
@@ -42,9 +41,8 @@ trait LiveProperty {
 			return $this->$methodName($value);
 		}
 
-		if(defined("static::PROPERTY_ATTRIBUTE_MAP")
-		&& isset(static::PROPERTY_ATTRIBUTE_MAP[$name])) {
-			$attribute = static::PROPERTY_ATTRIBUTE_MAP[$name];
+		if(isset(PropertyAttribute::PROPERTY_ATTRIBUTE_MAP[$name])) {
+			$attribute = PropertyAttribute::PROPERTY_ATTRIBUTE_MAP[$name];
 			if($attribute === true) {
 				$newAttr = $this->ownerDocument->createAttribute($name);
 
