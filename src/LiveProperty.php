@@ -25,8 +25,7 @@ trait LiveProperty {
 			return $this->$methodName();
 		}
 
-		if(defined("static::PROPERTY_ATTRIBUTE_MAP")
-		&& isset(PropertyAttribute::PROPERTY_ATTRIBUTE_MAP[$name])) {
+		if(isset(PropertyAttribute::PROPERTY_ATTRIBUTE_MAP[$name])) {
 			$attribute = PropertyAttribute::PROPERTY_ATTRIBUTE_MAP[$name];
 			if($attribute === true) {
 				return $this->hasAttribute($name);
