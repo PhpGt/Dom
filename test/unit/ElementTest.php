@@ -160,7 +160,7 @@ class ElementTest extends TestCase {
 			"__RATING_COUNT__",
 		], [
 			$ratingValue,
-			$ratingCount
+			$ratingCount,
 		], $script->innerHTML);
 
 		self::assertStringContainsString(
@@ -414,24 +414,24 @@ class ElementTest extends TestCase {
 		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
 
 		$input = $document->getElementById('f11');
-		self::assertEquals(NULL, $input->form);
+		self::assertEquals(null, $input->form);
 	}
 
 	public function testNonControlElementRetursNullAsFormProperty() {
 		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
 
 		$span = $document->getElementById('non_form_control_1');
-		self::assertEquals(NULL, $span->form);
+		self::assertEquals(null, $span->form);
 
 		$span = $document->getElementById('non_form_control_2');
-		self::assertEquals(NULL, $span->form);
+		self::assertEquals(null, $span->form);
 	}
 
 	public function testInputElementWithTypeImagetReturnsNullAsFormProperty() {
 		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
 
 		$input = $document->getElementById('f12');
-		self::assertEquals(NULL, $input->form);
+		self::assertEquals(null, $input->form);
 	}
 
 	public function testPropertyAttributeCorrelationFormEncoding() {
@@ -509,5 +509,132 @@ class ElementTest extends TestCase {
 		foreach($document->querySelectorAll("[name=to] option") as $toOption) {
 			self::assertIsNumeric($toOption->value);
 		}
+	}
+
+	public function testSetClassNameProperty() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+
+		$element->className = "test";
+		self::assertEquals("test", $element->getAttribute("class"));
+	}
+
+	public function testSetIdProperty() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("div");
+
+		$element->id = "test";
+		self::assertEquals("test", $element->id);
+	}
+
+	public function testSetValueOnButton() {
+		$document = new HTMLDocument();
+		$element = $document->createElement("button");
+
+		$element->value = "test";
+		self::assertEquals("test", $element->value);
+	}
+
+	public function testSetOuterHTMLChangesElementInDocument() {
+		$document = new HTMLDocument(Helper::HTML);
+		$element = $document->querySelector("h1");
+		$element->outerHTML = "<p>Hello!</p>";
+
+		$newElement = $document->querySelector("p");
+
+		self::assertNull($document->querySelector("h1"));
+		self::assertNotNull($newElement);
+		self::assertEquals("Hello!", $newElement->innerHTML);
+		self::assertStringContainsString("<p>", $newElement->outerHTML);
+	}
+
+	public function testGetValueAsDateDoesNothingOnNonInputElements() {
+		$document = new HTMLDocument(Helper::HTML_SELECTS);
+		$element = $document->querySelector("select");
+
+		$sut = $element->valueAsDate;
+
+		self::assertNull($sut);
+	}
+
+	public function testGetValueAsNumberDoesNothingOnNonInputElements() {
+		$document = new HTMLDocument(Helper::HTML_SELECTS);
+		$element = $document->querySelector("select");
+
+		$sut = $element->valueAsNumber;
+
+		self::assertNull($sut);
+	}
+
+	public function testDebugInfoSelect() {
+		$document = new HTMLDocument(Helper::HTML_SELECTS);
+		$element = $document->querySelector("select");
+
+		$sut = $element->__debugInfo();
+
+		$expected = [
+			'nodeName' => "select",
+			'nodeValue' => "ZeroOneTwoThreeFourFive",
+			'innerHTML' => '<option value="0">Zero</option><option value="1">One</option><option value="2">Two</option><option value="3">Three</option><option value="4">Four</option><option value="5">Five</option>',
+			"class" => null,
+			"name" => "from",
+			"type" => null,
+			"id" => null,
+			"src" => null,
+			"href" => null
+		];
+
+		self::assertEquals($expected["nodeName"], $sut["nodeName"]);
+		self::assertEquals($expected["nodeValue"], trim(strtr($sut["nodeValue"], ["\t" => '', "\r" => '', "\n" => ''])));
+		self::assertEquals($expected["innerHTML"], trim(strtr($sut["innerHTML"], ["\t" => '', "\r" => '', "\n" => ''])));
+		self::assertEquals($expected['class'], $sut['class']);
+		self::assertEquals($expected["name"], $sut["name"]);
+		self::assertEquals($expected["type"], $sut["type"]);
+		self::assertEquals($expected["id"], $sut["id"]);
+		self::assertEquals($expected["src"], $sut["src"]);
+		self::assertEquals($expected["href"], $sut["href"]);
+	}
+
+	public function testDebugInfoInput() {
+		$document = new HTMLDocument(Helper::HTML_MORE);
+		$element = $document->querySelector("input[name='who']");
+
+		$sut = $element->__debugInfo();
+
+		$expected = [
+			'nodeName' => "input",
+			'nodeValue' => "",
+			'innerHTML' => "",
+			"class" => 'c1 c3',
+			"name" => "who",
+			"type" => null,
+			"id" => null,
+			"src" => null,
+			"href" => null,
+
+		];
+		// die(var_dump($sut));
+		self::assertEquals($expected, $sut);
+	}
+
+	public function testDebugInfoAnchor() {
+		$document = new HTMLDocument(Helper::HTML_TEXT);
+		$element = $document->querySelector("a");
+
+		$sut = $element->__debugInfo();
+
+		$expected = [
+			'nodeName' => "a",
+			'nodeValue' => "casting a\n  ballot",
+			'innerHTML' => "casting a\n  ballot",
+			"class" => null,
+			"name" => null,
+			"type" => null,
+			"id" => null,
+			"src" => null,
+			"href" => "http://en.wikipedia.org/wiki/Absentee_ballot",
+
+		];
+		self::assertEquals($expected, $sut);
 	}
 }

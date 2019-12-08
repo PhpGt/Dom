@@ -31,7 +31,7 @@ $body->nextSibling;
 
 $anchors = $document->anchors;
 // You should get code completion for `Element` on after the [0]:
-$document->body->children[0]->textContent;
+$document->body->children[0]->classList->add("test");
 $newElement = $document->createElement("div");
 $newElement->getElementById("test")->querySelector("test2");
 

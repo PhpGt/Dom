@@ -7,6 +7,8 @@ namespace Gt\Dom;
  *
  * If the class with this trait has its own __get method, for compatibility
  * it should call the __get_live method after its own processing.
+ *
+ * @property-read Document $ownerDocument
  */
 trait LiveProperty {
 	public function __get($name) {
@@ -23,8 +25,8 @@ trait LiveProperty {
 			return $this->$methodName();
 		}
 
-		if(isset(self::PROPERTY_ATTRIBUTE_MAP[$name])) {
-			$attribute = self::PROPERTY_ATTRIBUTE_MAP[$name];
+		if(isset(PropertyAttribute::PROPERTY_ATTRIBUTE_MAP[$name])) {
+			$attribute = PropertyAttribute::PROPERTY_ATTRIBUTE_MAP[$name];
 			if($attribute === true) {
 				return $this->hasAttribute($name);
 			}
@@ -39,8 +41,8 @@ trait LiveProperty {
 			return $this->$methodName($value);
 		}
 
-		if(isset(self::PROPERTY_ATTRIBUTE_MAP[$name])) {
-			$attribute = self::PROPERTY_ATTRIBUTE_MAP[$name];
+		if(isset(PropertyAttribute::PROPERTY_ATTRIBUTE_MAP[$name])) {
+			$attribute = PropertyAttribute::PROPERTY_ATTRIBUTE_MAP[$name];
 			if($attribute === true) {
 				$newAttr = $this->ownerDocument->createAttribute($name);
 
@@ -55,5 +57,7 @@ trait LiveProperty {
 				$this->setAttribute($attribute, $value);
 			}
 		}
+
+		return null;
 	}
 }

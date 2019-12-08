@@ -41,7 +41,7 @@ class TokenList {
 		$this->element->setAttribute($this->attributeName, trim($attributeValue));
 	}
 
-	private function prop_get_length() {
+	protected function prop_get_length() {
 		$this->tok();
 
 		return count($this->tokenArray);
@@ -117,5 +117,9 @@ class TokenList {
 		$this->add($token);
 
 		return true;
+	}
+
+	public function __toString() {
+		return join(" ", $this->tokenArray);
 	}
 }

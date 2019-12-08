@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DOMDocument;
 use DOMNode;
 use DOMXPath;
 use Gt\CssXPath\Translator;
@@ -42,19 +43,19 @@ trait ParentNode {
 		return $this->css($selector);
 	}
 
-	private function prop_get_children():HTMLCollection {
+	protected function prop_get_children():HTMLCollection {
 		return new HTMLCollection($this->childNodes);
 	}
 
-	private function prop_get_firstElementChild():?Element {
+	protected function prop_get_firstElementChild():?Element {
 		return $this->children->item(0);
 	}
 
-	private function prop_get_lastElementChild():?Element {
+	protected function prop_get_lastElementChild():?Element {
 		return $this->children->item($this->children->length - 1);
 	}
 
-	private function prop_get_childElementCount():int {
+	protected function prop_get_childElementCount():int {
 		return $this->children->length;
 	}
 
@@ -95,7 +96,7 @@ trait ParentNode {
 	 * Normalises access to the parent dom document, which may be located in various places
 	 * depending on what type of object is using the trait
 	 *
-	 * @return \DOMDocument
+	 * @return DOMDocument
 	 */
-	protected abstract function getRootDocument():\DOMDocument;
+	protected abstract function getRootDocument():DOMDocument;
 }

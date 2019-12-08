@@ -25,7 +25,7 @@ class NodeList implements Iterator, ArrayAccess, Countable {
 	 * not just Elements.
 	 * @return int Number of Elements
 	 */
-	private function prop_get_length():int {
+	protected function prop_get_length():int {
 		return $this->list->length;
 	}
 
