@@ -31,5 +31,6 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: build-artifact
+          path: ./
 
       - uses: php-actions/phpunit@master
