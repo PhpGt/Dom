@@ -26,11 +26,76 @@ use DOMElement;
  * @property string $innerText
  * @property-read StringMap $dataset
  *
+ * @property string accept
+ * @property string acceptCharset
+ * @property string accessKey
+ * @property string action
+ * @property bool async
+ * @property bool autofocus
+ * @property bool autoplay
+ * @property string alt
+ * @property bool autocapitalize
+ * @property bool autocomplete
+ * @property string charset
+ * @property string cite
+ * @property string cols
+ * @property bool contentEditable
+ * @property bool controls
+ * @property string data
+ * @property string dateTime
+ * @property bool defer
+ * @property bool disabled
+ * @property string dir
+ * @property bool draggable
+ * @property string download
+ * @property string encoding
+ * @property string enctype
+ * @property string form
+ * @property string height
+ * @property string high
+ * @property string htmlFor
+ * @property string href
+ * @property string kind
+ * @property string label
+ * @property string lang
+ * @property bool loop
+ * @property string low
+ * @property string min
+ * @property string max
+ * @property string maxLength
+ * @property string mediaGroup
+ * @property bool multiple
+ * @property bool muted
+ * @property string name
+ * @property bool optimum
+ * @property string pattern
+ * @property string placeholder
+ * @property string poster
+ * @property bool preload
+ * @property string readOnly
+ * @property string rel
+ * @property bool reversed
+ * @property bool required
+ * @property string rows
+ * @property string start
+ * @property string step
+ * @property string style
+ * @property string size
+ * @property string span
+ * @property string src
+ * @property string srcset
+ * @property string tabindex
+ * @property string target
+ * @property string title
+ * @property string type
+ * @property string width
+ * @property string wrap
+ *
  * @method Attr setAttribute(string $name, string $value)
  * @method Attr setAttributeNode(DOMAttr $attr)
  * @method Attr getAttributeNode(string $name)
  */
-class Element extends DOMElement implements PropertyAttribute {
+class Element extends DOMElement {
 	use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
 	const VALUE_ELEMENTS = ["BUTTON", "INPUT", "METER", "OPTION", "PROGRESS", "PARAM"];
@@ -58,6 +123,7 @@ class Element extends DOMElement implements PropertyAttribute {
 	public function matches(string $selectors):bool {
 		$matches = $this->getRootDocument()->querySelectorAll($selectors);
 		$i = $matches->length;
+		/** @noinspection PhpStatementHasEmptyBodyInspection */
 		while(--$i >= 0 && $matches->item($i) !== $this) {
 			;
 		}
@@ -307,7 +373,7 @@ class Element extends DOMElement implements PropertyAttribute {
 		);
 	}
 
-	protected function getRootDocument():DOMDocument {
+	protected function getRootDocument():Document {
 		return $this->ownerDocument;
 	}
 

@@ -1,7 +1,7 @@
 <?php
 namespace Gt\Dom;
 
-interface PropertyAttribute {
+class PropertyAttribute {
 	const PROPERTY_ATTRIBUTE_MAP = [
 		"accept" => "accept",
 		"acceptCharset" => "accept-charset",
