@@ -223,6 +223,14 @@ class Element extends DOMElement {
 	}
 
 	public function prop_set_innerHTML(string $html):void {
+		while($this->firstChild) {
+			$this->removeChild($this->firstChild);
+		}
+
+		if($html === "") {
+			return;
+		}
+
 		$importDocument = new DOMDocument(
 			"1.0",
 			"utf-8"
@@ -243,10 +251,6 @@ class Element extends DOMElement {
 			$importBody,
 			true
 		);
-
-		while($this->firstChild) {
-			$this->removeChild($this->firstChild);
-		}
 
 		$fragment = $this->ownerDocument->createDocumentFragment();
 		while($node->firstChild) {
