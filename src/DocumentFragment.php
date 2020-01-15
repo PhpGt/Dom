@@ -45,4 +45,13 @@ class DocumentFragment extends \DOMDocumentFragment {
 	protected function getRootDocument():\DOMDocument {
 		return $this->ownerDocument;
 	}
+
+	public function prop_get_innerText():string {
+		return $this->textContent;
+	}
+
+	public function prop_set_innerText(string $value):string {
+		$this->textContent = $value;
+		return $this->textContent;
+	}
 }
