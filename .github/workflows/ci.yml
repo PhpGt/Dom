@@ -15,7 +15,7 @@ jobs:
         path: vendor
         key: ${{ runner.OS }}-build-${{ hashFiles('**/composer.lock') }}
           
-    - uses: php-actions/composer@master
+    - uses: php-actions/composer@v1
       
     - name: Upload build for test runner
       uses: actions/upload-artifact@v1
@@ -33,4 +33,4 @@ jobs:
           name: build-artifact
           path: ./
 
-      - uses: php-actions/phpunit@master
+      - uses: php-actions/phpunit@v1
