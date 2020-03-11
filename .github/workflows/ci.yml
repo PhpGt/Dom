@@ -4,11 +4,17 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     
     steps:
-    - uses: actions/checkout@v2          
+    - uses: actions/checkout@v2
+    - name: check files 1
+      run: |
+        ls -l
     - uses: php-actions/composer@v1
+    - name: check files 2
+      run: |
+        ls -l
       
     - name: Upload build for test runner
       uses: actions/upload-artifact@v1
