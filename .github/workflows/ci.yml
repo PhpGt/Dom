@@ -8,16 +8,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - name: check files 1
-      run: |
-        pwd
-        ls -l
     - uses: php-actions/composer@v1
-    - name: check files 2
-      run: |
-        pwd
-        ls -l
-      
     - name: Upload build for test runner
       uses: actions/upload-artifact@v1
       with:
@@ -25,7 +16,7 @@ jobs:
         path: ./
 
   test:
-    runs-on: [ubuntu-latest]
+    runs-on: self-hosted
     needs: [build]
     
     steps:
