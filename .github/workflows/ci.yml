@@ -10,10 +10,12 @@ jobs:
     - uses: actions/checkout@v2
     - name: check files 1
       run: |
+        pwd
         ls -l
     - uses: php-actions/composer@v1
     - name: check files 2
       run: |
+        pwd
         ls -l
       
     - name: Upload build for test runner
