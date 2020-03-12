@@ -1,5 +1,7 @@
 version: 2
 
+# Jobs are split into build and test-phpunit so that in the future, other types
+# of test can be run concurrently after build step has completed.
 jobs:
   build:
     docker:
