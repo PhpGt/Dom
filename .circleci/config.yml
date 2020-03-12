@@ -38,7 +38,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /home/circleci/repo
-      - run: mkdir test/phpunit/_junit
+      - run: cd ~/repo && mkdir test/phpunit/_junit
       - run:
           name: PHPUnit tests
           command: vendor/bin/phpunit -c test/phpunit/phpunit.xml --log-junit test/phpunit/_junit/junit.xml
