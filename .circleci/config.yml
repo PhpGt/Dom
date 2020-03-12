@@ -56,4 +56,4 @@ workflows:
       - build
       - test-phpunit:
           requires:
-            build
+            - build
