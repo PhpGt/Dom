@@ -41,7 +41,7 @@ jobs:
       - run: cd ~/repo && mkdir test/phpunit/_junit
       - run:
           name: PHPUnit tests
-          command: vendor/bin/phpunit -c test/phpunit/phpunit.xml --log-junit test/phpunit/_junit/junit.xml
+          command: cd ~/repo && vendor/bin/phpunit -c test/phpunit/phpunit.xml --log-junit test/phpunit/_junit/junit.xml
 
       - store_test_results:
           path: test/phpunit/_junit
