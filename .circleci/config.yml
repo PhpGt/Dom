@@ -27,18 +27,19 @@ jobs:
           paths:
             - ./
 
-  test:
+  test-phpunit:
     docker:
       - image: circleci/php:7.2-cli
 
-    working_directory: ~/repo
+    working-directory: ~/repo
 
     steps:
       - attach_workspace:
           at: /home/circleci/repo
+      - run: mkdir test/unit/_junit
       - run:
-          name: Unit Tests
-          command: vendor/bin/phpunit -c test/unit/phpunit.xml --log-junit test/unit/_junit/junit.xml -d memory_limit=512M
+          name: PHPUnit tests
+          command: vendor/bin/phpunit -c test/unit/phpunit.xml --log-junit test/unit/_junit/junit.xml
 
       - store_test_results:
           path: test/unit/_junit
@@ -50,9 +51,9 @@ jobs:
 workflows:
   version: 2
 
-  development:
+  ci:
     jobs:
       - build
-      - test:
+      - test-phpunit:
           requires:
-            - build
+            build
