@@ -434,20 +434,20 @@ class Element extends DOMElement {
 		return $value ?? "";
 	}
 
-	private function value_set_input(string $newValue):string {
+	private function value_set_input(string $newValue) {
 		return $this->setAttribute("value", $newValue);
 	}
 
-	private function value_get_input():string {
+	private function value_get_input() {
 		return $this->getAttribute("value");
 	}
 
-	private function value_set_textarea(string $newValue):string {
+	private function value_set_textarea(string $newValue) {
 		$this->innerHTML = $newValue;
 		return $this->innerHTML;
 	}
 
-	private function value_get_textarea():string {
+	private function value_get_textarea() {
 		return $this->innerHTML;
 	}
 
