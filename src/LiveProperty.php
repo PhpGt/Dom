@@ -20,6 +20,10 @@ trait LiveProperty {
 	}
 
 	private function __get_live($name) {
+		if(in_array($name, self::BOOLEAN_ATTRIBUTES)) {
+			return $this->getBooleanAttribute($name);
+		}
+
 		$methodName = "prop_get_$name";
 		if(method_exists($this, $methodName)) {
 			return $this->$methodName();
@@ -36,6 +40,10 @@ trait LiveProperty {
 	}
 
 	private function __set_live($name, $value) {
+		if(in_array($name, self::BOOLEAN_ATTRIBUTES)) {
+			return $this->setBooleanAttribute($name, $value);
+		}
+
 		$methodName = "prop_set_$name";
 		if(method_exists($this, $methodName)) {
 			return $this->$methodName($value);
