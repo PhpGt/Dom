@@ -455,7 +455,7 @@ class ElementTest extends TestCase {
 		$input = $document->querySelector("input");
 		$input->autofocus = true;
 		self::assertTrue($input->autofocus);
-		self::assertNull($input->getAttribute("autofocus"));
+		self::assertNotEmpty($input->getAttribute("autofocus"));
 	}
 
 	public function testPropertyDataset() {
@@ -636,5 +636,19 @@ class ElementTest extends TestCase {
 
 		];
 		self::assertEquals($expected, $sut);
+	}
+
+	public function testBooleanAttributes() {
+		$document = new HTMLDocument();
+		foreach(Element::BOOLEAN_ATTRIBUTES as $attribute) {
+			$tagName = uniqid("custom-element-");
+			$element = $document->createElement($tagName);
+
+			self::assertFalse($element->hasAttribute($attribute));
+			self::assertFalse($element->$attribute);
+			$element->$attribute = true;
+			self::assertTrue($element->$attribute);
+			self::assertTrue($element->hasAttribute($attribute));
+		}
 	}
 }
