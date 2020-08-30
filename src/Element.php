@@ -442,6 +442,15 @@ class Element extends DOMElement {
 		return $this->getAttribute("value");
 	}
 
+	private function value_set_textarea(string $newValue) {
+		$this->innerHTML = $newValue;
+		return $this->innerHTML;
+	}
+
+	private function value_get_textarea() {
+		return $this->innerHTML;
+	}
+
 	public function isSelectOptionSelected(Element $option) {
 		return $option->hasAttribute('selected') && $option->getAttribute('selected');
 	}
