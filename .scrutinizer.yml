@@ -1,11 +1,13 @@
 build:
   environment:
     php:
-      version: 7.2.0
+      version: 7.4.0
   tests:
     override:
+      - php-scrutinizer-run
+      - phpcs-run ./src
       -
-        command: 'vendor/bin/phpunit test/unit --coverage-clover coverage --whitelist src'
+        command: 'vendor/bin/phpunit test/phpunit --coverage-clover coverage --whitelist src'
         coverage:
           file: 'coverage'
           format: 'php-clover'
