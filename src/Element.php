@@ -416,16 +416,31 @@ class Element extends DOMElement {
 		return $this->ownerDocument;
 	}
 
-	private function getBooleanAttribute(string $name):bool {
-		return $this->hasAttribute($name);
+	private function getBooleanAttribute(string $attribute):bool {
+		return $this->hasAttribute($attribute);
 	}
 
-	private function setBooleanAttribute(string $name, bool $value) {
+	private function setBooleanAttribute(string $attribute, bool $value) {
+		if(($this->tagName === "input" && $this->type === "radio" && $attribute === "checked")
+		|| ($this->tagName === "option" && !$this->parentNode->hasAttribute("multiple")) && $attribute === "selected") {
+			if($form = $this->closest("form")) {
+				$elementName = $this->getAttribute("name");
+				if(!$elementName && $this->tagName === "option") {
+					$elementName = $this->parentNode->getAttribute("name");
+				}
+
+				$this->removeAttributeFromNamedElementAndChildren(
+					$form,
+					$elementName,
+					$attribute
+				);
+			}
+		}
 		if($value) {
-			$this->setAttribute($name, true);
+			$this->setAttribute($attribute, $attribute);
 		}
 		else {
-			$this->removeAttribute($name);
+			$this->removeAttribute($attribute);
 		}
 	}
 

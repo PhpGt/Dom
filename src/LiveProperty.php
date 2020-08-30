@@ -20,8 +20,10 @@ trait LiveProperty {
 	}
 
 	private function __get_live($name) {
-		if(in_array($name, self::BOOLEAN_ATTRIBUTES)) {
-			return $this->getBooleanAttribute($name);
+		if(defined("self::BOOLEAN_ATTRIBUTES")) {
+			if(in_array($name, self::BOOLEAN_ATTRIBUTES)) {
+				return $this->getBooleanAttribute($name);
+			}
 		}
 
 		$methodName = "prop_get_$name";
@@ -40,8 +42,10 @@ trait LiveProperty {
 	}
 
 	private function __set_live($name, $value) {
-		if(in_array($name, self::BOOLEAN_ATTRIBUTES)) {
-			return $this->setBooleanAttribute($name, $value);
+		if(defined("self::BOOLEAN_ATTRIBUTES")) {
+			if(in_array($name, self::BOOLEAN_ATTRIBUTES)) {
+				return $this->setBooleanAttribute($name, $value);
+			}
 		}
 
 		$methodName = "prop_set_$name";
