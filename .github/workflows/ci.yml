@@ -4,25 +4,25 @@ on: [push]
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v2
-    - uses: php-actions/composer@v1
+    - uses: php-actions/composer@v2
     - name: Upload build for test runner
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: build-artifact
         path: ./
 
   test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: [build]
     
     steps:
-      - uses: actions/download-artifact@v1
+      - uses: actions/download-artifact@v2
         with:
           name: build-artifact
           path: ./
 
-      - uses: php-actions/phpunit@v1
+      - uses: php-actions/phpunit@v9
