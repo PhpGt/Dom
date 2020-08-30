@@ -25,4 +25,7 @@ jobs:
           name: build-artifact
           path: ./
 
-      - uses: php-actions/phpunit@v9
+      - name: PHP Unit tests
+        uses: php-actions/phpunit@v9
+        with:
+          configuration: test/phpunit/phpunit.xml
