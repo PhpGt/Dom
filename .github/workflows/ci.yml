@@ -1,0 +1,31 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - uses: php-actions/composer@v2
+    - name: Upload build for test runner
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifact
+        path: ./
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [build]
+    
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: build-artifact
+          path: ./
+
+      - name: PHP Unit tests
+        uses: php-actions/phpunit@v9
+        with:
+          configuration: test/phpunit/phpunit.xml
