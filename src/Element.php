@@ -434,12 +434,21 @@ class Element extends DOMElement {
 		return $value ?? "";
 	}
 
-	private function value_set_input(string $newValue) {
+	private function value_set_input(string $newValue):string {
 		return $this->setAttribute("value", $newValue);
 	}
 
-	private function value_get_input() {
+	private function value_get_input():string {
 		return $this->getAttribute("value");
+	}
+
+	private function value_set_textarea(string $newValue):string {
+		$this->innerHTML = $newValue;
+		return $this->innerHTML;
+	}
+
+	private function value_get_textarea():string {
+		return $this->innerHTML;
 	}
 
 	public function isSelectOptionSelected(Element $option) {
