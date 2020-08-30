@@ -5,9 +5,9 @@ build:
   tests:
     override:
       - php-scrutinizer-run
-      - phpcs-run
+      - phpcs-run ./src
       -
-        command: 'vendor/bin/phpunit test/unit --coverage-clover coverage --whitelist src'
+        command: 'vendor/bin/phpunit test/phpunitunit --coverage-clover coverage --whitelist src'
         coverage:
           file: 'coverage'
           format: 'php-clover'
