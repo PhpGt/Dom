@@ -174,13 +174,13 @@ HTML;
 		<description>light Belgian waffles covered with strawberrys and whipped cream</description>
 		<calories>900</calories>
 	</food>
-	<food>
+	<food special-date="2020-08-30">
 		<name>Berry-Berry Belgian Waffles</name>
 		<price>$8.95</price>
 		<description>light Belgian waffles covered with an assortment of fresh berries and whipped cream</description>
 		<calories>900</calories>
 	</food>
-	<food>
+	<food offer="10%">
 		<name>French Toast</name>
 		<price>$4.50</price>
 		<description>thick slices made from our homemade sourdough bread</description>
