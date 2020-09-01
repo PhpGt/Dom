@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  Build dependencies:
+  build:
     runs-on: ubuntu-latest
     
     steps:
@@ -15,7 +15,7 @@ jobs:
         name: build-artifact
         path: ./
 
-  PHPUnit Tests:
+  test:
     runs-on: ubuntu-latest
     needs: [build]
     
