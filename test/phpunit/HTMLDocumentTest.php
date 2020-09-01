@@ -174,4 +174,26 @@ class HTMLDocumentTest extends TestCase {
 			StreamInterface::class
 		));
 	}
+
+	public function testInferredBody() {
+		$document = new HTMLDocument();
+		$message = "Hello, World!";
+		$document->body->innerText = $message;
+		self::assertEquals($message, $document->body->innerText);
+		self::assertStringContainsString(
+			"<body>$message</body>",
+			$document->saveHTML()
+		);
+	}
+
+	public function testInferredTitle() {
+		$document = new HTMLDocument();
+		$message = "Hello, World!";
+		$document->title = $message;
+		self::assertEquals($message, $document->title);
+		self::assertStringContainsString(
+			"<head><title>$message</title></head>",
+			$document->saveHTML()
+		);
+	}
 }
