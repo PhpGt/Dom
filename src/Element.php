@@ -13,8 +13,6 @@ use DOMElement;
  * @property string $className Gets and sets the value of the class attribute
  * @property-read TokenList $classList Returns a live TokenList collection of
  * the class attributes of the element
- * @property bool $checked Indicates whether the element is checked or not
- * @property bool $selected Indicates whether the element is selected or not
  * @property string $value Gets or sets the value of the element according to
  * its element type
  * @property string $id Gets or sets the value of the id attribute
@@ -26,27 +24,46 @@ use DOMElement;
  * @property string $innerText
  * @property-read StringMap $dataset
  *
+ * @property bool allowfullscreen
+ * @property bool allowpaymentrequest
+ * @property bool async
+ * @property bool autocapitalize
+ * @property bool autocomplete
+ * @property bool autofocus
+ * @property bool autoplay
+ * @property bool checked Indicates whether the element is checked or not
+ * @property bool contentEditable
+ * @property bool controls
+ * @property bool default
+ * @property bool defer
+ * @property bool disabled
+ * @property bool formnovalidate
+ * @property bool hidden
+ * @property bool ismap
+ * @property bool loop
+ * @property bool multiple
+ * @property bool muted
+ * @property bool novalidate
+ * @property bool open
+ * @property bool optimum
+ * @property bool preload
+ * @property bool readonly
+ * @property bool required
+ * @property bool reversed
+ * @property bool selected Indicates whether the element is selected or not
+ * @property bool typemustmatch
+ *
  * @property string accept
  * @property string acceptCharset
  * @property string accessKey
  * @property string action
- * @property bool async
- * @property bool autofocus
- * @property bool autoplay
  * @property string alt
- * @property bool autocapitalize
- * @property bool autocomplete
  * @property string charset
  * @property string cite
  * @property string cols
- * @property bool contentEditable
- * @property bool controls
  * @property string data
  * @property string dateTime
- * @property bool defer
- * @property bool disabled
  * @property string dir
- * @property bool draggable
  * @property string download
  * @property string encoding
  * @property string enctype
@@ -58,24 +75,17 @@ use DOMElement;
  * @property string kind
  * @property string label
  * @property string lang
- * @property bool loop
  * @property string low
  * @property string min
  * @property string max
  * @property string maxLength
  * @property string mediaGroup
- * @property bool multiple
- * @property bool muted
  * @property string name
- * @property bool optimum
  * @property string pattern
  * @property string placeholder
  * @property string poster
- * @property bool preload
  * @property string readOnly
  * @property string rel
- * @property bool reversed
- * @property bool required
  * @property string rows
  * @property string start
  * @property string step
@@ -99,6 +109,31 @@ class Element extends DOMElement {
 	use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
 
 	const VALUE_ELEMENTS = ["BUTTON", "INPUT", "METER", "OPTION", "PROGRESS", "PARAM"];
+	const BOOLEAN_ATTRIBUTES = [
+		"allowfullscreen",
+		"allowpaymentrequest",
+		"async",
+		"autofocus",
+		"autoplay",
+		"checked",
+		"controls",
+		"default",
+		"defer",
+		"disabled",
+		"formnovalidate",
+		"hidden",
+		"ismap",
+		"loop",
+		"multiple",
+		"muted",
+		"novalidate",
+		"open",
+		"readonly",
+		"required",
+		"reversed",
+		"selected",
+		"typemustmatch",
+	];
 
 	/** @var TokenList */
 	protected $liveProperty_classList;
@@ -379,6 +414,34 @@ class Element extends DOMElement {
 
 	protected function getRootDocument():Document {
 		return $this->ownerDocument;
+	}
+
+	private function getBooleanAttribute(string $attribute):bool {
+		return $this->hasAttribute($attribute);
+	}
+
+	private function setBooleanAttribute(string $attribute, bool $value) {
+		if(($this->tagName === "input" && $this->type === "radio" && $attribute === "checked")
+		|| ($this->tagName === "option" && !$this->parentNode->hasAttribute("multiple")) && $attribute === "selected") {
+			if($form = $this->closest("form")) {
+				$elementName = $this->getAttribute("name");
+				if(!$elementName && $this->tagName === "option") {
+					$elementName = $this->parentNode->getAttribute("name");
+				}
+
+				$this->removeAttributeFromNamedElementAndChildren(
+					$form,
+					$elementName,
+					$attribute
+				);
+			}
+		}
+		if($value) {
+			$this->setAttribute($attribute, $attribute);
+		}
+		else {
+			$this->removeAttribute($attribute);
+		}
 	}
 
 	private function value_set_select(string $newValue):void {
