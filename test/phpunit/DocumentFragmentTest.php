@@ -209,4 +209,21 @@ class DocumentFragmentTest extends TestCase {
 		$document->body->appendChild($fragment);
 		self::assertCount(3,$document->querySelectorAll("p"));
 	}
+
+    /**
+     * Tests the property innerHTML.
+     * Checks that innerHTML is not null before it is attached to the DOM
+     * as well as that it is null after.
+     * @see
+     */
+	public function testInnerHTML():void {
+        $document = new HTMLDocument(Helper::HTML);
+        $fragment = $document->createDocumentFragment();
+
+        self::assertNull($fragment->innerHTML);
+        $fragment->appendHTML(Helper::HTML_TEXT);
+        self::assertNotNull($fragment->innerHTML);
+        $document->body->appendChild($fragment);
+        self::assertNull($fragment->innerHTML);
+    }
 }
