@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom;
 
+use DOMDocument;
+use DOMDocumentFragment;
 use Exception;
 
 /**
@@ -19,8 +21,10 @@ use Exception;
  *
  * An empty DocumentFragment can be created using the
  * Document::createDocumentFragment() method or the constructor.
+ * @property ?string $innerHTML Gets the HTML serialization of the element's descendants (read only).
+ * @property string $innerText Represents the "rendered" text content of a node and its descendants.
  */
-class DocumentFragment extends \DOMDocumentFragment {
+class DocumentFragment extends DOMDocumentFragment {
 	use LiveProperty, ParentNode;
 
 	public function appendHTML(string $data):bool {
@@ -42,7 +46,7 @@ class DocumentFragment extends \DOMDocumentFragment {
 		}
 	}
 
-	protected function getRootDocument():\DOMDocument {
+	protected function getRootDocument(): DOMDocument {
 		return $this->ownerDocument;
 	}
 
@@ -54,4 +58,17 @@ class DocumentFragment extends \DOMDocumentFragment {
 		$this->textContent = $value;
 		return $this->textContent;
 	}
+
+    public function prop_get_innerHTML():?string {
+	    if ($this->hasChildNodes()) {
+            $childHtmlArray = [];
+            foreach ($this->childNodes as $child) {
+                $childHtmlArray [] = $this->ownerDocument->saveHTML($child);
+            }
+
+            return implode(PHP_EOL, $childHtmlArray);
+        }
+
+        return null;
+    }
 }

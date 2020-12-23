@@ -7,7 +7,7 @@ use Gt\Dom\Test\Helper\Helper;
 use PHPUnit\Framework\TestCase;
 
 class DocumentFragmentTest extends TestCase {
-	const DOC_CONTENT_BEFORE_INSERT = "<!doctype html><body>"
+	private const DOC_CONTENT_BEFORE_INSERT = "<!doctype html><body>"
 	. "<div><ul><li>outOfScope</li></ul></div>"
 	. "<span id='replaceWithSUT'></span>"
 	. "<div><ul><li>outOfScope</li></ul></div>"
@@ -21,7 +21,8 @@ class DocumentFragmentTest extends TestCase {
 		"Internet Explorer",
 	];
 
-	public function testQuerySelectorBeforeAddingToDocument() {
+	public function testQuerySelectorBeforeAddingToDocument(): void
+    {
 		$document = new HTMLDocument(self::DOC_CONTENT_BEFORE_INSERT);
 		$fragment = $document->createDocumentFragment();
 
@@ -46,10 +47,11 @@ class DocumentFragmentTest extends TestCase {
 		}
 
 		$actualFirstLi = $fragment->querySelector("li");
-		$this->assertSame($expectedFirstLi, $actualFirstLi);
+		self::assertSame($expectedFirstLi, $actualFirstLi);
 	}
 
-	public function testQuerySelectorAllBeforeAddingToDocument() {
+	public function testQuerySelectorAllBeforeAddingToDocument(): void
+    {
 		$document = new HTMLDocument(self::DOC_CONTENT_BEFORE_INSERT);
 		$fragment = $document->createDocumentFragment();
 
@@ -62,10 +64,11 @@ class DocumentFragmentTest extends TestCase {
 		}
 
 		$liCollection = $fragment->querySelectorAll("li");
-		$this->assertCount($expectedCount, $liCollection);
+		self::assertCount($expectedCount, $liCollection);
 	}
 
-	public function testAppendsToDocument() {
+	public function testAppendsToDocument(): void
+    {
 		$document = new HTMLDocument("<!doctype html><body><ul></ul></body>");
 		$fragment = $document->createDocumentFragment();
 
@@ -87,11 +90,12 @@ class DocumentFragmentTest extends TestCase {
 		$ul->appendChild($fragment);
 
 		$actualResult = $document->querySelectorAll("body>ul>li");
-		$this->assertCount($expectedCount, $actualResult);
-		$this->assertSame($expectedFirstLi, $actualResult[0]);
+		self::assertCount($expectedCount, $actualResult);
+		self::assertSame($expectedFirstLi, $actualResult[0]);
 	}
 
-	public function testQuerySelectorAfterAddingToDocument() {
+	public function testQuerySelectorAfterAddingToDocument(): void
+    {
 		$document = new HTMLDocument(self::DOC_CONTENT_BEFORE_INSERT);
 
 		$fragment = $document->createDocumentFragment();
@@ -102,12 +106,13 @@ class DocumentFragmentTest extends TestCase {
 		$fragLi = $fragment->querySelector("li");
 		$bodyLi = $document->querySelector("li#new-frag-li");
 // <li> is now child of body, not fragment.
-		$this->assertNull($fragLi);
-		$this->assertNotNull($bodyLi);
-		$this->assertEquals("inScope", $bodyLi->textContent);
+		self::assertNull($fragLi);
+		self::assertNotNull($bodyLi);
+		self::assertEquals("inScope", $bodyLi->textContent);
 	}
 
-	public function testQuerySelectorAllAfterAddingToDocument() {
+	public function testQuerySelectorAllAfterAddingToDocument(): void
+    {
 		$document = new HTMLDocument(self::DOC_CONTENT_BEFORE_INSERT);
 
 		$fragment = $document->createDocumentFragment();
@@ -116,30 +121,33 @@ class DocumentFragmentTest extends TestCase {
 		$document->querySelector("span#replaceWithSUT")->replaceWith($fragment);
 
 		$fragLiList = $fragment->querySelectorAll("li");
-		$this->assertCount(0, $fragLiList);
+		self::assertCount(0, $fragLiList);
 	}
 
-	public function testChildren() {
+	public function testChildren(): void
+    {
 		$document = new HTMLDocument(self::DOC_CONTENT_BEFORE_INSERT);
 
 		$fragment = $document->createDocumentFragment();
 		$fragment->appendXML("<p>one</p><p>two</p><p>three</p>");
 
-		$this->assertCount(3, $fragment->children);
+		self::assertCount(3, $fragment->children);
 	}
 
-	public function testFirstElementChild() {
+	public function testFirstElementChild(): void
+    {
 		$document = new HTMLDocument(self::DOC_CONTENT_BEFORE_INSERT);
 
 		$fragment = $document->createDocumentFragment();
 		$fragment->appendXML("this is a text node<p>this is an element node</p>");
 		$child = $fragment->firstElementChild;
 
-		$this->assertInstanceOf(Element::class, $child);
-		$this->assertEquals("p", $child->tagName);
+		self::assertInstanceOf(Element::class, $child);
+		self::assertEquals("p", $child->tagName);
 	}
 
-	public function testLastElementChild() {
+	public function testLastElementChild(): void
+    {
 		$document = new HTMLDocument(self::DOC_CONTENT_BEFORE_INSERT);
 
 		$fragment = $document->createDocumentFragment();
@@ -152,11 +160,12 @@ class DocumentFragmentTest extends TestCase {
 
 		$child = $fragment->lastElementChild;
 
-		$this->assertInstanceOf(Element::class, $child);
-		$this->assertEquals("div", $child->tagName);
+		self::assertInstanceOf(Element::class, $child);
+		self::assertEquals("div", $child->tagName);
 	}
 
-	public function testGetChildElementCound() {
+	public function testGetChildElementCound(): void
+    {
 		$document = new HTMLDocument(self::DOC_CONTENT_BEFORE_INSERT);
 
 		$fragment = $document->createDocumentFragment();
@@ -167,10 +176,11 @@ class DocumentFragmentTest extends TestCase {
 			. "this is another text node"
 		);
 
-		$this->assertEquals(2, $fragment->childElementCount);
+		self::assertEquals(2, $fragment->childElementCount);
 	}
 
-	public function testTemplate() {
+	public function testTemplate(): void
+    {
 		$document = new HTMLDocument(Helper::DOCS_DOCUMENTFRAGMENT_PAGE);
 		$fragment = $document->createDocumentFragment();
 		$fragment->appendXML(Helper::DOCS_DOCUMENTFRAGMENT_TEMPLATE);
@@ -178,11 +188,9 @@ class DocumentFragmentTest extends TestCase {
 		$shopItemList = $document->querySelectorAll("shop-item");
 
 		foreach($shopItemList as $shopItemElement) {
-			$shopItemParent = $shopItemElement->parentNode;
-
-// Create a clone of the fragment as a template element.
+            // Create a clone of the fragment as a template element.
 			$template = $fragment->cloneNode(true);
-// Set the elements of the fragment to their correct values.
+            // Set the elements of the fragment to their correct values.
 			$link = $template->querySelector("a");
 			$h1 = $template->querySelector("h1");
 			$h2 = $template->querySelector("h2");
@@ -190,17 +198,18 @@ class DocumentFragmentTest extends TestCase {
 			$link->href .= $shopItemElement->id;
 			$h1->textContent = $shopItemElement->getAttribute("name");
 			$h2->textContent = $shopItemElement->getAttribute("price");
-// Replace the custom element with the contents of the fragment.
+            // Replace the custom element with the contents of the fragment.
 			$shopItemElement->replaceWith($template);
 
-			$this->assertNull($shopItemElement->parentNode);
+			self::assertNull($shopItemElement->parentNode);
 		}
 
-// All shop-item elements should be replaced now.
-		$this->assertNull($document->querySelector("shop-item"));
+        // All shop-item elements should be replaced now.
+		self::assertNull($document->querySelector("shop-item"));
 	}
 
-	public function testNoAttribute() {
+	public function testNoAttribute(): void
+    {
 		$document = new HTMLDocument(Helper::HTML_LESS);
 		$fragment = $document->createDocumentFragment();
 		$fragment->appendHTML(Helper::HTML_TEMPLATE_NO_ATTRIBUTE_VALUE);
@@ -209,4 +218,21 @@ class DocumentFragmentTest extends TestCase {
 		$document->body->appendChild($fragment);
 		self::assertCount(3,$document->querySelectorAll("p"));
 	}
+
+    /**
+     * Tests the property innerHTML.
+     * Checks that innerHTML is not null before it is attached to the DOM as well as that it is null
+     * after.
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment#Usage_notes
+     */
+	public function testInnerHTML():void {
+        $document = new HTMLDocument(Helper::HTML);
+        $fragment = $document->createDocumentFragment();
+
+        self::assertNull($fragment->innerHTML);
+        $fragment->appendHTML(Helper::HTML_TEXT);
+        self::assertNotNull($fragment->innerHTML);
+        $document->body->appendChild($fragment);
+        self::assertNull($fragment->innerHTML);
+    }
 }
