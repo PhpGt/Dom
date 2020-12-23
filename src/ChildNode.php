@@ -24,28 +24,34 @@ trait ChildNode {
 	/**
 	 * Inserts a Node into the children list of this ChildNode's parent,
 	 * just before this ChildNode.
-	 * @param DOMNode $node
+	 * @param DOMNode[] $node
 	 */
-	public function before(DOMNode $node):void {
-		$this->parentNode->insertBefore($node, $this);
+	public function before(...$nodes):void {
+		foreach($nodes as $node) {
+			$this->parentNode->insertBefore($node, $this);
+		}
 	}
 
 	/**
 	 * Inserts a Node into the children list of this ChildNode's parent,
 	 * just after this ChildNode.
-	 * @param DOMNode $node
+	 * @param DOMNode[] $node
 	 */
-	public function after(DOMNode $node):void {
-		$this->parentNode->insertBefore($node, $this->nextSibling);
+	public function after(...$nodes):void {
+		foreach($nodes as $node) {
+			$this->parentNode->insertBefore($node, $this->nextSibling);
+		}
 	}
 
 	/**
 	 * Replace this ChildNode in the children list of its parent with the
 	 * supplied replacement node.
-	 * @param DOMNode $replacement
+	 * @param DOMNode[] $nodes
 	 */
-	public function replaceWith(DOMNode $replacement):void {
-		$this->parentNode->insertBefore($replacement, $this);
-		$this->remove();
+	public function replaceWith(...$nodes):void {
+		foreach($nodes as $replacement) {
+			$this->parentNode->insertBefore($replacement, $this);
+			$this->remove();
+		}
 	}
 }
