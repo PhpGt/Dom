@@ -8,7 +8,7 @@ Performing DOM manipulation in your server-side code enhances the way dynamic pa
 
 ***
 
-<a href="https://circleci.com/gh/PhpGt/Dom" target="_blank">
+<a href="https://github.com/PhpGt/Dom/actions" target="_blank">
 	<img src="https://badge.status.php.gt/dom-build.svg" alt="Build status" />
 </a>
 <a href="https://scrutinizer-ci.com/g/PhpGt/Dom" target="_blank">
