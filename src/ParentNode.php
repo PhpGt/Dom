@@ -91,12 +91,4 @@ trait ParentNode {
 			$element->removeAttribute($attribute);
 		}
 	}
-
-	/**
-	 * Normalises access to the parent dom document, which may be located in various places
-	 * depending on what type of object is using the trait
-	 *
-	 * @return DOMDocument
-	 */
-	protected abstract function getRootDocument():DOMDocument;
 }

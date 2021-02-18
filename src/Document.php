@@ -10,6 +10,7 @@ use DOMDocumentType;
 use DOMElement;
 use DOMNode;
 use DOMText;
+use Gt\PropFunc\MagicProp;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 
@@ -18,295 +19,323 @@ use RuntimeException;
  * into the web page's content, the DOM tree (including elements such as
  * <body> or <table>).
  *
- * @property-read DocumentType $doctype;
- * @property-read Element $documentElement
- * @property-read Document $ownerDocument
- *
- * @method Attr createAttribute(string $name)
- * @method Comment createComment(string $data)
- * @method DocumentFragment createDocumentFragment()
- * @method Element createElement(string $name)
- * @method Element createTextNode(string $content)
- * @method ?Element getElementById(string $id)
+ * @property ?Node $body The Document.body property represents the <body> or <frameset> node of the current document, or null if no such element exists.
+ * @property-read string $characterSet Returns the character set being used by the document.
+ * @property-read string $compatMode Indicates whether the document is rendered in quirks or strict mode.
+ * @property-read string $contentType Returns the Content-Type from the MIME Header of the current document.
+ * @property-read string $doctype Returns the Document Type Definition (DTD) of the current document.
+ * @property-read Element $documentElement Returns the Element that is a direct child of the document. For HTML documents, this is normally the HTMLHtmlElement object representing the document's <html> element.
+ * @property-read HTMLCollection $embeds Returns a list of the embedded <embed> elements within the current document.
+ * @property-read HTMLCollection $forms Returns a list of the <form> elements within the current document.
+ * @property-read ?HTMLHeadElement $head Returns the <head> element of the current document.
+ * @property-read HTMLCollection $images Returns a list of the images in the current document.
+ * @property-read HTMLCollection $links Returns a list of all the hyperlinks in the document.
+ * @property-read HTMLCollection $scripts Returns all the script elements on the document.
+ * @property-read int $childElementCount Returns the number of children of this ParentNode which are elements.
+ * @property-read HTMLCollection $children Returns a live HTMLCollection containing all of the Element objects that are children of this ParentNode, omitting all of its non-element nodes.
+ * @property-read ?Element $firstElementChild Returns the first node which is both a child of this ParentNode and is also an Element, or null if there is none.
+ * @property-read ?Element $lastElementChild Returns the last node which is both a child of this ParentNode and is an Element, or null if there is none.
  */
-class Document extends DOMDocument implements StreamInterface {
-	use LiveProperty, ParentNode;
+class Document extends Node implements StreamInterface {
+	use MagicProp;
+	use DocumentStream;
+//	use ParentNode;
 
-	/** @var resource */
-	protected $stream;
-	/** @var ?int number of bytes filled */
-	protected $streamFilled;
+	protected DOMDocument $domDocument;
 
-	public function __construct($document = null) {
+	public function __construct() {
 		libxml_use_internal_errors(true);
-		parent::__construct("1.0", "utf-8");
-		$this->registerNodeClass(DOMNode::class, Node::class);
-		$this->registerNodeClass(DOMElement::class, Element::class);
-		$this->registerNodeClass(DOMAttr::class, Attr::class);
-		$this->registerNodeClass(DOMDocumentFragment::class, DocumentFragment::class);
-		$this->registerNodeClass(DOMDocumentType::class, DocumentType::class);
-		$this->registerNodeClass(DOMCharacterData::class, CharacterData::class);
-		$this->registerNodeClass(DOMText::class, Text::class);
-		$this->registerNodeClass(DOMComment::class, Comment::class);
-
-		if($document instanceof DOMDocument) {
-			$node = $this->importNode($document->documentElement, true);
-			$this->appendChild($node);
-
-			return;
-		}
-
+		$this->domDocument = new DOMDocument(
+			"1.0",
+			"utf-8"
+		);
 		$this->stream = fopen("php://memory", "r+");
 	}
 
-	protected function getRootDocument():DOMDocument {
-		return $this;
-	}
+	public function __toString():string {
 
-	public function __toString() {
-		return $this->saveHTML();
-	}
-
-	public function saveHTML(DOMNode $node = null):string {
-		if(is_null($this->streamFilled)) {
-			$this->fillStream();
-		}
-		else {
-			fseek($this->stream, $this->streamFilled);
-		}
-
-		return parent::saveHTML($node);
 	}
 
 	/**
-	 * Closes the stream and any underlying resources.
-	 *
-	 * @return void
+	 * Document.adoptNode() transfers a node from another document into the
+	 * method's document. The adopted node and its subtree is removed from
+	 * its original document (if any), and its ownerDocument is changed to
+	 * the current document. The node can then be inserted into the current
+	 * document.
+	 */
+	public function adoptNode(Node $externalNode):Node {
+
+	}
+
+	/**
+	 * TODO: Move to ParentNode
+	 * Inserts a set of Node objects or DOMString objects after the last
+	 * child of the ParentNode. DOMString objects are inserted as
+	 * equivalent Text nodes.
+	 */
+	public function append(string|Node... $nodesOrDOMStrings):void {
+
+	}
+
+	/**
+	 * The Document.close() method finishes writing to a document,
+	 * opened with Document.open().
 	 */
 	public function close():void {
-		$this->stream = null;
+
 	}
 
 	/**
-	 * Separates any underlying resources from the stream.
-	 *
-	 * After the stream has been detached, the stream is in an unusable state.
-	 *
-	 * @return resource|null Underlying PHP stream, if any
+	 * The Document.createAttribute() method creates a new attribute node,
+	 * and returns it. The object created a node implementing the Attr
+	 * interface. The DOM does not enforce what sort of attributes can be
+	 * added to a particular element in this manner.
 	 */
-	public function detach() {
-		$this->fillStream();
-		$stream = $this->stream;
-		$this->stream = null;
-		return $stream;
+	public function createAttribute(string $name):Attr {
+
 	}
 
 	/**
-	 * Get the size of the stream if known.
-	 *
-	 * @return int|null Returns the size in bytes if known, or null if unknown.
+	 * Creates a new CDATA section node, and returns it.
 	 */
-	public function getSize() {
-		$this->fillStream();
-		return $this->streamFilled;
+	public function createCDATASection(string $data):CDATASection {
+
 	}
 
 	/**
-	 * Returns the current position of the file read/write pointer
-	 *
-	 * @return int Position of the file pointer
-	 * @throws RuntimeException on error.
+	 * Creates a new comment node, and returns it.
 	 */
-	public function tell():int {
-		$tell = null;
+	public function createComment():Comment {
 
-		if(!is_null($this->stream)) {
-			$tell = ftell($this->stream);
-		}
-
-		$this->fillStream();
-
-		if(!is_null($tell)) {
-			fseek($this->stream, $tell);
-		}
-
-		return $tell;
 	}
 
 	/**
-	 * Returns true if the stream is at the end of the stream.
-	 *
-	 * @return bool
+	 * Creates a new empty DocumentFragment into which DOM nodes can be
+	 * added to build an offscreen DOM tree.
 	 */
-	public function eof() {
-		$this->fillStream();
-		return feof($this->stream);
+	public function createDocumentFragment():DocumentFragment {
+
 	}
 
 	/**
-	 * Returns whether or not the stream is seekable.
-	 *
-	 * @return bool
+	 * In an HTML document, the document.createElement() method creates the
+	 * HTML element specified by tagName, or an HTMLUnknownElement if
+	 * tagName isn't recognized.
 	 */
-	public function isSeekable() {
-		$this->fillStream();
-		return $this->getMetadata("seekable");
+	public function createElement(string $tagName):Element {
+
 	}
 
 	/**
-	 * Seek to a position in the stream.
+	 * Creates an element with the specified namespace URI and
+	 * qualified name.
 	 *
-	 * @link http://www.php.net/manual/en/function.fseek.php
-	 * @param int $offset Stream offset
-	 * @param int $whence Specifies how the cursor position will be calculated
-	 *     based on the seek offset. Valid values are identical to the built-in
-	 *     PHP $whence values for `fseek()`.  SEEK_SET: Set position equal to
-	 *     offset bytes SEEK_CUR: Set position to current location plus offset
-	 *     SEEK_END: Set position to end-of-stream plus offset.
-	 * @throws RuntimeException on failure.
+	 * To create an element without specifying a namespace URI, use
+	 * the createElement() method.
 	 */
-	public function seek($offset, $whence = SEEK_SET):void {
-		$this->fillStream();
-		$result = fseek($this->stream, $offset, $whence);
+	public function createElementNS(string $tagName, string $qualifiedName):Element {
 
-		if($result === -1) {
-			throw new RuntimeException("Error seeking Document Stream");
-		}
 	}
 
 	/**
-	 * Seek to the beginning of the stream.
-	 *
-	 * If the stream is not seekable, this method will raise an exception;
-	 * otherwise, it will perform a seek(0).
-	 *
-	 * @throws RuntimeException on failure.
-	 * @link http://www.php.net/manual/en/function.fseek.php
-	 * @see seek()
+	 * TODO: Move to XPathEvaluator trait
+	 * This method compiles an XPathExpression which can then be used for
+	 * (repeated) evaluations.
 	 */
-	public function rewind():void {
-		$this->fillStream();
-		$this->seek(0);
+	public function createExpression(string $xpathText, callable $resolver = null) {
+
 	}
 
 	/**
-	 * Returns whether or not the stream is writable.
-	 *
-	 * @return bool
+	 * Returns a new NodeIterator object.
 	 */
-	public function isWritable():bool {
-		$this->fillStream();
-		$mode = $this->getMetadata("mode");
-		$writable = false;
+	public function createNodeIterator(Node $root, int $whatToShow = null, NodeFilter $filter = null):NodeIterator {
 
-		if(strstr($mode, "w") || strstr($mode, "+") || strstr($mode, "a")) {
-			$writable = true;
-		}
-
-		return $writable;
 	}
 
 	/**
-	 * Write data to the stream.
-	 *
-	 * @param string $string The string that is to be written.
-	 * @return int Returns the number of bytes written to the stream.
-	 * @throws RuntimeException on failure.
+	 * TODO: Move to XPathEvaluator trait
+	 * Creates an XPathNSResolver which resolves namespaces with respect to
+	 * the definitions in scope for a specified node.
 	 */
-	public function write($string):int {
-		$this->fillStream();
-		$this->loadHTML($this->getContents() . $string);
-		$bytesWritten = fwrite($this->stream, $string);
-		return $bytesWritten;
+	public function createNSResolver(Node $node):XPathNSResolver {
+
 	}
 
 	/**
-	 * Returns whether or not the stream is readable.
+	 * createProcessingInstruction() generates a new processing instruction
+	 * node and returns it.
 	 *
-	 * @return bool
+	 * The new node usually will be inserted into an XML document in order
+	 * to accomplish anything with it, such as with node.insertBefore.
 	 */
-	public function isReadable():bool {
-		$this->fillStream();
-		$mode = $this->getMetadata("mode");
-		$readable = false;
+	public function createProcessingInstruction(string $target, string $data):ProcessingInstruction {
 
-		if(strstr($mode, "r")
-			|| strstr($mode, "+")) {
-			$readable = true;
-		}
-
-		return $readable;
 	}
 
 	/**
-	 * Read data from the stream.
-	 *
-	 * @param int $length Read up to $length bytes from the object and return
-	 *     them. Fewer than $length bytes may be returned if underlying stream
-	 *     call returns fewer bytes.
-	 * @return string Returns the data read from the stream, or an empty string
-	 *     if no bytes are available.
-	 * @throws RuntimeException if an error occurs.
+	 * Creates a new Text node. This method can be used to escape HTML
+	 * characters.
 	 */
-	public function read($length):string {
-		$this->fillStream();
-		$bytesRead = fread($this->stream, $length);
+	public function createTextNode(string $data):Text {
 
-		return $bytesRead;
+	}
+
+	public function createTreeWalker(Node $root, int $whatToShow = null, NodeFilter $filter = null, bool $entityReferenceExpansion = null):TreeWalker {
+
 	}
 
 	/**
-	 * Returns the remaining contents in a string
-	 *
-	 * @return string
-	 * @throws RuntimeException if unable to read or an error occurs while
-	 *     reading.
+	 * TODO: Move to XPathEvaluator trait
+	 * The evaluate() method of the XPathEvaluator interface executes an
+	 * XPath expression on the given node or document and returns an
+	 * XPathResult.
 	 */
-	public function getContents():string {
-		$this->fillStream();
+	public function evaluate(
+		string $expression,
+		Node $contextNode,
+		XPathNSResolver $resolver = null,
+		int $type = null,
+		object $result = null
+	):XPathResult {
 
-		if(!is_resource($this->stream)) {
-			throw new RuntimeException("Stream is not available");
-		}
-
-		$string = stream_get_contents($this->stream);
-		return $string;
 	}
 
 	/**
-	 * Get stream metadata as an associative array or retrieve a specific key.
+	 * The Document method getElementById() returns an Element object
+	 * representing the element whose id property matches the specified
+	 * string. Since element IDs are required to be unique if specified,
+	 * they're a useful way to get access to a specific element quickly.
 	 *
-	 * The keys returned are identical to the keys returned from PHP's
-	 * stream_get_meta_data() function.
-	 *
-	 * @link http://php.net/manual/en/function.stream-get-meta-data.php
-	 * @param string $key Specific metadata to retrieve.
-	 * @return array|mixed|null Returns an associative array if no key is
-	 *     provided. Returns a specific key value if a key is provided and the
-	 *     value is found, or null if the key is not found.
+	 * If you need to get access to an element which doesn't have an ID,
+	 * you can use querySelector() to find the element using any selector.
 	 */
-	public function getMetadata($key = null) {
-		$this->fillStream();
-		$metaData = stream_get_meta_data($this->stream);
+	public function getElementById(string $id):?Element {
 
-		if(is_null($key)) {
-			return $metaData;
-		}
-
-		return $metaData[$key] ?? null;
 	}
 
-	private function fillStream():void {
-		if(!is_null($this->streamFilled)) {
-			return;
-		}
+	/**
+	 * The getElementsByClassName method of Document interface returns an
+	 * array-like object of all child elements which have all of the given
+	 * class name(s). When called on the document object, the complete
+	 * document is searched, including the root node. You may also call
+	 * getElementsByClassName() on any element; it will return only
+	 * elements which are descendants of the specified root element with
+	 * the given class name(s).
+	 */
+	public function getElementsByClassName(string $className):HTMLCollection {
 
-		if(!is_resource($this->stream)) {
-			throw new RuntimeException("Stream is closed");
-		}
+	}
 
-		$this->streamFilled = 0;
-		$this->streamFilled = fwrite($this->stream, $this->__toString());
-		fseek($this->stream, 0);
+	/**
+	 * The getElementsByName() method of the Document object returns a
+	 * NodeList Collection of elements with a given name in the document.
+	 */
+	public function getElementsByName(string $name):NodeList {
+
+	}
+
+	/**
+	 * The getElementsByTagName method of Document interface returns an
+	 * HTMLCollection of elements with the given tag name. The complete
+	 * document is searched, including the root node. The returned
+	 * HTMLCollection is live, meaning that it updates itself automatically
+	 * to stay in sync with the DOM tree without having to call
+	 * document.getElementsByTagName() again.
+	 */
+	public function getElementsByTagName(string $name):HTMLCollection {
+
+	}
+
+	/**
+	 * Returns a list of elements with the given tag name belonging to the
+	 * given namespace. The complete document is searched, including the
+	 * root node.
+	 */
+	public function getElementsByTagNameNS(string $namespace, string $name):HTMLCollection {
+
+	}
+
+	/**
+	 * The Document object's importNode() method creates a copy of a Node
+	 * or DocumentFragment from another document, to be inserted into the
+	 * current document later.
+	 *
+	 * The imported node is not yet included in the document tree. To
+	 * include it, you need to call an insertion method such as
+	 * appendChild() or insertBefore() with a node that is currently in the
+	 * document tree.
+	 *
+	 * Unlike document.adoptNode(), the original node is not removed from
+	 * its original document. The imported node is a clone of the original.
+	 */
+	public function importNode(Node $externalNode, bool $deep = false):Node {
+
+	}
+
+	/**
+	 * The Document.open() method opens a document for writing.
+	 */
+	public function open():void {
+
+	}
+
+	/**
+	 * TODO: Move to ParentNode trait.
+	 * The ParentNode.prepend() method inserts a set of Node objects or
+	 * DOMString objects before the first child of the ParentNode.
+	 * DOMString objects are inserted as equivalent Text nodes.
+	 */
+	public function prepend(string|Node... $nodesOrDOMStrings):void {
+
+	}
+
+	/**
+	 * TODO: Move to ParentNode trait.
+	 * The Document method querySelector() returns the first Element within
+	 * the document that matches the specified selector, or group of
+	 * selectors. If no matches are found, null is returned.
+	 */
+	public function querySelector(string $selectors):?Element {
+
+	}
+
+	/**
+	 * TODO: Move to ParentNode trait.
+	 *
+	 * The Document method querySelectorAll() returns a static (not live)
+	 * NodeList representing a list of the document's elements that match
+	 * the specified group of selectors.
+	 */
+	public function querySelectorAll(string $selectors):NodeList {
+
+	}
+
+	/**
+	 * TODO: Move to ParentNode trait.
+	 *
+	 * The ParentNode.replaceChildren() method replaces the existing
+	 * children of a Node with a specified new set of children. These can
+	 * be DOMString or Node objects.
+	 */
+	public function replaceChildren(string|Node...$nodesOrDOMStrings):void {
+
+	}
+
+	/**
+	 * The Document.write() method writes a string of text to a document
+	 * stream opened by document.open().
+	 * @param string $markup
+	 */
+	public function write($markup):int {
+
+	}
+
+	/**
+	 * Writes a string of text followed by a newline character to a
+	 * document.
+	 */
+	public function writeln($line):int {
+
 	}
 }
