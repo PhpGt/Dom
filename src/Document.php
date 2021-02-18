@@ -39,6 +39,7 @@ use RuntimeException;
 class Document extends Node implements StreamInterface {
 	use MagicProp;
 	use DocumentStream;
+
 //	use ParentNode;
 
 	protected DOMDocument $domDocument;
@@ -53,6 +54,74 @@ class Document extends Node implements StreamInterface {
 	}
 
 	public function __toString():string {
+
+	}
+
+	public function __prop_get_body():?Node {
+
+	}
+
+	public function __prop_set_body(Node $body):void {
+
+	}
+
+	public function __prop_get_characterSet():string {
+
+	}
+
+	public function __prop_get_compatMode():string {
+
+	}
+
+	public function __prop_get_contentType():string {
+
+	}
+
+	public function __prop_get_doctype():string {
+
+	}
+
+	public function __prop_get_documentElement():Element {
+
+	}
+
+	public function __prop_get_embeds():HTMLCollection {
+
+	}
+
+	public function __prop_get_forms():HTMLCollection {
+
+	}
+
+	public function __prop_get_head():?HTMLHeadElement {
+
+	}
+
+	public function __prop_get_images():HTMLCollection {
+
+	}
+
+	public function __prop_get_links():HTMLCollection {
+
+	}
+
+	public function __prop_get_scripts():HTMLCollection {
+
+	}
+
+	public function __prop_get_childElementCount():int {
+
+	}
+
+	public function __prop_get_children():HTMLCollection {
+
+	}
+
+	public function __prop_get_firstElementChild():?Element {
+
+	}
+
+	public function __prop_get_lastElementChild():?Element {
 
 	}
 
@@ -73,7 +142,7 @@ class Document extends Node implements StreamInterface {
 	 * child of the ParentNode. DOMString objects are inserted as
 	 * equivalent Text nodes.
 	 */
-	public function append(string|Node... $nodesOrDOMStrings):void {
+	public function append(string|Node...$nodesOrDOMStrings):void {
 
 	}
 
@@ -286,7 +355,7 @@ class Document extends Node implements StreamInterface {
 	 * DOMString objects before the first child of the ParentNode.
 	 * DOMString objects are inserted as equivalent Text nodes.
 	 */
-	public function prepend(string|Node... $nodesOrDOMStrings):void {
+	public function prepend(string|Node...$nodesOrDOMStrings):void {
 
 	}
 
