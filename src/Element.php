@@ -14,6 +14,8 @@ use DOMElement;
  * for HTML elements, while the SVGElement interface is the basis for all SVG
  * elements. Most functionality is specified further down the class hierarchy.
  *
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/Element
+ *
  * @property-read NamedNodeMap $attributes Returns a NamedNodeMap object containing the assigned attributes of the corresponding HTML element.
  * @property-read DOMTokenList $classList Returns a DOMTokenList containing the list of class attributes.
  * @property string $className Is a DOMString representing the class of the element.
@@ -24,7 +26,6 @@ use DOMElement;
  * @property string $outerHTML Is a DOMString representing the markup of the element including its content. When used as a setter, replaces the element with nodes parsed from the given string.
  * @property-read string $prefix A DOMString representing the namespace prefix of the element, or null if no prefix is specified.
  * @property-read string $tagName Returns a String with the name of the tag for the given element.
- *
  */
 class Element extends Node {
 	use NonDocumentTypeChildNode;

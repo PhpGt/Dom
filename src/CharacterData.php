@@ -7,6 +7,8 @@ namespace Gt\Dom;
  * of type CharacterData: it is implemented by other interfaces like Text,
  * Comment, or ProcessingInstruction, which aren't abstract.
  *
+ * https://developer.mozilla.org/en-US/docs/Web/API/CharacterData
+ *
  * @property string $data Is a DOMString representing the textual data contained in this object.
  * @property-read int $length Returns an unsigned long representing the size of the string contained in CharacterData.data.
  */

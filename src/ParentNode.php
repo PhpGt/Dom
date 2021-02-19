@@ -7,8 +7,8 @@ use DOMXPath;
 use Gt\CssXPath\Translator;
 
 /**
- * @see https://dom.spec.whatwg.org/#parentnode
- * @see https://developer.mozilla.org/en-US/docs/Web/API/ParentNode
+ * @link https://dom.spec.whatwg.org/#parentnode
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode
  *
  * Contains methods and properties that are common to all types of Node objects
  * that can have children. It's implemented by Element, Document, and

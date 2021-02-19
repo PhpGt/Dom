@@ -19,6 +19,8 @@ use RuntimeException;
  * into the web page's content, the DOM tree (including elements such as
  * <body> or <table>).
  *
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/Document
+ *
  * @property ?Node $body The Document.body property represents the <body> or <frameset> node of the current document, or null if no such element exists.
  * @property-read string $characterSet Returns the character set being used by the document.
  * @property-read string $compatMode Indicates whether the document is rendered in quirks or strict mode.
