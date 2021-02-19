@@ -24,18 +24,22 @@ use Gt\CssXPath\Translator;
  *  child of this ParentNode.
  */
 trait ParentNode {
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/childElementCount */
 	protected function __prop_get_childElementCount():int {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children */
 	protected function __prop_get_children():HTMLCollection {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/firstElementChild */
 	protected function __prop_get_firstElementChild():?Element {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/lastElementChild */
 	protected function __prop_get_lastElementChild():?Element {
 
 	}
