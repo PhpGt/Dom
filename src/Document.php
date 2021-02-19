@@ -52,54 +52,67 @@ class Document extends Node implements StreamInterface {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/body */
 	public function __prop_get_body():?Node {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/body */
 	public function __prop_set_body(Node $body):void {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/characterSet */
 	public function __prop_get_characterSet():string {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/compatMode */
 	public function __prop_get_compatMode():string {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/contentType */
 	public function __prop_get_contentType():string {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/doctype */
 	public function __prop_get_doctype():string {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/documentElement */
 	public function __prop_get_documentElement():Element {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/embeds */
 	public function __prop_get_embeds():HTMLCollection {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/forms */
 	public function __prop_get_forms():HTMLCollection {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/head */
 	public function __prop_get_head():?HTMLHeadElement {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/images */
 	public function __prop_get_images():HTMLCollection {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/links */
 	public function __prop_get_links():HTMLCollection {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/scripts */
 	public function __prop_get_scripts():HTMLCollection {
 
 	}
