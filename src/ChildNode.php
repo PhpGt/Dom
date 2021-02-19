@@ -4,54 +4,60 @@ namespace Gt\Dom;
 use DOMNode;
 
 /**
- * Contains methods that are particular to Node objects that can have a parent.
+ * The ChildNode mixin contains methods and properties that are common to all
+ * types of Node objects that can have a parent. It's implemented by Element,
+ * DocumentType, and CharacterData objects.
  *
- * This trait is used by the following classes:
- *  - Element
- *  - DocumentType
- *  - CharacterData
- *
- * @property-read Node|Element $parentNode
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode
  */
 trait ChildNode {
 	/**
-	 * Removes this ChildNode from the children list of its parent.
+	 * Removes the object from the tree it belongs to.
+	 *
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
 	 */
-	public function remove():void {
-		$this->parentNode->removeChild($this);
+	public function remove() {
+
 	}
 
 	/**
-	 * Inserts a Node into the children list of this ChildNode's parent,
-	 * just before this ChildNode.
-	 * @param DOMNode[] $node
+	 * The ChildNode.before() method inserts a set of Node or DOMString
+	 * objects in the children list of this ChildNode's parent, just before
+	 * this ChildNode. DOMString objects are inserted as equivalent Text
+	 * nodes.
+	 *
+	 * @param string|Node ...$nodes A set of Node or DOMString objects to
+	 * insert.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/before
 	 */
-	public function before(...$nodes):void {
-		foreach($nodes as $node) {
-			$this->parentNode->insertBefore($node, $this);
-		}
+	public function before(string|Node...$nodes) {
+
 	}
 
 	/**
-	 * Inserts a Node into the children list of this ChildNode's parent,
-	 * just after this ChildNode.
-	 * @param DOMNode[] $node
+	 * The ChildNode.after() method inserts a set of Node or DOMString
+	 * objects in the children list of this ChildNode's parent, just after
+	 * this ChildNode. DOMString objects are inserted as equivalent Text
+	 * nodes.
+	 *
+	 * @param string|Node ...$nodes A set of Node or DOMString objects to
+	 * insert.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/after
 	 */
-	public function after(...$nodes):void {
-		foreach($nodes as $node) {
-			$this->parentNode->insertBefore($node, $this->nextSibling);
-		}
+	public function after(string|Node...$nodes) {
+
 	}
 
 	/**
-	 * Replace this ChildNode in the children list of its parent with the
-	 * supplied replacement node.
-	 * @param DOMNode[] $nodes
+	 * The ChildNode.replaceWith() method replaces this ChildNode in the
+	 * children list of its parent with a set of Node or DOMString objects.
+	 * DOMString objects are inserted as equivalent Text nodes.
+	 *
+	 * @param string|Node ...$nodes A set of Node or DOMString objects to
+	 * replace.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/replaceWith
 	 */
-	public function replaceWith(...$nodes):void {
-		foreach($nodes as $replacement) {
-			$this->parentNode->insertBefore($replacement, $this);
-			$this->remove();
-		}
+	public function replaceWith(string|Node...$nodes) {
+
 	}
 }
