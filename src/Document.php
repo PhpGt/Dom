@@ -35,6 +35,7 @@ use RuntimeException;
 class Document extends Node implements StreamInterface {
 	use MagicProp;
 	use DocumentStream;
+	use ParentNode;
 
 	protected DOMDocument $domDocument;
 
