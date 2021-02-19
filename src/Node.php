@@ -42,71 +42,85 @@ use Gt\PropFunc\MagicProp;
 class Node {
 	use MagicProp;
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/baseURI */
 	protected function __prop_get_baseURI():string {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes */
 	protected function __prop_get_childNodes():NodeList {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/firstChild */
 	protected function __prop_get_firstChild():?Node {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected */
 	protected function __prop_get_isConnected():bool {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/lastChild */
 	protected function __prop_get_lastChild():?Node {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nextSibling */
 	protected function __prop_get_nextSibling():?Node {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName */
 	protected function __prop_get_nodeName():string {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType */
 	protected function __prop_get_nodeType():int {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
 	protected function __prop_get_nodeValue():string {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
 	protected function __prop_set_nodeValue(string $value):void {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/ownerDocument */
 	protected function __prop_get_ownerDocument():?Document {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentNode */
 	protected function __prop_get_parentNode():?Node {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentElement */
 	protected function __prop_get_parentElement():?Node {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/previousSibling */
 	protected function __prop_get_previousSibling():?Node {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent */
 	protected function __prop_get_textContent():string {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent */
 	protected function __prop_set_textContent():void {
 
 	}
-
-
 
 	/**
 	 * Adds the specified childNode argument as the last child to the
@@ -114,11 +128,14 @@ class Node {
 	 * DOM tree, the node will be detached from its current position and
 	 * attached at the new position.
 	 *
-	 * @param Node $newNode
-	 * @return Node
-	 * @link
+	 * @param Node $aChild The node to append to the given parent node
+	 * (commonly an element).
+	 * @return Node The returned value is the appended child (aChild),
+	 * except when aChild is a DocumentFragment, in which case the empty
+	 * DocumentFragment is returned.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
 	 */
-	public function appendChild(Node $newNode):Node {
+	public function appendChild(Node $aChild):Node {
 
 	}
 
@@ -126,9 +143,18 @@ class Node {
 	 * Clone a Node, and optionally, all of its contents. By default, it
 	 * clones the content of the node.
 	 *
-	 * @param bool $deep
-	 * @return Node
-	 * @link
+	 * @param bool $deep If true, then node and its whole subtree—including
+	 * text that may be in child Text nodes—is also copied. If false, only
+	 * node will be cloned. Any text that node contains is not cloned,
+	 * either (since text is contained by one or more child Text nodes).
+	 * deep has no effect on empty elements (such as the <img> and <input>
+	 * elements).
+	 *
+	 * @return Node The new node, cloned from node. The newClone has no
+	 * parent and is not part of the document, until it is added to another
+	 * node that is part of the document (using Node.appendChild() or a
+	 * similar method).
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode
 	 */
 	public function cloneNode(bool $deep = false):Node {
 
@@ -138,9 +164,16 @@ class Node {
 	 * Compares the position of the current node against another node in
 	 * any other document.
 	 *
-	 * @param Node $otherNode
-	 * @return int
-	 * @link
+	 * @param Node $otherNode The other Node with which to compare the first
+	 * node’s document position.
+	 * @return int An integer value whose bits represent the otherNode's
+	 * relationship to the calling node. More than one bit is set if
+	 * multiple scenarios apply. For example, if otherNode is located
+	 * earlier in the document and contains the node on which
+	 * compareDocumentPosition() was called, then both the
+	 * DOCUMENT_POSITION_CONTAINS and DOCUMENT_POSITION_PRECEDING bits would
+	 * be set, producing a value of 10 (0x0A).
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
 	 */
 	public function compareDocumentPosition(Node $otherNode):int {
 
@@ -152,7 +185,7 @@ class Node {
 	 *
 	 * @param Node $otherNode
 	 * @return bool
-	 * @link
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/contains
 	 */
 	public function contains(Node $otherNode):bool {
 
@@ -161,8 +194,8 @@ class Node {
 	/**
 	 * Returns the context object's root.
 	 *
-	 * @return Node
-	 * @link
+	 * @return Node An object inheriting from Node.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/getRootNode
 	 */
 	public function getRootNode():Node {
 
@@ -172,8 +205,9 @@ class Node {
 	 * Returns a Boolean indicating whether or not the element has any
 	 * child nodes.
 	 *
-	 * @return bool
-	 * @link
+	 * @return bool A Boolean that is true if the node has child nodes,
+	 * and false otherwise.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/hasChildNodes
 	 */
 	public function hasChildNodes():bool {
 
@@ -183,10 +217,12 @@ class Node {
 	 * Inserts a Node before the reference node as a child of a
 	 * specified parent node.
 	 *
-	 * @param Node $newNode
-	 * @param Node $refNode
-	 * @return Node
-	 * @link
+	 * @param Node $newNode The node to be inserted.
+	 * @param Node $refNode The node before which newNode is inserted. If
+	 * this is null, then newNode is inserted at the end of parentNode's
+	 * child nodes.
+	 * @return Node The node being inserted (the same as newNode)
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore
 	 */
 	public function insertBefore(Node $newNode, Node $refNode):Node {
 
@@ -197,11 +233,12 @@ class Node {
 	 * value of true if the namespace is the default namespace on the given
 	 * node or false if not.
 	 *
-	 * @param string $namespace
-	 * @return bool
-	 * @link
+	 * @param string $namespaceURI a string representing the namespace
+	 * against which the element will be checked.
+	 * @return bool a Boolean that holds the return value true or false.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isDefaultNamespace
 	 */
-	public function isDefaultNamespace(string $namespace):bool {
+	public function isDefaultNamespace(string $namespaceURI):bool {
 
 	}
 
@@ -209,9 +246,9 @@ class Node {
 	 * Returns a Boolean which indicates whether or not two nodes are of
 	 * the same type and all their defining data points match.
 	 *
-	 * @param Node $otherNode
+	 * @param Node $otherNode The Node to compare equality with.
 	 * @return bool
-	 * @link
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isEqualNode
 	 */
 	public function isEqualNode(Node $otherNode):bool {
 
@@ -221,9 +258,9 @@ class Node {
 	 * Returns a Boolean value indicating whether or not the two nodes are
 	 * the same (that is, they reference the same object).
 	 *
-	 * @param Node $otherNode
+	 * @param Node $otherNode The Node to test against.
 	 * @return bool
-	 * @link
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isSameNode
 	 */
 	public function isSameNode(Node $otherNode):bool {
 
@@ -235,7 +272,7 @@ class Node {
 	 * the result is implementation-dependent.
 	 *
 	 * @return ?string
-	 * @link
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/lookupPrefix
 	 */
 	public function lookupPrefix():?string {
 
@@ -246,9 +283,11 @@ class Node {
 	 * the given node if found (and null if not). Supplying null for the
 	 * prefix will return the default namespace.
 	 *
-	 * @param ?string $prefix
-	 * @return ?string
-	 * @link
+	 * @param ?string $prefix The prefix to look for. If this parameter is
+	 * null, the method will return the default namespace URI, if any.
+	 * @return ?string A DOMString containing the namespace URI. If the
+	 * prefix is not found, it returns null.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/lookupNamespaceURI
 	 */
 	public function lookupNamespaceURI(string $prefix = null):?string {
 
@@ -258,7 +297,7 @@ class Node {
 	 * Clean up all the text nodes under this element (merge adjacent,
 	 * remove empty).
 	 *
-	 * @link
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/normalize
 	 */
 	public function normalize():void {
 
@@ -268,9 +307,10 @@ class Node {
 	 * Removes a child node from the current element, which must be a
 	 * child of the current node.
 	 *
-	 * @param Node $oldNode
+	 * @param Node $oldNode holds a reference to the removed child node,
+	 * i.e., oldChild === child.
 	 * @return Node
-	 * @link
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild
 	 */
 	public function removeChild(Node $oldNode):Node {
 
@@ -280,10 +320,11 @@ class Node {
 	 * Replaces one child Node of the current one with the second one given
 	 * in parameter.
 	 *
-	 * @param Node $newNode
-	 * @param Node $oldNode
-	 * @return Node
-	 * @link
+	 * @param Node $newNode The new node to replace oldChild. If it already
+	 * exists in the DOM, it is first removed.
+	 * @param Node $oldNode The child to be replaced.
+	 * @return Node The returned value is the replaced node. This is the same node as oldChild.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/replaceChild
 	 */
 	public function replaceChild(Node $newNode, Node $oldNode):Node {
 
