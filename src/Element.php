@@ -21,14 +21,14 @@ use DOMElement;
  * @property string $innerHTML Is a DOMString representing the markup of the element's content.
  * @property-read string $localName A DOMString representing the local part of the qualified name of the element.
  * @property-read ?string $namespaceURI The namespace URI of the element, or null if it is no namespace.
- * @property-read ?Element $nextElementSibling Is an Element, the element immediately following the given one in the tree, or null if there's no sibling node.
  * @property string $outerHTML Is a DOMString representing the markup of the element including its content. When used as a setter, replaces the element with nodes parsed from the given string.
  * @property-read string $prefix A DOMString representing the namespace prefix of the element, or null if no prefix is specified.
- * @property-read ?Element $previousElementSibling Is a Element, the element immediately preceding the given one in the tree, or null if there is no sibling element.
  * @property-read string $tagName Returns a String with the name of the tag for the given element.
  *
  */
 class Element extends Node {
+	use NonDocumentTypeChildNode;
+
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/attributes */
 	protected function __prop_get_attributes():NamedNodeMap {
 
@@ -79,11 +79,6 @@ class Element extends Node {
 
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/nextElementSibling */
-	protected function __prop_get_nextElementSibling():?Element {
-
-	}
-
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
 	protected function __prop_get_outerHTML():string {
 
@@ -96,11 +91,6 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/prefix */
 	protected function __prop_get_prefix():string {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/previousElementSibling */
-	protected function __prop_get_previousElementSibling():?Element {
 
 	}
 
