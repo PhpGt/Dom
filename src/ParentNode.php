@@ -7,88 +7,116 @@ use DOMXPath;
 use Gt\CssXPath\Translator;
 
 /**
- * Contains methods that are particular to Node objects that can have children.
+ * @see https://dom.spec.whatwg.org/#parentnode
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/ParentNode
  *
- * This trait can only be used in a class that is a trait of LiveProperty.
+ * contains methods and properties that are common to all types of Node objects
+ * that can have children. It's implemented by Element, Document, and
+ * DocumentFragment objects.
  *
- * This trait is used by the following classes:
- *  - Element
- *  - Document and its subclasses XMLDocument and HTMLDocument
- *  - DocumentFragment
+ * @property-read int $childElementCount The number of children of this
+ * ParentNode which are elements.
  * @property-read HTMLCollection $children A live HTMLCollection containing all
  *  objects of type Element that are children of this ParentNode.
- * @property-read Node|Element|null $firstChild
- * @property-read Element|null $firstElementChild The Element that is the first
+ * @property-read ?Element $firstElementChild The Element that is the first
  *  child of this ParentNode.
- * @property-read Node|Element|null $lastChild
- * @property-read Element|null $lastElementChild The Element that is the last
+ * @property-read ?Element $lastElementChild The Element that is the last
  *  child of this ParentNode.
- * @property-read int $childElementCount The amount of children that the
- *  ParentNode has.
- *
- * @method Element getElementById(string $id)
- * @method Node|Element importNode(DOMNode $importedNode, bool $deep = false)
- * @method Node|Element insertBefore(DOMNode $newNode, DOMNode $refNode = false)
- * @method Node|Element removeChild(DOMNode $oldNode)
- * @method Node|Element replaceChild(DOMNode $newNode, DOMNode $oldNode)
  */
 trait ParentNode {
-	public function querySelector(string $selector):?Element {
-		$htmlCollection = $this->css($selector);
+	protected function __prop_get_childElementCount():int {
 
-		return $htmlCollection->item(0);
 	}
 
-	public function querySelectorAll(string $selector):HTMLCollection {
-		return $this->css($selector);
+	protected function __prop_get_children():HTMLCollection {
+
 	}
 
-	protected function prop_get_children():HTMLCollection {
-		return new HTMLCollection($this->childNodes);
+	protected function __prop_get_firstElementChild():?Element {
+
 	}
 
-	protected function prop_get_firstElementChild():?Element {
-		return $this->children->item(0);
+	protected function __prop_get_lastElementChild():?Element {
+
 	}
 
-	protected function prop_get_lastElementChild():?Element {
-		return $this->children->item($this->children->length - 1);
+	/**
+	 * The ParentNode.prepend() method inserts a set of Node objects or
+	 * DOMString objects before the first child of the ParentNode.
+	 * DOMString objects are inserted as equivalent Text nodes.
+	 *
+	 * @param string|Node ...$nodesOrDOMStrings A set of Node or DOMString
+	 * objects to insert.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/prepend
+	 */
+	public function prepend(string|Node...$nodesOrDOMStrings):void {
+
 	}
 
-	protected function prop_get_childElementCount():int {
-		return $this->children->length;
+	/**
+	 * Inserts a set of Node objects or DOMString objects after the last
+	 * child of the ParentNode. DOMString objects are inserted as
+	 * equivalent Text nodes.
+	 *
+	 * @param string|Node ...$nodesOrDOMStrings A set of Node or DOMString
+	 * objects to insert.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/append
+	 */
+	public function append(string|Node...$nodesOrDOMStrings):void {
+
 	}
 
-	public function css(
-		string $selectors,
-		string $prefix = ".//"
-	):HTMLCollection {
-		$translator = new Translator($selectors, $prefix);
-		return $this->xPath($translator);
+	/**
+	 * The ParentNode.replaceChildren() method replaces the existing
+	 * children of a Node with a specified new set of children. These can
+	 * be DOMString or Node objects.
+	 *
+	 * @param string|Node ...$nodesOrDOMStrings A set of Node or DOMString
+	 * objects to replace the ParentNode's existing children with. If no
+	 * replacement objects are specified, then the ParentNode is emptied of
+	 * all child nodes.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/replaceChildren
+	 */
+	public function replaceChildren(string|Node...$nodesOrDOMStrings):void {
+
 	}
 
-	public function xPath(string $selector):HTMLCollection {
-		$x = new DOMXPath($this->getRootDocument());
-		return new HTMLCollection($x->query($selector, $this));
+	/**
+	 * The Document method querySelector() returns the first Element within
+	 * the document that matches the specified selector, or group of
+	 * selectors. If no matches are found, null is returned.
+	 *
+	 * @param string $selectors A DOMString containing one or more selectors
+	 * to match against. This string must be a valid compound selector list
+	 * supported by the browser; if it's not, a SyntaxError exception is
+	 * thrown. See Locating DOM elements using selectors for more
+	 * information about using selectors to identify elements. Multiple
+	 * selectors may be specified by separating them using commas.
+	 * @return ?Element The first Element that matches at least one of the
+	 * specified selectors or null if no such element is found.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/querySelector
+	 */
+	public function querySelector(string $selectors):?Element {
+
 	}
 
-	public function getElementsByTagName($name):HTMLCollection {
-		$nodeList = parent::getElementsByTagName($name);
-		if($nodeList instanceof NodeList) {
-			return $nodeList;
-		}
+	/**
+	 * The Document method querySelectorAll() returns a static (not live)
+	 * NodeList representing a list of the document's elements that match
+	 * the specified group of selectors.
+	 *
+	 * @param string $selectors A DOMString containing one or more selectors
+	 * to match against. This string must be a valid CSS selector string; if
+	 * it's not, a SyntaxError exception is thrown. See Locating DOM
+	 * elements using selectors for more information about using selectors
+	 * to identify elements. Multiple selectors may be specified by
+	 * separating them using commas.
+	 * @return NodeList A non-live NodeList containing one Element object
+	 * for each descendant node that matches at least one of the specified
+	 * selectors.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/querySelectorAll
+	 */
+	public function querySelectorAll(string $selectors):NodeList {
 
-		return new HTMLCollection($nodeList);
-	}
-
-	public function removeAttributeFromNamedElementAndChildren(
-		Element $form,
-		string $name,
-		string $attribute
-	):void {
-		$selector = "[name='$name'], [name='$name'] *";
-		foreach($form->querySelectorAll($selector) as $element) {
-			$element->removeAttribute($attribute);
-		}
 	}
 }
