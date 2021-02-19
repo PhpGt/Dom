@@ -14,9 +14,19 @@ namespace Gt\Dom;
  * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeFilter
  */
 abstract class NodeFilter {
-	CONST FILTER_ACCEPT = 1;
-	CONST FILTER_REJECT = 2;
-	CONST FILTER_SKIP = 3;
+	const FILTER_ACCEPT = 1;
+	const FILTER_REJECT = 2;
+	const FILTER_SKIP = 3;
+
+	const SHOW_ALL = -1;
+	const SHOW_ELEMENT = 1;
+	const SHOW_ATTRIBUTE = 2;
+	const SHOW_TEXT = 4;
+	const SHOW_PROCESSING_INSTRUCTION = 64;
+	const SHOW_COMMENT = 128;
+	const SHOW_DOCUMENT = 256;
+	const SHOW_DOCUMENT_TYPE = 512;
+	const SHOW_DOCUMENT_FRAGMENT = 1024;
 
 	/**
 	 * The NodeFilter.acceptNode() method returns an unsigned short that
