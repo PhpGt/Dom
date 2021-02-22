@@ -21,12 +21,12 @@ use Gt\Dom\Element;
  * @property bool $inert Is a Boolean indicating whether the user agent must act as though the given node is absent for the purposes of user interaction events, in-page text searches ("find in page"), and text selection.
  * @property string $innerText Represents the "rendered" text content of a node and its descendants. As a getter, it approximates the text the user would get if they highlighted the contents of the element with the cursor and then copied it to the clipboard.
  * @property string $lang Is a DOMString representing the language of an element's attributes, text, and element contents.
- * @property CSSStyleDeclaration $style Is a CSSStyleDeclaration, an object representing the declarations of an element's style attributes.
  * @property int $tabIndex Is a long that represents this element's position in the tabbing order.
  * @property string $title Is a DOMString containing the text that appears in a popup box when mouse is over the element.
  */
 abstract class HTMLElement extends Element {
 	use HTMLOrForeignElement;
+	use ElementCSSInlineStyle;
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/accessKey */
 	protected function __prop_get_accessKey():string {
@@ -125,16 +125,6 @@ abstract class HTMLElement extends Element {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/lang */
 	protected function __prop_set_lang(string $value):void {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style */
-	protected function __prop_get_style():CSSStyleDeclaration {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style */
-	protected function __prop_set_style(CSSStyleDeclaration $value):void {
 
 	}
 
