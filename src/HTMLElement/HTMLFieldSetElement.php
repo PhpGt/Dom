@@ -11,14 +11,14 @@ use Gt\Dom\HTMLCollection;
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement
  *
- * @property-read HTMLCollection $elements The elements belonging to this field set. The type of this property depends on the version of the spec that is implemented by the browser.
+ * @property-read HTMLFormControlsCollection $elements The elements belonging to this field set. The type of this property depends on the version of the spec that is implemented by the browser.
  * @property-read string $type The DOMString "fieldset".
  */
 class HTMLFieldSetElement extends HTMLElement {
 	use HTMLUIElement;
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/elements */
-	protected function __prop_get_elements():HTMLCollection {
+	protected function __prop_get_elements():HTMLFormControlsCollection {
 
 	}
 

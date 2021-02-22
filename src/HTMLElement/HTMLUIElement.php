@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\NodeList;
+
 /**
  * This is a non-standard trait that contains functions and properties that are
  * shared between any UI elements, such as buttons, inputs, selects, etc.
