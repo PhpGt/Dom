@@ -11,7 +11,6 @@ namespace Gt\Dom\HTMLElement;
  */
 class HTMLButtonElement extends HTMLElement {
 	use HTMLUIElement;
-	use HTMLOrForeignElement;
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/type */
 	protected function __prop_get_type():string {

@@ -21,7 +21,6 @@ use Gt\Dom\DOMTokenList;
  */
 class HTMLAnchorElement extends HTMLElement implements Stringable {
 	use MagicProp;
-	use HTMLOrForeignElement;
 	use HTMLAnchorOrAreaElement;
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hreflang */

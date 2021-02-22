@@ -26,6 +26,8 @@ use Gt\Dom\Element;
  * @property string $title Is a DOMString containing the text that appears in a popup box when mouse is over the element.
  */
 abstract class HTMLElement extends Element {
+	use HTMLOrForeignElement;
+
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/accessKey */
 	protected function __prop_get_accessKey():string {
 
