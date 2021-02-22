@@ -12,6 +12,8 @@ use Gt\Dom\DOMTokenList;
  * presentation of such elements. This interface corresponds to <a> element;
  * not to be confused with <link>, which is represented by HTMLLinkElement).
  *
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement
+ *
  * @property string $download Is a DOMString indicating that the linked resource is intended to be downloaded rather than displayed in the browser. The value represent the proposed name of the file. If the name is not a valid filename of the underlying OS, browser will adapt it.
  * @property string $hash Is a USVString representing the fragment identifier, including the leading hash mark ('#'), if any, in the referenced URL.
  * @property string $host Is a USVString representing the hostname and port (if it's not the default port) in the referenced URL.
