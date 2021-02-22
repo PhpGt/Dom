@@ -17,6 +17,8 @@ use Gt\Dom\NodeList;
  * @property string $formTarget Is a DOMString reflecting a name or keyword indicating where to display the response that is received after submitting the form. If specified, this attribute overrides the target attribute of the <form> element that owns this element.
  * @property-read NodeList $labels Is a NodeList that represents a list of <label> elements that are labels for this HTMLUIElement.
  * @property string $name Is a DOMString representing the name of the object when submitted with a form. If specified, it must not be the empty string.
+ * @property bool $required Returns / Sets the element's required attribute, indicating that the user must fill in a value before submitting a form.
+ * @property string $type Is a DOMString indicating the behavior of the button.
  * @property-read bool $willValidate Is a Boolean indicating whether the button is a candidate for constraint validation. It is false if any conditions bar it from constraint validation, including: its type property is reset or button; it has a <datalist> ancestor; or the disabled property is set to true.
  * @property-read string $validationMessage Is a DOMString representing the localized message that describes the validation constraints that the control does not satisfy (if any). This attribute is the empty string if the control is not a candidate for constraint validation (willValidate is false), or it satisfies its constraints.
  * @property-read string $validity Is a ValidityState representing the validity states that this button is in.
@@ -98,6 +100,24 @@ trait HTMLUIElement {
 	}
 
 	protected function __prop_set_name(string $value):void {
+
+	}
+
+	protected function __prop_get_required():bool {
+
+	}
+
+	protected function __prop_set_required(bool $value):void {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/type */
+	protected function __prop_get_type():string {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/type */
+	protected function __prop_set_type(string $value):void {
 
 	}
 
