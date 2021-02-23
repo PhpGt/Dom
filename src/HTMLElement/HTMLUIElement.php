@@ -18,6 +18,7 @@ use Gt\Dom\NodeList;
  * @property string $inputMode The inputmode global attribute is an enumerated attribute that hints at the type of data that might be entered by the user while editing the element or its contents.
  * @property-read NodeList $labels Is a NodeList that represents a list of <label> elements that are labels for this HTMLUIElement.
  * @property string $name Is a DOMString representing the name of the object when submitted with a form. If specified, it must not be the empty string.
+ * @property bool $readOnly Returns / Sets the element's readonly attribute, indicating that the user cannot modify the value of the control.
  * @property bool $required Returns / Sets the element's required attribute, indicating that the user must fill in a value before submitting a form.
  * @property string $type Is a DOMString indicating the behavior of the button.
  * @property-read bool $willValidate Is a Boolean indicating whether the button is a candidate for constraint validation. It is false if any conditions bar it from constraint validation, including: its type property is reset or button; it has a <datalist> ancestor; or the disabled property is set to true.
@@ -109,6 +110,14 @@ trait HTMLUIElement {
 	}
 
 	protected function __prop_set_name(string $value):void {
+
+	}
+
+	protected function __prop_get_readOnly():bool {
+
+	}
+
+	protected function __prop_set_readOnly(bool $value):void {
 
 	}
 
