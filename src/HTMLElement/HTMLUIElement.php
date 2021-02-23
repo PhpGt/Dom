@@ -15,6 +15,7 @@ use Gt\Dom\NodeList;
  * @property string $formMethod Is a DOMString reflecting the HTTP method that the browser uses to submit the form. If specified, this attribute overrides the method attribute of the <form> element that owns this element.
  * @property bool $formNoValidate Is a Boolean indicating that the form is not to be validated when it is submitted. If specified, this attribute overrides the novalidate attribute of the <form> element that owns this element.
  * @property string $formTarget Is a DOMString reflecting a name or keyword indicating where to display the response that is received after submitting the form. If specified, this attribute overrides the target attribute of the <form> element that owns this element.
+ * @property string $inputMode The inputmode global attribute is an enumerated attribute that hints at the type of data that might be entered by the user while editing the element or its contents.
  * @property-read NodeList $labels Is a NodeList that represents a list of <label> elements that are labels for this HTMLUIElement.
  * @property string $name Is a DOMString representing the name of the object when submitted with a form. If specified, it must not be the empty string.
  * @property bool $required Returns / Sets the element's required attribute, indicating that the user must fill in a value before submitting a form.
@@ -87,6 +88,14 @@ trait HTMLUIElement {
 	}
 
 	protected function __prop_set_formTarget(string $value):void {
+
+	}
+
+	protected function __prop_get_inputMode():string {
+
+	}
+
+	protected function __prop_set_inputMode(string $value):void {
 
 	}
 
