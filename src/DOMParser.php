@@ -20,11 +20,14 @@ class DOMParser {
 		string $string,
 		string $mimeType
 	):Document {
+		$mimeType = strtolower($mimeType);
 		$this->checkMimeType($mimeType);
+		$documentClass = self::MIME_TYPE_CLASS[$mimeType];
+		$document = new $documentClass();
+		return $document;
 	}
 
 	private function checkMimeType(string $mimeType):void {
-		$mimeType = strtolower($mimeType);
 		if(!array_key_exists($mimeType, self::MIME_TYPE_CLASS)) {
 			throw new MimeTypeNotSupportedException($mimeType);
 		}
