@@ -17,6 +17,8 @@ HTML;
 HTML;
 
 	const HTML_EMBED = <<<HTML
+<!doctype html>
+<h1>Here is an embedded video</h1>
 <embed type="video/webm"
        src="/media/cc0-videos/flower.mp4"
        width="250"

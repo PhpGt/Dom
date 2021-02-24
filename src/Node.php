@@ -2,6 +2,7 @@
 namespace Gt\Dom;
 
 use DOMNode;
+use Gt\Dom\Exception\DomException;
 use Gt\Dom\Facade\DOMDocumentNodeMap;
 use Gt\PropFunc\MagicProp;
 
@@ -82,8 +83,19 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
 	 */
 	public function appendChild(Node $aChild):Node {
-		$domNode = DOMDocumentNodeMap::getNativeDomNode($aChild);
-		$this->domNode->appendChild($domNode);
+		if($this instanceof Document) {
+			if($this->childElementCount > 0) {
+				throw new DomException("Cannot have more than one Element child of a Document");
+			}
+		}
+
+		$nativeDomChild = DOMDocumentNodeMap::getNativeDomNode($aChild);
+
+$NATIVE_DOM_DOCUMENT = $nativeDomChild->ownerDocument;
+$THIS_DOM_DOCUMENT = $this->domNode->ownerDocument;
+var_dump($NATIVE_DOM_DOCUMENT === $THIS_DOM_DOCUMENT);
+
+		$this->domNode->appendChild($nativeDomChild);
 		return $aChild;
 	}
 

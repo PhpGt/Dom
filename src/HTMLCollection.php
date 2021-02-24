@@ -24,8 +24,8 @@ use Gt\PropFunc\MagicProp;
 class HTMLCollection {
 	use MagicProp;
 
-	/** @var callable Returns a NodeList, called multiple times, allowing
-	 * the HTMLCollection to be "live" */
+	/** @var callable():NodeList Returns a NodeList, called multiple times,
+	 * allowing the HTMLCollection to be "live" */
 	private $callback;
 
 	/**
@@ -54,7 +54,15 @@ class HTMLCollection {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/item
 	 */
 	public function item(int $index):?Element {
+		/** @var NodeList $nodeList */
+		$nodeList = call_user_func($this->callback);
+		$item = $nodeList->item($index);
 
+		if($item instanceof Element) {
+			return $item;
+		}
+
+		return null;
 	}
 
 	/**

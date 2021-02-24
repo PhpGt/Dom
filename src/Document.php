@@ -12,6 +12,7 @@ use DOMNode;
 use DOMText;
 use Gt\Dom\Facade\DOMDocumentNodeMap;
 use Gt\Dom\Facade\HTMLCollectionFactory;
+use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
 use Gt\PropFunc\MagicProp;
@@ -427,17 +428,20 @@ class Document extends Node implements StreamInterface {
 	 */
 	public function getElementsByTagName(string $name):HTMLCollection {
 		return HTMLCollectionFactory::create(function()use($name) {
-			$domNodeArray = [];
+			$gtDomNodeArray = [];
 
 			$domNodeList = $this->domDocument->getElementsByTagName($name);
 			for($i = 0, $len = $domNodeList->length; $i < $len; $i++) {
-				array_push(
-					$domNodeArray,
+				$gtDomNode = DOMDocumentNodeMap::getGtDomNode(
 					$domNodeList->item($i)
+				);
+				array_push(
+					$gtDomNodeArray,
+					$gtDomNode
 				);
 			}
 
-			return $domNodeArray;
+			return NodeListFactory::create(...$gtDomNodeArray);
 		});
 	}
 

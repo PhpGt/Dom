@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use Countable;
 use Gt\PropFunc\MagicProp;
 
 /**
@@ -14,7 +15,7 @@ use Gt\PropFunc\MagicProp;
  *
  * @property-read int $length The number of nodes in the NodeList.
  */
-class NodeList {
+class NodeList implements Countable {
 	use MagicProp;
 
 	/** @var Node[] */
@@ -26,7 +27,7 @@ class NodeList {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/length */
 	protected function __prop_get_length():int {
-
+		return count($this->nodeList);
 	}
 
 	/**
@@ -40,7 +41,7 @@ class NodeList {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/item
 	 */
 	public function item(int $index):?Node {
-
+		return $this->nodeList[$index];
 	}
 
 	/**
@@ -89,5 +90,9 @@ class NodeList {
 	 */
 	public function values():iterable {
 
+	}
+
+	public function count():int {
+		return count($this->nodeList);
 	}
 }

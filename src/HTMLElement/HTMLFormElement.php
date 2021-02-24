@@ -26,7 +26,7 @@ use ArrayAccess;
  * @property string $autocomplete A DOMString reflecting the value of the form's autocomplete HTML attribute, indicating whether the controls in this form can have their values automatically populated by the browser.
  * @property bool $noValidate A Boolean reflecting the value of the form's novalidate HTML attribute, indicating whether the form should not be validated.
  */
-class HTMLFormElement implements ArrayAccess {
+class HTMLFormElement extends HTMLElement implements ArrayAccess {
 	public function offsetExists($offset):bool  {
 	}
 

@@ -130,7 +130,7 @@ class DocumentTest extends TestCase {
 		// Reference "embeds" before another is added to the document.
 		$embeds = $sut->embeds;
 		$secondEmbed = $sut->createElement("embed");
-		$sut->appendChild($secondEmbed);
+		$sut->body->appendChild($secondEmbed);
 		self::assertEquals(2, $embeds->length);
 	}
 
@@ -145,6 +145,17 @@ class DocumentTest extends TestCase {
 		self::assertEquals(
 			substr_count(DocumentTestFactory::HTML_FORMS, "<form"),
 			$sut->forms->length
+		);
+	}
+
+	public function testFormsLive():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
+		// Reference "forms" before one is removed from the document.
+		$forms = $sut->forms;
+		$forms->item(0)->remove();
+		self::assertEquals(
+			substr_count(DocumentTestFactory::HTML_FORMS, "<form") - 1,
+			$forms->length
 		);
 	}
 }

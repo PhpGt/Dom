@@ -408,7 +408,7 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
 	 */
 	public function remove():void {
-
+		$this->domNode->parentNode->removeChild($this->domNode);
 	}
 
 	/**
