@@ -64,12 +64,25 @@ XML;
 </menu>
 XML;
 
-	public static function createHTMLDocument(string $html):HTMLDocument {
+	const XML_BOOK = <<<XML
+<!DOCTYPE book [<!ENTITY h 'hardcover'>]>
+<book genre='novel' ISBN='1-861001-57-5'>
+	<title>Pride And Prejudice</title>
+	<style>&h;</style>
+</book>
+XML;
+
+
+	public static function createHTMLDocument(
+		string $html = self::HTML_DEFAULT
+	):HTMLDocument {
 		$parser = new DOMParser();
 		return $parser->parseFromString($html, "text/html");
 	}
 
-	public static function createXMLDocument(string $xml):XMLDocument {
+	public static function createXMLDocument(
+		string $xml = self::XML_DEFAULT
+	):XMLDocument {
 		$parser = new DOMParser();
 		return $parser->parseFromString($xml, "text/xml");
 	}

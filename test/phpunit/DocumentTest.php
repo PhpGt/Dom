@@ -2,6 +2,7 @@
 namespace Gt\Dom\Test;
 
 use Gt\Dom\Document;
+use Gt\Dom\DocumentType;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\PropFunc\PropertyReadOnlyException;
@@ -42,12 +43,12 @@ class DocumentTest extends TestCase {
 	}
 
 	public function testToStringDefaultHTML():void {
-		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_DEFAULT);
+		$sut = DocumentTestFactory::createHTMLDocument();
 		self::assertEquals("<!DOCTYPE html>\n<html><head></head><body><h1>Hello, PHP.Gt!</h1></body></html>\n", (string)$sut);
 	}
 
 	public function testBodyNullOnXML():void {
-		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_DEFAULT);
+		$sut = DocumentTestFactory::createXMLDocument();
 		self::assertNull($sut->body);
 	}
 
@@ -57,7 +58,7 @@ class DocumentTest extends TestCase {
 	}
 
 	public function testCharacterSetUnset():void {
-		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_DEFAULT);
+		$sut = DocumentTestFactory::createHTMLDocument();
 		self::assertEquals("", $sut->characterSet);
 	}
 
@@ -72,12 +73,27 @@ class DocumentTest extends TestCase {
 	}
 
 	public function testContentTypeHTMLDocument():void {
-		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_DEFAULT);
+		$sut = DocumentTestFactory::createHTMLDocument();
 		self::assertEquals("text/html", $sut->contentType);
 	}
 
 	public function testContentTypeXMLDocument():void {
-		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_DEFAULT);
+		$sut = DocumentTestFactory::createXMLDocument();
 		self::assertEquals("text/xml", $sut->contentType);
+	}
+
+	public function testDoctypeEmpty():void {
+		$sut = new Document();
+		self::assertNull($sut->doctype);
+	}
+
+	public function testDoctypeHTML():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::assertInstanceOf(DocumentType::class, $sut->doctype);
+	}
+
+	public function testDoctypeXML():void {
+		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_BOOK);
+		self::assertInstanceOf(DocumentType::class, $sut->doctype);
 	}
 }

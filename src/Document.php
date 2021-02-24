@@ -27,7 +27,7 @@ use RuntimeException;
  * @property-read ?HTMLBodyElement $body The Document.body property represents the <body> or <frameset> node of the current document, or null if no such element exists.
  * @property-read string $characterSet Returns the character set being used by the document.
  * @property-read string $contentType Returns the Content-Type from the MIME Header of the current document.
- * @property-read string $doctype Returns the Document Type Definition (DTD) of the current document.
+ * @property-read ?DocumentType $doctype Returns the Document Type Definition (DTD) of the current document.
  * @property-read Element $documentElement Returns the Element that is a direct child of the document. For HTML documents, this is normally the HTMLHtmlElement object representing the document's <html> element.
  * @property-read HTMLCollection $embeds Returns a list of the embedded <embed> elements within the current document.
  * @property-read HTMLCollection $forms Returns a list of the <form> elements within the current document.
@@ -90,8 +90,18 @@ class Document extends Node implements StreamInterface {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/doctype */
-	protected function __prop_get_doctype():string {
+	protected function __prop_get_doctype():?DocumentType {
+		$domDoctype = $this->domDocument->doctype;
+		if(!$domDoctype) {
+			return null;
+		}
 
+		$gtDoctype = DOMDocumentNodeMap::get($domDoctype);
+		if($gtDoctype instanceof DocumentType) {
+			return $gtDoctype;
+		}
+
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/documentElement */
