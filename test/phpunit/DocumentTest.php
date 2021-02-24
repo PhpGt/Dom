@@ -4,6 +4,7 @@ namespace Gt\Dom\Test;
 use Gt\Dom\Document;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
+use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\PropFunc\PropertyReadOnlyException;
@@ -111,5 +112,16 @@ class DocumentTest extends TestCase {
 	public function testDocumentElementXML():void {
 		$sut = DocumentTestFactory::createXMLDocument();
 		self::assertInstanceOf(Element::class, $sut->documentElement);
+	}
+
+	public function testEmbedsEmpty():void {
+		$sut = new Document();
+		self::assertInstanceOf(HTMLCollection::class, $sut->embeds);
+		self::assertEquals(0, $sut->embeds->length);
+	}
+
+	public function testEmbedsNonEmpty():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_EMBED);
+		self::assertEquals(1, $sut->embeds->length);
 	}
 }

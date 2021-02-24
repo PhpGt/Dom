@@ -16,6 +16,13 @@ HTML;
 <h1>Hello, PHP.Gt!</h1>
 HTML;
 
+	const HTML_EMBED = <<<HTML
+<embed type="video/webm"
+       src="/media/cc0-videos/flower.mp4"
+       width="250"
+       height="200" />
+HTML;
+
 
 	const XML_DEFAULT = <<<XML
 <?xml version="1.0" ?>

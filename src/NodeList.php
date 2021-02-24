@@ -17,6 +17,13 @@ use Gt\PropFunc\MagicProp;
 class NodeList {
 	use MagicProp;
 
+	/** @var Node[] */
+	private array $nodeList;
+
+	protected function __construct(Node...$nodeList) {
+		$this->nodeList = $nodeList;
+	}
+
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/length */
 	protected function __prop_get_length():int {
 

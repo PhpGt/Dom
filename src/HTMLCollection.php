@@ -1,6 +1,9 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\Dom\Facade\HTMLCollectionFactory;
+use Gt\PropFunc\MagicProp;
+
 /**
  * The HTMLCollection interface represents a generic collection (array-like
  * object similar to arguments) of elements (in document order) and offers
@@ -14,13 +17,29 @@ namespace Gt\Dom;
  * the underlying document is changed.
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection
+ * @see HTMLCollectionFactory
  *
  * @property-read int $length Returns the number of items in the collection.
  */
 class HTMLCollection {
+	use MagicProp;
+
+	/** @var callable Returns a NodeList, called multiple times, allowing
+	 * the HTMLCollection to be "live" */
+	private $callback;
+
+	/**
+	 * This class must be constructed with a callback that returns an array
+	 * of Node objects. This allows the HTMLCollection to be "live".
+	 */
+	protected function __construct(callable $callback) {
+		$this->callback = $callback;
+	}
+
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/length */
 	protected function __prop_get_length():int {
-
+		$nodeList = call_user_func($this->callback);
+		return count($nodeList);
 	}
 
 	/**
@@ -30,11 +49,11 @@ class HTMLCollection {
 	 * @param int $index The position of the Node to be returned. Elements
 	 * appear in an HTMLCollection in the same order in which they appear
 	 * in the document's source.
-	 * @return ?Node The Node at the specified index, or null if index is
-	 * less than zero or greater than or equal to the length property.
+	 * @return ?Element The Element at the specified index, or null if index
+	 * is less than zero or greater than or equal to the length property.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/item
 	 */
-	public function item(int $index):?Node {
+	public function item(int $index):?Element {
 
 	}
 
@@ -49,10 +68,10 @@ class HTMLCollection {
 	 * non-JavaScript DOM implementations.
 	 *
 	 * @param string $name
-	 * @return ?Node
+	 * @return ?Element
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/namedItem
 	 */
-	public function namedItem(string $name):?Node {
+	public function namedItem(string $name):?Element {
 
 	}
 }

@@ -11,6 +11,7 @@ use DOMElement;
 use DOMNode;
 use DOMText;
 use Gt\Dom\Facade\DOMDocumentNodeMap;
+use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
 use Gt\PropFunc\MagicProp;
@@ -115,7 +116,7 @@ class Document extends Node implements StreamInterface {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/embeds */
 	protected function __prop_get_embeds():HTMLCollection {
-
+		return $this->getElementsByTagName("embed");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/forms */
@@ -422,7 +423,19 @@ class Document extends Node implements StreamInterface {
 	 * document.getElementsByTagName() again.
 	 */
 	public function getElementsByTagName(string $name):HTMLCollection {
+		return HTMLCollectionFactory::create(function()use($name) {
+			$domNodeArray = [];
 
+			$domNodeList = $this->domDocument->getElementsByTagName($name);
+			for($i = 0, $len = $domNodeList->length; $i < $len; $i++) {
+				array_push(
+					$domNodeArray,
+					$domNodeList->item($i)
+				);
+			}
+
+			return $domNodeArray;
+		});
 	}
 
 	/**
