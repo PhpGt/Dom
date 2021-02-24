@@ -6,9 +6,11 @@ use Gt\Dom\Node;
 use PHPUnit\Framework\TestCase;
 
 class NodeTest extends TestCase {
-	public function testCanNotConstruct() {
+	public function testCanNotConstruct():void {
 		self::expectException(Error::class);
 		self::expectExceptionMessage("Cannot instantiate abstract class Gt\Dom\Node");
-		new Node();
+		$className = Node::class;
+		/** @phpstan-ignore-next-line */
+		new $className();
 	}
 }
