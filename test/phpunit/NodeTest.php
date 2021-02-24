@@ -9,6 +9,6 @@ class NodeTest extends TestCase {
 	public function testCanNotConstruct() {
 		self::expectException(Error::class);
 		self::expectExceptionMessage("Cannot instantiate abstract class Gt\Dom\Node");
-		$sut = new Node();
+		new Node();
 	}
 }
