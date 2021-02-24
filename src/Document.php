@@ -51,7 +51,7 @@ class Document extends Node implements StreamInterface {
 	}
 
 	public function __toString():string {
-
+		return PHP_EOL;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/body */
