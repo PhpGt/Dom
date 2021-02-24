@@ -8,9 +8,7 @@ use PHPUnit\Framework\TestCase;
 class NodeTest extends TestCase {
 	public function testPrivateConstructor() {
 		self::expectException(Error::class);
-		self::expectExceptionMessage("Call to protected Gt\Dom\Node::__construct()");
+		self::expectExceptionMessage("Cannot instantiate abstract class Gt\Dom\Node");
 		$sut = new Node();
 	}
-
-
 }
