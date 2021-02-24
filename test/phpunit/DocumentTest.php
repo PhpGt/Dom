@@ -3,6 +3,7 @@ namespace Gt\Dom\Test;
 
 use Gt\Dom\Document;
 use Gt\Dom\DocumentType;
+use Gt\Dom\Element;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\PropFunc\PropertyReadOnlyException;
@@ -95,5 +96,20 @@ class DocumentTest extends TestCase {
 	public function testDoctypeXML():void {
 		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_BOOK);
 		self::assertInstanceOf(DocumentType::class, $sut->doctype);
+	}
+
+	public function testDocumentElementEmpty():void {
+		$sut = new Document();
+		self::assertNull($sut->documentElement);
+	}
+
+	public function testDocumentElementHTML():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::assertInstanceOf(Element::class, $sut->documentElement);
+	}
+
+	public function testDocumentElementXML():void {
+		$sut = DocumentTestFactory::createXMLDocument();
+		self::assertInstanceOf(Element::class, $sut->documentElement);
 	}
 }

@@ -3,13 +3,16 @@ namespace Gt\Dom\Facade;
 
 use DOMNode;
 use Gt\Dom\DocumentType;
+use Gt\Dom\Element;
 use Gt\Dom\Node;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 
 class DOMDocumentNodeMap {
+	const DEFAULT_CLASS = Element::class;
 	const NODE_CLASS_LIST = [
-		"html" => DocumentType::class,
-		"body" => HTMLBodyElement::class,
+		"DOMDocumentType" => DocumentType::class,
+		"DOMElement::html" => Element::class,
+		"DOMElement::body" => HTMLBodyElement::class,
 	];
 
 	/** @var DOMNode[] */
@@ -29,8 +32,17 @@ class DOMDocumentNodeMap {
 	}
 
 	private static function cache(DOMNode $node):void {
-		/** @phpstan-ignore-next-line */
-		$gtNodeClass = self::NODE_CLASS_LIST[$node->localName ?? $node->name];
+		$key = get_class($node);
+		if($node->localName) {
+			$key .= "::" . $node->localName;
+		}
+		if(isset(self::NODE_CLASS_LIST[$key])) {
+			$gtNodeClass = self::NODE_CLASS_LIST[$key];
+		}
+		else {
+			$gtNodeClass = self::DEFAULT_CLASS;
+		}
+
 		$class = new \ReflectionClass($gtNodeClass);
 		$object = $class->newInstanceWithoutConstructor();
 		$constructor = new \ReflectionMethod($object, "__construct");

@@ -28,7 +28,7 @@ use RuntimeException;
  * @property-read string $characterSet Returns the character set being used by the document.
  * @property-read string $contentType Returns the Content-Type from the MIME Header of the current document.
  * @property-read ?DocumentType $doctype Returns the Document Type Definition (DTD) of the current document.
- * @property-read Element $documentElement Returns the Element that is a direct child of the document. For HTML documents, this is normally the HTMLHtmlElement object representing the document's <html> element.
+ * @property-read ?Element $documentElement Returns the Element that is a direct child of the document. For HTML documents, this is normally the HTMLHtmlElement object representing the document's <html> element.
  * @property-read HTMLCollection $embeds Returns a list of the embedded <embed> elements within the current document.
  * @property-read HTMLCollection $forms Returns a list of the <form> elements within the current document.
  * @property-read ?HTMLHeadElement $head Returns the <head> element of the current document.
@@ -96,17 +96,21 @@ class Document extends Node implements StreamInterface {
 			return null;
 		}
 
-		$gtDoctype = DOMDocumentNodeMap::get($domDoctype);
-		if($gtDoctype instanceof DocumentType) {
-			return $gtDoctype;
-		}
-
-		return null;
+		/** @var DocumentType $gtNode */
+		$gtNode = DOMDocumentNodeMap::get($domDoctype);
+		return $gtNode;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/documentElement */
-	protected function __prop_get_documentElement():Element {
+	protected function __prop_get_documentElement():?Element {
+		$domDocumentElement = $this->domDocument->documentElement;
+		if(!$domDocumentElement) {
+			return null;
+		}
 
+		/** @var Element $gtNode */
+		$gtNode = DOMDocumentNodeMap::get($domDocumentElement);
+		return $gtNode;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/embeds */
