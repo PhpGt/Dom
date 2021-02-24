@@ -26,7 +26,6 @@ use RuntimeException;
  *
  * @property-read ?HTMLBodyElement $body The Document.body property represents the <body> or <frameset> node of the current document, or null if no such element exists.
  * @property-read string $characterSet Returns the character set being used by the document.
- * @property-read string $compatMode Indicates whether the document is rendered in quirks or strict mode.
  * @property-read string $contentType Returns the Content-Type from the MIME Header of the current document.
  * @property-read string $doctype Returns the Document Type Definition (DTD) of the current document.
  * @property-read Element $documentElement Returns the Element that is a direct child of the document. For HTML documents, this is normally the HTMLHtmlElement object representing the document's <html> element.
@@ -66,7 +65,7 @@ class Document extends Node implements StreamInterface {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/body */
-	public function __prop_get_body():?Node {
+	protected function __prop_get_body():?Node {
 		$domBody = $this->domDocument->getElementsByTagName("body")->item(0);
 		if(!$domBody) {
 			return null;
@@ -76,57 +75,57 @@ class Document extends Node implements StreamInterface {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/characterSet */
-	public function __prop_get_characterSet():string {
+	protected function __prop_get_characterSet():string {
+		$encoding = $this->domDocument->encoding;
+		if(!$encoding) {
+			return "";
+		}
 
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/compatMode */
-	public function __prop_get_compatMode():string {
-
+		return strtoupper($encoding);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/contentType */
-	public function __prop_get_contentType():string {
-
+	protected function __prop_get_contentType():string {
+		return "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/doctype */
-	public function __prop_get_doctype():string {
+	protected function __prop_get_doctype():string {
 
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/documentElement */
-	public function __prop_get_documentElement():Element {
+	protected function __prop_get_documentElement():Element {
 
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/embeds */
-	public function __prop_get_embeds():HTMLCollection {
+	protected function __prop_get_embeds():HTMLCollection {
 
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/forms */
-	public function __prop_get_forms():HTMLCollection {
+	protected function __prop_get_forms():HTMLCollection {
 
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/head */
-	public function __prop_get_head():?HTMLHeadElement {
+	protected function __prop_get_head():?HTMLHeadElement {
 
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/images */
-	public function __prop_get_images():HTMLCollection {
+	protected function __prop_get_images():HTMLCollection {
 
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/links */
-	public function __prop_get_links():HTMLCollection {
+	protected function __prop_get_links():HTMLCollection {
 
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/scripts */
-	public function __prop_get_scripts():HTMLCollection {
+	protected function __prop_get_scripts():HTMLCollection {
 
 	}
 

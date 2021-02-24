@@ -45,4 +45,39 @@ class DocumentTest extends TestCase {
 		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_DEFAULT);
 		self::assertEquals("<!DOCTYPE html>\n<html><head></head><body><h1>Hello, PHP.Gt!</h1></body></html>\n", (string)$sut);
 	}
+
+	public function testBodyNullOnXML():void {
+		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_DEFAULT);
+		self::assertNull($sut->body);
+	}
+
+	public function testToStringEmptyXML():void {
+		$sut = DocumentTestFactory::createXMLDocument("");
+		self::assertEquals("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n", (string)$sut);
+	}
+
+	public function testCharacterSetUnset():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_DEFAULT);
+		self::assertEquals("", $sut->characterSet);
+	}
+
+	public function testCharacterSetUTF8():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_DEFAULT_UTF8);
+		self::assertEquals("UTF-8", $sut->characterSet);
+	}
+
+	public function testContentTypeEmpty():void {
+		$sut = new Document();
+		self::assertEquals("", $sut->contentType);
+	}
+
+	public function testContentTypeHTMLDocument():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_DEFAULT);
+		self::assertEquals("text/html", $sut->contentType);
+	}
+
+	public function testContentTypeXMLDocument():void {
+		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_DEFAULT);
+		self::assertEquals("text/xml", $sut->contentType);
+	}
 }

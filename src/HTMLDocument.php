@@ -32,4 +32,8 @@ class HTMLDocument extends Document {
 			$this->domDocument->documentElement->appendChild($body);
 		}
 	}
+
+	protected function __prop_get_contentType():string {
+		return "text/html";
+	}
 }
