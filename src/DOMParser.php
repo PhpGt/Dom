@@ -2,6 +2,8 @@
 namespace Gt\Dom;
 
 use Gt\Dom\Exception\MimeTypeNotSupportedException;
+use Gt\Dom\Facade\HTMLDocumentFactory;
+use Gt\Dom\Facade\XMLDocumentFactory;
 
 class DOMParser {
 	const MIME_TYPE_CLASS = [
@@ -12,6 +14,11 @@ class DOMParser {
 		"image/svg+xml" => XMLDocument::class,
 	];
 
+	const FACTORY_CLASS = [
+		HTMLDocument::class => HTMLDocumentFactory::class,
+		XMLDocument::class => XMLDocumentFactory::class,
+	];
+
 	public function __construct() {
 
 	}
@@ -19,12 +26,15 @@ class DOMParser {
 	public function parseFromString(
 		string $string,
 		string $mimeType
-	):Document {
+	):HTMLDocument|XMLDocument {
 		$mimeType = strtolower($mimeType);
 		$this->checkMimeType($mimeType);
 		$documentClass = self::MIME_TYPE_CLASS[$mimeType];
-		$document = new $documentClass();
-		return $document;
+		$factoryClass = self::FACTORY_CLASS[$documentClass];
+		return call_user_func(
+			"$factoryClass::create",
+			$string
+		);
 	}
 
 	private function checkMimeType(string $mimeType):void {

@@ -10,6 +10,9 @@ use DOMDocumentType;
 use DOMElement;
 use DOMNode;
 use DOMText;
+use Gt\Dom\Facade\DOMDocumentNodeMap;
+use Gt\Dom\HTMLElement\HTMLBodyElement;
+use Gt\Dom\HTMLElement\HTMLHeadElement;
 use Gt\PropFunc\MagicProp;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
@@ -21,7 +24,7 @@ use RuntimeException;
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Document
  *
- * @property ?Node $body The Document.body property represents the <body> or <frameset> node of the current document, or null if no such element exists.
+ * @property-read ?HTMLBodyElement $body The Document.body property represents the <body> or <frameset> node of the current document, or null if no such element exists.
  * @property-read string $characterSet Returns the character set being used by the document.
  * @property-read string $compatMode Indicates whether the document is rendered in quirks or strict mode.
  * @property-read string $contentType Returns the Content-Type from the MIME Header of the current document.
@@ -48,20 +51,28 @@ class Document extends Node implements StreamInterface {
 			"utf-8"
 		);
 		$this->stream = fopen("php://memory", "r+");
+		parent::__construct($this->domDocument);
 	}
 
 	public function __toString():string {
-		return PHP_EOL;
+		if($this instanceof XMLDocument) {
+			$string = $this->domDocument->saveXML();
+		}
+		else {
+			$string = $this->domDocument->saveHTML();
+		}
+
+		return $string;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/body */
 	public function __prop_get_body():?Node {
+		$domBody = $this->domDocument->getElementsByTagName("body")->item(0);
+		if(!$domBody) {
+			return null;
+		}
 
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/body */
-	public function __prop_set_body(Node $body):void {
-
+		return DOMDocumentNodeMap::get($domBody);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/characterSet */

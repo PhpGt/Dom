@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DOMNode;
 use Gt\PropFunc\MagicProp;
 
 /**
@@ -62,9 +63,9 @@ use Gt\PropFunc\MagicProp;
 abstract class Node {
 	use MagicProp;
 
-	protected function __construct() {
-
-	}
+	protected function __construct(
+		protected DOMNode $domNode
+	) {}
 
 	/**
 	 * Adds the specified childNode argument as the last child to the
