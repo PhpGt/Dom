@@ -24,101 +24,45 @@ use Gt\PropFunc\MagicProp;
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Node
  *
- * @property-read string $baseURI Returns a DOMString representing the base URL of the document containing the Node
- * @property-read NodeList $childNodes Returns a live NodeList containing all the children of this node (including elements, text and comments). NodeList being live means that if the children of the Node change, the NodeList object is automatically updated.
- * @property-read ?Node $firstChild Returns a Node representing the first direct child node of the node, or null if the node has no child.
- * @property-read bool $isConnected A boolean indicating whether or not the Node is connected (directly or indirectly) to the Document object.
- * @property-read ?Node $lastChild Returns a Node representing the last direct child node of the node, or null if the node has no child.
- * @property-read ?Node $nextSibling Returns a Node representing the next node in the tree, or null if there isn't such node.
- * @property-read string $nodeName Returns a DOMString containing the name of the Node. The structure of the name will differ with the node type. E.g. An HTMLElement will contain the name of the corresponding tag, like 'audio' for an HTMLAudioElement, a Text node will have the '#text' string, or a Document node will have the '#document' string.
- * @property-read int $nodeType Returns an unsigned short representing the type of the node.
+ * @property-read string $baseURI Returns a DOMString representing the base URL
+ * of the document containing the Node
+ * @property-read NodeList $childNodes Returns a live NodeList containing all
+ * the children of this node (including elements, text and comments). NodeList
+ * being live means that if the children of the Node change, the NodeList object
+ * is automatically updated.
+ * @property-read ?Node $firstChild Returns a Node representing the first direct
+ * child node of the node, or null if the node has no child.
+ * @property-read bool $isConnected A boolean indicating whether or not the Node
+ * is connected (directly or indirectly) to the Document object.
+ * @property-read ?Node $lastChild Returns a Node representing the last direct
+ * child node of the node, or null if the node has no child.
+ * @property-read ?Node $nextSibling Returns a Node representing the next node
+ * in the tree, or null if there isn't such node.
+ * @property-read string $nodeName Returns a DOMString containing the name of
+ * the Node. The structure of the name will differ with the node type. E.g. An
+ * HTMLElement will contain the name of the corresponding tag, like 'audio' for
+ * an HTMLAudioElement, a Text node will have the '#text' string, or a Document
+ * node will have the '#document' string.
+ * @property-read int $nodeType Returns an unsigned short representing the type
+ * of the node.
  * @property string $nodeValue Returns / Sets the value of the current node.
- * @property-read ?Document $ownerDocument Returns the Document that this node belongs to. If the node is itself a document, returns null.
- * @property-read ?Node $parentNode Returns a Node that is the parent of this node. If there is no such node, like if this node is the top of the tree or if doesn't participate in a tree, this property returns null.
- * @property-read ?Element $parentElement Returns an Element that is the parent of this node. If the node has no parent, or if that parent is not an Element, this property returns null.
- * @property-read ?Node $previousSibling Returns a Node representing the previous node in the tree, or null if there isn't such node.
- * @property string $textContent Returns / Sets the textual content of an element and all its descendants.
+ * @property-read ?Document $ownerDocument Returns the Document that this node
+ * belongs to. If the node is itself a document, returns null.
+ * @property-read ?Node $parentNode Returns a Node that is the parent of this
+ * node. If there is no such node, like if this node is the top of the tree or
+ * if doesn't participate in a tree, this property returns null.
+ * @property-read ?Element $parentElement Returns an Element that is the parent
+ * of this node. If the node has no parent, or if that parent is not an Element,
+ * this property returns null.
+ * @property-read ?Node $previousSibling Returns a Node representing the
+ * previous node in the tree, or null if there isn't such node.
+ * @property string $textContent Returns / Sets the textual content of an
+ * element and all its descendants.
  */
-class Node {
+abstract class Node {
 	use MagicProp;
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/baseURI */
-	protected function __prop_get_baseURI():string {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes */
-	protected function __prop_get_childNodes():NodeList {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/firstChild */
-	protected function __prop_get_firstChild():?Node {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected */
-	protected function __prop_get_isConnected():bool {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/lastChild */
-	protected function __prop_get_lastChild():?Node {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nextSibling */
-	protected function __prop_get_nextSibling():?Node {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName */
-	protected function __prop_get_nodeName():string {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType */
-	protected function __prop_get_nodeType():int {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
-	protected function __prop_get_nodeValue():string {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
-	protected function __prop_set_nodeValue(string $value):void {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/ownerDocument */
-	protected function __prop_get_ownerDocument():?Document {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentNode */
-	protected function __prop_get_parentNode():?Node {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentElement */
-	protected function __prop_get_parentElement():?Node {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/previousSibling */
-	protected function __prop_get_previousSibling():?Node {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent */
-	protected function __prop_get_textContent():string {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent */
-	protected function __prop_set_textContent():void {
+	protected function __construct() {
 
 	}
 
@@ -327,6 +271,86 @@ class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/replaceChild
 	 */
 	public function replaceChild(Node $newNode, Node $oldNode):Node {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/baseURI */
+	protected function __prop_get_baseURI():string {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes */
+	protected function __prop_get_childNodes():NodeList {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/firstChild */
+	protected function __prop_get_firstChild():?Node {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected */
+	protected function __prop_get_isConnected():bool {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/lastChild */
+	protected function __prop_get_lastChild():?Node {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nextSibling */
+	protected function __prop_get_nextSibling():?Node {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName */
+	protected function __prop_get_nodeName():string {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType */
+	protected function __prop_get_nodeType():int {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
+	protected function __prop_get_nodeValue():string {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
+	protected function __prop_set_nodeValue(string $value):void {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/ownerDocument */
+	protected function __prop_get_ownerDocument():?Document {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentNode */
+	protected function __prop_get_parentNode():?Node {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentElement */
+	protected function __prop_get_parentElement():?Node {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/previousSibling */
+	protected function __prop_get_previousSibling():?Node {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent */
+	protected function __prop_get_textContent():string {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent */
+	protected function __prop_set_textContent():void {
 
 	}
 }
