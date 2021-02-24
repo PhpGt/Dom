@@ -124,4 +124,18 @@ class DocumentTest extends TestCase {
 		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_EMBED);
 		self::assertEquals(1, $sut->embeds->length);
 	}
+
+	public function testFormsEmpty():void {
+		$sut = new Document();
+		self::assertInstanceOf(HTMLCollection::class, $sut->forms);
+		self::assertEquals(0, $sut->forms->length);
+	}
+
+	public function testFormsNonEmpty():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
+		self::assertEquals(
+			substr_count(DocumentTestFactory::HTML_FORMS, "<form"),
+			$sut->forms->length
+		);
+	}
 }

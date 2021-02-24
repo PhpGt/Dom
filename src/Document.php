@@ -121,7 +121,7 @@ class Document extends Node implements StreamInterface {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/forms */
 	protected function __prop_get_forms():HTMLCollection {
-
+		return $this->getElementsByTagName("form");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/head */

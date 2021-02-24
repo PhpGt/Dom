@@ -24,6 +24,38 @@ HTML;
 HTML;
 
 
+	const HTML_FORMS = <<<HTML
+<!doctype html>
+<main>
+	<form>
+		<h1>This is a GET form</h1>
+		
+		<label>
+			<span>Search query</span>
+			<input name="q" required />		
+		</label>
+		
+		<button>Search!</button>
+	</form>
+	
+	<form method="post">
+		<h1>This is a POST form</h1>
+		
+		<label>
+			<span>Your name</span>
+			<input name="name" required />
+		</label>
+		<label>
+			<span>Your email</span>
+			<input name="email" type="email" required />
+		</label>
+		
+		<button>Submit</button>
+	</form>
+</main>
+HTML;
+
+
 	const XML_DEFAULT = <<<XML
 <?xml version="1.0" ?>
 <example/>
@@ -70,7 +102,6 @@ XML;
   </food>
 </menu>
 XML;
-
 	const XML_BOOK = <<<XML
 <!DOCTYPE book [<!ENTITY h 'hardcover'>]>
 <book genre='novel' ISBN='1-861001-57-5'>
