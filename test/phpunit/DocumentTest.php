@@ -125,6 +125,15 @@ class DocumentTest extends TestCase {
 		self::assertEquals(1, $sut->embeds->length);
 	}
 
+	public function testEmbedsLive():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_EMBED);
+		// Reference "embeds" before another is added to the document.
+		$embeds = $sut->embeds;
+		$secondEmbed = $sut->createElement("embed");
+		$sut->appendChild($secondEmbed);
+		self::assertEquals(2, $embeds->length);
+	}
+
 	public function testFormsEmpty():void {
 		$sut = new Document();
 		self::assertInstanceOf(HTMLCollection::class, $sut->forms);

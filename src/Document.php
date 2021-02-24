@@ -72,7 +72,7 @@ class Document extends Node implements StreamInterface {
 			return null;
 		}
 
-		return DOMDocumentNodeMap::get($domBody);
+		return DOMDocumentNodeMap::getGtDomNode($domBody);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/characterSet */
@@ -98,7 +98,7 @@ class Document extends Node implements StreamInterface {
 		}
 
 		/** @var DocumentType $gtNode */
-		$gtNode = DOMDocumentNodeMap::get($domDoctype);
+		$gtNode = DOMDocumentNodeMap::getGtDomNode($domDoctype);
 		return $gtNode;
 	}
 
@@ -110,7 +110,7 @@ class Document extends Node implements StreamInterface {
 		}
 
 		/** @var Element $gtNode */
-		$gtNode = DOMDocumentNodeMap::get($domDocumentElement);
+		$gtNode = DOMDocumentNodeMap::getGtDomNode($domDocumentElement);
 		return $gtNode;
 	}
 
@@ -246,7 +246,10 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
 	 */
 	public function createElement(string $tagName):Element {
-
+		$domElement = $this->domDocument->createElement($tagName);
+		/** @var Element $element */
+		$element = DOMDocumentNodeMap::getGtDomNode($domElement);
+		return $element;
 	}
 
 	/**

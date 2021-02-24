@@ -2,6 +2,7 @@
 namespace Gt\Dom;
 
 use DOMNode;
+use Gt\Dom\Facade\DOMDocumentNodeMap;
 use Gt\PropFunc\MagicProp;
 
 /**
@@ -81,7 +82,9 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
 	 */
 	public function appendChild(Node $aChild):Node {
-
+		$domNode = DOMDocumentNodeMap::getNativeDomNode($aChild);
+		$this->domNode->appendChild($domNode);
+		return $aChild;
 	}
 
 	/**
