@@ -225,15 +225,23 @@ class Document extends Node implements StreamInterface {
 	 * are the same object.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/adoptNode
 	 */
-	public function adoptNode(Node $externalNode):Node {
+	public function adoptNode(Node &$externalNode):Node {
 		$nativeNode = $this->getNativeDomNode($externalNode);
 
-		$domNodeFacade = new ReflectionClass(\DOMNode::class);
-		$ownerDocument = $domNodeFacade->getProperty("ownerDocument");
-//		$ownerDocument->setAccessible(true);
-		$ownerDocument->setValue($nativeNode, $this->domDocument);
+		if($nativeNode->ownerDocument === $this->domDocument) {
+			return $externalNode;
+		}
 
-//		$nativeNode->ownerDocument = $this->domDocument;
+		if($nativeNode->parentNode) {
+			$nativeNode->parentNode->removeChild($nativeNode);
+		}
+		$importedNode = $this->domDocument->importNode(
+			$nativeNode,
+			true
+		);
+
+		// Overwrite node (passed by reference).
+		$externalNode = $this->domDocument->getGtDomNode($importedNode);
 		return $externalNode;
 	}
 

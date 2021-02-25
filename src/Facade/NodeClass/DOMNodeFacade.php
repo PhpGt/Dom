@@ -8,5 +8,4 @@ use Gt\Dom\Facade\DOMDocumentFacade;
  * @property-read DOMDocumentFacade $ownerDocument
  */
 class DOMNodeFacade extends DOMNode {
-
 }

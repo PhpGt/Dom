@@ -239,6 +239,18 @@ class DocumentTest extends TestCase {
 		self::assertCount(2, $sut->scripts);
 	}
 
+	public function testAdoptNodeSameDocument():void {
+		$sut = new Document();
+		$div = $sut->createElement("div");
+		$divOwner = $div->ownerDocument;
+		self::assertSame($divOwner, $sut);
+
+		$divAdopted = $sut->adoptNode($div);
+		self::assertSame($div, $divAdopted);
+		self::assertSame($divAdopted->ownerDocument, $sut);
+		self::assertSame($divAdopted->ownerDocument, $div->ownerDocument);
+	}
+
 	public function testAdoptNodeOwnerDocument():void {
 		$sut1 = new Document();
 		$div = $sut1->createElement("div");
@@ -250,8 +262,8 @@ class DocumentTest extends TestCase {
 		$divAdoptedOwner = $divAdopted->ownerDocument;
 		$divOwner = $div->ownerDocument;
 
-		self::assertSame($divAdoptedOwner, $sut2);
-		self::assertSame($divOwner, $sut2);
-		self::assertSame($div, $divAdopted);
+		self::assertSame($divAdoptedOwner, $sut2, "The owner of the div after adoption must be the second document");
+		self::assertSame($divOwner, $sut2, "The original DIV's ownerDocument must change to the second document");
+		self::assertSame($div, $divAdopted, "The node should not change its reference after it has been adopted");
 	}
 }
