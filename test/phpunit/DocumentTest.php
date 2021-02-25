@@ -221,4 +221,21 @@ class DocumentTest extends TestCase {
 			$liveHTMLCollection->length
 		);
 	}
+
+	public function testScriptsEmpty():void {
+		$sut = new Document();
+		self::assertEquals(0, $sut->scripts->length);
+		self::assertCount(0, $sut->scripts);
+	}
+
+	public function testScriptsEmptyXML():void {
+		$sut = DocumentTestFactory::createXMLDocument();
+		self::assertEquals(0, $sut->scripts->length);
+		self::assertCount(0, $sut->scripts);
+	}
+
+	public function testScripts():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_PAGE);
+		self::assertCount(2, $sut->scripts);
+	}
 }

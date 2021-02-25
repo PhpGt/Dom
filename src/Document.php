@@ -206,7 +206,7 @@ class Document extends Node implements StreamInterface {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/scripts */
 	protected function __prop_get_scripts():HTMLCollection {
-
+		return $this->getElementsByTagName("script");
 	}
 
 	/**

@@ -43,6 +43,10 @@ class HTMLCollection implements Countable {
 		return count($nodeList);
 	}
 
+	public function count():int {
+		return $this->length;
+	}
+
 	/**
 	 * The HTMLCollection method item() returns the node located at the
 	 * specified offset into the collection.
@@ -82,9 +86,5 @@ class HTMLCollection implements Countable {
 	 */
 	public function namedItem(string $name):?Element {
 
-	}
-
-	public function count() {
-		// TODO: Implement count() method.
 	}
 }

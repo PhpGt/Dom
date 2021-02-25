@@ -85,6 +85,7 @@ HTML;
 	<head>
 		<meta charset="utf-8" />
 		<title>My Website!</title>
+		<script src="https://invasive-tracker.weownyou.com/analytics.js"></script>
 	</head>
 <body>
 	<a href="#top-of-page">Skip to content</a>
@@ -120,6 +121,8 @@ HTML;
 	<footer>
 		<span>Copyright &copy; forever, me.</span>	
 	</footer>
+	
+	<script src="/my-script.js"></script>
 </body>
 </html>
 HTML;
