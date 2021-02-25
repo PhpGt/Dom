@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use Countable;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\PropFunc\MagicProp;
 
@@ -21,7 +22,7 @@ use Gt\PropFunc\MagicProp;
  *
  * @property-read int $length Returns the number of items in the collection.
  */
-class HTMLCollection {
+class HTMLCollection implements Countable {
 	use MagicProp;
 
 	/** @var callable():NodeList Returns a NodeList, called multiple times,
@@ -81,5 +82,9 @@ class HTMLCollection {
 	 */
 	public function namedItem(string $name):?Element {
 
+	}
+
+	public function count() {
+		// TODO: Implement count() method.
 	}
 }

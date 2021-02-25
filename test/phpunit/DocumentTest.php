@@ -173,4 +173,10 @@ class DocumentTest extends TestCase {
 		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_ANIMAL_PARTS);
 		self::assertNull($sut->head);
 	}
+
+	public function testImagesEmpty():void {
+		$sut = new Document();
+		self::assertEquals(0, $sut->images->length);
+		self::assertCount(0, $sut->images);
+	}
 }

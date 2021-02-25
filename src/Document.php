@@ -169,7 +169,7 @@ class Document extends Node implements StreamInterface {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/images */
 	protected function __prop_get_images():HTMLCollection {
-
+		return $this->getElementsByTagName("img");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/links */
