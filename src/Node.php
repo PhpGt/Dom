@@ -3,6 +3,7 @@ namespace Gt\Dom;
 
 use DOMNode;
 use Gt\Dom\Exception\DomException;
+use Gt\Dom\Facade\DOMDocumentFacade;
 use Gt\Dom\Facade\DOMDocumentNodeMap;
 use Gt\PropFunc\MagicProp;
 
@@ -89,7 +90,7 @@ abstract class Node {
 			}
 		}
 
-		$nativeDomChild = DOMDocumentNodeMap::getNativeDomNode($aChild);
+		$nativeDomChild = $aChild->ownerDocument->getNativeDomNode($aChild);
 
 $NATIVE_DOM_DOCUMENT = $nativeDomChild->ownerDocument;
 $THIS_DOM_DOCUMENT = $this->domNode->ownerDocument;
@@ -342,7 +343,11 @@ var_dump($NATIVE_DOM_DOCUMENT === $THIS_DOM_DOCUMENT);
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/ownerDocument */
 	protected function __prop_get_ownerDocument():?Document {
-
+		/** @var DOMDocumentFacade $nativeDocument */
+		$nativeDocument = $this->domNode->ownerDocument;
+		/** @var Document $gtDocument */
+		$gtDocument = $nativeDocument->getGtDomNode($nativeDocument);
+		return $gtDocument;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentNode */

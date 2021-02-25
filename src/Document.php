@@ -2,16 +2,33 @@
 namespace Gt\Dom;
 
 use DOMAttr;
+use DOMCdataSection;
 use DOMCharacterData;
 use DOMComment;
 use DOMDocument;
 use DOMDocumentFragment;
 use DOMDocumentType;
 use DOMElement;
+use DOMEntity;
+use DOMEntityReference;
 use DOMNode;
+use DOMNotation;
 use DOMText;
+use Gt\Dom\Facade\DOMDocumentFacade;
 use Gt\Dom\Facade\DOMDocumentNodeMap;
 use Gt\Dom\Facade\HTMLCollectionFactory;
+use Gt\Dom\Facade\NodeClass\DOMAttrFacade;
+use Gt\Dom\Facade\NodeClass\DOMCdataSectionFacade;
+use Gt\Dom\Facade\NodeClass\DOMCharacterDataFacade;
+use Gt\Dom\Facade\NodeClass\DOMCommentFacade;
+use Gt\Dom\Facade\NodeClass\DOMDocumentFragmentFacade;
+use Gt\Dom\Facade\NodeClass\DOMDocumentTypeFacade;
+use Gt\Dom\Facade\NodeClass\DOMElementFacade;
+use Gt\Dom\Facade\NodeClass\DOMEntityFacade;
+use Gt\Dom\Facade\NodeClass\DOMEntityReferenceFacade;
+use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
+use Gt\Dom\Facade\NodeClass\DOMNotationFacade;
+use Gt\Dom\Facade\NodeClass\DOMTextFacade;
 use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
@@ -43,14 +60,15 @@ class Document extends Node implements StreamInterface {
 	use DocumentStream;
 	use ParentNode;
 
-	protected DOMDocument $domDocument;
+	protected DOMDocumentFacade $domDocument;
 
 	public function __construct() {
 		libxml_use_internal_errors(true);
-		$this->domDocument = new DOMDocument(
+		$this->domDocument = new DOMDocumentFacade(
 			"1.0",
 			"utf-8"
 		);
+		$this->registerNodeClasses();
 		$this->stream = fopen("php://memory", "r+");
 		parent::__construct($this->domDocument);
 	}
@@ -66,6 +84,12 @@ class Document extends Node implements StreamInterface {
 		return $string;
 	}
 
+	public function getNativeDomNode(Node $gtNode):DOMNode {
+		/** @var DOMNodeFacade $nativeDomNode */
+		$nativeDomNode = $this->domDocument->getNativeDomNode($gtNode);
+		return $nativeDomNode;
+	}
+
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/body */
 	protected function __prop_get_body():?Node {
 		$domBody = $this->domDocument->getElementsByTagName("body")->item(0);
@@ -73,7 +97,7 @@ class Document extends Node implements StreamInterface {
 			return null;
 		}
 
-		return DOMDocumentNodeMap::getGtDomNode($domBody);
+		return $this->domDocument->getGtDomNode($domBody);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/characterSet */
@@ -99,7 +123,7 @@ class Document extends Node implements StreamInterface {
 		}
 
 		/** @var DocumentType $gtNode */
-		$gtNode = DOMDocumentNodeMap::getGtDomNode($domDoctype);
+		$gtNode = $this->domDocument->getGtDomNode($domDoctype);
 		return $gtNode;
 	}
 
@@ -111,7 +135,7 @@ class Document extends Node implements StreamInterface {
 		}
 
 		/** @var Element $gtNode */
-		$gtNode = DOMDocumentNodeMap::getGtDomNode($domDocumentElement);
+		$gtNode = $this->domDocument->getGtDomNode($domDocumentElement);
 		return $gtNode;
 	}
 
@@ -249,7 +273,7 @@ class Document extends Node implements StreamInterface {
 	public function createElement(string $tagName):Element {
 		$domElement = $this->domDocument->createElement($tagName);
 		/** @var Element $element */
-		$element = DOMDocumentNodeMap::getGtDomNode($domElement);
+		$element = $this->domDocument->getGtDomNode($domElement);
 		return $element;
 	}
 
@@ -432,7 +456,7 @@ class Document extends Node implements StreamInterface {
 
 			$domNodeList = $this->domDocument->getElementsByTagName($name);
 			for($i = 0, $len = $domNodeList->length; $i < $len; $i++) {
-				$gtDomNode = DOMDocumentNodeMap::getGtDomNode(
+				$gtDomNode = $this->domDocument->getGtDomNode(
 					$domNodeList->item($i)
 				);
 				array_push(
@@ -534,5 +558,29 @@ class Document extends Node implements StreamInterface {
 	 */
 	public function writeln($line):int {
 
+	}
+
+	private function registerNodeClasses():void {
+		$classList = [
+			DOMAttr::class => DOMAttrFacade::class,
+			DOMCdataSection::class => DOMCdataSectionFacade::class,
+			DOMCharacterData::class => DOMCharacterDataFacade::class,
+			DOMComment::class => DOMCommentFacade::class,
+			DOMDocumentFragment::class => DOMDocumentFragmentFacade::class,
+			DOMDocumentType::class => DOMDocumentTypeFacade::class,
+			DOMElement::class => DOMElementFacade::class,
+			DOMEntity::class => DOMEntityFacade::class,
+			DOMEntityReference::class => DOMEntityReferenceFacade::class,
+			DOMNode::class => DOMNodeFacade::class,
+			DOMNotation::class => DOMNotationFacade::class,
+			DOMText::class => DOMTextFacade::class,
+		];
+
+		foreach($classList as $nativeClass => $facadeClass) {
+			$this->domDocument->registerNodeClass(
+				$nativeClass,
+				$facadeClass
+			);
+		}
 	}
 }

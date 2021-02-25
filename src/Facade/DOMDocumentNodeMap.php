@@ -30,7 +30,6 @@ use Gt\Dom\HTMLElement\HTMLLegendElement;
 use Gt\Dom\HTMLElement\HTMLLiElement;
 use Gt\Dom\HTMLElement\HTMLLinkElement;
 use Gt\Dom\HTMLElement\HTMLMapElement;
-use Gt\Dom\HTMLElement\HTMLMediaElement;
 use Gt\Dom\HTMLElement\HTMLMenuElement;
 use Gt\Dom\HTMLElement\HTMLMetaElement;
 use Gt\Dom\HTMLElement\HTMLMeterElement;
@@ -66,6 +65,8 @@ use Gt\Dom\HTMLElement\HTMLUListElement;
 use Gt\Dom\HTMLElement\HTMLVideoElement;
 use Gt\Dom\Node;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
+use ReflectionClass;
+use ReflectionMethod;
 
 class DOMDocumentNodeMap {
 	const DEFAULT_CLASS = Element::class;
@@ -145,49 +146,5 @@ class DOMDocumentNodeMap {
 		"DOMElement::video" => HTMLVideoElement::class,
 	];
 
-	/** @var DOMNode[] */
-	private static array $domNodeList = [];
-	/** @var Node[] */
-	private static array $gtNodeList = [];
 
-	public static function getGtDomNode(DOMNode $node):Node {
-		do {
-			$key = array_search(
-				$node,
-				self::$domNodeList,
-				true
-			);
-			if(!is_int($key) || !isset(self::$gtNodeList[$key])) {
-				self::cacheNativeDomNode($node);
-			}
-		}
-		while(!is_int($key));
-		return self::$gtNodeList[$key];
-	}
-
-	public static function getNativeDomNode(Node $node):DOMNode {
-		$key = array_search($node, self::$gtNodeList);
-		return self::$domNodeList[$key];
-	}
-
-	private static function cacheNativeDomNode(DOMNode $node):void {
-		$key = get_class($node);
-		if($node->localName) {
-			$key .= "::" . $node->localName;
-		}
-		if(isset(self::NODE_CLASS_LIST[$key])) {
-			$gtNodeClass = self::NODE_CLASS_LIST[$key];
-		}
-		else {
-			$gtNodeClass = self::DEFAULT_CLASS;
-		}
-
-		$class = new \ReflectionClass($gtNodeClass);
-		$object = $class->newInstanceWithoutConstructor();
-		$constructor = new \ReflectionMethod($object, "__construct");
-		$constructor->setAccessible(true);
-		$constructor->invoke($object, $node);
-		array_push(self::$domNodeList, $node);
-		array_push(self::$gtNodeList, $object);
-	}
 }
