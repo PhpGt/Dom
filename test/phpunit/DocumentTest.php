@@ -158,4 +158,19 @@ class DocumentTest extends TestCase {
 			$forms->length
 		);
 	}
+
+	public function testHeadNullOnEmpty():void {
+		$sut = new Document();
+		self::assertNull($sut->head);
+	}
+
+	public function testHeadNullOnXML():void {
+		$sut = DocumentTestFactory::createXMLDocument();
+		self::assertNull($sut->head);
+	}
+
+	public function testHeadNullOnXMLWithHeadElement():void {
+		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_ANIMAL_PARTS);
+		self::assertNull($sut->head);
+	}
 }

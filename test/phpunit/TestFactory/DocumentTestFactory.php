@@ -111,6 +111,21 @@ XML;
 	<style>&h;</style>
 </book>
 XML;
+	const XML_ANIMAL_PARTS = <<<XML
+<?xml version="1.0" ?>
+<animal>
+	<head>
+		<ears>2</ears>
+		<eyes>2</eyes>
+		<mouth>1</mouth>
+	</head>
+	<body>
+		<legs>4</legs>
+		<coat>Fur</coat>
+	</body>
+	<tail/>
+</animal>
+XML;
 
 
 	public static function createHTMLDocument(

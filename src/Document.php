@@ -151,7 +151,20 @@ class Document extends Node implements StreamInterface {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/head */
 	protected function __prop_get_head():?HTMLHeadElement {
+		if(!$this instanceof HTMLDocument) {
+			return null;
+		}
 
+		$nativeNode = $this->domDocument->getElementsByTagName(
+			"head")->item(0);
+
+		if(!$nativeNode) {
+			return null;
+		}
+
+		/** @var HTMLHeadElement $gtNode */
+		$gtNode = $this->domDocument->getGtDomNode($nativeNode);
+		return $gtNode;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/images */

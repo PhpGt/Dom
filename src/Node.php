@@ -91,11 +91,6 @@ abstract class Node {
 		}
 
 		$nativeDomChild = $aChild->ownerDocument->getNativeDomNode($aChild);
-
-$NATIVE_DOM_DOCUMENT = $nativeDomChild->ownerDocument;
-$THIS_DOM_DOCUMENT = $this->domNode->ownerDocument;
-var_dump($NATIVE_DOM_DOCUMENT === $THIS_DOM_DOCUMENT);
-
 		$this->domNode->appendChild($nativeDomChild);
 		return $aChild;
 	}
