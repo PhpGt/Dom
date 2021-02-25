@@ -153,6 +153,20 @@ class DOMDocumentFacade extends DOMDocument {
 	private array $domNodeList = [];
 	/** @var Node[] */
 	private array $gtNodeList = [];
+	private Document $gtDocument;
+
+	/**
+	 * @param string $version
+	 * @param string $encoding
+	 */
+	public function __construct(
+		Document $gtDocument,
+		$version = "",
+		$encoding = ""
+	) {
+		$this->gtDocument = $gtDocument;
+		parent::__construct($version, $encoding);
+	}
 
 	public function getGtDomNode(DOMNode $node):Node {
 		do {
@@ -181,22 +195,27 @@ class DOMDocumentFacade extends DOMDocument {
 	}
 
 	private function cacheNativeDomNode(DOMNode $node):void {
-		$key = get_class($node);
-		if($node->localName) {
-			$key .= "::" . $node->localName;
-		}
-		if(isset(self::NODE_CLASS_LIST[$key])) {
-			$gtNodeClass = self::NODE_CLASS_LIST[$key];
+		if($node instanceof DOMDocumentFacade) {
+			$object = $node->gtDocument;
 		}
 		else {
-			$gtNodeClass = self::DEFAULT_CLASS;
-		}
+			$key = get_class($node);
+			if($node->localName) {
+				$key .= "::" . $node->localName;
+			}
+			if(isset(self::NODE_CLASS_LIST[$key])) {
+				$gtNodeClass = self::NODE_CLASS_LIST[$key];
+			}
+			else {
+				$gtNodeClass = self::DEFAULT_CLASS;
+			}
 
-		$class = new ReflectionClass($gtNodeClass);
-		$object = $class->newInstanceWithoutConstructor();
-		$constructor = new ReflectionMethod($object, "__construct");
-		$constructor->setAccessible(true);
-		$constructor->invoke($object, $node);
+			$class = new ReflectionClass($gtNodeClass);
+			$object = $class->newInstanceWithoutConstructor();
+			$constructor = new ReflectionMethod($object, "__construct");
+			$constructor->setAccessible(true);
+			$constructor->invoke($object, $node);
+		}
 		array_push($this->domNodeList, $node);
 		array_push($this->gtNodeList, $object);
 	}

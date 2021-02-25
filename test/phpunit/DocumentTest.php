@@ -238,4 +238,20 @@ class DocumentTest extends TestCase {
 		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_PAGE);
 		self::assertCount(2, $sut->scripts);
 	}
+
+	public function testAdoptNodeOwnerDocument():void {
+		$sut1 = new Document();
+		$div = $sut1->createElement("div");
+		$divOwner = $div->ownerDocument;
+		self::assertSame($divOwner, $sut1);
+
+		$sut2 = new Document();
+		$divAdopted = $sut2->adoptNode($div);
+		$divAdoptedOwner = $divAdopted->ownerDocument;
+		$divOwner = $div->ownerDocument;
+
+		self::assertSame($divAdoptedOwner, $sut2);
+		self::assertSame($divOwner, $sut2);
+		self::assertSame($div, $divAdopted);
+	}
 }

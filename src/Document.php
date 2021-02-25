@@ -34,6 +34,7 @@ use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
 use Gt\PropFunc\MagicProp;
 use Psr\Http\Message\StreamInterface;
+use ReflectionClass;
 use RuntimeException;
 
 /**
@@ -65,6 +66,7 @@ class Document extends Node implements StreamInterface {
 	public function __construct() {
 		libxml_use_internal_errors(true);
 		$this->domDocument = new DOMDocumentFacade(
+			$this,
 			"1.0",
 			"utf-8"
 		);
@@ -224,7 +226,15 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/adoptNode
 	 */
 	public function adoptNode(Node $externalNode):Node {
+		$nativeNode = $this->getNativeDomNode($externalNode);
 
+		$domNodeFacade = new ReflectionClass(\DOMNode::class);
+		$ownerDocument = $domNodeFacade->getProperty("ownerDocument");
+//		$ownerDocument->setAccessible(true);
+		$ownerDocument->setValue($nativeNode, $this->domDocument);
+
+//		$nativeNode->ownerDocument = $this->domDocument;
+		return $externalNode;
 	}
 
 	/**
