@@ -79,6 +79,51 @@ HTML;
 </html>
 HTML;
 
+	const HTML_PAGE = <<<HTML
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>My Website!</title>
+	</head>
+<body>
+	<a href="#top-of-page">Skip to content</a>
+	
+	<header>
+		<a href="/">
+			<h1>My Website!</h1>
+		</a>
+		
+		<nav>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/about">About me</a></li>
+				<li><a href="/projects">My projects</a></li>
+				<li><a href="/contact">Contact me</a></li>
+			</ul>
+		</nav>
+	</header>
+	
+	<main>
+		<h1>
+			<a id="top-of-page">Welcome to my site!</a>
+		</h1>
+		
+		<article>
+			<h1>This is my example website.</h1>
+			<p>Thank you for visiting.</p>
+			<p>If you want, take a look at <a href="/projects">my projects</a>. They are really interesting to me.</p>
+			<p>Do you want to talk? <a href="/contact">Give me a buzz!</a></p>
+		</article>
+	</main>
+	
+	<footer>
+		<span>Copyright &copy; forever, me.</span>	
+	</footer>
+</body>
+</html>
+HTML;
+
 
 	const XML_DEFAULT = <<<XML
 <?xml version="1.0" ?>

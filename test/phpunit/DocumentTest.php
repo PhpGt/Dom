@@ -192,4 +192,33 @@ class DocumentTest extends TestCase {
 			$sut->images->length
 		);
 	}
+
+	public function testLinksEmpty():void {
+		$sut = new Document();
+		self::assertEquals(0, $sut->links->length);
+		self::assertCount(0, $sut->links);
+	}
+
+	public function testLinksEmptyXML():void {
+		$sut = DocumentTestFactory::createXMLDocument();
+		self::assertCount(0, $sut->links);
+	}
+
+	public function testLinksLive():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_PAGE);
+		$substrCount = substr_count(DocumentTestFactory::HTML_PAGE, "<a href");
+		$liveHTMLCollection = $sut->links;
+
+		self::assertEquals(
+			$substrCount,
+			$liveHTMLCollection->length
+		);
+
+		$fourthAnchor = $sut->getElementsByTagName("a")->item(3);
+		$fourthAnchor->remove();
+		self::assertEquals(
+			$substrCount - 1,
+			$liveHTMLCollection->length
+		);
+	}
 }

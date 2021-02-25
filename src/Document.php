@@ -174,7 +174,34 @@ class Document extends Node implements StreamInterface {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/links */
 	protected function __prop_get_links():HTMLCollection {
+		return HTMLCollectionFactory::create(function() {
+			$gtNodeArray = [];
 
+			$areaList = $this->domDocument->getElementsByTagName("area");
+			for($i = 0, $len = $areaList->length; $i < $len; $i++) {
+				$gtNode = $this->domDocument->getGtDomNode(
+					$areaList->item($i)
+				);
+				array_push($gtNodeArray, $gtNode);
+			}
+			$aList = $this->domDocument->getElementsByTagName("a");
+			for($i = 0, $len = $aList->length; $i < $len; $i++) {
+				$domNode = $aList->item($i);
+				$hrefAttr = $domNode->attributes->getNamedItem(
+					"href"
+				);
+				if(!$hrefAttr) {
+					continue;
+				}
+
+				$gtNode = $this->domDocument->getGtDomNode(
+					$aList->item($i)
+				);
+				array_push($gtNodeArray, $gtNode);
+			}
+
+			return NodeListFactory::create(...$gtNodeArray);
+		});
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/scripts */
