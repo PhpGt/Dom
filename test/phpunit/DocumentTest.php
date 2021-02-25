@@ -179,4 +179,17 @@ class DocumentTest extends TestCase {
 		self::assertEquals(0, $sut->images->length);
 		self::assertCount(0, $sut->images);
 	}
+
+	public function testImagesEmptyXML():void {
+		$sut = DocumentTestFactory::createXMLDocument();
+		self::assertEquals(0, $sut->images->length);
+	}
+
+	public function testImagesNonEmpty():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_IMAGES);
+		self::assertEquals(
+			substr_count(DocumentTestFactory::HTML_IMAGES, "<img"),
+			$sut->images->length
+		);
+	}
 }

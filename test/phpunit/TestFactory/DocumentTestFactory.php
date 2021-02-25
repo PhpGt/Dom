@@ -57,12 +57,33 @@ HTML;
 </main>
 HTML;
 
+	const HTML_IMAGES = <<<HTML
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>My Photos</title>
+	</head>
+<body>
+	<h1>Take a look at these amazing photos!</h1>
+
+	<ul>
+		<li><img src="/photo/cat.jpg" alt="My cat" /></li>
+		<li><img src="/photo/tree.jpg" alt="My cat in a tree" /></li>
+		<li>
+			<img src="/photo/bed.jpg" alt="My cat in bed" />
+		</li>
+		<li><img src="/photo/backflip.jpg" alt="My cat doing a backflip" /></li>	
+	</ul>
+</body>
+</html>
+HTML;
+
 
 	const XML_DEFAULT = <<<XML
 <?xml version="1.0" ?>
 <example/>
 XML;
-
 	const XML_BREAKFAST_MENU = <<<XML
 <?xml version="1.0" ?>
 <menu>
@@ -126,7 +147,6 @@ XML;
 	<tail/>
 </animal>
 XML;
-
 
 	public static function createHTMLDocument(
 		string $html = self::HTML_DEFAULT
