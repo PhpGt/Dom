@@ -67,6 +67,7 @@ use Gt\Dom\HTMLElement\HTMLUListElement;
 use Gt\Dom\HTMLElement\HTMLVideoElement;
 use Gt\Dom\Node;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
+use Gt\Dom\Text;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -75,6 +76,7 @@ class DOMDocumentFacade extends DOMDocument {
 	const NODE_CLASS_LIST = [
 		"Gt\Dom\Facade\DOMDocumentFacade" => Document::class,
 		"Gt\Dom\Facade\NodeClass\DOMDocumentTypeFacade" => DocumentType::class,
+		"Gt\Dom\Facade\NodeClass\DOMTextFacade" => Text::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::a" => HTMLAnchorElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::area" => HTMLAreaElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::audio" => HTMLAudioElement::class,

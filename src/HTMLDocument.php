@@ -11,6 +11,7 @@ class HTMLDocument extends Document {
 			$html = self::EMPTY_DOCUMENT_STRING;
 		}
 
+		$this->open();
 		$this->domDocument->loadHTML($html);
 
 		if(!$this->domDocument->documentElement) {

@@ -2,7 +2,8 @@
 namespace Gt\Dom;
 
 use DOMNode;
-use Gt\Dom\Exception\DomException;
+use Gt\Dom\Exception\DOMException;
+use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Facade\DOMDocumentFacade;
 use Gt\Dom\Facade\DOMDocumentNodeMap;
 use Gt\PropFunc\MagicProp;
@@ -86,7 +87,11 @@ abstract class Node {
 	public function appendChild(Node $aChild):Node {
 		if($this instanceof Document) {
 			if($this->childElementCount > 0) {
-				throw new DomException("Cannot have more than one Element child of a Document");
+				throw new DOMException("Cannot have more than one Element child of a Document");
+			}
+
+			if($aChild instanceof Text) {
+				throw new TextNodeCanNotBeRootNodeException("Cannot insert a Text as a child of a Document");
 			}
 		}
 
@@ -338,8 +343,13 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/ownerDocument */
 	protected function __prop_get_ownerDocument():?Document {
+		if($this instanceof Document) {
+			$nativeDocument = $this->domDocument;
+		}
+		else {
+			$nativeDocument = $this->domNode->ownerDocument;
+		}
 		/** @var DOMDocumentFacade $nativeDocument */
-		$nativeDocument = $this->domNode->ownerDocument;
 		/** @var Document $gtDocument */
 		$gtDocument = $nativeDocument->getGtDomNode($nativeDocument);
 		return $gtDocument;

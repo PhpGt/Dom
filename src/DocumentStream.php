@@ -1,7 +1,12 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\Dom\Exception\DocumentStreamNotWritableException;
+use Gt\Dom\Exception\DOMException;
+use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
+use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Psr\Http\Message\StreamInterface;
+use RuntimeException;
 
 trait DocumentStream {
 	/** @var ?resource */
@@ -33,34 +38,20 @@ trait DocumentStream {
 	 * Get the size of the stream if known.
 	 */
 	public function getSize():?int {
-		$this->fillStream();
-		return $this->streamBytesFilled;
+
 	}
 
 	/**
 	 * Returns the current position of the file read/write pointer
 	 */
 	public function tell():int {
-		$tell = null;
-
-		if(!is_null($this->stream)) {
-			$tell = ftell($this->stream);
-		}
-
-		$this->fillStream();
-
-		if(!is_null($tell)) {
-			fseek($this->stream, $tell);
-		}
-
-		return $tell;
+		return ftell($this->stream);
 	}
 
 	/**
 	 * Returns true if the stream is at the end of the stream.
 	 */
 	public function eof():bool {
-		$this->fillStream();
 		return feof($this->stream);
 	}
 
@@ -68,7 +59,6 @@ trait DocumentStream {
 	 * Returns whether or not the stream is seekable.
 	 */
 	public function isSeekable():bool {
-		$this->fillStream();
 		return $this->getMetadata("seekable");
 	}
 
@@ -114,7 +104,10 @@ trait DocumentStream {
 	 * @return bool
 	 */
 	public function isWritable():bool {
-		$this->fillStream();
+		if(!isset($this->stream)) {
+			return false;
+		}
+
 		$mode = $this->getMetadata("mode");
 		$writable = false;
 
@@ -126,17 +119,28 @@ trait DocumentStream {
 	}
 
 	/**
-	 * Write data to the stream.
+	 * The Document.write() method writes a string of text to a document
+	 * stream opened by document.open().
+	 *
+	 * Note: Because document.write() writes to the document stream, calling
+	 * document.write() on a closed (loaded) document automatically calls
+	 * document.open(), which will clear the document.
 	 *
 	 * @param string $string The string that is to be written.
 	 * @return int Returns the number of bytes written to the stream.
 	 * @throws RuntimeException on failure.
 	 */
 	public function write($string):int {
-		$this->fillStream();
-		$this->loadHTML($this->getContents() . $string);
-		$bytesWritten = fwrite($this->stream, $string);
-		return $bytesWritten;
+		if(!$this->isWritable()) {
+			throw new DocumentStreamNotWritableException();
+		}
+
+		if(!$this instanceof HTMLDocument) {
+			throw new WriteOnNonHTMLDocumentException("Operation is not supported");
+		}
+
+		$this->body?->append($string);
+		return strlen($string);
 	}
 
 	/**
@@ -155,6 +159,12 @@ trait DocumentStream {
 		}
 
 		return $readable;
+	}
+
+	public function open():Document {
+		/** @var Document $this */
+		$this->stream = fopen("php://memory", "r+");
+		return $this;
 	}
 
 	/**
@@ -205,7 +215,6 @@ trait DocumentStream {
 	 *     value is found, or null if the key is not found.
 	 */
 	public function getMetadata($key = null) {
-		$this->fillStream();
 		$metaData = stream_get_meta_data($this->stream);
 
 		if(is_null($key)) {
@@ -216,15 +225,10 @@ trait DocumentStream {
 	}
 
 	private function fillStream():void {
-		if(!is_null($this->streamBytesFilled)) {
-			return;
+		if(!isset($this->stream)) {
+			throw new DOMException("DocumentStream is closed");
 		}
 
-		if(!is_resource($this->stream)) {
-			throw new RuntimeException("Stream is closed");
-		}
-
-		$this->streamBytesFilled = 0;
 		$this->streamBytesFilled = fwrite($this->stream, $this->__toString());
 		fseek($this->stream, 0);
 	}

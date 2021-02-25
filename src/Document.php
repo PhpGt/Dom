@@ -71,7 +71,6 @@ class Document extends Node implements StreamInterface {
 			"utf-8"
 		);
 		$this->registerNodeClasses();
-		$this->stream = fopen("php://memory", "r+");
 		parent::__construct($this->domDocument);
 	}
 
@@ -246,15 +245,6 @@ class Document extends Node implements StreamInterface {
 	}
 
 	/**
-	 * The Document.close() method finishes writing to a document,
-	 * opened with Document.open().
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/close
-	 */
-	public function close():void {
-
-	}
-
-	/**
 	 * The Document.createAttribute() method creates a new attribute node,
 	 * and returns it. The object created a node implementing the Attr
 	 * interface. The DOM does not enforce what sort of attributes can be
@@ -419,7 +409,10 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/createTextNode
 	 */
 	public function createTextNode(string $data):Text {
-
+		$nativeNode = $this->domDocument->createTextNode($data);
+		/** @var Text $gtNode */
+		$gtNode = $this->domDocument->getGtDomNode($nativeNode);
+		return $gtNode;
 	}
 
 	/**
@@ -583,29 +576,6 @@ class Document extends Node implements StreamInterface {
 	}
 
 	/**
-	 * The Document.open() method opens a document for writing.
-	 *
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/open
-	 */
-	public function open():void {
-
-	}
-
-	/**
-	 * The Document.write() method writes a string of text to a document
-	 * stream opened by document.open().
-	 *
-	 * @param string $markup A string containing the text to be written to
-	 * the document.
-	 * @return int The number of bytes written.
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/write
-	 * @noinspection PhpMissingParamTypeInspection
-	 */
-	public function write($markup):int {
-
-	}
-
-	/**
 	 * Writes a string of text followed by a newline character to a
 	 * document.
 	 *
@@ -615,7 +585,7 @@ class Document extends Node implements StreamInterface {
 	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function writeln($line):int {
-
+		return $this->write($line . PHP_EOL);
 	}
 
 	private function registerNodeClasses():void {

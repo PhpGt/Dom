@@ -4,6 +4,9 @@ namespace Gt\Dom\Test;
 use Gt\Dom\Document;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
+use Gt\Dom\Exception\DocumentStreamNotWritableException;
+use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
+use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
 use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
@@ -265,5 +268,74 @@ class DocumentTest extends TestCase {
 		self::assertSame($divAdoptedOwner, $sut2, "The owner of the div after adoption must be the second document");
 		self::assertSame($divOwner, $sut2, "The original DIV's ownerDocument must change to the second document");
 		self::assertSame($div, $divAdopted, "The node should not change its reference after it has been adopted");
+	}
+
+	public function testStreamClosedByDefault():void {
+		$sut = new Document();
+		self::assertFalse($sut->isWritable());
+		self::expectException(DocumentStreamNotWritableException::class);
+		$sut->write("test");
+	}
+
+	public function testStreamOpenedByHTMLDocument():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::assertTrue($sut->isWritable());
+	}
+
+	public function testStreamOpenedByXMLDocument():void {
+		$sut = DocumentTestFactory::createXMLDocument();
+		self::assertTrue($sut->isWritable());
+	}
+
+	public function testClose():void {
+		$sut = new Document();
+		$sut->open();
+		self::assertTrue($sut->isWritable());
+		$sut->close();
+		self::assertFalse($sut->isWritable());
+	}
+
+	public function testWriteDirectlyToDocument():void {
+		$message = "Hello from PHPUnit!";
+		$sut = new Document();
+		$sut->open();
+		self::expectException(WriteOnNonHTMLDocumentException::class);
+		$sut->write($message);
+	}
+
+	public function testWriteHTMLDocument():void {
+		$message = "Hello from PHPUnit!";
+		$sut = DocumentTestFactory::createHTMLDocument();
+		$sut->open();
+		$sut->write($message);
+		$stream = $sut->detach();
+		$contents = stream_get_contents($stream);
+		$expected = <<<HTML
+		<!DOCTYPE html>
+		<html><head></head><body><h1>Hello, PHP.Gt!</h1>$message</body></html>
+		
+		HTML;
+
+		self::assertEquals($expected, $contents);
+	}
+
+	public function testWritelnHTMLDocument():void {
+		$message1 = "Hello from PHPUnit!";
+		$message2 = "Here is another message!";
+		$sut = DocumentTestFactory::createHTMLDocument();
+		$sut->open();
+		$sut->writeln($message1);
+		$sut->writeln($message2);
+		$stream = $sut->detach();
+		$contents = stream_get_contents($stream);
+		$expected = <<<HTML
+		<!DOCTYPE html>
+		<html><head></head><body><h1>Hello, PHP.Gt!</h1>$message1
+		$message2
+		</body></html>
+		
+		HTML;
+
+		self::assertEquals($expected, $contents);
 	}
 }

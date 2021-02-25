@@ -5,6 +5,8 @@ use DOMDocument;
 use DOMNode;
 use DOMXPath;
 use Gt\CssXPath\Translator;
+use Gt\Dom\Facade\NodeClass\DOMElementFacade;
+use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
 
 /**
  * @link https://dom.spec.whatwg.org/#parentnode
@@ -26,7 +28,20 @@ use Gt\CssXPath\Translator;
 trait ParentNode {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/childElementCount */
 	protected function __prop_get_childElementCount():int {
+		$count = 0;
 
+		/** @var Node $this */
+		/** @var DOMNodeFacade $nativeNode */
+		$nativeNode = $this->getNativeDomNode($this);
+		$childNodes = $nativeNode->childNodes;
+		for($i = 0, $len = $childNodes->length; $i < $len; $i++) {
+			$nativeChild = $childNodes->item($i);
+			if($nativeChild instanceof DOMElementFacade) {
+				$count++;
+			}
+		}
+
+		return $count;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children */
@@ -67,7 +82,16 @@ trait ParentNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/append
 	 */
 	public function append(string|Node...$nodesOrDOMStrings):void {
+		foreach($nodesOrDOMStrings as $nodeOrString) {
+			$node = $nodeOrString;
+			if(is_string($nodeOrString)) {
+				/** @var Document $doc */
+				$doc = $this->ownerDocument ?? $this;
+				$node = $doc->createTextNode($nodeOrString);
+			}
 
+			$this->appendChild($node);
+		}
 	}
 
 	/**

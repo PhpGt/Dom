@@ -11,6 +11,7 @@ class XMLDocument extends Document {
 			$xml = self::EMPTY_DOCUMENT_STRING;
 		}
 
+		$this->open();
 		$this->domDocument->loadXML($xml);
 	}
 
