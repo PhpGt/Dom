@@ -9,6 +9,7 @@ use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
 use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
+use Gt\Dom\HTMLElement\HTMLHeadElement;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\PropFunc\PropertyReadOnlyException;
 use PHPUnit\Framework\TestCase;
@@ -174,6 +175,17 @@ class DocumentTest extends TestCase {
 
 	public function testHeadNullOnXMLWithHeadElement():void {
 		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_ANIMAL_PARTS);
+		self::assertNull($sut->head);
+	}
+
+	public function testHeadCreatedByDefaultHTML():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::assertInstanceOf(HTMLHeadElement::class, $sut->head);
+	}
+
+	public function testHeadRemovable():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		$sut->head->remove();
 		self::assertNull($sut->head);
 	}
 
