@@ -237,6 +237,16 @@ class DocumentTest extends TestCase {
 		);
 	}
 
+	public function testLinksArea():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_AREA);
+		$substrAHrefCount = substr_count(DocumentTestFactory::HTML_AREA, "<a href");
+		$substrAreaCount = substr_count(DocumentTestFactory::HTML_AREA, "<area");
+		self::assertCount(
+			$substrAHrefCount + $substrAreaCount,
+			$sut->links
+		);
+	}
+
 	public function testScriptsEmpty():void {
 		$sut = new Document();
 		self::assertEquals(0, $sut->scripts->length);

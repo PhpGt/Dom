@@ -8,4 +8,8 @@ class NodeListFactory extends NodeList {
 	public static function create(Node...$nodeList):NodeList {
 		return new NodeList(...$nodeList);
 	}
+
+	public static function createLive(callable $callback):NodeList {
+
+	}
 }

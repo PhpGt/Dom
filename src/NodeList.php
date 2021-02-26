@@ -20,9 +20,24 @@ class NodeList implements Countable {
 
 	/** @var Node[] */
 	private array $nodeList;
+	/** @var callable */
+	private $callback;
 
-	protected function __construct(Node...$nodeList) {
-		$this->nodeList = $nodeList;
+	/**
+	 * A NodeList can, confusingly, be both "live" OR "static" using the
+	 * same class. To differentiate, PHP.Gt sets EITHER a $nodeList
+	 * OR a $callback property. When a $nodeList is set, the list is deemed
+	 * "static". When a $callback is set, the list is deemed "live" and
+	 * behaves similarly to HTMLCollection (which is ALWAYS live).
+	 * @see HTMLCollection
+	 */
+	protected function __construct(Node|callable...$representation) {
+		if(isset($representation[0]) && is_callable($representation[0])) {
+			$this->callback = $representation[0];
+		}
+		else {
+			$this->nodeList = $representation;
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/length */
