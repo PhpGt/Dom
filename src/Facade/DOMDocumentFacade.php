@@ -12,9 +12,12 @@ use DOMElement;
 use DOMEntity;
 use DOMEntityReference;
 use DOMNode;
+use DOMNodeList;
 use DOMNotation;
 use DOMProcessingInstruction;
 use DOMText;
+use DOMXPath;
+use Gt\CssXPath\Translator;
 use Gt\Dom\Attr;
 use Gt\Dom\CDATASection;
 use Gt\Dom\Comment;
@@ -22,6 +25,7 @@ use Gt\Dom\Document;
 use Gt\Dom\DocumentFragment;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
+use Gt\Dom\Exception\XPathQueryException;
 use Gt\Dom\Facade\NodeClass\DOMAttrFacade;
 use Gt\Dom\Facade\NodeClass\DOMCdataSectionFacade;
 use Gt\Dom\Facade\NodeClass\DOMCharacterDataFacade;
@@ -230,6 +234,19 @@ class DOMDocumentFacade extends DOMDocument {
 		}
 		while(!is_int($key));
 		return $this->domNodeList[$key];
+	}
+
+	public function query(
+		string $expression,
+		DOMNode $contextNode = null
+	):DOMNodeList {
+		$domXPath = new DOMXPath($this);
+		$result = $domXPath->query($expression, $contextNode);
+		if(!$result) {
+			throw new XPathQueryException($expression);
+		}
+
+		return $result;
 	}
 
 	private function cacheNativeDomNode(DOMNode $node):void {

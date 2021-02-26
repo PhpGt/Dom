@@ -88,38 +88,39 @@ HTML;
 		<script src="https://invasive-tracker.weownyou.com/analytics.js"></script>
 	</head>
 <body>
-	<a href="#top-of-page">Skip to content</a>
+	<a href="#top-of-page" class="hidden">Skip to content</a>
 	
 	<header>
 		<a href="/">
-			<h1>My Website!</h1>
+			<h1 class="big-text">My Website!</h1>
 		</a>
 		
 		<nav>
 			<ul>
-				<li><a href="/">Home</a></li>
-				<li><a href="/about">About me</a></li>
-				<li><a href="/projects">My projects</a></li>
-				<li><a href="/contact">Contact me</a></li>
+				<li class="icon icon-home"><a href="/">Home</a></li>
+				<li class="icon icon-about"><a href="/about">About me</a></li>
+				<li class="icon icon-projects"><a href="/projects">My projects</a></li>
+				<li class="icon icon-contact"><a href="/contact">Contact me</a></li>
 			</ul>
 		</nav>
 	</header>
 	
 	<main>
 		<h1>
-			<a id="top-of-page">Welcome to my site!</a>
+			<a id="top-of-page" class="big-text green">Welcome to my site!</a>
 		</h1>
 		
 		<article>
 			<h1>This is my example website.</h1>
 			<p>Thank you for visiting.</p>
-			<p>If you want, take a look at <a href="/projects">my projects</a>. They are really interesting to me.</p>
-			<p>Do you want to talk? <a href="/contact">Give me a buzz!</a></p>
+			<p>If you want, take a look at <a href="/projects" class="icon icon-projects">my projects</a>. They are really interesting to me.</p>
+			<p>Do you want to talk? <a href="/contact" class="icon icon-contact">Give me a buzz!</a></p>
 		</article>
 	</main>
 	
 	<footer>
 		<span>Copyright &copy; forever, me.</span>	
+		<span>I ❤️ 🐢</span>
 	</footer>
 	
 	<script src="/my-script.js"></script>

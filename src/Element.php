@@ -49,7 +49,9 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/className */
 	protected function __prop_set_className(string $className):void {
-
+		/** @var DOMElement $domElement */
+		$domElement = $this->domNode;
+		$domElement->setAttribute("class", $className);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */

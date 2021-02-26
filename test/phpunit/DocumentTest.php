@@ -513,4 +513,42 @@ class DocumentTest extends TestCase {
 		$selected = $sut->getElementById("id-of-child2");
 		self::assertSame($child2, $selected);
 	}
+
+	public function testGetElementsByClassNameEmpty():void {
+		$sut = new Document();
+		$htmlCollection = $sut->getElementsByClassName("nothing here");
+		self::assertCount(0, $htmlCollection);
+	}
+
+	public function testGetElementsByClassName():void {
+		$sut = new Document();
+		$root = $sut->createElement("root");
+		$sut->appendChild($root);
+		$trunk = $sut->createElement("trunk");
+		$root->appendChild($trunk);
+		$leaf = $sut->createElement("leaf");
+		$trunk->appendChild($leaf);
+
+		$root->className = "below-ground brown";
+		$trunk->className = "above-ground brown";
+		$leaf->className = "above-ground green";
+
+		self::assertCount(
+			2,
+			$sut->getElementsByClassName("above-ground")
+		);
+		self::assertCount(
+			1,
+			$sut->getElementsByClassName("green")
+		);
+		self::assertCount(
+			2,
+			$sut->getElementsByClassName("brown")
+		);
+	}
+
+	public function testGetElementsByClassNameHTML():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_PAGE);
+		self::assertCount(6, $sut->getElementsByClassName("icon"));
+	}
 }

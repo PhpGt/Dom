@@ -537,7 +537,18 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByClassName
 	 */
 	public function getElementsByClassName(string $names):HTMLCollection {
+		$querySelector = "";
+		foreach(explode(" ", $names) as $name) {
+			if(strlen($querySelector) > 0) {
+				$querySelector .= " ";
+			}
 
+			$querySelector .= ".$name";
+		}
+
+		return HTMLCollectionFactory::create(
+			fn() => $this->querySelectorAll($querySelector)
+		);
 	}
 
 	/**

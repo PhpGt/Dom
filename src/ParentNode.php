@@ -5,8 +5,10 @@ use DOMDocument;
 use DOMNode;
 use DOMXPath;
 use Gt\CssXPath\Translator;
+use Gt\Dom\Facade\DOMDocumentFacade;
 use Gt\Dom\Facade\NodeClass\DOMElementFacade;
 use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
+use Gt\Dom\Facade\NodeListFactory;
 
 /**
  * @link https://dom.spec.whatwg.org/#parentnode
@@ -145,6 +147,25 @@ trait ParentNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/querySelectorAll
 	 */
 	public function querySelectorAll(string $selectors):NodeList {
+		/** @var Node $context */
+		$context = $this;
+//		if($this instanceof Document) {
+//			$context = $this->documentElement;
+//		}
 
+		$translator = new Translator($selectors, ".//");
+		$nativeContext = $this->getNativeDomNode($context);
+		$domNodeList = $this->domDocument->query(
+			$translator,
+			$nativeContext
+		);
+		$nodeArray = [];
+
+		for($i = 0, $len = $domNodeList->length; $i < $len; $i++) {
+			$gtNode = $this->getGtDomNode($domNodeList->item($i));
+			array_push($nodeArray, $gtNode);
+		}
+
+		return NodeListFactory::create(...$nodeArray);
 	}
 }
