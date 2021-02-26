@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\Attr;
 use Gt\Dom\Document;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
@@ -372,5 +373,11 @@ class DocumentTest extends TestCase {
 		HTML;
 
 		self::assertEquals($expected, $contents);
+	}
+
+	public function testCreateAttribute():void {
+		$sut = new Document();
+		$attr = $sut->createAttribute("example");
+		self::assertEquals("example", $attr->name);
 	}
 }

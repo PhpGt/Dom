@@ -20,7 +20,7 @@ namespace Gt\Dom;
 class Attr extends Node {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Attr/name */
 	protected function __prop_get_name():string {
-
+		return $this->domNode->localName;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Attr/namespaceURI */

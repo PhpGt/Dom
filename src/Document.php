@@ -262,7 +262,10 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/createAttribute
 	 */
 	public function createAttribute(string $name):Attr {
-
+		$nativeAttr = $this->domDocument->createAttribute($name);
+		/** @var Attr $gtAttr */
+		$gtAttr = $this->getGtDomNode($nativeAttr);
+		return $gtAttr;
 	}
 
 	/**
