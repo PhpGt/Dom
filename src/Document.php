@@ -34,6 +34,7 @@ use Gt\Dom\Facade\NodeClass\DOMNotationFacade;
 use Gt\Dom\Facade\NodeClass\DOMTextFacade;
 use Gt\Dom\Facade\NodeIteratorFactory;
 use Gt\Dom\Facade\NodeListFactory;
+use Gt\Dom\Facade\TreeWalkerFactory;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
 use Gt\PropFunc\MagicProp;
@@ -475,7 +476,7 @@ class Document extends Node implements StreamInterface {
 	 *
 	 * @param Node $root A root Node of this TreeWalker traversal. Typically
 	 * this will be an element owned by the document.
-	 * @param ?int $whatToShow A unsigned long representing a bitmask
+	 * @param int $whatToShow A unsigned long representing a bitmask
 	 * created by combining the constant properties of NodeFilter. It is a
 	 * convenient way of filtering for certain types of node. It defaults
 	 * to 0xFFFFFFFF representing the SHOW_ALL constant.
@@ -487,10 +488,10 @@ class Document extends Node implements StreamInterface {
 	 */
 	public function createTreeWalker(
 		Node $root,
-		int $whatToShow = null,
+		int $whatToShow = NodeFilter::SHOW_ALL,
 		NodeFilter $filter = null
 	):TreeWalker {
-
+		return TreeWalkerFactory::create($root, $whatToShow, $filter);
 	}
 
 	/**

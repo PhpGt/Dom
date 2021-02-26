@@ -478,4 +478,10 @@ class DocumentTest extends TestCase {
 		$text = $sut->createTextNode("test");
 		self::assertSame($text->ownerDocument, $sut);
 	}
+
+	public function testCreateTreeWalker():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		$treeWalker = $sut->createTreeWalker($sut->body);
+		self::assertSame($sut->body, $treeWalker->currentNode);
+	}
 }

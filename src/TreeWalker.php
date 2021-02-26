@@ -19,6 +19,39 @@ use Gt\PropFunc\MagicProp;
 class TreeWalker {
 	use MagicProp;
 
+	private Node $pCurrent;
+	private NodeFilter $pFilter;
+
+	protected function __construct(
+		private Node $root,
+		private int $whatToShow = NodeFilter::SHOW_ALL,
+		NodeFilter|callable $filter = null
+	) {
+		$this->pCurrent = $root;
+
+		if($filter) {
+			if(is_callable($filter)) {
+				$filter = new class($filter) extends NodeFilter {
+					/** @var callable */
+					private $callback;
+
+					/** @param callable $callback */
+					public function __construct($callback) {
+						$this->callback = $callback;
+					}
+
+					public function acceptNode(Node $node):int {
+						return call_user_func(
+							$this->callback,
+							$node
+						);
+					}
+				};
+			}
+			$this->pFilter = $filter;
+		}
+	}
+
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/root */
 	protected function __prop_get_root():Node {
 
@@ -36,7 +69,7 @@ class TreeWalker {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/currentNode */
 	protected function __prop_get_currentNode():Node {
-
+		return $this->pCurrent;
 	}
 
 	/**
