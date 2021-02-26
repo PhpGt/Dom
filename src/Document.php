@@ -347,7 +347,18 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
 	 */
 	public function createElement(string $tagName):Element {
-		$domElement = $this->domDocument->createElement($tagName);
+		if($this instanceof HTMLDocument) {
+			$domElement = $this->domDocument->createElementNS(
+				HTMLDocument::W3_NAMESPACE,
+				$tagName
+			);
+		}
+		else {
+			$domElement = $this->domDocument->createElement(
+				$tagName
+			);
+		}
+
 		/** @var Element $element */
 		$element = $this->domDocument->getGtDomNode($domElement);
 		return $element;
@@ -373,7 +384,13 @@ class Document extends Node implements StreamInterface {
 		string $namespaceURI,
 		string $qualifiedName
 	):Element {
-
+		$domElement = $this->domDocument->createElementNS(
+			$namespaceURI,
+			$qualifiedName
+		);
+		/** @var Element $gtElement */
+		$gtElement = $this->getGtDomNode($domElement);
+		return $gtElement;
 	}
 
 	/**

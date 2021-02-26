@@ -11,6 +11,7 @@ use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
 use Gt\Dom\HTMLCollection;
+use Gt\Dom\HTMLDocument;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
@@ -423,6 +424,32 @@ class DocumentTest extends TestCase {
 			$element = $sut->createElement($elementName);
 			self::assertInstanceOf(Element::class, $element);
 			self::assertEquals(strtoupper($elementName), $element->tagName);
+			self::assertNull($element->namespaceURI);
+		}
+	}
+
+	public function testCreateElementHTML():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		foreach(["one", "two", "three"] as $number) {
+			$elementName = "element-$number";
+			$element = $sut->createElement($elementName);
+			self::assertEquals(
+				HTMLDocument::W3_NAMESPACE,
+				$element->namespaceURI
+			);
+		}
+	}
+
+	public function testCreateElementNS():void {
+		$sut = new Document();
+		foreach(["one", "two", "three"] as $number) {
+			$elementName = "element-$number";
+			$namespace = uniqid("ns-");
+			$element = $sut->createElementNS($namespace, $elementName);
+			self::assertEquals(
+				$namespace,
+				$element->namespaceURI
+			);
 		}
 	}
 }

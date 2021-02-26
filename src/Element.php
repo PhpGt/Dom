@@ -79,7 +79,11 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/namespaceURI */
 	protected function __prop_get_namespaceURI():?string {
+		if(isset($this->domNode->namespaceURI)) {
+			return $this->domNode->namespaceURI;
+		}
 
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
