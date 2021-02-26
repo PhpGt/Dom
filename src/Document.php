@@ -85,6 +85,10 @@ class Document extends Node implements StreamInterface {
 		return $string;
 	}
 
+	public function getGtDomNode(DOMNode $nativeNode):Node {
+		return $this->domDocument->getGtDomNode($nativeNode);
+	}
+
 	public function getNativeDomNode(Node $gtNode):DOMNode {
 		/** @var DOMNodeFacade $nativeDomNode */
 		$nativeDomNode = $this->domDocument->getNativeDomNode($gtNode);

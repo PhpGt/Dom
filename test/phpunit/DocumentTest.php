@@ -292,6 +292,19 @@ class DocumentTest extends TestCase {
 		self::assertSame($div, $divAdopted, "The node should not change its reference after it has been adopted");
 	}
 
+	public function testAdoptNodeRemovesParent():void {
+		$sut1 = new Document();
+		$body1 = $sut1->createElement("body");
+		$sut1->appendChild($body1);
+		$div = $sut1->createElement("div");
+		$body1->appendChild($div);
+		$sut2 = new Document();
+
+		self::assertSame($body1, $div->parentNode);
+		$sut2->adoptNode($div);
+		self::assertNull($div->parentNode);
+	}
+
 	public function testStreamClosedByDefault():void {
 		$sut = new Document();
 		self::assertFalse($sut->isWritable());

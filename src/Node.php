@@ -357,7 +357,12 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentNode */
 	protected function __prop_get_parentNode():?Node {
+		$nativeNode = $this->domNode->parentNode;
+		if(!$nativeNode) {
+			return null;
+		}
 
+		return $this->ownerDocument->getGtDomNode($nativeNode);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentElement */
