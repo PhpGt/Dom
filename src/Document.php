@@ -74,7 +74,7 @@ class Document extends Node implements StreamInterface {
 			"1.0",
 			"utf-8"
 		);
-		$this->registerNodeClasses();
+
 		parent::__construct($this->domDocument);
 	}
 
@@ -442,7 +442,15 @@ class Document extends Node implements StreamInterface {
 		string $target,
 		string $data
 	):ProcessingInstruction {
+		$closingTag = "?>";
+		if(strstr($data, $closingTag)) {
+			throw new InvalidCharacterException($closingTag);
+		}
 
+		$domProcessingInstruction = $this->domDocument->createProcessingInstruction($target, $data);
+		/** @var ProcessingInstruction $gtProcessingInstruction */
+		$gtProcessingInstruction = $this->getGtDomNode($domProcessingInstruction);
+		return $gtProcessingInstruction;
 	}
 
 	/**
@@ -632,29 +640,5 @@ class Document extends Node implements StreamInterface {
 	 */
 	public function writeln($line):int {
 		return $this->write($line . PHP_EOL);
-	}
-
-	private function registerNodeClasses():void {
-		$classList = [
-			DOMAttr::class => DOMAttrFacade::class,
-			DOMCdataSection::class => DOMCdataSectionFacade::class,
-			DOMCharacterData::class => DOMCharacterDataFacade::class,
-			DOMComment::class => DOMCommentFacade::class,
-			DOMDocumentFragment::class => DOMDocumentFragmentFacade::class,
-			DOMDocumentType::class => DOMDocumentTypeFacade::class,
-			DOMElement::class => DOMElementFacade::class,
-			DOMEntity::class => DOMEntityFacade::class,
-			DOMEntityReference::class => DOMEntityReferenceFacade::class,
-			DOMNode::class => DOMNodeFacade::class,
-			DOMNotation::class => DOMNotationFacade::class,
-			DOMText::class => DOMTextFacade::class,
-		];
-
-		foreach($classList as $nativeClass => $facadeClass) {
-			$this->domDocument->registerNodeClass(
-				$nativeClass,
-				$facadeClass
-			);
-		}
 	}
 }

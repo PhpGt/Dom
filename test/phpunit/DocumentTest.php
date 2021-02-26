@@ -460,4 +460,16 @@ class DocumentTest extends TestCase {
 		$iterator = $sut->createNodeIterator($sut->body);
 		self::assertIsIterable($iterator);
 	}
+
+	public function testCreateProcessingInstructionInvalidCharacter():void {
+		$sut = new Document();
+		self::expectException(InvalidCharacterException::class);
+		$sut->createProcessingInstruction("test", "?><?");
+	}
+
+	public function testCreateProcessingInstruction():void {
+		$sut = new Document();
+		$pi = $sut->createProcessingInstruction("test", "example");
+		self::assertSame($pi->ownerDocument, $sut);
+	}
 }

@@ -1,8 +1,20 @@
 <?php
 namespace Gt\Dom\Facade;
 
+use DOMAttr;
+use DOMCdataSection;
+use DOMCharacterData;
+use DOMComment;
 use DOMDocument;
+use DOMDocumentFragment;
+use DOMDocumentType;
+use DOMElement;
+use DOMEntity;
+use DOMEntityReference;
 use DOMNode;
+use DOMNotation;
+use DOMProcessingInstruction;
+use DOMText;
 use Gt\Dom\Attr;
 use Gt\Dom\CDATASection;
 use Gt\Dom\Comment;
@@ -11,6 +23,18 @@ use Gt\Dom\DocumentFragment;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
 use Gt\Dom\Facade\NodeClass\DOMAttrFacade;
+use Gt\Dom\Facade\NodeClass\DOMCdataSectionFacade;
+use Gt\Dom\Facade\NodeClass\DOMCharacterDataFacade;
+use Gt\Dom\Facade\NodeClass\DOMCommentFacade;
+use Gt\Dom\Facade\NodeClass\DOMDocumentFragmentFacade;
+use Gt\Dom\Facade\NodeClass\DOMDocumentTypeFacade;
+use Gt\Dom\Facade\NodeClass\DOMElementFacade;
+use Gt\Dom\Facade\NodeClass\DOMEntityFacade;
+use Gt\Dom\Facade\NodeClass\DOMEntityReferenceFacade;
+use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
+use Gt\Dom\Facade\NodeClass\DOMNotationFacade;
+use Gt\Dom\Facade\NodeClass\DOMProcessingInstructionFacade;
+use Gt\Dom\Facade\NodeClass\DOMTextFacade;
 use Gt\Dom\HTMLElement\HTMLAnchorElement;
 use Gt\Dom\HTMLElement\HTMLAreaElement;
 use Gt\Dom\HTMLElement\HTMLAudioElement;
@@ -72,6 +96,7 @@ use Gt\Dom\HTMLElement\HTMLUListElement;
 use Gt\Dom\HTMLElement\HTMLVideoElement;
 use Gt\Dom\Node;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
+use Gt\Dom\ProcessingInstruction;
 use Gt\Dom\Text;
 use ReflectionClass;
 use ReflectionMethod;
@@ -86,6 +111,7 @@ class DOMDocumentFacade extends DOMDocument {
 		"Gt\Dom\Facade\NodeClass\DOMCdataSectionFacade" => CDATASection::class,
 		"Gt\Dom\Facade\NodeClass\DOMCommentFacade" => Comment::class,
 		"Gt\Dom\Facade\NodeClass\DOMDocumentFragmentFacade" => DocumentFragment::class,
+		"Gt\Dom\Facade\NodeClass\DOMProcessingInstructionFacade" => ProcessingInstruction::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::a" => HTMLAnchorElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::area" => HTMLAreaElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::audio" => HTMLAudioElement::class,
@@ -177,6 +203,7 @@ class DOMDocumentFacade extends DOMDocument {
 	) {
 		$this->gtDocument = $gtDocument;
 		parent::__construct($version, $encoding);
+		$this->registerNodeClasses();
 	}
 
 	public function getGtDomNode(DOMNode $node):Node {
@@ -241,5 +268,30 @@ class DOMDocumentFacade extends DOMDocument {
 		$domNode = $prop->getValue($node);
 		array_push($this->domNodeList, $domNode);
 		array_push($this->gtNodeList, $node);
+	}
+
+	private function registerNodeClasses():void {
+		$classList = [
+			DOMAttr::class => DOMAttrFacade::class,
+			DOMCdataSection::class => DOMCdataSectionFacade::class,
+			DOMCharacterData::class => DOMCharacterDataFacade::class,
+			DOMComment::class => DOMCommentFacade::class,
+			DOMDocumentFragment::class => DOMDocumentFragmentFacade::class,
+			DOMDocumentType::class => DOMDocumentTypeFacade::class,
+			DOMElement::class => DOMElementFacade::class,
+			DOMEntity::class => DOMEntityFacade::class,
+			DOMEntityReference::class => DOMEntityReferenceFacade::class,
+			DOMNode::class => DOMNodeFacade::class,
+			DOMNotation::class => DOMNotationFacade::class,
+			DOMText::class => DOMTextFacade::class,
+			DOMProcessingInstruction::class => DOMProcessingInstructionFacade::class,
+		];
+
+		foreach($classList as $baseClass => $extendedClass) {
+			$this->registerNodeClass(
+				$baseClass,
+				$extendedClass
+			);
+		}
 	}
 }
