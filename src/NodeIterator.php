@@ -2,6 +2,7 @@
 namespace Gt\Dom;
 
 use Gt\PropFunc\MagicProp;
+use Iterator;
 
 /**
  * The NodeIterator interface represents an iterator over the members of a list
@@ -15,8 +16,16 @@ use Gt\PropFunc\MagicProp;
  * @property-read NodeFilter $filter Returns a NodeFilter used to select the relevant nodes.
  *
  */
-class NodeIterator {
+class NodeIterator implements Iterator {
 	use MagicProp;
+
+	protected function __construct(
+		Node $root,
+		int $whatToShow = NodeFilter::SHOW_ALL,
+		NodeFilter|callable $filter = null
+	) {
+
+	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator/root */
 	protected function __prop_get_root():Node {
@@ -61,5 +70,25 @@ class NodeIterator {
 	 */
 	public function nextNode():?Node {
 
+	}
+
+	public function current() {
+		// TODO: Implement current() method.
+	}
+
+	public function next() {
+		// TODO: Implement next() method.
+	}
+
+	public function key() {
+		// TODO: Implement key() method.
+	}
+
+	public function valid() {
+		// TODO: Implement valid() method.
+	}
+
+	public function rewind() {
+		// TODO: Implement rewind() method.
 	}
 }

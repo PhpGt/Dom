@@ -14,6 +14,8 @@ use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
+use Gt\Dom\NodeFilter;
+use Gt\Dom\NodeIterator;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\PropFunc\PropertyReadOnlyException;
 use PHPUnit\Framework\TestCase;
@@ -451,5 +453,11 @@ class DocumentTest extends TestCase {
 				$element->namespaceURI
 			);
 		}
+	}
+
+	public function testCreateNodeIterator():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		$iterator = $sut->createNodeIterator($sut->body);
+		self::assertIsIterable($iterator);
 	}
 }

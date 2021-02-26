@@ -32,6 +32,7 @@ use Gt\Dom\Facade\NodeClass\DOMEntityReferenceFacade;
 use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
 use Gt\Dom\Facade\NodeClass\DOMNotationFacade;
 use Gt\Dom\Facade\NodeClass\DOMTextFacade;
+use Gt\Dom\Facade\NodeIteratorFactory;
 use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
@@ -402,10 +403,10 @@ class Document extends Node implements StreamInterface {
 	 * bitmask created by combining the constant properties of NodeFilter.
 	 * It is a convenient way of filtering for certain types of node.
 	 * It defaults to 0xFFFFFFFF representing the SHOW_ALL constant.
-	 * @param ?NodeFilter $filter An object implementing the NodeFilter
-	 * interface. Its acceptNode() method will be called for each node in
-	 * the subtree based at root which is accepted as included by the
-	 * whatToShow flag to determine whether or not to include it in the
+	 * @param ?NodeFilter|?callable $filter An object implementing the
+	 * NodeFilter interface. Its acceptNode() method will be called for each
+	 * node in the subtree based at root which is accepted as included by
+	 * the whatToShow flag to determine whether or not to include it in the
 	 * list of iterable nodes (a simple callback function may also be used
 	 * instead). The method should return one of NodeFilter.FILTER_ACCEPT,
 	 * NodeFilter.FILTER_REJECT, or NodeFilter.FILTER_SKIP.
@@ -414,10 +415,10 @@ class Document extends Node implements StreamInterface {
 	 */
 	public function createNodeIterator(
 		Node $root,
-		int $whatToShow = null,
-		NodeFilter $filter = null
+		int $whatToShow = NodeFilter::SHOW_ALL,
+		NodeFilter|callable $filter = null
 	):NodeIterator {
-
+		return NodeIteratorFactory::create($root, $whatToShow, $filter);
 	}
 
 	/**
