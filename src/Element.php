@@ -99,7 +99,7 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/tagName */
 	protected function __prop_get_tagName():string {
-
+		return strtoupper($this->domNode->localName);
 	}
 
 	/**

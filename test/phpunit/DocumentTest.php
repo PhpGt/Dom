@@ -415,4 +415,14 @@ class DocumentTest extends TestCase {
 		$fragment = $sut->createDocumentFragment();
 		self::assertSame($sut, $fragment->ownerDocument);
 	}
+
+	public function testCreateElement():void {
+		$sut = new Document();
+		foreach(["one", "two", "three"] as $number) {
+			$elementName = "element-$number";
+			$element = $sut->createElement($elementName);
+			self::assertInstanceOf(Element::class, $element);
+			self::assertEquals(strtoupper($elementName), $element->tagName);
+		}
+	}
 }
