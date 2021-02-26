@@ -472,4 +472,10 @@ class DocumentTest extends TestCase {
 		$pi = $sut->createProcessingInstruction("test", "example");
 		self::assertSame($pi->ownerDocument, $sut);
 	}
+
+	public function testCreateTextNode():void {
+		$sut = new Document();
+		$text = $sut->createTextNode("test");
+		self::assertSame($text->ownerDocument, $sut);
+	}
 }
