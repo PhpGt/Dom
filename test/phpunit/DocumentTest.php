@@ -409,4 +409,10 @@ class DocumentTest extends TestCase {
 		$comment = $sut->createComment($data);
 		self::assertEquals($data, $comment->nodeValue);
 	}
+
+	public function testCreateDocumentFragment():void {
+		$sut = new Document();
+		$fragment = $sut->createDocumentFragment();
+		self::assertSame($sut, $fragment->ownerDocument);
+	}
 }

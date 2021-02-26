@@ -327,7 +327,10 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/createDocumentFragment
 	 */
 	public function createDocumentFragment():DocumentFragment {
-
+		$domFragment = $this->domDocument->createDocumentFragment();
+		/** @var DocumentFragment $gtFragment */
+		$gtFragment = $this->getGtDomNode($domFragment);
+		return $gtFragment;
 	}
 
 	/**
