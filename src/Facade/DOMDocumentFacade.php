@@ -5,6 +5,7 @@ use DOMDocument;
 use DOMNode;
 use Gt\Dom\Attr;
 use Gt\Dom\CDATASection;
+use Gt\Dom\Comment;
 use Gt\Dom\Document;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
@@ -82,6 +83,7 @@ class DOMDocumentFacade extends DOMDocument {
 		"Gt\Dom\Facade\NodeClass\DOMTextFacade" => Text::class,
 		"Gt\Dom\Facade\NodeClass\DOMAttrFacade" => Attr::class,
 		"Gt\Dom\Facade\NodeClass\DOMCdataSectionFacade" => CDATASection::class,
+		"Gt\Dom\Facade\NodeClass\DOMCommentFacade" => Comment::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::a" => HTMLAnchorElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::area" => HTMLAreaElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::audio" => HTMLAudioElement::class,

@@ -402,4 +402,11 @@ class DocumentTest extends TestCase {
 		self::expectException(InvalidCharacterException::class);
 		$sut->createCDATASection($data);
 	}
+
+	public function testCreateComment():void {
+		$sut = new Document();
+		$data = "This is an example comment!";
+		$comment = $sut->createComment($data);
+		self::assertEquals($data, $comment->nodeValue);
+	}
 }

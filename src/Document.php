@@ -312,7 +312,10 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/createComment
 	 */
 	public function createComment(string $data):Comment {
-
+		$domComment = $this->domDocument->createComment($data);
+		/** @var Comment $gtComment */
+		$gtComment = $this->getGtDomNode($domComment);
+		return $gtComment;
 	}
 
 	/**
