@@ -14,6 +14,7 @@ use DOMEntityReference;
 use DOMNode;
 use DOMNotation;
 use DOMText;
+use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Facade\DOMDocumentFacade;
 use Gt\Dom\Facade\DOMDocumentNodeMap;
 use Gt\Dom\Facade\HTMLCollectionFactory;
@@ -285,7 +286,14 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/createCDATASection
 	 */
 	public function createCDATASection(string $data):CDATASection {
+		if($this instanceof HTMLDocument) {
+			throw new HTMLDocumentDoesNotSupportCDATASectionException();
+		}
 
+		$nativeCDATA = $this->domDocument->createCDATASection($data);
+		/** @var CDATASection $gtCDATA */
+		$gtCDATA = $this->getGtDomNode($nativeCDATA);
+		return $gtCDATA;
 	}
 
 	/**

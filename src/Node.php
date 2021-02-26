@@ -333,7 +333,7 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
 	protected function __prop_get_nodeValue():string {
-
+		return $this->domNode->nodeValue;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */

@@ -6,6 +6,7 @@ use Gt\Dom\Document;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
 use Gt\Dom\Exception\DocumentStreamNotWritableException;
+use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
 use Gt\Dom\HTMLCollection;
@@ -379,5 +380,18 @@ class DocumentTest extends TestCase {
 		$sut = new Document();
 		$attr = $sut->createAttribute("example");
 		self::assertEquals("example", $attr->name);
+	}
+
+	public function testCreateCDATASectionHTML():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::expectException(HTMLDocumentDoesNotSupportCDATASectionException::class);
+		$sut->createCDATASection("");
+	}
+
+	public function testCreateCDATASection():void {
+		$sut = new Document();
+		$data = "Example CDATASection data!";
+		$cdata = $sut->createCDATASection($data);
+		self::assertEquals($data, $cdata->nodeValue);
 	}
 }
