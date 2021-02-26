@@ -15,6 +15,8 @@ use DOMNode;
 use DOMNotation;
 use DOMText;
 use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
+use Gt\Dom\Exception\InvalidCharacterException;
+use Gt\Dom\Exception\NotSupportedException;
 use Gt\Dom\Facade\DOMDocumentFacade;
 use Gt\Dom\Facade\DOMDocumentNodeMap;
 use Gt\Dom\Facade\HTMLCollectionFactory;
@@ -279,7 +281,7 @@ class Document extends Node implements StreamInterface {
 	 * to the CDATA Section.
 	 * @return CDATASection a CDATA Section node.
 	 * @throws NotSupportedException
-	 * @throws NsDomInvalidCharacterException if one tries to submit the
+	 * @throws InvalidCharacterException if one tries to submit the
 	 * closing CDATA sequence ("]]>") as part of the data, so unescaped
 	 * user-provided data cannot be safely used without this method getting
 	 * this exception (createTextNode() can often be used in its place).
@@ -288,6 +290,11 @@ class Document extends Node implements StreamInterface {
 	public function createCDATASection(string $data):CDATASection {
 		if($this instanceof HTMLDocument) {
 			throw new HTMLDocumentDoesNotSupportCDATASectionException();
+		}
+
+		$closingTag = "]]>";
+		if(strstr($data, $closingTag)) {
+			throw new InvalidCharacterException($closingTag);
 		}
 
 		$nativeCDATA = $this->domDocument->createCDATASection($data);

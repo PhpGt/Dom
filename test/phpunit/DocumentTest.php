@@ -7,6 +7,7 @@ use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
 use Gt\Dom\Exception\DocumentStreamNotWritableException;
 use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
+use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
 use Gt\Dom\HTMLCollection;
@@ -393,5 +394,12 @@ class DocumentTest extends TestCase {
 		$data = "Example CDATASection data!";
 		$cdata = $sut->createCDATASection($data);
 		self::assertEquals($data, $cdata->nodeValue);
+	}
+
+	public function testCreateCDATASectionInvalidCharacter():void {
+		$sut = new Document();
+		$data = "Illegal Characters ]]>";
+		self::expectException(InvalidCharacterException::class);
+		$sut->createCDATASection($data);
 	}
 }
