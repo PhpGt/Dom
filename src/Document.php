@@ -512,7 +512,14 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById
 	 */
 	public function getElementById(string $id):?Element {
+		$domElement = $this->domDocument->getElementById($id);
+		if(!$domElement) {
+			return null;
+		}
 
+		/** @var Element $gtElement */
+		$gtElement = $this->getGtDomNode($domElement);
+		return $gtElement;
 	}
 
 	/**

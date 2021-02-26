@@ -67,8 +67,12 @@ use Gt\PropFunc\MagicProp;
 abstract class Node {
 	use MagicProp;
 
+	/**
+	 * @param DOMNode $domNode DOMNode or any extension
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
 	protected function __construct(
-		protected DOMNode $domNode
+		protected $domNode
 	) {}
 
 	/**

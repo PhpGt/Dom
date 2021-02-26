@@ -484,4 +484,33 @@ class DocumentTest extends TestCase {
 		$treeWalker = $sut->createTreeWalker($sut->body);
 		self::assertSame($sut->body, $treeWalker->currentNode);
 	}
+
+	public function testGetElementByIdNull():void {
+		$sut = new Document();
+		self::assertNull($sut->getElementById("nothing-here"));
+	}
+
+	public function testGetElementByIdNoDoctypeNull():void {
+		$sut = new Document();
+		$root = $sut->createElement("root");
+		$sut->appendChild($root);
+		$root->id = "test";
+		self::assertNull($sut->getElementById("test"));
+	}
+
+	public function testGetElementById():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		$child1 = $sut->createElement("child");
+		$child1->id = "id-of-child1";
+		$child2 = $sut->createElement("child");
+		$child2->id = "id-of-child2";
+		$child3 = $sut->createElement("child");
+		$child3->id = "id-of-child3";
+		$sut->body->appendChild($child1);
+		$sut->body->appendChild($child2);
+		$sut->body->appendChild($child3);
+
+		$selected = $sut->getElementById("id-of-child2");
+		self::assertSame($child2, $selected);
+	}
 }

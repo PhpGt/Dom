@@ -59,7 +59,9 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */
 	protected function __prop_set_id(string $id):void {
-
+		/** @var DOMElement $element */
+		$element = $this->domNode;
+		$element->setAttribute("id", $id);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML */
