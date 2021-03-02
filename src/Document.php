@@ -617,6 +617,26 @@ class Document extends Node implements StreamInterface {
 		string $namespace,
 		string $name
 	):HTMLCollection {
+		return HTMLCollectionFactory::create(function()use($namespace, $name) {
+			$gtDomNodeArray = [];
+
+			$domNodeList = $this->domDocument->getElementsByTagNameNS(
+				$namespace,
+				$name
+			);
+
+			for($i = 0, $len = $domNodeList->length; $i < $len; $i++) {
+				$gtDomNode = $this->domDocument->getGtDomNode(
+					$domNodeList->item($i)
+				);
+				array_push(
+					$gtDomNodeArray,
+					$gtDomNode
+				);
+			}
+
+			return NodeListFactory::create(...$gtDomNodeArray);
+		});
 
 	}
 

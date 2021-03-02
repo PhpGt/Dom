@@ -594,4 +594,33 @@ class DocumentTest extends TestCase {
 			self::assertCount($currentLength - 1, $inputList);
 		}
 	}
+
+	public function testGetElementsByTagNameNSEmpty():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::assertCount(
+			0,
+			$sut->getElementsByTagNameNS(
+				"http://www.w3.org/1999/xhtml",
+				"p"
+			)
+		);
+	}
+
+	public function testGetElementsByTagNameNS():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
+		self::assertCount(
+			4,
+			$sut->getElementsByTagNameNS(
+				"", // Empty for HTML5
+				"label"
+			)
+		);
+		self::assertCount(
+			0,
+			$sut->getElementsByTagNameNS(
+				"non-matching",
+				"label"
+			)
+		);
+	}
 }
