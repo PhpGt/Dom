@@ -5,6 +5,7 @@ use Error;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Node;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\Text;
 use PHPUnit\Framework\TestCase;
 
 class NodeTest extends TestCase {
@@ -155,6 +156,9 @@ class NodeTest extends TestCase {
 		$sut->innerHTML = $message;
 		self::assertNull($sut->nodeValue);
 		$textNode = $sut->childNodes[0];
+		self::assertInstanceOf(Text::class, $textNode);
 		self::assertEquals($message, $textNode->nodeValue);
 	}
+
+
 }
