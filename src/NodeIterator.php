@@ -15,6 +15,7 @@ use Iterator;
  * @property-read int $whatToShow Returns an unsigned long being a bitmask made of constants describing the types of Node that must to be presented. Non-matching nodes are skipped, but their children may be included, if relevant. Value is a combination of any NodeFilter.SHOW_* constnat.
  * @property-read NodeFilter $filter Returns a NodeFilter used to select the relevant nodes.
  *
+ * @implements Iterator<Node>
  */
 class NodeIterator implements Iterator {
 	use MagicProp;

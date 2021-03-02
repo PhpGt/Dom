@@ -1,37 +1,13 @@
 <?php
 namespace Gt\Dom;
 
-use DOMAttr;
-use DOMCdataSection;
-use DOMCharacterData;
-use DOMComment;
-use DOMDocument;
-use DOMDocumentFragment;
-use DOMDocumentType;
-use DOMElement;
-use DOMEntity;
-use DOMEntityReference;
 use DOMNode;
-use DOMNotation;
-use DOMText;
 use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Exception\NotSupportedException;
 use Gt\Dom\Facade\DOMDocumentFacade;
-use Gt\Dom\Facade\DOMDocumentNodeMap;
 use Gt\Dom\Facade\HTMLCollectionFactory;
-use Gt\Dom\Facade\NodeClass\DOMAttrFacade;
-use Gt\Dom\Facade\NodeClass\DOMCdataSectionFacade;
-use Gt\Dom\Facade\NodeClass\DOMCharacterDataFacade;
-use Gt\Dom\Facade\NodeClass\DOMCommentFacade;
-use Gt\Dom\Facade\NodeClass\DOMDocumentFragmentFacade;
-use Gt\Dom\Facade\NodeClass\DOMDocumentTypeFacade;
-use Gt\Dom\Facade\NodeClass\DOMElementFacade;
-use Gt\Dom\Facade\NodeClass\DOMEntityFacade;
-use Gt\Dom\Facade\NodeClass\DOMEntityReferenceFacade;
 use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
-use Gt\Dom\Facade\NodeClass\DOMNotationFacade;
-use Gt\Dom\Facade\NodeClass\DOMTextFacade;
 use Gt\Dom\Facade\NodeIteratorFactory;
 use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\Facade\TreeWalkerFactory;
@@ -39,8 +15,6 @@ use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
 use Gt\PropFunc\MagicProp;
 use Psr\Http\Message\StreamInterface;
-use ReflectionClass;
-use RuntimeException;
 
 /**
  * Represents any web page loaded in the browser and serves as an entry point
@@ -400,11 +374,11 @@ class Document extends Node implements StreamInterface {
 	 *
 	 * @param Node $root The root node at which to begin the NodeIterator's
 	 * traversal.
-	 * @param ?int $whatToShow Is an optional unsigned long representing a
+	 * @param int $whatToShow Is an optional unsigned long representing a
 	 * bitmask created by combining the constant properties of NodeFilter.
 	 * It is a convenient way of filtering for certain types of node.
 	 * It defaults to 0xFFFFFFFF representing the SHOW_ALL constant.
-	 * @param ?NodeFilter|?callable $filter An object implementing the
+	 * @param NodeFilter|callable|null $filter An object implementing the
 	 * NodeFilter interface. Its acceptNode() method will be called for each
 	 * node in the subtree based at root which is accepted as included by
 	 * the whatToShow flag to determine whether or not to include it in the
