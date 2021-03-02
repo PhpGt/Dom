@@ -8,6 +8,8 @@ use Gt\Dom\Exception\DOMException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WrongDocumentErrorException;
 use Gt\Dom\Facade\DOMDocumentFacade;
+use Gt\Dom\Facade\NodeClass\DOMDocumentFragmentFacade;
+use Gt\Dom\Facade\NodeClass\DOMElementFacade;
 use Gt\Dom\Facade\NodeListFactory;
 use Gt\PropFunc\MagicProp;
 
@@ -112,10 +114,11 @@ abstract class Node {
 			}
 		}
 
-		$nativeDomChild = $aChild->ownerDocument->getNativeDomNode($aChild);
+		$nativeDomChild = $aChild->domNode;
 		try {
 			$this->domNode->appendChild($nativeDomChild);
 		}
+		/** @noinspection PhpRedundantCatchClauseInspection */
 		catch(NativeDOMException $exception) {
 			if(strstr("Wrong Document Error", $exception->getMessage())) {
 				throw new WrongDocumentErrorException();
@@ -453,7 +456,12 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentElement */
 	protected function __prop_get_parentElement():?Node {
+		$nativeNode = $this->domNode->parentNode;
+		if(!$nativeNode || !$nativeNode instanceof DOMElementFacade) {
+			return null;
+		}
 
+		return $this->ownerDocument->getGtDomNode($nativeNode);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/previousSibling */

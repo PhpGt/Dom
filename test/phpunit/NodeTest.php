@@ -173,4 +173,26 @@ class NodeTest extends TestCase {
 		$docDoc = $doc->ownerDocument;
 		self::assertSame($doc, $docDoc);
 	}
+
+	public function testParentElementNone():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->parentElement);
+	}
+
+	public function testParentElement():void {
+		$sut = NodeTestFactory::createNode("example");
+		$parent = NodeTestFactory::createNode("parent", $sut->ownerDocument);
+		$parent->appendChild($sut);
+		self::assertSame($parent, $sut->parentElement);
+	}
+
+	public function testParentElementNode():void {
+		$sut = NodeTestFactory::createNode("example");
+		$fragment = $sut->ownerDocument->createDocumentFragment();
+		$fragment->appendChild($sut);
+		$parent = NodeTestFactory::createNode("parent", $sut->ownerDocument);
+		self::assertNull($sut->parentElement);
+		$parent->appendChild($fragment);
+		self::assertSame($parent, $sut->parentElement);
+	}
 }
