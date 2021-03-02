@@ -3,11 +3,11 @@ namespace Gt\Dom;
 
 use DOMException as NativeDOMException;
 use DOMNode;
+use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\DOMException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WrongDocumentErrorException;
 use Gt\Dom\Facade\DOMDocumentFacade;
-use Gt\Dom\Facade\DOMDocumentNodeMap;
 use Gt\PropFunc\MagicProp;
 
 /**
@@ -306,7 +306,7 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/baseURI */
 	protected function __prop_get_baseURI():string {
-
+		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes */

@@ -1,22 +1,18 @@
 <?php
 namespace Gt\Dom\Test;
 
-use Gt\Dom\Attr;
 use Gt\Dom\Document;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
 use Gt\Dom\Exception\DocumentStreamNotWritableException;
 use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Exception\InvalidCharacterException;
-use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
 use Gt\Dom\Exception\WrongDocumentErrorException;
 use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
-use Gt\Dom\NodeFilter;
-use Gt\Dom\NodeIterator;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\PropFunc\PropertyReadOnlyException;
 use PHPUnit\Framework\TestCase;

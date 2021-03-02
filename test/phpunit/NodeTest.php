@@ -2,7 +2,9 @@
 namespace Gt\Dom\Test;
 
 use Error;
+use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Node;
+use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
 
 class NodeTest extends TestCase {
@@ -12,5 +14,11 @@ class NodeTest extends TestCase {
 		$className = Node::class;
 		/** @phpstan-ignore-next-line */
 		new $className();
+	}
+
+	public function testBaseURIClientSideOnly():void {
+		$node = NodeTestFactory::createNode("example");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		$node->baseURI;
 	}
 }
