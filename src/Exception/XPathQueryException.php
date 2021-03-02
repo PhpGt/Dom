@@ -1,5 +1,5 @@
 <?php
-namespace Gt\Dom\Exception;
+namespace Gt\Dom\Facade;
 
 class XPathQueryException extends DOMException {
 

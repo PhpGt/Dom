@@ -11,6 +11,7 @@ use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
 use Gt\Dom\Facade\NodeIteratorFactory;
 use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\Facade\TreeWalkerFactory;
+use Gt\Dom\Facade\XPathResultFactory;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
 use Gt\PropFunc\MagicProp;
@@ -466,6 +467,31 @@ class Document extends Node implements StreamInterface {
 		NodeFilter $filter = null
 	):TreeWalker {
 		return TreeWalkerFactory::create($root, $whatToShow, $filter);
+	}
+
+	/**
+	 * Returns an XPathResult based on an XPath expression.
+	 *
+	 * @param string $xpathExpression is a string representing the XPath to
+	 * be evaluated.
+	 * @param ?Node $contextNode Leave null to default to $this node
+	 * @return XPathResult
+	 */
+	public function evaluate(
+		string $xpathExpression,
+		Node $contextNode = null
+	):XPathResult {
+		if(!$contextNode) {
+			$contextNode = $this;
+		}
+
+		/** @var DOMNodeFacade $nativeContextNode */
+		$nativeContextNode = $this->getNativeDomNode($contextNode);
+		return XPathResultFactory::create(
+			$xpathExpression,
+			$this->domDocument,
+			$nativeContextNode
+		);
 	}
 
 	/**

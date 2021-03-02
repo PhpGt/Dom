@@ -82,6 +82,13 @@ abstract class Node {
 	const TYPE_DOCUMENT_TYPE_NODE = 10;
 	const TYPE_DOCUMENT_FRAGMENT_NODE = 11;
 
+	const DOCUMENT_POSITION_DISCONNECTED = 0b000001;
+	const DOCUMENT_POSITION_PRECEDING = 0b000010;
+	const DOCUMENT_POSITION_FOLLOWING = 0b000100;
+	const DOCUMENT_POSITION_CONTAINS = 0b001000;
+	const DOCUMENT_POSITION_CONTAINED_BY = 0b010000;
+	const DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC = 0b100000;
+
 	/**
 	 * @param DOMNode $domNode DOMNode or any extension
 	 * @noinspection PhpMissingParamTypeInspection
@@ -165,7 +172,22 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
 	 */
 	public function compareDocumentPosition(Node $otherNode):int {
+		$nativeOtherNode = $this->ownerDocument->getNativeDomNode(
+			$otherNode
+		);
+		$bits = 0b000000;
+		if($nativeOtherNode->ownerDocument !== $this->domNode->ownerDocument) {
+			$bits |= self::DOCUMENT_POSITION_DISCONNECTED;
+		}
 
+		$thisNodePath = $this->domNode->getNodePath();
+		$otherNodePath = $nativeOtherNode->getNodePath();
+// A union of the two node paths are used to query the document, which will
+// return a NodeList in document order.
+		$unionPath = "$thisNodePath | $otherNodePath";
+		$this->ownerDocument->evaluate($unionPath);
+
+		return $bits;
 	}
 
 	/**
