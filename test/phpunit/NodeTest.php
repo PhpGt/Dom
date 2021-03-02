@@ -160,5 +160,10 @@ class NodeTest extends TestCase {
 		self::assertEquals($message, $textNode->nodeValue);
 	}
 
-
+	public function testNodeValueSetNoEffectOnElement():void {
+// TODO: Test nodeValue on other types of node.
+		$sut = NodeTestFactory::createNode("example");
+		$sut->nodeValue = "Example value.";
+		self::assertNull($sut->nodeValue);
+	}
 }

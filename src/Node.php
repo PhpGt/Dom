@@ -415,7 +415,16 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
 	protected function __prop_set_nodeValue(string $value):void {
+		if(in_array($this->nodeType, [
+			self::TYPE_DOCUMENT_NODE,
+			self::TYPE_DOCUMENT_FRAGMENT_NODE,
+			self::TYPE_DOCUMENT_TYPE_NODE,
+			self::TYPE_ELEMENT_NODE,
+		])) {
+			return;
+		}
 
+		$this->domNode->nodeValue = $value;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/ownerDocument */
