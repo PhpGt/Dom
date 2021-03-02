@@ -166,4 +166,11 @@ class NodeTest extends TestCase {
 		$sut->nodeValue = "Example value.";
 		self::assertNull($sut->nodeValue);
 	}
+
+	public function testOwnerDocument():void {
+		$sut = NodeTestFactory::createNode("example");
+		$doc = $sut->ownerDocument;
+		$docDoc = $doc->ownerDocument;
+		self::assertSame($doc, $docDoc);
+	}
 }
