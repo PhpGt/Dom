@@ -563,7 +563,10 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByName
 	 */
 	public function getElementsByName(string $name):NodeList {
-
+		$querySelector = "[name=$name]";
+		return NodeListFactory::createLive(
+			fn() => $this->querySelectorAll($querySelector)
+		);
 	}
 
 	/**

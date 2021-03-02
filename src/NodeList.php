@@ -20,7 +20,7 @@ class NodeList implements Countable {
 
 	/** @var Node[] */
 	private array $nodeList;
-	/** @var callable */
+	/** @var callable():NodeList */
 	private $callback;
 
 	/**
@@ -108,6 +108,12 @@ class NodeList implements Countable {
 	}
 
 	public function count():int {
-		return count($this->nodeList);
+		if(isset($this->nodeList)) {
+			return count($this->nodeList);
+		}
+
+		/** @var NodeList $staticNodeList */
+		$staticNodeList = call_user_func($this->callback);
+		return count($staticNodeList);
 	}
 }

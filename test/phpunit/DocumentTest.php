@@ -551,4 +551,14 @@ class DocumentTest extends TestCase {
 		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_PAGE);
 		self::assertCount(6, $sut->getElementsByClassName("icon"));
 	}
+
+	public function testGetElementsByNameEmpty():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::assertCount(0, $sut->getElementsByName("test"));
+	}
+
+	public function testGetElementsByName():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
+		self::assertCount(6, $sut->getElementsByName("continent"));
+	}
 }
