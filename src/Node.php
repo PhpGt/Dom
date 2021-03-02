@@ -1,9 +1,11 @@
 <?php
 namespace Gt\Dom;
 
+use DOMException as NativeDOMException;
 use DOMNode;
 use Gt\Dom\Exception\DOMException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
+use Gt\Dom\Exception\WrongDocumentErrorException;
 use Gt\Dom\Facade\DOMDocumentFacade;
 use Gt\Dom\Facade\DOMDocumentNodeMap;
 use Gt\PropFunc\MagicProp;
@@ -100,7 +102,14 @@ abstract class Node {
 		}
 
 		$nativeDomChild = $aChild->ownerDocument->getNativeDomNode($aChild);
-		$this->domNode->appendChild($nativeDomChild);
+		try {
+			$this->domNode->appendChild($nativeDomChild);
+		}
+		catch(NativeDOMException $exception) {
+			if(strstr("Wrong Document Error", $exception->getMessage())) {
+				throw new WrongDocumentErrorException();
+			}
+		}
 		return $aChild;
 	}
 

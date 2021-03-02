@@ -10,6 +10,7 @@ use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
+use Gt\Dom\Exception\WrongDocumentErrorException;
 use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
@@ -622,5 +623,39 @@ class DocumentTest extends TestCase {
 				"label"
 			)
 		);
+	}
+
+	public function testImportNode():void {
+		$sut1 = new Document();
+		$sut2 = new Document();
+
+// First try to append the node to the wrong document.
+		$node = $sut1->createElement("example");
+		$exception = null;
+		try {
+			$sut2->appendChild($node);
+		}
+		catch(WrongDocumentErrorException $exception) {
+		}
+// Ensure an exception was caught.
+		self::assertNotNull($exception);
+
+// Import the node, but ensure the original node is untouched.
+		self::assertEquals($sut1, $node->ownerDocument);
+		/** @var Element $newNode */
+		$newNode = $sut2->importNode($node);
+		$sut2->appendChild($newNode);
+		self::assertEquals($sut1, $node->ownerDocument);
+		self::assertEquals($sut2, $newNode->ownerDocument);
+		$newNode->remove();
+
+// The original node should still not be able to be attached to the other document.
+		$exception = null;
+		try {
+			$sut2->appendChild($node);
+		}
+		catch(WrongDocumentErrorException $exception) {
+		}
+		self::assertNotNull($exception);
 	}
 }

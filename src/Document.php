@@ -668,7 +668,13 @@ class Document extends Node implements StreamInterface {
 		Node $externalNode,
 		bool $deep = false
 	):Node {
+		$nativeNode = $this->getNativeDomNode($externalNode);
+		$newNativeNode = $this->domDocument->importNode(
+			$nativeNode,
+			$deep
+		);
 
+		return $this->getGtDomNode($newNativeNode);
 	}
 
 	/**
