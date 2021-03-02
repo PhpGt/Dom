@@ -145,7 +145,8 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode
 	 */
 	public function cloneNode(bool $deep = false):Node {
-
+		$nativeDomNode = $this->domNode->cloneNode($deep);
+		return $this->ownerDocument->getGtDomNode($nativeDomNode);
 	}
 
 	/**

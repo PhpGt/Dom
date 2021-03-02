@@ -25,6 +25,7 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	private array $nodeList;
 	/** @var callable():NodeList */
 	private $callback;
+	private int $iteratorKey;
 
 	/**
 	 * A NodeList can, confusingly, be both "live" OR "static" using the
@@ -41,6 +42,8 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 		else {
 			$this->nodeList = $representation;
 		}
+
+		$this->iteratorKey = 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/length */
@@ -144,23 +147,43 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 		// TODO: Implement offsetUnset() method.
 	}
 
-	public function current() {
-		// TODO: Implement current() method.
+	public function current():Node {
+		if(isset($this->nodeList)) {
+			return $this->nodeList[$this->iteratorKey];
+		}
+
+		/** @var NodeList $nodeList */
+		$nodeList = call_user_func($this->callback);
+		while($nodeList->key() < $this->iteratorKey) {
+			$nodeList->next();
+		}
+
+		return $nodeList->current();
 	}
 
-	public function next() {
-		// TODO: Implement next() method.
+	public function next():void {
+		$this->iteratorKey++;
 	}
 
-	public function key() {
-		// TODO: Implement key() method.
+	public function key():int {
+		return $this->iteratorKey;
 	}
 
-	public function valid() {
-		// TODO: Implement valid() method.
+	public function valid():bool {
+		if(isset($this->nodeList)) {
+			return isset($this->nodeList[$this->iteratorKey]);
+		}
+
+		/** @var NodeList $nodeList */
+		$nodeList = call_user_func($this->callback);
+		while($nodeList->key() < $this->iteratorKey) {
+			$nodeList->next();
+		}
+
+		return $nodeList->valid();
 	}
 
-	public function rewind() {
-		// TODO: Implement rewind() method.
+	public function rewind():void {
+		$this->iteratorKey = 0;
 	}
 }

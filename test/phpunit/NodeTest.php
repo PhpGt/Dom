@@ -2,6 +2,7 @@
 namespace Gt\Dom\Test;
 
 use Error;
+use Gt\Dom\Element;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Node;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
@@ -196,5 +197,28 @@ class NodeTest extends TestCase {
 		$parent->appendChild($fragment);
 // ... but when the fragment is added, the parent is not the Element node.
 		self::assertSame($parent, $sut->parentElement);
+	}
+
+	public function testCloneNode():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<p><a href='https://phpunit.de'>PHPUnit is amazing!</a>";
+		/** @var Element $clone */
+		$clone = $sut->cloneNode();
+		self::assertNotSame($sut, $clone);
+		self::assertEquals("EXAMPLE", $clone->tagName);
+		self::assertCount(0, $clone->childNodes);
+	}
+
+	public function testCloneNodeDeep():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<p><a href='https://phpunit.de'>PHPUnit is amazing!</a>";
+		/** @var Element $clone */
+		$clone = $sut->cloneNode(true);
+		self::assertNotSame($sut, $clone);
+		self::assertStringContainsString(
+			"PHPUnit is amazing!",
+			$clone->innerHTML
+		);
+		self::assertSame($sut->innerHTML, $clone->innerHTML);
 	}
 }
