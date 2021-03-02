@@ -50,4 +50,32 @@ class NodeTest extends TestCase {
 
 		self::assertCount(100, $nodeList);
 	}
+
+	public function testFirstChildNone():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->firstChild);
+	}
+
+	public function testFirstChild():void {
+		$sut = NodeTestFactory::createNode("example");
+		$c1 = $sut->ownerDocument->createElement("child-one");
+		$c2 = $sut->ownerDocument->createElement("child-two");
+		$c3 = $sut->ownerDocument->createElement("child-three");
+		$sut->append($c1, $c2, $c3);
+		self::assertSame($c1, $sut->firstChild);
+	}
+
+	public function testLastChildNone():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->lastChild);
+	}
+
+	public function testLastChild():void {
+		$sut = NodeTestFactory::createNode("example");
+		$c1 = $sut->ownerDocument->createElement("child-one");
+		$c2 = $sut->ownerDocument->createElement("child-two");
+		$c3 = $sut->ownerDocument->createElement("child-three");
+		$sut->append($c1, $c2, $c3);
+		self::assertSame($c3, $sut->lastChild);
+	}
 }

@@ -328,7 +328,12 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/firstChild */
 	protected function __prop_get_firstChild():?Node {
+		$nativeNode = $this->domNode->firstChild;
+		if(!$nativeNode) {
+			return null;
+		}
 
+		return $this->ownerDocument->getGtDomNode($nativeNode);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected */
@@ -338,7 +343,12 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/lastChild */
 	protected function __prop_get_lastChild():?Node {
+		$nativeNode = $this->domNode->lastChild;
+		if(!$nativeNode) {
+			return null;
+		}
 
+		return $this->ownerDocument->getGtDomNode($nativeNode);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nextSibling */
