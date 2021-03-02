@@ -70,6 +70,16 @@ use Gt\PropFunc\MagicProp;
 abstract class Node {
 	use MagicProp;
 
+	const TYPE_ELEMENT_NODE = 1;
+	const TYPE_ATTRIBUTE_NODE = 2;
+	const TYPE_TEXT_NODE = 3;
+	const TYPE_CDATA_SECTION_NODE = 4;
+	const TYPE_PROCESSING_INSTRUCTION_NODE = 7;
+	const TYPE_COMMENT_NODE = 8;
+	const TYPE_DOCUMENT_NODE = 9;
+	const TYPE_DOCUMENT_TYPE_NODE = 10;
+	const TYPE_DOCUMENT_FRAGMENT_NODE = 11;
+
 	/**
 	 * @param DOMNode $domNode DOMNode or any extension
 	 * @noinspection PhpMissingParamTypeInspection
@@ -386,7 +396,7 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType */
 	protected function __prop_get_nodeType():int {
-
+		return $this->domNode->nodeType;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */

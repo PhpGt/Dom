@@ -126,11 +126,21 @@ class NodeTest extends TestCase {
 		self::assertSame($c1, $sut->previousSibling);
 	}
 
-	public function testGetNodeName():void {
+	public function testNodeName():void {
 // TODO: Test other types of nodes (Attr, CDATASection, Comment, Document,
 // DocumentFragment, DocumentType, Notation, ProcessingInstruction, Text) as
 // each node type has a different expectation for this value.
 		$sut = NodeTestFactory::createNode("example");
 		self::assertEquals("example", $sut->nodeName);
+	}
+
+	public function testNodeType():void {
+// TODO: Test the other types of nodes, make sure they return the expected
+// values in accordance to the Node::TYPE* constants.
+		$sut = NodeTestFactory::createNode("example");
+		self::assertEquals(
+			Node::TYPE_ELEMENT_NODE,
+			$sut->nodeType
+		);
 	}
 }
