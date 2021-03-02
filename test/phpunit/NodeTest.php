@@ -88,4 +88,11 @@ class NodeTest extends TestCase {
 		$sut->insertBefore($c3, $c1);
 		self::assertSame($c3, $sut->firstChild);
 	}
+
+	public function testIsConnected():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertFalse($sut->isConnected);
+		$sut->ownerDocument->append($sut);
+		self::assertTrue($sut->isConnected);
+	}
 }

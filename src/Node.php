@@ -344,7 +344,19 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected */
 	protected function __prop_get_isConnected():bool {
+		if(!$this->parentNode) {
+			return false;
+		}
 
+		$context = $this;
+		while($context) {
+			$context = $context->parentNode;
+			if($context === $this->ownerDocument) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/lastChild */
