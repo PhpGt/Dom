@@ -200,7 +200,13 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore
 	 */
 	public function insertBefore(Node $newNode, Node $refNode):Node {
-
+		$nativeNewNode = $this->ownerDocument->getNativeDomNode($newNode);
+		$nativeRefNode = $this->ownerDocument->getNativeDomNode($refNode);
+		$inserted = $this->domNode->insertBefore(
+			$nativeNewNode,
+			$nativeRefNode
+		);
+		return $this->ownerDocument->getGtDomNode($inserted);
 	}
 
 	/**

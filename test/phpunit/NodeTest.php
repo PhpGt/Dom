@@ -78,4 +78,14 @@ class NodeTest extends TestCase {
 		$sut->append($c1, $c2, $c3);
 		self::assertSame($c3, $sut->lastChild);
 	}
+
+	public function testFirstChildAfterInsertBefore():void {
+		$sut = NodeTestFactory::createNode("example");
+		$c1 = $sut->ownerDocument->createElement("child-one");
+		$c2 = $sut->ownerDocument->createElement("child-two");
+		$c3 = $sut->ownerDocument->createElement("child-three");
+		$sut->append($c1, $c2);
+		$sut->insertBefore($c3, $c1);
+		self::assertSame($c3, $sut->firstChild);
+	}
 }
