@@ -127,7 +127,11 @@ trait ParentNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/querySelector
 	 */
 	public function querySelector(string $selectors):?Element {
-
+		/** @var Element[] $all */
+		$all = $this->querySelectorAll($selectors);
+// TODO: Is there a case for optimisation here?
+// Test with a document of thousands of nodes to compare efficiency.
+		return $all[0] ?? null;
 	}
 
 	/**
@@ -149,9 +153,6 @@ trait ParentNode {
 	public function querySelectorAll(string $selectors):NodeList {
 		/** @var Node $context */
 		$context = $this;
-//		if($this instanceof Document) {
-//			$context = $this->documentElement;
-//		}
 
 		$translator = new Translator($selectors, ".//");
 		$nativeContext = $this->getNativeDomNode($context);

@@ -562,6 +562,19 @@ class DocumentTest extends TestCase {
 		self::assertCount(6, $sut->getElementsByName("continent"));
 	}
 
+	public function testGetElementsByNameLive():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
+		$continentList = $sut->getElementsByName("continent");
+		$originalLength = $continentList->length;
+
+		while($input = $sut->querySelector("input")) {
+			$input->remove();
+		}
+
+		self::assertLessThan($originalLength, $continentList->length);
+		self::assertCount(0, $continentList);
+	}
+
 	public function testGetElementsByTagNameEmpty():void {
 		$sut = DocumentTestFactory::createHTMLDocument();
 		self::assertCount(0, $sut->getElementsByName("input"));
@@ -570,5 +583,15 @@ class DocumentTest extends TestCase {
 	public function testGetElementsByTagName():void {
 		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
 		self::assertCount(4, $sut->getElementsByTagName("label"));
+	}
+
+	public function testGetElementsByTagNameLive():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
+		$inputList = $sut->getElementsByTagName("input");
+
+		while($currentLength = $inputList->length) {
+			$sut->querySelector("input")->remove();
+			self::assertCount($currentLength - 1, $inputList);
+		}
 	}
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use ArrayAccess;
 use Countable;
 use Gt\PropFunc\MagicProp;
 
@@ -15,7 +16,7 @@ use Gt\PropFunc\MagicProp;
  *
  * @property-read int $length The number of nodes in the NodeList.
  */
-class NodeList implements Countable {
+class NodeList implements ArrayAccess, Countable {
 	use MagicProp;
 
 	/** @var Node[] */
@@ -42,7 +43,7 @@ class NodeList implements Countable {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/length */
 	protected function __prop_get_length():int {
-		return count($this->nodeList);
+		return $this->count();
 	}
 
 	/**
@@ -115,5 +116,25 @@ class NodeList implements Countable {
 		/** @var NodeList $staticNodeList */
 		$staticNodeList = call_user_func($this->callback);
 		return count($staticNodeList);
+	}
+
+	public function offsetExists($offset):bool {
+		if(isset($this->nodeList)) {
+			return isset($this->nodeList[$offset]);
+		}
+	}
+
+	public function offsetGet($offset):?Node {
+		if(isset($this->nodeList)) {
+			return $this->nodeList[$offset] ?? null;
+		}
+	}
+
+	public function offsetSet($offset, $value):void {
+		// TODO: Implement offsetSet() method.
+	}
+
+	public function offsetUnset($offset):void {
+		// TODO: Implement offsetUnset() method.
 	}
 }
