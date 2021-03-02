@@ -371,7 +371,12 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nextSibling */
 	protected function __prop_get_nextSibling():?Node {
+		$nativeNode = $this->domNode->nextSibling;
+		if(!$nativeNode) {
+			return null;
+		}
 
+		return $this->ownerDocument->getGtDomNode($nativeNode);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName */

@@ -95,4 +95,19 @@ class NodeTest extends TestCase {
 		$sut->ownerDocument->append($sut);
 		self::assertTrue($sut->isConnected);
 	}
+
+	public function testNextSiblingNone():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->nextSibling);
+	}
+
+	public function testNextSibling():void {
+		$parent = NodeTestFactory::createNode("parent");
+		$c1 = NodeTestFactory::createNode("child", $parent->ownerDocument);
+		$sut = NodeTestFactory::createNode("child", $parent->ownerDocument);
+		$c2 = NodeTestFactory::createNode("child", $parent->ownerDocument);
+
+		$parent->append($c1, $sut, $c2);
+		self::assertSame($c2, $sut->nextSibling);
+	}
 }
