@@ -191,8 +191,10 @@ class NodeTest extends TestCase {
 		$fragment = $sut->ownerDocument->createDocumentFragment();
 		$fragment->appendChild($sut);
 		$parent = NodeTestFactory::createNode("parent", $sut->ownerDocument);
+// When the fragment is the parentNode, it is not an "Element" so this should be null...
 		self::assertNull($sut->parentElement);
 		$parent->appendChild($fragment);
+// ... but when the fragment is added, the parent is not the Element node.
 		self::assertSame($parent, $sut->parentElement);
 	}
 }
