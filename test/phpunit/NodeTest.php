@@ -221,4 +221,118 @@ class NodeTest extends TestCase {
 		);
 		self::assertSame($sut->innerHTML, $clone->innerHTML);
 	}
+
+	public function testCompareDocumentPostitionNowhere():void {
+		$sut = NodeTestFactory::createNode("example");
+		$anotherNodeInAnotherDoc = NodeTestFactory::createNode("other");
+		self::assertGreaterThan(
+			0,
+			Node::DOCUMENT_POSITION_DISCONNECTED,
+			$sut->compareDocumentPosition($anotherNodeInAnotherDoc)
+		);
+	}
+
+	public function testCompareDocumentPositionPreceding():void {
+		$sut = NodeTestFactory::createNode("example");
+		$root = NodeTestFactory::createNode("root", $sut->ownerDocument);
+		$compareTo = NodeTestFactory::createNode("compare-to", $sut->ownerDocument);
+
+		$sut->ownerDocument->appendChild($root);
+		$root->appendChild($sut);
+		$root->appendChild($compareTo);
+
+		self::assertGreaterThan(
+			0,
+			$sut->compareDocumentPosition($compareTo)
+			& Node::DOCUMENT_POSITION_FOLLOWING
+		);
+		self::assertGreaterThan(
+			0,
+			$compareTo->compareDocumentPosition($sut)
+			& Node::DOCUMENT_POSITION_PRECEDING
+		);
+		self::assertEquals(
+			0,
+			$sut->compareDocumentPosition($compareTo)
+			& Node::DOCUMENT_POSITION_DISCONNECTED
+		);
+		self::assertEquals(
+			0,
+			$compareTo->compareDocumentPosition($sut)
+			& Node::DOCUMENT_POSITION_DISCONNECTED
+		);
+	}
+
+	public function testCompareDocumentPositionFollowing():void {
+		$sut = NodeTestFactory::createNode("example");
+		$root = NodeTestFactory::createNode("root", $sut->ownerDocument);
+		$compareTo = NodeTestFactory::createNode("compare-to", $sut->ownerDocument);
+
+		$sut->ownerDocument->appendChild($root);
+		$root->appendChild($compareTo);
+		$root->appendChild($sut);
+
+		self::assertGreaterThan(
+			0,
+			$sut->compareDocumentPosition($compareTo)
+			& Node::DOCUMENT_POSITION_PRECEDING
+		);
+		self::assertGreaterThan(
+			0,
+			$compareTo->compareDocumentPosition($sut)
+			& Node::DOCUMENT_POSITION_FOLLOWING
+		);
+		self::assertEquals(
+			0,
+			$sut->compareDocumentPosition($compareTo)
+			& Node::DOCUMENT_POSITION_DISCONNECTED
+		);
+		self::assertEquals(
+			0,
+			$compareTo->compareDocumentPosition($sut)
+			& Node::DOCUMENT_POSITION_DISCONNECTED
+		);
+	}
+
+	public function testCompareDocumentPositionContainedBy():void {
+		$sut = NodeTestFactory::createNode("example");
+		$root = NodeTestFactory::createNode("root", $sut->ownerDocument);
+		$compareTo = NodeTestFactory::createNode("compare-to", $sut->ownerDocument);
+
+		$sut->ownerDocument->appendChild($root);
+		$root->appendChild($sut);
+		$sut->appendChild($compareTo);
+
+		self::assertGreaterThan(
+			0,
+			$sut->compareDocumentPosition($compareTo)
+			& Node::DOCUMENT_POSITION_CONTAINED_BY
+		);
+		self::assertEquals(
+			0,
+			$sut->compareDocumentPosition($compareTo)
+			& Node::DOCUMENT_POSITION_CONTAINS
+		);
+	}
+
+	public function testCompareDocumentPositionContainedByFlipped():void {
+		$sut = NodeTestFactory::createNode("example");
+		$root = NodeTestFactory::createNode("root", $sut->ownerDocument);
+		$compareTo = NodeTestFactory::createNode("compare-to", $sut->ownerDocument);
+
+		$sut->ownerDocument->appendChild($root);
+		$root->appendChild($compareTo);
+		$compareTo->appendChild($sut);
+
+		self::assertGreaterThan(
+			0,
+			$sut->compareDocumentPosition($compareTo)
+			& Node::DOCUMENT_POSITION_CONTAINS
+		);
+		self::assertEquals(
+			0,
+			$sut->compareDocumentPosition($compareTo)
+			& Node::DOCUMENT_POSITION_CONTAINED_BY
+		);
+	}
 }

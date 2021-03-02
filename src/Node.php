@@ -172,6 +172,7 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
 	 */
 	public function compareDocumentPosition(Node $otherNode):int {
+		$nativeThisNode = $this->domNode;
 		$nativeOtherNode = $this->ownerDocument->getNativeDomNode(
 			$otherNode
 		);
@@ -180,12 +181,30 @@ abstract class Node {
 			$bits |= self::DOCUMENT_POSITION_DISCONNECTED;
 		}
 
-		$thisNodePath = $this->domNode->getNodePath();
+		$thisNodePath = $nativeThisNode->getNodePath();
 		$otherNodePath = $nativeOtherNode->getNodePath();
 // A union of the two node paths are used to query the document, which will
 // return a NodeList in document order.
 		$unionPath = "$thisNodePath | $otherNodePath";
-		$this->ownerDocument->evaluate($unionPath);
+		$xpathResult = $this->ownerDocument->evaluate($unionPath);
+
+		foreach($xpathResult as $node) {
+			if($node === $this) {
+				$bits |= self::DOCUMENT_POSITION_FOLLOWING;
+				break;
+			}
+			if($node === $otherNode) {
+				$bits |= self::DOCUMENT_POSITION_PRECEDING;
+				break;
+			}
+		}
+
+		if($this->contains($otherNode)) {
+			$bits |= self::DOCUMENT_POSITION_CONTAINED_BY;
+		}
+		elseif($otherNode->contains($this)) {
+			$bits |= self::DOCUMENT_POSITION_CONTAINS;
+		}
 
 		return $bits;
 	}
@@ -199,7 +218,15 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/contains
 	 */
 	public function contains(Node $otherNode):bool {
+		$context = $otherNode;
 
+		while($context = $context->parentNode) {
+			if($context === $this) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
