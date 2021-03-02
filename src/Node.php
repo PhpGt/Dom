@@ -8,6 +8,7 @@ use Gt\Dom\Exception\DOMException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WrongDocumentErrorException;
 use Gt\Dom\Facade\DOMDocumentFacade;
+use Gt\Dom\Facade\NodeListFactory;
 use Gt\PropFunc\MagicProp;
 
 /**
@@ -311,7 +312,18 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes */
 	protected function __prop_get_childNodes():NodeList {
+		return NodeListFactory::createLive(function() {
+			$nodeArray = [];
 
+			$nativeChildNodes = $this->domNode->childNodes;
+			for($i = 0, $len = $nativeChildNodes->length; $i < $len; $i++) {
+				$nativeNode = $nativeChildNodes->item($i);
+				$gtNode = $this->ownerDocument->getGtDomNode($nativeNode);
+				array_push($nodeArray, $gtNode);
+			}
+
+			return NodeListFactory::create(...$nodeArray);
+		});
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/firstChild */
