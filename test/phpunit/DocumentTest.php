@@ -561,4 +561,14 @@ class DocumentTest extends TestCase {
 		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
 		self::assertCount(6, $sut->getElementsByName("continent"));
 	}
+
+	public function testGetElementsByTagNameEmpty():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::assertCount(0, $sut->getElementsByName("input"));
+	}
+
+	public function testGetElementsByTagName():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
+		self::assertCount(4, $sut->getElementsByTagName("label"));
+	}
 }
