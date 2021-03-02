@@ -143,4 +143,18 @@ class NodeTest extends TestCase {
 			$sut->nodeType
 		);
 	}
+
+	public function testNodeValueGetNone():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->nodeValue);
+	}
+
+	public function testNodeValueGetEmptyWithChildTextContent():void {
+		$message = "This is a test message.";
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = $message;
+		self::assertNull($sut->nodeValue);
+		$textNode = $sut->childNodes[0];
+		self::assertEquals($message, $textNode->nodeValue);
+	}
 }

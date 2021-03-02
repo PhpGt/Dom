@@ -400,7 +400,16 @@ abstract class Node {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
-	protected function __prop_get_nodeValue():string {
+	protected function __prop_get_nodeValue():?string {
+		if(in_array($this->nodeType, [
+			self::TYPE_DOCUMENT_NODE,
+			self::TYPE_DOCUMENT_FRAGMENT_NODE,
+			self::TYPE_DOCUMENT_TYPE_NODE,
+			self::TYPE_ELEMENT_NODE,
+		])) {
+			return null;
+		}
+
 		return $this->domNode->nodeValue;
 	}
 

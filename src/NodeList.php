@@ -4,6 +4,7 @@ namespace Gt\Dom;
 use ArrayAccess;
 use Countable;
 use Gt\PropFunc\MagicProp;
+use Iterator;
 
 /**
  * NodeList objects are collections of nodes, usually returned by properties
@@ -15,8 +16,9 @@ use Gt\PropFunc\MagicProp;
  * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList
  *
  * @property-read int $length The number of nodes in the NodeList.
+ * @implements Iterator<Node>
  */
-class NodeList implements ArrayAccess, Countable {
+class NodeList implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
 
 	/** @var Node[] */
@@ -128,6 +130,10 @@ class NodeList implements ArrayAccess, Countable {
 		if(isset($this->nodeList)) {
 			return $this->nodeList[$offset] ?? null;
 		}
+
+		/** @var NodeList $nodeList */
+		$nodeList = call_user_func($this->callback);
+		return $nodeList[$offset];
 	}
 
 	public function offsetSet($offset, $value):void {
@@ -136,5 +142,25 @@ class NodeList implements ArrayAccess, Countable {
 
 	public function offsetUnset($offset):void {
 		// TODO: Implement offsetUnset() method.
+	}
+
+	public function current() {
+		// TODO: Implement current() method.
+	}
+
+	public function next() {
+		// TODO: Implement next() method.
+	}
+
+	public function key() {
+		// TODO: Implement key() method.
+	}
+
+	public function valid() {
+		// TODO: Implement valid() method.
+	}
+
+	public function rewind() {
+		// TODO: Implement rewind() method.
 	}
 }

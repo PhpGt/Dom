@@ -64,11 +64,11 @@ class Document extends Node implements StreamInterface {
 		return $string;
 	}
 
-	protected function getGtDomNode(DOMNode $nativeNode):Node {
+	public function getGtDomNode(DOMNode $nativeNode):Node {
 		return $this->domDocument->getGtDomNode($nativeNode);
 	}
 
-	protected function getNativeDomNode(Node $gtNode):DOMNode {
+	public function getNativeDomNode(Node $gtNode):DOMNode {
 		/** @var DOMNodeFacade $nativeDomNode */
 		$nativeDomNode = $this->domDocument->getNativeDomNode($gtNode);
 		return $nativeDomNode;

@@ -68,12 +68,45 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML */
 	protected function __prop_get_innerHTML():string {
+		$html = "";
 
+		/** @var DOMDocument $nativeDocument */
+		$nativeDocument = $this->ownerDocument->domNode;
+
+		foreach($this->childNodes as $child) {
+			$nativeChild = $this->ownerDocument->getNativeDomNode($child);
+			$html .= $nativeDocument->saveHTML($nativeChild);
+		}
+
+		return $html;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML */
 	protected function __prop_set_innerHTML(string $innerHTML):void {
+		while($child = $this->firstChild) {
+			/** @var Element $child */
+			$child->remove();
+		}
 
+		$tempDocument = new Document();
+		/** @var DOMDocument $nativeTempDocument */
+		$nativeTempDocument = $tempDocument->domNode;
+		$nativeTempDocument->loadHTML(
+			"<html-fragment>$innerHTML</html-fragment>"
+		);
+		$innerFragmentNode = $nativeTempDocument->getElementsByTagName(
+			"html-fragment")->item(0);
+
+		/** @var DOMDocument $nativeDocument */
+		$nativeDocument = $this->ownerDocument->domNode;
+		$imported = $nativeDocument->importNode(
+			$innerFragmentNode,
+			true
+		);
+
+		$nativeDomNode = $this->ownerDocument->getNativeDomNode($this);
+		$firstChild = $imported->firstChild;
+		$nativeDomNode->appendChild($firstChild);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/localName */
