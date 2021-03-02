@@ -381,7 +381,7 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName */
 	protected function __prop_get_nodeName():string {
-
+		return $this->domNode->nodeName;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType */
