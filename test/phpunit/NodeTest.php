@@ -354,4 +354,17 @@ class NodeTest extends TestCase {
 		$sut->appendChild($otherNode);
 		self::assertTrue($sut->contains($otherNode));
 	}
+
+	public function testHasChildNodesEmpty():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertFalse($sut->hasChildNodes());
+	}
+
+	public function testHasChildNodes():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child = NodeTestFactory::createNode("example", $sut->ownerDocument);
+		$sut->appendChild($child);
+		self::assertTrue($sut->hasChildNodes());
+		self::assertFalse($child->hasChildNodes());
+	}
 }

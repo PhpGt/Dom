@@ -230,16 +230,6 @@ abstract class Node {
 	}
 
 	/**
-	 * Returns the context object's root.
-	 *
-	 * @return Node An object inheriting from Node.
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/getRootNode
-	 */
-	public function getRootNode():Node {
-
-	}
-
-	/**
 	 * Returns a Boolean indicating whether or not the element has any
 	 * child nodes.
 	 *
@@ -248,7 +238,7 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/hasChildNodes
 	 */
 	public function hasChildNodes():bool {
-
+		return $this->domNode->hasChildNodes();
 	}
 
 	/**
