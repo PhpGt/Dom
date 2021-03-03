@@ -389,7 +389,7 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/lookupNamespaceURI
 	 */
 	public function lookupNamespaceURI(string $prefix = null):?string {
-
+		return $this->domNode->lookupNamespaceURI($prefix);
 	}
 
 	/**

@@ -453,4 +453,9 @@ class NodeTest extends TestCase {
 		$sut = NodeTestFactory::createNode("example");
 		self::assertNull($sut->lookupPrefix("nothing"));
 	}
+
+	public function testLookupNamespaceURI():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->lookupNamespaceURI());
+	}
 }
