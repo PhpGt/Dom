@@ -4,6 +4,7 @@ namespace Gt\Dom\Test;
 use Error;
 use Gt\Dom\Element;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
+use Gt\Dom\Exception\NotFoundErrorException;
 use Gt\Dom\Node;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use Gt\Dom\Text;
@@ -490,5 +491,21 @@ class NodeTest extends TestCase {
 		$sut->normalize();
 		self::assertCount(4, $sut->childNodes);
 		self::assertEquals("<test></test>Part 1 Part 2 Part 3 <test></test><test></test>", $sut->innerHTML);
+	}
+
+	public function testRemoveChildNotChild():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::expectException(NotFoundErrorException::class);
+		$sut->ownerDocument->removeChild($sut);
+	}
+
+	public function testRemoveChild():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child = $sut->ownerDocument->createElement("child");
+		$sut->appendChild($child);
+		self::assertCount(1, $sut->childNodes);
+		$sut->removeChild($child);
+		self::assertCount(0, $sut->childNodes);
+
 	}
 }

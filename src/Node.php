@@ -5,6 +5,7 @@ use DOMException as NativeDOMException;
 use DOMNode;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\DOMException;
+use Gt\Dom\Exception\NotFoundErrorException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WrongDocumentErrorException;
 use Gt\Dom\Facade\DOMDocumentFacade;
@@ -428,7 +429,15 @@ abstract class Node {
 	 */
 	public function removeChild(Node $oldNode):Node {
 		$nativeOldNode = $this->ownerDocument->getNativeDomNode($oldNode);
-		$this->domNode->removeChild($nativeOldNode);
+		try {
+			$this->domNode->removeChild($nativeOldNode);
+		}
+		/** @noinspection PhpRedundantCatchClauseInspection */
+		catch(NativeDOMException $exception) {
+			if(strstr("Not Found Error", $exception->getMessage())) {
+				throw new NotFoundErrorException();
+			}
+		}
 		return $oldNode;
 	}
 
