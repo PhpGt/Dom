@@ -5,6 +5,7 @@ use DateTime;
 use DOMAttr;
 use DOMDocument;
 use DOMElement;
+use Gt\Dom\Facade\NamedNodeMapFactory;
 
 /**
  * Element is the most general base class from which all element objects (i.e.
@@ -34,7 +35,10 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/attributes */
 	protected function __prop_get_attributes():NamedNodeMap {
-
+		return NamedNodeMapFactory::create(
+			$this->domNode->attributes,
+			$this->ownerDocument
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/classList */
@@ -111,7 +115,7 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/localName */
 	protected function __prop_get_localName():string {
-
+		return $this->domNode->localName;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/namespaceURI */

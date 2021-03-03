@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DOMNamedNodeMap;
 use Gt\PropFunc\MagicProp;
 
 /**
@@ -22,9 +23,15 @@ use Gt\PropFunc\MagicProp;
 class NamedNodeMap {
 	use MagicProp;
 
+	/** @param DOMNamedNodeMap<string, string> $nativeNamedNodeMap */
+	protected function __construct(
+		private DOMNamedNodeMap $nativeNamedNodeMap,
+		private Document $ownerDocument
+	) {}
+
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/length */
 	protected function __prop_get_length():int {
-
+		return $this->nativeNamedNodeMap->length;
 	}
 
 	/**
@@ -37,7 +44,16 @@ class NamedNodeMap {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/getNamedItem
 	 */
 	public function getNamedItem(string $qualifiedName):?Attr {
+		$nativeAttr = $this->nativeNamedNodeMap->getNamedItem(
+			$qualifiedName
+		);
+		if(!$nativeAttr) {
+			return null;
+		}
 
+		/** @var Attr $gtAttr */
+		$gtAttr = $this->ownerDocument->getGtDomNode($nativeAttr);
+		return $gtAttr;
 	}
 
 	/**
@@ -52,7 +68,17 @@ class NamedNodeMap {
 		string $namespace,
 		string $localName
 	):?Attr {
+		$nativeAttr = $this->nativeNamedNodeMap->getNamedItemNS(
+			$namespace,
+			$localName
+		);
+		if(!$nativeAttr) {
+			return null;
+		}
 
+		/** @var Attr $gtAttr */
+		$gtAttr = $this->ownerDocument->getGtDomNode($nativeAttr);
+		return $gtAttr;
 	}
 
 	/**
@@ -62,7 +88,18 @@ class NamedNodeMap {
 	 * @return ?Attr The replaced Attr, or Null if provided Attr was new.
 	 */
 	public function setNamedItem(Attr $attr):?Attr {
+		$nativeAttr = $this->ownerDocument->getNativeDomNode($attr);
 
+		$existing = false;
+		if($this->nativeNamedNodeMap->getNamedItem($attr->name)) {
+			$existing = true;
+		}
+		$this->nativeNamedNodeMap->setNamedItem($nativeAttr);
+
+		if($existing) {
+			return $attr;
+		}
+		return null;
 	}
 
 	/**
@@ -74,7 +111,21 @@ class NamedNodeMap {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/setNamedItemNS
 	 */
 	public function setNamedItemNS(Attr $attr):?Attr {
+		$nativeAttr = $this->ownerDocument->getNativeDomNode($attr);
 
+		$existing = false;
+		if($this->nativeNamedNodeMap->getNamedItemNS(
+			$attr->namespaceURI,
+			$attr->name)
+		) {
+			$existing = true;
+		}
+		$this->nativeNamedNodeMap->setNamedItemNS($nativeAttr);
+
+		if($existing) {
+			return $attr;
+		}
+		return null;
 	}
 
 	/**
@@ -85,7 +136,9 @@ class NamedNodeMap {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/removeNamedItem
 	 */
 	public function removeNamedItem(Attr $attr):Attr {
-
+		$nativeAttr = $this->ownerDocument->getNativeDomNode($attr);
+		$this->nativeNamedNodeMap->removeNamedItem($nativeAttr);
+		return $attr;
 	}
 
 	/**
@@ -98,7 +151,12 @@ class NamedNodeMap {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/removeNamedItem
 	 */
 	public function removeNamedItemNS(Attr $attr, string $localName):Attr {
-
+		$nativeAttr = $this->ownerDocument->getNativeDomNode($attr);
+		$this->nativeNamedNodeMap->removeNamedItemNS(
+			$nativeAttr,
+			$localName
+		);
+		return $attr;
 	}
 
 	/**
@@ -110,6 +168,13 @@ class NamedNodeMap {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/item
 	 */
 	public function item(int $index):?Attr {
+		$nativeAttr = $this->nativeNamedNodeMap->item($index);
+		if(!$nativeAttr) {
+			return null;
+		}
 
+		/** @var Attr $gtAttr */
+		$gtAttr = $this->ownerDocument->getGtDomNode($nativeAttr);
+		return $gtAttr;
 	}
 }

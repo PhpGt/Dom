@@ -249,6 +249,27 @@ class Document extends Node implements StreamInterface {
 	}
 
 	/**
+	 * Currently undocumented at MDN. Please see W3C spec instead.
+	 * @link https://dom.spec.whatwg.org/#dom-document-createattributens
+	 *
+	 * @param string $namespace
+	 * @param string $qualifiedName
+	 * @return Attr
+	 */
+	public function createAttributeNS(
+		string $namespace,
+		string $qualifiedName
+	):Attr {
+		$nativeAttr = $this->domDocument->createAttributeNS(
+			$namespace,
+			$qualifiedName
+		);
+		/** @var Attr $gtAttr */
+		$gtAttr = $this->getGtDomNode($nativeAttr);
+		return $gtAttr;
+	}
+
+	/**
 	 * Creates a new CDATA section node, and returns it.
 	 * This will only work with XML, not HTML documents (as HTML documents
 	 * do not support CDATA sections); attempting it on an HTML document

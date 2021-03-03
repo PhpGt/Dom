@@ -408,12 +408,26 @@ class NodeTest extends TestCase {
 	public function testIsEqualNodeClone():void {
 		$sut = NodeTestFactory::createNode("example");
 		$clone = $sut->cloneNode(true);
-		self::assertFalse($clone->isEqualNode($sut));
+		self::assertTrue($clone->isEqualNode($sut));
 	}
 
 	public function testIsEqualNode():void {
 		$sut = NodeTestFactory::createNode("example");
 		$inserted = $sut->ownerDocument->appendChild($sut);
 		self::assertTrue($sut->isEqualNode($inserted));
+	}
+
+	public function testIsEqualNodeDifferent():void {
+		$sut = NodeTestFactory::createNode("example");
+		$other = NodeTestFactory::createNode("example", $sut->ownerDocument);
+		$other->innerHTML = "different";
+		self::assertFalse($sut->isEqualNode($other));
+	}
+
+	public function testIsEqualNodeDifferentType():void {
+// TODO: Test equality of different node types.
+		$sut = NodeTestFactory::createNode("example");
+		$attr = $sut->ownerDocument->createAttribute("example");
+		self::assertFalse($sut->isEqualNode($attr));
 	}
 }
