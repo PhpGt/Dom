@@ -369,11 +369,12 @@ abstract class Node {
 	 * if present, and null if not. When multiple prefixes are possible,
 	 * the result is implementation-dependent.
 	 *
+	 * @param string $namespace
 	 * @return ?string
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/lookupPrefix
 	 */
-	public function lookupPrefix():?string {
-
+	public function lookupPrefix(string $namespace):?string {
+		return $this->domNode->lookupPrefix($namespace);
 	}
 
 	/**
