@@ -367,4 +367,21 @@ class NodeTest extends TestCase {
 		self::assertTrue($sut->hasChildNodes());
 		self::assertFalse($child->hasChildNodes());
 	}
+
+	public function testInsertBefore():void {
+		$sut = NodeTestFactory::createNode("example");
+		$one = NodeTestFactory::createNode("one", $sut->ownerDocument);
+		$two = NodeTestFactory::createNode("two", $sut->ownerDocument);
+		$three = NodeTestFactory::createNode("three", $sut->ownerDocument);
+		$four = NodeTestFactory::createNode("four", $sut->ownerDocument);
+		$sut->append($one, $two, $four);
+		$sut->insertBefore($three, $four);
+
+		$tagsFound = "";
+		foreach($sut->childNodes as $child) {
+			$tagsFound .= $child->nodeName;
+		}
+
+		self::assertEquals("onetwothreefour", $tagsFound);
+	}
 }
