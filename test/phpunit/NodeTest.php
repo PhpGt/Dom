@@ -430,4 +430,27 @@ class NodeTest extends TestCase {
 		$attr = $sut->ownerDocument->createAttribute("example");
 		self::assertFalse($sut->isEqualNode($attr));
 	}
+
+	public function testIsSameNodeDifferentDocument():void {
+		$sut = NodeTestFactory::createNode("example");
+		$other = NodeTestFactory::createNode("example");
+		self::assertFalse($sut->isSameNode($other));
+	}
+
+	public function testIsSameNodeSameDocumentDifferentNode():void {
+		$sut = NodeTestFactory::createNode("example");
+		$other = NodeTestFactory::createNode("example", $sut->ownerDocument);
+		self::assertFalse($sut->isSameNode($other));
+	}
+
+	public function testIsSameNode():void {
+		$sut = NodeTestFactory::createNode("example");
+		$same = $sut->ownerDocument->appendChild($sut);
+		self::assertTrue($sut->isSameNode($same));
+	}
+
+	public function testLookupPrefix():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->lookupPrefix("nothing"));
+	}
 }

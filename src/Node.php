@@ -361,7 +361,7 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isSameNode
 	 */
 	public function isSameNode(Node $otherNode):bool {
-
+		return $this === $otherNode;
 	}
 
 	/**
