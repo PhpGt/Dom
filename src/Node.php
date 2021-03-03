@@ -452,7 +452,13 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/replaceChild
 	 */
 	public function replaceChild(Node $newNode, Node $oldNode):Node {
-
+		$nativeNewNode = $this->ownerDocument->getNativeDomNode($newNode);
+		$nativeOldNode = $this->ownerDocument->getNativeDomNode($oldNode);
+		if(!$this->contains($oldNode)) {
+			throw new NotFoundErrorException("Child to be replaced is not a child of this node");
+		}
+		$this->domNode->replaceChild($nativeNewNode, $nativeOldNode);
+		return $newNode;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/baseURI */

@@ -506,6 +506,24 @@ class NodeTest extends TestCase {
 		self::assertCount(1, $sut->childNodes);
 		$sut->removeChild($child);
 		self::assertCount(0, $sut->childNodes);
+	}
 
+	public function testReplaceChildNotChild():void {
+		$sut = NodeTestFactory::createNode("example");
+		$new = $sut->ownerDocument->createElement("new");
+		$old = $sut->ownerDocument->createElement("old");
+		self::expectException(NotFoundErrorException::class);
+		self::expectExceptionMessage("Child to be replaced is not a child of this node");
+		$sut->replaceChild($new, $old);
+	}
+
+	public function testReplaceChild():void {
+		$sut = NodeTestFactory::createNode("example");
+		$new = $sut->ownerDocument->createElement("new");
+		$old = $sut->ownerDocument->createElement("old");
+		$sut->appendChild($old);
+		self::assertEquals("<old></old>", $sut->innerHTML);
+		$sut->replaceChild($new, $old);
+		self::assertEquals("<new></new>", $sut->innerHTML);
 	}
 }
