@@ -246,15 +246,19 @@ abstract class Node {
 	 * specified parent node.
 	 *
 	 * @param Node $newNode The node to be inserted.
-	 * @param Node $refNode The node before which newNode is inserted. If
+	 * @param ?Node $refNode The node before which newNode is inserted. If
 	 * this is null, then newNode is inserted at the end of parentNode's
 	 * child nodes.
 	 * @return Node The node being inserted (the same as newNode)
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore
 	 */
-	public function insertBefore(Node $newNode, Node $refNode):Node {
+	public function insertBefore(Node $newNode, ?Node $refNode):Node {
 		$nativeNewNode = $this->ownerDocument->getNativeDomNode($newNode);
-		$nativeRefNode = $this->ownerDocument->getNativeDomNode($refNode);
+		$nativeRefNode = null;
+		if($refNode) {
+			$nativeRefNode = $this->ownerDocument->getNativeDomNode($refNode);
+		}
+
 		$inserted = $this->domNode->insertBefore(
 			$nativeNewNode,
 			$nativeRefNode

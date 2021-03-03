@@ -384,4 +384,19 @@ class NodeTest extends TestCase {
 
 		self::assertEquals("onetwothreefour", $tagsFound);
 	}
+
+	public function testInsertBeforeNullRef():void {
+		$sut = NodeTestFactory::createNode("example");
+		$one = NodeTestFactory::createNode("one", $sut->ownerDocument);
+		$two = NodeTestFactory::createNode("two", $sut->ownerDocument);
+		$sut->insertBefore($one, null);
+		$sut->insertBefore($two, null);
+
+		$tagsFound = "";
+		foreach($sut->childNodes as $child) {
+			$tagsFound .= $child->nodeName;
+		}
+
+		self::assertEquals("onetwo", $tagsFound);
+	}
 }
