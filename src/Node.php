@@ -399,7 +399,22 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/normalize
 	 */
 	public function normalize():void {
+		$previousChild = null;
 
+		for($i = $this->childNodes->length - 2; $i >= 0; $i--) {
+			$child = $this->childNodes->item($i);
+			if(!$child instanceof Text) {
+				continue;
+			}
+
+			$previousChild = $this->childNodes->item($i + 1);
+			if(!$previousChild instanceof Text) {
+				continue;
+			}
+
+			$child->nodeValue .= $previousChild->nodeValue;
+			$this->removeChild($previousChild);
+		}
 	}
 
 	/**
@@ -412,7 +427,9 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild
 	 */
 	public function removeChild(Node $oldNode):Node {
-
+		$nativeOldNode = $this->ownerDocument->getNativeDomNode($oldNode);
+		$this->domNode->removeChild($nativeOldNode);
+		return $oldNode;
 	}
 
 	/**

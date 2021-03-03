@@ -458,4 +458,37 @@ class NodeTest extends TestCase {
 		$sut = NodeTestFactory::createNode("example");
 		self::assertNull($sut->lookupNamespaceURI());
 	}
+
+	public function testNormalize():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $clone */
+		$clone = $sut->cloneNode(true);
+		$sut->normalize();
+		self::assertEquals($sut->outerHTML, $clone->outerHTML);
+	}
+
+	public function testNormalizeWhitespaceOnly():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->appendChild($sut->ownerDocument->createTextNode("Part 1 "));
+		$sut->appendChild($sut->ownerDocument->createTextNode("Part 2 "));
+		$sut->appendChild($sut->ownerDocument->createTextNode("Part 3 "));
+		self::assertCount(3, $sut->childNodes);
+		$sut->normalize();
+		self::assertCount(1, $sut->childNodes);
+		self::assertEquals("Part 1 Part 2 Part 3 ", $sut->innerHTML);
+	}
+
+	public function testNormalizeManyChildren():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->appendChild($sut->ownerDocument->createElement("test"));
+		$sut->appendChild($sut->ownerDocument->createTextNode("Part 1 "));
+		$sut->appendChild($sut->ownerDocument->createTextNode("Part 2 "));
+		$sut->appendChild($sut->ownerDocument->createTextNode("Part 3 "));
+		$sut->appendChild($sut->ownerDocument->createElement("test"));
+		$sut->appendChild($sut->ownerDocument->createElement("test"));
+		self::assertCount(6, $sut->childNodes);
+		$sut->normalize();
+		self::assertCount(4, $sut->childNodes);
+		self::assertEquals("<test></test>Part 1 Part 2 Part 3 <test></test><test></test>", $sut->innerHTML);
+	}
 }

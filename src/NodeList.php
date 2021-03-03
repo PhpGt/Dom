@@ -62,7 +62,13 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/item
 	 */
 	public function item(int $index):?Node {
-		return $this->nodeList[$index];
+		if(isset($this->nodeList)) {
+			return $this->nodeList[$index];
+		}
+
+		/** @var NodeList $staticNodeList */
+		$staticNodeList = call_user_func($this->callback);
+		return $staticNodeList->item($index);
 	}
 
 	/**

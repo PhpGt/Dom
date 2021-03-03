@@ -129,7 +129,9 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
 	protected function __prop_get_outerHTML():string {
-
+		/** @var DOMDocument $nativeDocument */
+		$nativeDocument = $this->ownerDocument->domNode;
+		return $nativeDocument->saveHTML($this->domNode);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
