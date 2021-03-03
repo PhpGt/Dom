@@ -404,4 +404,16 @@ class NodeTest extends TestCase {
 		$sut = NodeTestFactory::createNode("example");
 		self::assertFalse($sut->isDefaultNamespace("not-in-namespace"));
 	}
+
+	public function testIsEqualNodeClone():void {
+		$sut = NodeTestFactory::createNode("example");
+		$clone = $sut->cloneNode(true);
+		self::assertFalse($clone->isEqualNode($sut));
+	}
+
+	public function testIsEqualNode():void {
+		$sut = NodeTestFactory::createNode("example");
+		$inserted = $sut->ownerDocument->appendChild($sut);
+		self::assertTrue($sut->isEqualNode($inserted));
+	}
 }
