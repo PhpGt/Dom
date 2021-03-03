@@ -335,4 +335,23 @@ class NodeTest extends TestCase {
 			& Node::DOCUMENT_POSITION_CONTAINED_BY
 		);
 	}
+
+	public function testContainsOtherDocumentNode():void {
+		$sut = NodeTestFactory::createNode("example");
+		$otherNode = NodeTestFactory::createNode("example");
+		self::assertFalse($sut->contains($otherNode));
+	}
+
+	public function testContainsNegativeWhenNotChild():void {
+		$sut = NodeTestFactory::createNode("example");
+		$otherNode = NodeTestFactory::createNode("example", $sut->ownerDocument);
+		self::assertFalse($sut->contains($otherNode));
+	}
+
+	public function testContainsPositiveWhenChild():void {
+		$sut = NodeTestFactory::createNode("parent");
+		$otherNode = NodeTestFactory::createNode("child", $sut->ownerDocument);
+		$sut->appendChild($otherNode);
+		self::assertTrue($sut->contains($otherNode));
+	}
 }
