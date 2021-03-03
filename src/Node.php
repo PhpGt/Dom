@@ -277,7 +277,7 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isDefaultNamespace
 	 */
 	public function isDefaultNamespace(string $namespaceURI):bool {
-
+		return $this->domNode->isDefaultNamespace($namespaceURI);
 	}
 
 	/**

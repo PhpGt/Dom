@@ -399,4 +399,9 @@ class NodeTest extends TestCase {
 
 		self::assertEquals("onetwo", $tagsFound);
 	}
+
+	public function testIsDefaultNamespace():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertFalse($sut->isDefaultNamespace("not-in-namespace"));
+	}
 }
