@@ -21,6 +21,7 @@ class NodeTest extends TestCase {
 	public function testBaseURIClientSideOnly():void {
 		$sut = NodeTestFactory::createNode("example");
 		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @phpstan-ignore-next-line */
 		$sut->baseURI;
 	}
 
@@ -222,12 +223,11 @@ class NodeTest extends TestCase {
 		self::assertSame($sut->innerHTML, $clone->innerHTML);
 	}
 
-	public function testCompareDocumentPostitionNowhere():void {
+	public function testCompareDocumentPositionNowhere():void {
 		$sut = NodeTestFactory::createNode("example");
 		$anotherNodeInAnotherDoc = NodeTestFactory::createNode("other");
 		self::assertGreaterThan(
 			0,
-			Node::DOCUMENT_POSITION_DISCONNECTED,
 			$sut->compareDocumentPosition($anotherNodeInAnotherDoc)
 		);
 	}
@@ -382,7 +382,7 @@ class NodeTest extends TestCase {
 			$tagsFound .= $child->nodeName;
 		}
 
-		self::assertEquals("onetwothreefour", $tagsFound);
+		self::assertEquals("one"."two"."three"."four", $tagsFound);
 	}
 
 	public function testInsertBeforeNullRef():void {
@@ -397,7 +397,7 @@ class NodeTest extends TestCase {
 			$tagsFound .= $child->nodeName;
 		}
 
-		self::assertEquals("onetwo", $tagsFound);
+		self::assertEquals("one"."two", $tagsFound);
 	}
 
 	public function testIsDefaultNamespace():void {
