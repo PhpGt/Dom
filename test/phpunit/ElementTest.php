@@ -62,4 +62,21 @@ class ElementTest extends TestCase {
 		$sut->setAttribute("name", "unit-test");
 		self::assertCount(2, $attributes);
 	}
+
+	public function testClassList():void {
+		$sut = NodeTestFactory::createNode("example");
+		$classList = $sut->classList;
+		self::assertFalse($classList->contains("a-class"));
+		$sut->className = "something another-thing a-class final-class";
+		self::assertTrue($classList->contains("a-class"));
+	}
+
+	public function testClassName():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->className = "something another-thing a-class final-class";
+		self::assertEquals(
+			$sut->className,
+			$sut->getAttribute("class")
+		);
+	}
 }

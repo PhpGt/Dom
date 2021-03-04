@@ -5,6 +5,7 @@ use DateTime;
 use DOMAttr;
 use DOMDocument;
 use DOMElement;
+use Gt\Dom\Facade\DOMTokenListFactory;
 use Gt\Dom\Facade\NamedNodeMapFactory;
 use Gt\Dom\Facade\NodeClass\DOMElementFacade;
 
@@ -44,12 +45,14 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/classList */
 	protected function __prop_get_classList():DOMTokenList {
-
+		return DOMTokenListFactory::create(
+			fn() => explode(" ", $this->className)
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/className */
 	protected function __prop_get_className():string {
-
+		return $this->getAttribute("class");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/className */
@@ -61,7 +64,9 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */
 	protected function __prop_get_id():string {
-
+		/** @var Element $nativeElement */
+		$nativeElement = $this->domNode;
+		return $nativeElement->getAttribute("id");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */
@@ -177,7 +182,9 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute
 	 */
 	public function getAttribute(string $attributeName):?string {
-
+		/** @var DOMElementFacade $nativeElement */
+		$nativeElement = $this->domNode;
+		return $nativeElement->getAttribute($attributeName);
 	}
 
 	/**
