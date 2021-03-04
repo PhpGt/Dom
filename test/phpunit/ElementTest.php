@@ -79,4 +79,13 @@ class ElementTest extends TestCase {
 			$sut->getAttribute("class")
 		);
 	}
+
+	public function testId():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->id = "something";
+		self::assertEquals(
+			$sut->id,
+			$sut->getAttribute("id")
+		);
+	}
 }
