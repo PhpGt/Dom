@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\Dom\Facade\NodeClass\DOMDocumentTypeFacade;
+
 /**
  * The DocumentType interface represents a Node containing a doctype.
  *
@@ -15,16 +17,22 @@ class DocumentType extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/DocumentType/name */
 	protected function __prop_get_name():string {
-
+		/** @var DOMDocumentTypeFacade $nativeNode */
+		$nativeNode = $this->domNode;
+		return $nativeNode->name;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/DocumentType/publicId */
 	protected function __prop_get_publicId():string {
-
+		/** @var DOMDocumentTypeFacade $nativeNode */
+		$nativeNode = $this->domNode;
+		return $nativeNode->publicId;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/DocumentType/systemId */
 	protected function __prop_get_systemId():string {
-
+		/** @var DOMDocumentTypeFacade $nativeNode */
+		$nativeNode = $this->domNode;
+		return $nativeNode->systemId;
 	}
 }

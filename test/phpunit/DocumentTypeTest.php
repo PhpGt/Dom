@@ -14,4 +14,10 @@ class DocumentTypeTest extends TestCase {
 		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_BOOK)->doctype;
 		self::assertNull($sut->textContent);
 	}
+
+	public function testIsEqualNode():void {
+		$sut = DocumentTestFactory::createHTMLDocument()->doctype;
+		$xmlType = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::XML_BOOK)->doctype;
+		self::assertFalse($sut->isEqualNode($xmlType));
+	}
 }
