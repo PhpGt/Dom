@@ -1,6 +1,9 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\Dom\Facade\NodeClass\DOMAttrFacade;
+use Gt\Dom\Facade\NodeClass\DOMElementFacade;
+
 /**
  * The Attr interface represents one of a DOM element's attributes as an object.
  * In most DOM methods, you will directly retrieve the attribute as a string
@@ -24,24 +27,34 @@ class Attr extends Node {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Attr/namespaceURI */
-	protected function __prop_get_namespaceURI():string {
+	protected function __prop_get_namespaceURI():?string {
 		/** @noinspection PhpUndefinedFieldInspection */
 		return $this->domNode->namespaceURI;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Attr/localName */
 	protected function __prop_get_localName():string {
-
+		return $this->domNode->localName;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Attr/prefix */
 	protected function __prop_get_prefix():string {
-
+		return $this->domNode->prefix;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Attr/ownerElement */
 	protected function __prop_get_ownerElement():?Element {
+		/** @var DOMAttrFacade $nativeAttr */
+		$nativeAttr = $this->domNode;
+		/** @var ?DOMElementFacade $nativeOwnerElement */
+		$nativeOwnerElement = $nativeAttr->ownerElement;
+		if(!$nativeOwnerElement) {
+			return null;
+		}
 
+		/** @var Element $gtElement */
+		$gtElement = $this->ownerDocument->getGtDomNode($nativeOwnerElement);
+		return $gtElement;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Attr/specified */
@@ -51,11 +64,15 @@ class Attr extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Attr/value */
 	protected function __prop_get_value():string {
-
+		/** @var DOMAttrFacade $nativeNode */
+		$nativeNode = $this->domNode;
+		return $nativeNode->value;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Attr/value */
 	protected function __prop_set_value(string $value):void {
-
+		/** @var DOMAttrFacade $nativeNode */
+		$nativeNode = $this->domNode;
+		$nativeNode->value = $value;
 	}
 }

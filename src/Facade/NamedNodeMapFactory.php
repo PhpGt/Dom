@@ -6,10 +6,11 @@ use Gt\Dom\Document;
 use Gt\Dom\NamedNodeMap;
 
 class NamedNodeMapFactory extends NamedNodeMap {
+	/** @param callable $callback DOMNamedNodeMap */
 	public static function create(
-		DOMNamedNodeMap $nativeNamedNodeMap,
-		Document $document
+		callable $callback,
+		Document $ownerDocument
 	):NamedNodeMap {
-		return new NamedNodeMap($nativeNamedNodeMap, $document);
+		return new NamedNodeMap($callback, $ownerDocument);
 	}
 }

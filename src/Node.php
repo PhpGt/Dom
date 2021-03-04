@@ -5,7 +5,6 @@ use DOMException as NativeDOMException;
 use DOMNode;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\DocumentHasMoreThanOneElementChildException;
-use Gt\Dom\Exception\DOMException;
 use Gt\Dom\Exception\NotFoundErrorException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WrongDocumentErrorException;

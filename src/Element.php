@@ -6,6 +6,7 @@ use DOMAttr;
 use DOMDocument;
 use DOMElement;
 use Gt\Dom\Facade\NamedNodeMapFactory;
+use Gt\Dom\Facade\NodeClass\DOMElementFacade;
 
 /**
  * Element is the most general base class from which all element objects (i.e.
@@ -36,7 +37,7 @@ class Element extends Node {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/attributes */
 	protected function __prop_get_attributes():NamedNodeMap {
 		return NamedNodeMapFactory::create(
-			$this->domNode->attributes,
+			fn() => $this->domNode->attributes,
 			$this->ownerDocument
 		);
 	}
@@ -506,7 +507,9 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute
 	 */
 	public function setAttribute(string $name, string $value):void {
-
+		/** @var DOMElementFacade $nativeElement */
+		$nativeElement = $this->domNode;
+		$nativeElement->setAttribute($name, $value);
 	}
 
 	/**
