@@ -49,4 +49,14 @@ class CharacterDataTest extends TestCase {
 			$sut->data
 		);
 	}
+
+	public function testReplaceData():void {
+		$message = "abcdefghijklmnopqurstvwxyz";
+		$sut = (new Document())->createTextNode($message);
+		$sut->replaceData(4, 6, "INSERTED");
+		self::assertEquals(
+			"abcdINSERTEDklmnopqurstvwxyz",
+			$sut->data
+		);
+	}
 }
