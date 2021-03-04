@@ -117,22 +117,36 @@ class ElementTest extends TestCase {
 
 	public function testOuterHTMLSet():void {
 		$sut = NodeTestFactory::createNode("example");
+		$sut->ownerDocument->appendChild($sut);
+		self::assertCount(
+			1,
+			$sut->ownerDocument->getElementsByTagName("example")
+		);
+
 		$innerHTML = "<p>A paragraph</p>";
 		$sut->outerHTML = "<changed-outer>$innerHTML</changed-outer>";
-		self::assertEquals($innerHTML, $sut->innerHTML);
+		self::assertCount(
+			0,
+			$sut->ownerDocument->getElementsByTagName("example")
+		);
+		self::assertCount(
+			1,
+			$sut->ownerDocument->getElementsByTagName("changed-outer")
+		);
 		self::assertEquals(
 			"<changed-outer><p>A paragraph</p></changed-outer>",
-			$sut->outerHTML
+			$sut->ownerDocument->getElementsByTagName("changed-outer")->item(0)->outerHTML
 		);
 	}
 
 	public function testOuterHTMLSetMultiple():void {
 		$sut = NodeTestFactory::createNode("example");
+		$sut->ownerDocument->appendChild($sut);
+		self::assertCount(1, $sut->ownerDocument->getElementsByTagName("example"));
 		$sut->outerHTML = "<first-outer>Example1</first-outer><second-outer>Example2</second-outer>";
-		self::assertEquals(
-			"<first-outer>Example1</first-outer>",
-			$sut->outerHTML
-		);
+		self::assertCount(0, $sut->ownerDocument->getElementsByTagName("example"));
+		self::assertCount(1, $sut->ownerDocument->getElementsByTagName("first-outer"));
+		self::assertCount(1, $sut->ownerDocument->getElementsByTagName("second-outer"));
 	}
 
 	public function testOuterHTMLParent():void {
@@ -140,8 +154,8 @@ class ElementTest extends TestCase {
 		$sut = NodeTestFactory::createNode("example");
 		$sut->ownerDocument->appendChild($sut);
 		$sut->outerHTML = $html;
-		self::assertEquals($html, $sut->outerHTML);
-//		self::assertEquals($html, $sut->ownerDocument->documentElement->innerHTML);
+		self::assertCount(0, $sut->ownerDocument->getElementsByTagName("example"));
+		self::assertCount(1, $sut->ownerDocument->getElementsByTagName("changed-tag"));
 	}
 
 	public function testChildren():void {

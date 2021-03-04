@@ -143,6 +143,10 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
 	protected function __prop_set_outerHTML(string $outerHTML):void {
+		if(!$this->parentNode) {
+			return;
+		}
+
 		while($child = $this->firstChild) {
 			/** @var Element $child */
 			$child->parentNode->removeChild($child);
@@ -152,27 +156,22 @@ class Element extends Node {
 		/** @var DOMDocument $nativeTempDocument */
 		$nativeTempDocument = $tempDocument->domNode;
 		$nativeTempDocument->loadHTML($outerHTML);
+		$body = $nativeTempDocument->getElementsByTagName("body")->item(0);
 		/** @var DOMDocument $nativeThisDocument */
 		$nativeThisDocument = $this->ownerDocument->domNode;
+		$nativeNextSibling = $this->domNode->nextSibling;
+		$nativeParent = $this->domNode->parentNode;
 
-		$importedNodeArray = [];
-		$body = $nativeTempDocument->getElementsByTagName("body")->item(0);
-
-		while($body->firstChild) {
+		$nativeParent->removeChild($this->domNode);
+		for($i = 0, $len = $body->childNodes->length; $i < $len; $i++) {
 			$imported = $nativeThisDocument->importNode(
-				$body->firstChild,
+				$body->childNodes->item($i),
 				true
 			);
-			array_push($importedNodeArray, $imported);
-			$body->removeChild($body->firstChild);
-		}
-
-		$nativeThisDomNode = $this->ownerDocument->getNativeDomNode($this);
-		if($nativeThisDomNode->parentNode) {
-			$nativeThisDomNode->replaceWith(...$importedNodeArray);
-		}
-		else {
-
+			$nativeParent->insertBefore(
+				$imported,
+				$nativeNextSibling
+			);
 		}
 	}
 
