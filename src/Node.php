@@ -348,9 +348,13 @@ abstract class Node {
 				&& $this->data === $otherNode->data;
 		}
 
-		/** @var Text|Comment $this */
-		/** @var Text|Comment $otherNode */
-		return $this->data === $otherNode->data;
+		if(isset($this->data)) {
+			/** @var Text|Comment $this */
+			/** @var Text|Comment $otherNode */
+			return $this->data === $otherNode->data;
+		}
+
+		return false;
 	}
 
 	/**
@@ -498,15 +502,16 @@ abstract class Node {
 			return false;
 		}
 
+		$connected = false;
 		$context = $this;
 		while($context) {
 			$context = $context->parentNode;
 			if($context === $this->ownerDocument) {
-				return true;
+				$connected = true;
 			}
 		}
 
-		return false;
+		return $connected;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/lastChild */

@@ -690,4 +690,10 @@ class DocumentTest extends TestCase {
 		self::expectException(TextNodeCanNotBeRootNodeException::class);
 		$sut->appendChild($sut->createTextNode("Hello!"));
 	}
+
+	public function testIsEqualNode():void {
+		$sut = new Document();
+		$other = new Document();
+		self::assertFalse($sut->isEqualNode($other));
+	}
 }
