@@ -51,6 +51,15 @@ HTML;
 			<span>Your email</span>
 			<input name="email" type="email" required />
 		</label>
+		<label>
+			<span>Where do you live?</span>
+			<input name="continent" value="africa" /> Africa <br />
+			<input name="continent" value="america" /> America <br />
+			<input name="continent" value="antarctica" /> Antarctica <br />
+			<input name="continent" value="asia" /> Asia <br />
+			<input name="continent" value="australia" /> Australia <br />
+			<input name="continent" value="europe" /> Europe <br />
+		</label>
 		
 		<button>Submit</button>
 	</form>

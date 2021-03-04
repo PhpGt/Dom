@@ -5,6 +5,9 @@ use DateTime;
 use DOMAttr;
 use DOMDocument;
 use DOMElement;
+use Gt\Dom\Facade\DOMTokenListFactory;
+use Gt\Dom\Facade\NamedNodeMapFactory;
+use Gt\Dom\Facade\NodeClass\DOMElementFacade;
 
 /**
  * Element is the most general base class from which all element objects (i.e.
@@ -16,7 +19,7 @@ use DOMElement;
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Element
  *
- * @property-read NamedNodeMap $attributes Returns a NamedNodeMap object containing the assigned attributes of the corresponding HTML element.
+ * @property-read NamedNodeMap<Attr> $attributes Returns a NamedNodeMap object containing the assigned attributes of the corresponding HTML element.
  * @property-read DOMTokenList $classList Returns a DOMTokenList containing the list of class attributes.
  * @property string $className Is a DOMString representing the class of the element.
  * @property string $id Is a DOMString representing the id of the element.
@@ -34,17 +37,22 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/attributes */
 	protected function __prop_get_attributes():NamedNodeMap {
-
+		return NamedNodeMapFactory::create(
+			fn() => $this->domNode->attributes,
+			$this
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/classList */
 	protected function __prop_get_classList():DOMTokenList {
-
+		return DOMTokenListFactory::create(
+			fn() => explode(" ", $this->className)
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/className */
 	protected function __prop_get_className():string {
-
+		return $this->getAttribute("class");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/className */
@@ -56,7 +64,9 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */
 	protected function __prop_get_id():string {
-
+		/** @var Element $nativeElement */
+		$nativeElement = $this->domNode;
+		return $nativeElement->getAttribute("id");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */
@@ -68,17 +78,51 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML */
 	protected function __prop_get_innerHTML():string {
+		$html = "";
 
+		/** @var DOMDocument $nativeDocument */
+		$nativeDocument = $this->ownerDocument->domNode;
+
+		foreach($this->childNodes as $child) {
+			$nativeChild = $this->ownerDocument->getNativeDomNode($child);
+			$html .= $nativeDocument->saveHTML($nativeChild);
+		}
+
+		return $html;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML */
 	protected function __prop_set_innerHTML(string $innerHTML):void {
+		while($child = $this->firstChild) {
+			/** @var Element $child */
+			$child->parentNode->removeChild($child);
+		}
 
+		$tempDocument = new Document();
+		/** @var DOMDocument $nativeTempDocument */
+		$nativeTempDocument = $tempDocument->domNode;
+		$nativeTempDocument->loadHTML(
+			"<html-fragment>$innerHTML</html-fragment>"
+		);
+		$innerFragmentNode = $nativeTempDocument->getElementsByTagName(
+			"html-fragment")->item(0);
+
+		/** @var DOMDocument $nativeDocument */
+		$nativeDocument = $this->ownerDocument->domNode;
+		$imported = $nativeDocument->importNode(
+			$innerFragmentNode,
+			true
+		);
+
+		$nativeDomNode = $this->ownerDocument->getNativeDomNode($this);
+		while($imported->firstChild) {
+			$nativeDomNode->appendChild($imported->firstChild);
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/localName */
 	protected function __prop_get_localName():string {
-
+		return $this->domNode->localName;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/namespaceURI */
@@ -92,12 +136,44 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
 	protected function __prop_get_outerHTML():string {
-
+		/** @var DOMDocument $nativeDocument */
+		$nativeDocument = $this->ownerDocument->domNode;
+		return $nativeDocument->saveHTML($this->domNode);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
-	protected function __prop_set_outerHTML():void {
+	protected function __prop_set_outerHTML(string $outerHTML):void {
+		while($child = $this->firstChild) {
+			/** @var Element $child */
+			$child->parentNode->removeChild($child);
+		}
 
+		$tempDocument = new Document();
+		/** @var DOMDocument $nativeTempDocument */
+		$nativeTempDocument = $tempDocument->domNode;
+		$nativeTempDocument->loadHTML($outerHTML);
+		/** @var DOMDocument $nativeThisDocument */
+		$nativeThisDocument = $this->ownerDocument->domNode;
+
+		$importedNodeArray = [];
+		$body = $nativeTempDocument->getElementsByTagName("body")->item(0);
+
+		while($body->firstChild) {
+			$imported = $nativeThisDocument->importNode(
+				$body->firstChild,
+				true
+			);
+			array_push($importedNodeArray, $imported);
+			$body->removeChild($body->firstChild);
+		}
+
+		$nativeThisDomNode = $this->ownerDocument->getNativeDomNode($this);
+		if($nativeThisDomNode->parentNode) {
+			$nativeThisDomNode->replaceWith(...$importedNodeArray);
+		}
+		else {
+
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/prefix */
@@ -137,7 +213,9 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute
 	 */
 	public function getAttribute(string $attributeName):?string {
-
+		/** @var DOMElementFacade $nativeElement */
+		$nativeElement = $this->domNode;
+		return $nativeElement->getAttribute($attributeName);
 	}
 
 	/**
@@ -467,7 +545,9 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute
 	 */
 	public function setAttribute(string $name, string $value):void {
-
+		/** @var DOMElementFacade $nativeElement */
+		$nativeElement = $this->domNode;
+		$nativeElement->setAttribute($name, $value);
 	}
 
 	/**

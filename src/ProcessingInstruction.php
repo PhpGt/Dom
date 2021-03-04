@@ -16,6 +16,6 @@ namespace Gt\Dom;
 class ProcessingInstruction extends CharacterData {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ProcessingInstruction/target */
 	public function __prop_get_target():string {
-
+		return $this->getNativeNode()->target;
 	}
 }

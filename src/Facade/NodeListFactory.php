@@ -10,6 +10,6 @@ class NodeListFactory extends NodeList {
 	}
 
 	public static function createLive(callable $callback):NodeList {
-
+		return new NodeList($callback);
 	}
 }

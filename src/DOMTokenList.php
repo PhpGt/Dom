@@ -20,6 +20,13 @@ use Gt\PropFunc\MagicProp;
 class DOMTokenList {
 	use MagicProp;
 
+	/** @var callable Return an indexed array of tokens */
+	private $callback;
+
+	protected function __construct(callable $callback) {
+		$this->callback = $callback;
+	}
+
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/length */
 	protected function __prop_get_length():int {
 
@@ -62,7 +69,7 @@ class DOMTokenList {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/contains
 	 */
 	public function contains(string $token):bool {
-
+		return in_array($token, $this->assoc());
 	}
 
 	/**
@@ -176,5 +183,10 @@ class DOMTokenList {
 	 */
 	public function values():iterable {
 
+	}
+
+	/** @return string[] */
+	private function assoc():array {
+		return call_user_func($this->callback);
 	}
 }

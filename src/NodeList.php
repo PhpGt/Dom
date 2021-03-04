@@ -1,8 +1,10 @@
 <?php
 namespace Gt\Dom;
 
+use ArrayAccess;
 use Countable;
 use Gt\PropFunc\MagicProp;
+use Iterator;
 
 /**
  * NodeList objects are collections of nodes, usually returned by properties
@@ -14,14 +16,16 @@ use Gt\PropFunc\MagicProp;
  * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList
  *
  * @property-read int $length The number of nodes in the NodeList.
+ * @implements Iterator<Node>
  */
-class NodeList implements Countable {
+class NodeList implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
 
 	/** @var Node[] */
 	private array $nodeList;
-	/** @var callable */
+	/** @var callable():NodeList */
 	private $callback;
+	private int $iteratorKey;
 
 	/**
 	 * A NodeList can, confusingly, be both "live" OR "static" using the
@@ -38,11 +42,13 @@ class NodeList implements Countable {
 		else {
 			$this->nodeList = $representation;
 		}
+
+		$this->iteratorKey = 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/length */
 	protected function __prop_get_length():int {
-		return count($this->nodeList);
+		return $this->count();
 	}
 
 	/**
@@ -56,7 +62,17 @@ class NodeList implements Countable {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/item
 	 */
 	public function item(int $index):?Node {
-		return $this->nodeList[$index];
+		if(isset($this->nodeList)) {
+			if(isset($this->nodeList[$index])) {
+				return $this->nodeList[$index];
+			}
+
+			return null;
+		}
+
+		/** @var NodeList $staticNodeList */
+		$staticNodeList = call_user_func($this->callback);
+		return $staticNodeList->item($index);
 	}
 
 	/**
@@ -108,6 +124,76 @@ class NodeList implements Countable {
 	}
 
 	public function count():int {
-		return count($this->nodeList);
+		if(isset($this->nodeList)) {
+			return count($this->nodeList);
+		}
+
+		/** @var NodeList $staticNodeList */
+		$staticNodeList = call_user_func($this->callback);
+		return count($staticNodeList);
+	}
+
+	public function offsetExists($offset):bool {
+		if(isset($this->nodeList)) {
+			return isset($this->nodeList[$offset]);
+		}
+	}
+
+	public function offsetGet($offset):?Node {
+		if(isset($this->nodeList)) {
+			return $this->nodeList[$offset] ?? null;
+		}
+
+		/** @var NodeList $nodeList */
+		$nodeList = call_user_func($this->callback);
+		return $nodeList[$offset];
+	}
+
+	public function offsetSet($offset, $value):void {
+		// TODO: Implement offsetSet() method.
+	}
+
+	public function offsetUnset($offset):void {
+		// TODO: Implement offsetUnset() method.
+	}
+
+	public function current():Node {
+		if(isset($this->nodeList)) {
+			return $this->nodeList[$this->iteratorKey];
+		}
+
+		/** @var NodeList $nodeList */
+		$nodeList = call_user_func($this->callback);
+		while($nodeList->key() < $this->iteratorKey) {
+			$nodeList->next();
+		}
+
+		return $nodeList->current();
+	}
+
+	public function next():void {
+		$this->iteratorKey++;
+	}
+
+	public function key():int {
+		return $this->iteratorKey;
+	}
+
+	public function valid():bool {
+		if(isset($this->nodeList)) {
+			return isset($this->nodeList[$this->iteratorKey]);
+		}
+
+		/** @var NodeList $nodeList */
+		$nodeList = call_user_func($this->callback);
+		while($nodeList->key() < $this->iteratorKey) {
+			$nodeList->next();
+		}
+
+		return $nodeList->valid();
+	}
+
+	public function rewind():void {
+		$this->iteratorKey = 0;
 	}
 }

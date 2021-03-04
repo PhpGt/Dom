@@ -1,6 +1,10 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\Dom\Facade\NodeClass\DOMCharacterDataFacade;
+use Gt\Dom\Facade\NodeClass\DOMProcessingInstructionFacade;
+use Gt\Dom\Facade\NodeClass\DOMTextFacade;
+
 /**
  * The CharacterData abstract interface represents a Node object that contains
  * characters. This is an abstract interface, meaning there aren't any objects
@@ -17,17 +21,17 @@ abstract class CharacterData extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/data */
 	protected function __prop_get_data():string {
-
+		return $this->getNativeNode()->data;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/data */
 	public function __prop_set_data(string $data):void {
-
+		$this->getNativeNode()->data = $data;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/length */
 	public function __prop_get_length():int {
-
+		return $this->getNativeNode()->length;
 	}
 
 	/**
@@ -37,7 +41,7 @@ abstract class CharacterData extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/appendData
 	 */
 	public function appendData(string $data):void {
-
+		$this->getNativeNode()->appendData($data);
 	}
 
 	/**
@@ -52,7 +56,7 @@ abstract class CharacterData extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/deleteData
 	 */
 	public function deleteData(int $offset, int $count):void {
-
+		$this->getNativeNode()->deleteData($offset, $count);
 	}
 
 	/**
@@ -66,7 +70,7 @@ abstract class CharacterData extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/insertData
 	 */
 	public function insertData(int $offset, string $data):void {
-
+		$this->getNativeNode()->insertData($offset, $data);
 	}
 
 	/**
@@ -86,7 +90,7 @@ abstract class CharacterData extends Node {
 		int $count,
 		string $data
 	):void {
-
+		$this->getNativeNode()->replaceData($offset, $count, $data);
 	}
 
 	/**
@@ -99,6 +103,13 @@ abstract class CharacterData extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/substringData
 	 */
 	public function substringData(int $offset, int $count):string {
+		return $this->getNativeNode()->substringData($offset, $count);
+	}
 
+	protected function getNativeNode(
+	):DOMCharacterDataFacade|DOMTextFacade|DOMProcessingInstructionFacade {
+		/** @var DOMCharacterDataFacade $nativeNode */
+		$nativeNode = $this->domNode;
+		return $nativeNode;
 	}
 }

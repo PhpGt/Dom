@@ -6,6 +6,7 @@ use DOMNode;
 use DOMXPath;
 use Gt\CssXPath\Translator;
 use Gt\Dom\Facade\DOMDocumentFacade;
+use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NodeClass\DOMElementFacade;
 use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
 use Gt\Dom\Facade\NodeListFactory;
@@ -48,7 +49,20 @@ trait ParentNode {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children */
 	protected function __prop_get_children():HTMLCollection {
+		return HTMLCollectionFactory::create(function() {
+			$elementArray = [];
 
+			for($i = 0, $len = $this->childNodes->length; $i < $len; $i++) {
+				$child = $this->childNodes->item($i);
+				if(!$child instanceof Element) {
+					continue;
+				}
+
+				array_push($elementArray, $child);
+			}
+
+			return NodeListFactory::create(...$elementArray);
+		});
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/firstElementChild */
@@ -127,7 +141,11 @@ trait ParentNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/querySelector
 	 */
 	public function querySelector(string $selectors):?Element {
-
+		/** @var Element[] $all */
+		$all = $this->querySelectorAll($selectors);
+// TODO: Is there a case for optimisation here?
+// Test with a document of thousands of nodes to compare efficiency.
+		return $all[0] ?? null;
 	}
 
 	/**
@@ -147,25 +165,9 @@ trait ParentNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/querySelectorAll
 	 */
 	public function querySelectorAll(string $selectors):NodeList {
-		/** @var Node $context */
-		$context = $this;
-//		if($this instanceof Document) {
-//			$context = $this->documentElement;
-//		}
-
 		$translator = new Translator($selectors, ".//");
-		$nativeContext = $this->getNativeDomNode($context);
-		$domNodeList = $this->domDocument->query(
-			$translator,
-			$nativeContext
-		);
-		$nodeArray = [];
-
-		for($i = 0, $len = $domNodeList->length; $i < $len; $i++) {
-			$gtNode = $this->getGtDomNode($domNodeList->item($i));
-			array_push($nodeArray, $gtNode);
-		}
-
+		$xpathResult = $this->ownerDocument->evaluate($translator);
+		$nodeArray = iterator_to_array($xpathResult);
 		return NodeListFactory::create(...$nodeArray);
 	}
 }

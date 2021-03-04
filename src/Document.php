@@ -1,46 +1,21 @@
 <?php
 namespace Gt\Dom;
 
-use DOMAttr;
-use DOMCdataSection;
-use DOMCharacterData;
-use DOMComment;
-use DOMDocument;
-use DOMDocumentFragment;
-use DOMDocumentType;
-use DOMElement;
-use DOMEntity;
-use DOMEntityReference;
 use DOMNode;
-use DOMNotation;
-use DOMText;
 use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Exception\NotSupportedException;
 use Gt\Dom\Facade\DOMDocumentFacade;
-use Gt\Dom\Facade\DOMDocumentNodeMap;
 use Gt\Dom\Facade\HTMLCollectionFactory;
-use Gt\Dom\Facade\NodeClass\DOMAttrFacade;
-use Gt\Dom\Facade\NodeClass\DOMCdataSectionFacade;
-use Gt\Dom\Facade\NodeClass\DOMCharacterDataFacade;
-use Gt\Dom\Facade\NodeClass\DOMCommentFacade;
-use Gt\Dom\Facade\NodeClass\DOMDocumentFragmentFacade;
-use Gt\Dom\Facade\NodeClass\DOMDocumentTypeFacade;
-use Gt\Dom\Facade\NodeClass\DOMElementFacade;
-use Gt\Dom\Facade\NodeClass\DOMEntityFacade;
-use Gt\Dom\Facade\NodeClass\DOMEntityReferenceFacade;
 use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
-use Gt\Dom\Facade\NodeClass\DOMNotationFacade;
-use Gt\Dom\Facade\NodeClass\DOMTextFacade;
 use Gt\Dom\Facade\NodeIteratorFactory;
 use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\Facade\TreeWalkerFactory;
+use Gt\Dom\Facade\XPathResultFactory;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
 use Gt\PropFunc\MagicProp;
 use Psr\Http\Message\StreamInterface;
-use ReflectionClass;
-use RuntimeException;
 
 /**
  * Represents any web page loaded in the browser and serves as an entry point
@@ -274,6 +249,27 @@ class Document extends Node implements StreamInterface {
 	}
 
 	/**
+	 * Currently undocumented at MDN. Please see W3C spec instead.
+	 * @link https://dom.spec.whatwg.org/#dom-document-createattributens
+	 *
+	 * @param string $namespace
+	 * @param string $qualifiedName
+	 * @return Attr
+	 */
+	public function createAttributeNS(
+		string $namespace,
+		string $qualifiedName
+	):Attr {
+		$nativeAttr = $this->domDocument->createAttributeNS(
+			$namespace,
+			$qualifiedName
+		);
+		/** @var Attr $gtAttr */
+		$gtAttr = $this->getGtDomNode($nativeAttr);
+		return $gtAttr;
+	}
+
+	/**
 	 * Creates a new CDATA section node, and returns it.
 	 * This will only work with XML, not HTML documents (as HTML documents
 	 * do not support CDATA sections); attempting it on an HTML document
@@ -400,11 +396,11 @@ class Document extends Node implements StreamInterface {
 	 *
 	 * @param Node $root The root node at which to begin the NodeIterator's
 	 * traversal.
-	 * @param ?int $whatToShow Is an optional unsigned long representing a
+	 * @param int $whatToShow Is an optional unsigned long representing a
 	 * bitmask created by combining the constant properties of NodeFilter.
 	 * It is a convenient way of filtering for certain types of node.
 	 * It defaults to 0xFFFFFFFF representing the SHOW_ALL constant.
-	 * @param ?NodeFilter|?callable $filter An object implementing the
+	 * @param NodeFilter|callable|null $filter An object implementing the
 	 * NodeFilter interface. Its acceptNode() method will be called for each
 	 * node in the subtree based at root which is accepted as included by
 	 * the whatToShow flag to determine whether or not to include it in the
@@ -495,6 +491,31 @@ class Document extends Node implements StreamInterface {
 	}
 
 	/**
+	 * Returns an XPathResult based on an XPath expression.
+	 *
+	 * @param string $xpathExpression is a string representing the XPath to
+	 * be evaluated.
+	 * @param ?Node $contextNode Leave null to default to $this node
+	 * @return XPathResult
+	 */
+	public function evaluate(
+		string $xpathExpression,
+		Node $contextNode = null
+	):XPathResult {
+		if(!$contextNode) {
+			$contextNode = $this;
+		}
+
+		/** @var DOMNodeFacade $nativeContextNode */
+		$nativeContextNode = $this->getNativeDomNode($contextNode);
+		return XPathResultFactory::create(
+			$xpathExpression,
+			$this->domDocument,
+			$nativeContextNode
+		);
+	}
+
+	/**
 	 * The Document method getElementById() returns an Element object
 	 * representing the element whose id property matches the specified
 	 * string. Since element IDs are required to be unique if specified,
@@ -563,7 +584,10 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByName
 	 */
 	public function getElementsByName(string $name):NodeList {
-
+		$querySelector = "[name=$name]";
+		return NodeListFactory::createLive(
+			fn() => $this->querySelectorAll($querySelector)
+		);
 	}
 
 	/**
@@ -614,6 +638,26 @@ class Document extends Node implements StreamInterface {
 		string $namespace,
 		string $name
 	):HTMLCollection {
+		return HTMLCollectionFactory::create(function()use($namespace, $name) {
+			$gtDomNodeArray = [];
+
+			$domNodeList = $this->domDocument->getElementsByTagNameNS(
+				$namespace,
+				$name
+			);
+
+			for($i = 0, $len = $domNodeList->length; $i < $len; $i++) {
+				$gtDomNode = $this->domDocument->getGtDomNode(
+					$domNodeList->item($i)
+				);
+				array_push(
+					$gtDomNodeArray,
+					$gtDomNode
+				);
+			}
+
+			return NodeListFactory::create(...$gtDomNodeArray);
+		});
 
 	}
 
@@ -645,7 +689,13 @@ class Document extends Node implements StreamInterface {
 		Node $externalNode,
 		bool $deep = false
 	):Node {
+		$nativeNode = $this->getNativeDomNode($externalNode);
+		$newNativeNode = $this->domDocument->importNode(
+			$nativeNode,
+			$deep
+		);
 
+		return $this->getGtDomNode($newNativeNode);
 	}
 
 	/**

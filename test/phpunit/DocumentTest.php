@@ -1,22 +1,23 @@
 <?php
 namespace Gt\Dom\Test;
 
-use Gt\Dom\Attr;
 use Gt\Dom\Document;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
+use Gt\Dom\Exception\DocumentHasMoreThanOneElementChildException;
 use Gt\Dom\Exception\DocumentStreamNotWritableException;
 use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
+use Gt\Dom\Exception\WrongDocumentErrorException;
+use Gt\Dom\Exception\XPathQueryException;
 use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
-use Gt\Dom\NodeFilter;
-use Gt\Dom\NodeIterator;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
+use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use Gt\PropFunc\PropertyReadOnlyException;
 use PHPUnit\Framework\TestCase;
 
@@ -386,6 +387,13 @@ class DocumentTest extends TestCase {
 		self::assertEquals("example", $attr->name);
 	}
 
+	public function testCreateAttributeNS():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		$attr = $sut->createAttributeNS("namespace", "example");
+		self::assertEquals("example", $attr->name);
+		self::assertEquals("namespace", $attr->namespaceURI);
+	}
+
 	public function testCreateCDATASectionHTML():void {
 		$sut = DocumentTestFactory::createHTMLDocument();
 		self::expectException(HTMLDocumentDoesNotSupportCDATASectionException::class);
@@ -550,5 +558,149 @@ class DocumentTest extends TestCase {
 	public function testGetElementsByClassNameHTML():void {
 		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_PAGE);
 		self::assertCount(6, $sut->getElementsByClassName("icon"));
+	}
+
+	public function testGetElementsByNameEmpty():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::assertCount(0, $sut->getElementsByName("test"));
+	}
+
+	public function testGetElementsByName():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
+		self::assertCount(6, $sut->getElementsByName("continent"));
+	}
+
+	public function testGetElementsByNameLive():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
+		$continentList = $sut->getElementsByName("continent");
+		$originalLength = $continentList->length;
+
+		while($input = $sut->querySelector("input")) {
+			$input->remove();
+		}
+
+		self::assertLessThan($originalLength, $continentList->length);
+		self::assertCount(0, $continentList);
+	}
+
+	public function testGetElementsByTagNameEmpty():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::assertCount(0, $sut->getElementsByName("input"));
+	}
+
+	public function testGetElementsByTagName():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
+		self::assertCount(4, $sut->getElementsByTagName("label"));
+	}
+
+	public function testGetElementsByTagNameLive():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
+		$inputList = $sut->getElementsByTagName("input");
+
+		while($currentLength = $inputList->length) {
+			$sut->querySelector("input")->remove();
+			self::assertCount($currentLength - 1, $inputList);
+		}
+	}
+
+	public function testGetElementsByTagNameNSEmpty():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::assertCount(
+			0,
+			$sut->getElementsByTagNameNS(
+				"http://www.w3.org/1999/xhtml",
+				"p"
+			)
+		);
+	}
+
+	public function testGetElementsByTagNameNS():void {
+		$sut = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_FORMS);
+		self::assertCount(
+			4,
+			$sut->getElementsByTagNameNS(
+				"", // Empty for HTML5
+				"label"
+			)
+		);
+		self::assertCount(
+			0,
+			$sut->getElementsByTagNameNS(
+				"non-matching",
+				"label"
+			)
+		);
+	}
+
+	public function testImportNode():void {
+		$sut1 = new Document();
+		$sut2 = new Document();
+
+// First try to append the node to the wrong document.
+		$node = $sut1->createElement("example");
+		$exception = null;
+		try {
+			$sut2->appendChild($node);
+		}
+		catch(WrongDocumentErrorException $exception) {
+		}
+// Ensure an exception was caught.
+		self::assertNotNull($exception);
+
+// Import the node, but ensure the original node is untouched.
+		self::assertEquals($sut1, $node->ownerDocument);
+		/** @var Element $newNode */
+		$newNode = $sut2->importNode($node);
+		$sut2->appendChild($newNode);
+		self::assertEquals($sut1, $node->ownerDocument);
+		self::assertEquals($sut2, $newNode->ownerDocument);
+		$newNode->remove();
+
+// The original node should still not be able to be attached to the other document.
+		$exception = null;
+		try {
+			$sut2->appendChild($node);
+		}
+		catch(WrongDocumentErrorException $exception) {
+		}
+		self::assertNotNull($exception);
+	}
+
+	public function testTextContent():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::assertNull($sut->textContent);
+	}
+
+	public function testAppendChild():void {
+		$sut = new Document();
+		$node = $sut->createElement("example");
+		self::assertCount(0, $sut->childNodes);
+		$sut->appendChild($node);
+		self::assertCount(1, $sut->childNodes);
+	}
+
+	public function testAppendChildNotEmpty():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		$node = $sut->createElement("example");
+		self::expectException(DocumentHasMoreThanOneElementChildException::class);
+		$sut->appendChild($node);
+	}
+
+	public function testAppendChildText():void {
+		$sut = new Document();
+		self::expectException(TextNodeCanNotBeRootNodeException::class);
+		$sut->appendChild($sut->createTextNode("Hello!"));
+	}
+
+	public function testIsEqualNode():void {
+		$sut = new Document();
+		$other = new Document();
+		self::assertFalse($sut->isEqualNode($other));
+	}
+
+	public function testEvaluateDodgyXPath():void {
+		$sut = new Document();
+		self::expectException(XPathQueryException::class);
+		$sut->evaluate("lalala 123@456 [#]");
 	}
 }
