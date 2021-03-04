@@ -88,4 +88,30 @@ class ElementTest extends TestCase {
 			$sut->getAttribute("id")
 		);
 	}
+
+	public function testInnerHTML():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<p>A paragraph</p>
+		<div>A div</div>";
+		self::assertEquals("A paragraph", $sut->children[0]->innerHTML);
+		self::assertEquals("A div", $sut->children[1]->innerHTML);
+	}
+
+	public function testInnerHTMLReset():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<p>A paragraph</p>
+		<div>A div</div>";
+		$sut->innerHTML = "<example>An example</example><another-example>And another</another-example>";
+		self::assertEquals("An example", $sut->children[0]->innerHTML);
+		self::assertEquals("And another", $sut->children[1]->innerHTML);
+	}
+
+	public function testChildren():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<p>A paragraph</p>
+		<div>A div</div>";
+		self::assertCount(2, $sut->children);
+		self::assertEquals("A paragraph", $sut->children[0]->innerHTML);
+		self::assertEquals("A div", $sut->children[1]->innerHTML);
+	}
 }

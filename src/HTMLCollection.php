@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use ArrayAccess;
 use Countable;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\PropFunc\MagicProp;
@@ -22,17 +23,13 @@ use Gt\PropFunc\MagicProp;
  *
  * @property-read int $length Returns the number of items in the collection.
  */
-class HTMLCollection implements Countable {
+class HTMLCollection implements ArrayAccess, Countable {
 	use MagicProp;
 
 	/** @var callable():NodeList Returns a NodeList, called multiple times,
 	 * allowing the HTMLCollection to be "live" */
 	private $callback;
 
-	/**
-	 * This class must be constructed with a callback that returns an array
-	 * of Node objects. This allows the HTMLCollection to be "live".
-	 */
 	protected function __construct(callable $callback) {
 		$this->callback = $callback;
 	}
@@ -86,5 +83,39 @@ class HTMLCollection implements Countable {
 	 */
 	public function namedItem(string $name):?Element {
 
+	}
+
+	/**
+	 * @param int $offset
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
+	public function offsetExists($offset):bool {
+		$element = $this->item($offset);
+		return !is_null($element);
+
+	}
+
+	/**
+	 * @param int $offset
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
+	public function offsetGet($offset):?Element {
+		return $this->item($offset);
+	}
+
+	/**
+	 * @param int $offset
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
+	public function offsetSet($offset, $value):void {
+		// TODO: Implement offsetSet() method.
+	}
+
+	/**
+	 * @param int $offset
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
+	public function offsetUnset($offset):void {
+		// TODO: Implement offsetUnset() method.
 	}
 }

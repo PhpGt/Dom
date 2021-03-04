@@ -6,6 +6,7 @@ use DOMNode;
 use DOMXPath;
 use Gt\CssXPath\Translator;
 use Gt\Dom\Facade\DOMDocumentFacade;
+use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NodeClass\DOMElementFacade;
 use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
 use Gt\Dom\Facade\NodeListFactory;
@@ -48,7 +49,20 @@ trait ParentNode {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children */
 	protected function __prop_get_children():HTMLCollection {
+		return HTMLCollectionFactory::create(function() {
+			$elementArray = [];
 
+			for($i = 0, $len = $this->childNodes->length; $i < $len; $i++) {
+				$child = $this->childNodes->item($i);
+				if(!$child instanceof Element) {
+					continue;
+				}
+
+				array_push($elementArray, $child);
+			}
+
+			return NodeListFactory::create(...$elementArray);
+		});
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/firstElementChild */

@@ -95,7 +95,7 @@ class Element extends Node {
 	protected function __prop_set_innerHTML(string $innerHTML):void {
 		while($child = $this->firstChild) {
 			/** @var Element $child */
-			$child->remove();
+			$child->parentNode->removeChild($child);
 		}
 
 		$tempDocument = new Document();
@@ -115,8 +115,9 @@ class Element extends Node {
 		);
 
 		$nativeDomNode = $this->ownerDocument->getNativeDomNode($this);
-		$firstChild = $imported->firstChild;
-		$nativeDomNode->appendChild($firstChild);
+		while($imported->firstChild) {
+			$nativeDomNode->appendChild($imported->firstChild);
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/localName */

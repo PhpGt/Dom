@@ -63,7 +63,11 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 */
 	public function item(int $index):?Node {
 		if(isset($this->nodeList)) {
-			return $this->nodeList[$index];
+			if(isset($this->nodeList[$index])) {
+				return $this->nodeList[$index];
+			}
+
+			return null;
 		}
 
 		/** @var NodeList $staticNodeList */
