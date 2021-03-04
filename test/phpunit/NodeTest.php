@@ -100,6 +100,14 @@ class NodeTest extends TestCase {
 		self::assertTrue($sut->isConnected);
 	}
 
+	public function testIsConnectedNo():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertFalse($sut->isConnected);
+		$sut->ownerDocument->append($sut);
+		$sut->ownerDocument->removeChild($sut);
+		self::assertFalse($sut->isConnected);
+	}
+
 	public function testNextSiblingNone():void {
 		$sut = NodeTestFactory::createNode("example");
 		self::assertNull($sut->nextSibling);
