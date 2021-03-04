@@ -142,8 +142,38 @@ class Element extends Node {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
-	protected function __prop_set_outerHTML():void {
+	protected function __prop_set_outerHTML(string $outerHTML):void {
+		while($child = $this->firstChild) {
+			/** @var Element $child */
+			$child->parentNode->removeChild($child);
+		}
 
+		$tempDocument = new Document();
+		/** @var DOMDocument $nativeTempDocument */
+		$nativeTempDocument = $tempDocument->domNode;
+		$nativeTempDocument->loadHTML($outerHTML);
+		/** @var DOMDocument $nativeThisDocument */
+		$nativeThisDocument = $this->ownerDocument->domNode;
+
+		$importedNodeArray = [];
+		$body = $nativeTempDocument->getElementsByTagName("body")->item(0);
+
+		while($body->firstChild) {
+			$imported = $nativeThisDocument->importNode(
+				$body->firstChild,
+				true
+			);
+			array_push($importedNodeArray, $imported);
+			$body->removeChild($body->firstChild);
+		}
+
+		$nativeThisDomNode = $this->ownerDocument->getNativeDomNode($this);
+		if($nativeThisDomNode->parentNode) {
+			$nativeThisDomNode->replaceWith(...$importedNodeArray);
+		}
+		else {
+
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/prefix */

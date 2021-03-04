@@ -106,6 +106,44 @@ class ElementTest extends TestCase {
 		self::assertEquals("And another", $sut->children[1]->innerHTML);
 	}
 
+	public function testOuterHTML():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<p>A paragraph</p>";
+		self::assertEquals(
+			"<example><p>A paragraph</p></example>",
+			$sut->outerHTML
+		);
+	}
+
+	public function testOuterHTMLSet():void {
+		$sut = NodeTestFactory::createNode("example");
+		$innerHTML = "<p>A paragraph</p>";
+		$sut->outerHTML = "<changed-outer>$innerHTML</changed-outer>";
+		self::assertEquals($innerHTML, $sut->innerHTML);
+		self::assertEquals(
+			"<changed-outer><p>A paragraph</p></changed-outer>",
+			$sut->outerHTML
+		);
+	}
+
+	public function testOuterHTMLSetMultiple():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->outerHTML = "<first-outer>Example1</first-outer><second-outer>Example2</second-outer>";
+		self::assertEquals(
+			"<first-outer>Example1</first-outer>",
+			$sut->outerHTML
+		);
+	}
+
+	public function testOuterHTMLParent():void {
+		$html = "<changed-tag>Some content</changed-tag>";
+		$sut = NodeTestFactory::createNode("example");
+		$sut->ownerDocument->appendChild($sut);
+		$sut->outerHTML = $html;
+		self::assertEquals($html, $sut->outerHTML);
+//		self::assertEquals($html, $sut->ownerDocument->documentElement->innerHTML);
+	}
+
 	public function testChildren():void {
 		$sut = NodeTestFactory::createNode("example");
 		$sut->innerHTML = "<p>A paragraph</p>
