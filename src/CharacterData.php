@@ -2,6 +2,7 @@
 namespace Gt\Dom;
 
 use Gt\Dom\Facade\NodeClass\DOMCharacterDataFacade;
+use Gt\Dom\Facade\NodeClass\DOMProcessingInstructionFacade;
 use Gt\Dom\Facade\NodeClass\DOMTextFacade;
 
 /**
@@ -105,7 +106,8 @@ abstract class CharacterData extends Node {
 		return $this->getNativeNode()->substringData($offset, $count);
 	}
 
-	private function getNativeNode():DOMCharacterDataFacade|DOMTextFacade {
+	protected function getNativeNode(
+	):DOMCharacterDataFacade|DOMTextFacade|DOMProcessingInstructionFacade {
 		/** @var DOMCharacterDataFacade $nativeNode */
 		$nativeNode = $this->domNode;
 		return $nativeNode;
