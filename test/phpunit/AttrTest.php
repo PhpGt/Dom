@@ -40,4 +40,10 @@ class AttrTest extends TestCase {
 		$sut = $document->createAttribute("example");
 		self::assertNull($sut->ownerElement);
 	}
+
+	public function testSpecified():void {
+		$sut = (new Document())->createAttribute("example");
+// Another weird DOM quirk, but again, true to spec. Always true.
+		self::assertTrue($sut->specified);
+	}
 }
