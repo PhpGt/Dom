@@ -11,6 +11,7 @@ use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
 use Gt\Dom\Exception\WrongDocumentErrorException;
+use Gt\Dom\Exception\XPathQueryException;
 use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
@@ -695,5 +696,11 @@ class DocumentTest extends TestCase {
 		$sut = new Document();
 		$other = new Document();
 		self::assertFalse($sut->isEqualNode($other));
+	}
+
+	public function testEvaluateDodgyXPath():void {
+		$sut = new Document();
+		self::expectException(XPathQueryException::class);
+		$sut->evaluate("lalala 123@456 [#]");
 	}
 }

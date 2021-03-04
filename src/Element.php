@@ -18,7 +18,7 @@ use Gt\Dom\Facade\NodeClass\DOMElementFacade;
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Element
  *
- * @property-read NamedNodeMap $attributes Returns a NamedNodeMap object containing the assigned attributes of the corresponding HTML element.
+ * @property-read NamedNodeMap<Attr> $attributes Returns a NamedNodeMap object containing the assigned attributes of the corresponding HTML element.
  * @property-read DOMTokenList $classList Returns a DOMTokenList containing the list of class attributes.
  * @property string $className Is a DOMString representing the class of the element.
  * @property string $id Is a DOMString representing the id of the element.
@@ -38,7 +38,7 @@ class Element extends Node {
 	protected function __prop_get_attributes():NamedNodeMap {
 		return NamedNodeMapFactory::create(
 			fn() => $this->domNode->attributes,
-			$this->ownerDocument
+			$this
 		);
 	}
 

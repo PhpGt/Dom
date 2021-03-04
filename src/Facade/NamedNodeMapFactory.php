@@ -1,16 +1,15 @@
 <?php
 namespace Gt\Dom\Facade;
 
-use DOMNamedNodeMap;
-use Gt\Dom\Document;
+use Gt\Dom\Element;
 use Gt\Dom\NamedNodeMap;
 
 class NamedNodeMapFactory extends NamedNodeMap {
-	/** @param callable $callback DOMNamedNodeMap */
+	/** @param callable $callback Returns DOMNamedNodeMap */
 	public static function create(
 		callable $callback,
-		Document $ownerDocument
+		Element $owner
 	):NamedNodeMap {
-		return new NamedNodeMap($callback, $ownerDocument);
+		return new NamedNodeMap($callback, $owner);
 	}
 }

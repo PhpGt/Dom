@@ -1,7 +1,9 @@
 <?php
 namespace Gt\Dom;
 
+use ArrayAccess;
 use DOMNamedNodeMap;
+use Gt\Dom\Exception\DOMException;
 use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
 use Gt\PropFunc\MagicProp;
 
@@ -20,8 +22,9 @@ use Gt\PropFunc\MagicProp;
  * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap
  *
  * @property-read int $length Returns the amount of objects in the map.
+ * @implements ArrayAccess<int|string, Attr>
  */
-class NamedNodeMap {
+class NamedNodeMap implements ArrayAccess {
 	use MagicProp;
 
 	/** @var callable Returns a DOMNamedNodeMap */
@@ -30,16 +33,14 @@ class NamedNodeMap {
 	/** @param callable $callback Returns a DOMNamedNodeMapFacade */
 	protected function __construct(
 		callable $callback,
-		private Document $ownerDocument
+		private Element $owner
 	) {
 		$this->callback = $callback;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/length */
 	protected function __prop_get_length():int {
-		/** @var DOMNamedNodeMap<DOMNodeFacade> $nativeNamedNodeMap */
-		$nativeNamedNodeMap = call_user_func($this->callback);
-		return $nativeNamedNodeMap->length;
+		return $this->getNative()->length;
 	}
 
 	/**
@@ -52,9 +53,7 @@ class NamedNodeMap {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/getNamedItem
 	 */
 	public function getNamedItem(string $qualifiedName):?Attr {
-		/** @var DOMNamedNodeMap<DOMNodeFacade> $nativeNamedNodeMap */
-		$nativeNamedNodeMap = call_user_func($this->callback);
-		$nativeAttr = $nativeNamedNodeMap->getNamedItem(
+		$nativeAttr = $this->getNative()->getNamedItem(
 			$qualifiedName
 		);
 		if(!$nativeAttr) {
@@ -62,7 +61,7 @@ class NamedNodeMap {
 		}
 
 		/** @var Attr $gtAttr */
-		$gtAttr = $this->ownerDocument->getGtDomNode($nativeAttr);
+		$gtAttr = $this->owner->ownerDocument->getGtDomNode($nativeAttr);
 		return $gtAttr;
 	}
 
@@ -78,9 +77,7 @@ class NamedNodeMap {
 		string $namespace,
 		string $localName
 	):?Attr {
-		/** @var DOMNamedNodeMap<DOMNodeFacade> $nativeNamedNodeMap */
-		$nativeNamedNodeMap = call_user_func($this->callback);
-		$nativeAttr = $nativeNamedNodeMap->getNamedItemNS(
+		$nativeAttr = $this->getNative()->getNamedItemNS(
 			$namespace,
 			$localName
 		);
@@ -89,7 +86,7 @@ class NamedNodeMap {
 		}
 
 		/** @var Attr $gtAttr */
-		$gtAttr = $this->ownerDocument->getGtDomNode($nativeAttr);
+		$gtAttr = $this->owner->ownerDocument->getGtDomNode($nativeAttr);
 		return $gtAttr;
 	}
 
@@ -100,15 +97,12 @@ class NamedNodeMap {
 	 * @return ?Attr The replaced Attr, or Null if provided Attr was new.
 	 */
 	public function setNamedItem(Attr $attr):?Attr {
-		/** @var DOMNamedNodeMap<DOMNodeFacade> $nativeNamedNodeMap */
-		$nativeNamedNodeMap = call_user_func($this->callback);
-		$nativeAttr = $this->ownerDocument->getNativeDomNode($attr);
-
 		$existing = false;
-		if($nativeNamedNodeMap->getNamedItem($attr->name)) {
+		if($this->getNative()->getNamedItem($attr->name)) {
 			$existing = true;
 		}
-		$nativeNamedNodeMap->setNamedItem($nativeAttr);
+
+		$this->owner->setAttribute($attr->name, $attr->value);
 
 		if($existing) {
 			return $attr;
@@ -125,18 +119,21 @@ class NamedNodeMap {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/setNamedItemNS
 	 */
 	public function setNamedItemNS(Attr $attr):?Attr {
-		/** @var DOMNamedNodeMap<DOMNodeFacade> $nativeNamedNodeMap */
-		$nativeNamedNodeMap = call_user_func($this->callback);
-		$nativeAttr = $this->ownerDocument->getNativeDomNode($attr);
+		$nativeAttr = $this->owner->ownerDocument->getNativeDomNode($attr);
 
 		$existing = false;
-		if($nativeNamedNodeMap->getNamedItemNS(
+		if($this->getNative()->getNamedItemNS(
 			$attr->namespaceURI,
 			$attr->name)
 		) {
 			$existing = true;
 		}
-		$nativeNamedNodeMap->setNamedItemNS($nativeAttr);
+
+		$this->owner->setAttributeNS(
+			$attr->namespaceURI,
+			$attr->name,
+			$attr->value
+		);
 
 		if($existing) {
 			return $attr;
@@ -152,10 +149,8 @@ class NamedNodeMap {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/removeNamedItem
 	 */
 	public function removeNamedItem(Attr $attr):Attr {
-		/** @var DOMNamedNodeMap<DOMNodeFacade> $nativeNamedNodeMap */
-		$nativeNamedNodeMap = call_user_func($this->callback);
-		$nativeAttr = $this->ownerDocument->getNativeDomNode($attr);
-		$nativeNamedNodeMap->removeNamedItem($nativeAttr);
+		$nativeAttr = $this->owner->ownerDocument->getNativeDomNode($attr);
+		$this->getNative()->removeNamedItem($nativeAttr);
 		return $attr;
 	}
 
@@ -169,10 +164,8 @@ class NamedNodeMap {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/removeNamedItem
 	 */
 	public function removeNamedItemNS(Attr $attr, string $localName):Attr {
-		/** @var DOMNamedNodeMap<DOMNodeFacade> $nativeNamedNodeMap */
-		$nativeNamedNodeMap = call_user_func($this->callback);
-		$nativeAttr = $this->ownerDocument->getNativeDomNode($attr);
-		$nativeNamedNodeMap->removeNamedItemNS(
+		$nativeAttr = $this->owner->ownerDocument->getNativeDomNode($attr);
+		$this->getNative()->removeNamedItemNS(
 			$nativeAttr,
 			$localName
 		);
@@ -188,15 +181,65 @@ class NamedNodeMap {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/item
 	 */
 	public function item(int $index):?Attr {
-		/** @var DOMNamedNodeMap<DOMNodeFacade> $nativeNamedNodeMap */
-		$nativeNamedNodeMap = call_user_func($this->callback);
-		$nativeAttr = $nativeNamedNodeMap->item($index);
+		$nativeAttr = $this->getNative()->item($index);
 		if(!$nativeAttr) {
 			return null;
 		}
 
 		/** @var Attr $gtAttr */
-		$gtAttr = $this->ownerDocument->getGtDomNode($nativeAttr);
+		$gtAttr = $this->owner->ownerDocument->getGtDomNode($nativeAttr);
 		return $gtAttr;
+	}
+
+	/**
+	 * @param int|string $offset
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
+	public function offsetExists($offset):bool {
+		if(is_int($offset)) {
+			$item = $this->item($offset);
+		}
+		else {
+			$item = $this->getNamedItem($offset);
+		}
+
+		return !is_null($item);
+	}
+
+	/**
+	 * @param int|string $offset
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
+	public function offsetGet($offset):?Node {
+		if(is_int($offset)) {
+			return $this->item($offset);
+		}
+		else {
+			return $this->getNamedItem($offset);
+		}
+	}
+
+	/**
+	 * @param mixed $offset
+	 * @param mixed $value
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
+	public function offsetSet($offset, $value):void {
+		throw new DOMException("Use setNamedItem instead of ArrayAccess");
+	}
+
+	/**
+	 * @param mixed $offset
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
+	public function offsetUnset($offset):void {
+		throw new DOMException("Use removeNamedItem instead of ArrayAccess");
+	}
+
+	/** @return DOMNamedNodeMap<DOMNodeFacade> */
+	private function getNative():DOMNamedNodeMap {
+		/** @var DOMNamedNodeMap<DOMNodeFacade> $nativeNamedNodeMap */
+		$nativeNamedNodeMap = call_user_func($this->callback);
+		return $nativeNamedNodeMap;
 	}
 }
