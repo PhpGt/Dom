@@ -4,9 +4,11 @@ namespace Gt\Dom\Test;
 use Gt\Dom\Document;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
+use Gt\Dom\Exception\DocumentHasMoreThanOneElementChildException;
 use Gt\Dom\Exception\DocumentStreamNotWritableException;
 use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Exception\InvalidCharacterException;
+use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
 use Gt\Dom\Exception\WrongDocumentErrorException;
 use Gt\Dom\HTMLCollection;
@@ -14,6 +16,7 @@ use Gt\Dom\HTMLDocument;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
+use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use Gt\PropFunc\PropertyReadOnlyException;
 use PHPUnit\Framework\TestCase;
 
@@ -383,6 +386,13 @@ class DocumentTest extends TestCase {
 		self::assertEquals("example", $attr->name);
 	}
 
+	public function testCreateAttributeNS():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		$attr = $sut->createAttributeNS("namespace", "example");
+		self::assertEquals("example", $attr->name);
+		self::assertEquals("namespace", $attr->namespaceURI);
+	}
+
 	public function testCreateCDATASectionHTML():void {
 		$sut = DocumentTestFactory::createHTMLDocument();
 		self::expectException(HTMLDocumentDoesNotSupportCDATASectionException::class);
@@ -658,5 +668,26 @@ class DocumentTest extends TestCase {
 	public function testTextContent():void {
 		$sut = DocumentTestFactory::createHTMLDocument();
 		self::assertNull($sut->textContent);
+	}
+
+	public function testAppendChild():void {
+		$sut = new Document();
+		$node = $sut->createElement("example");
+		self::assertCount(0, $sut->childNodes);
+		$sut->appendChild($node);
+		self::assertCount(1, $sut->childNodes);
+	}
+
+	public function testAppendChildNotEmpty():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		$node = $sut->createElement("example");
+		self::expectException(DocumentHasMoreThanOneElementChildException::class);
+		$sut->appendChild($node);
+	}
+
+	public function testAppendChildText():void {
+		$sut = new Document();
+		self::expectException(TextNodeCanNotBeRootNodeException::class);
+		$sut->appendChild($sut->createTextNode("Hello!"));
 	}
 }

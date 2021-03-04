@@ -25,7 +25,8 @@ class Attr extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Attr/namespaceURI */
 	protected function __prop_get_namespaceURI():string {
-
+		/** @noinspection PhpUndefinedFieldInspection */
+		return $this->domNode->namespaceURI;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Attr/localName */

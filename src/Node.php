@@ -4,6 +4,7 @@ namespace Gt\Dom;
 use DOMException as NativeDOMException;
 use DOMNode;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
+use Gt\Dom\Exception\DocumentHasMoreThanOneElementChildException;
 use Gt\Dom\Exception\DOMException;
 use Gt\Dom\Exception\NotFoundErrorException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
@@ -113,7 +114,7 @@ abstract class Node {
 	public function appendChild(Node $aChild):Node {
 		if($this instanceof Document) {
 			if($this->childElementCount > 0) {
-				throw new DOMException("Cannot have more than one Element child of a Document");
+				throw new DocumentHasMoreThanOneElementChildException("Cannot have more than one Element child of a Document");
 			}
 
 			if($aChild instanceof Text) {
