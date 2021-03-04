@@ -46,4 +46,11 @@ class AttrTest extends TestCase {
 // Another weird DOM quirk, but again, true to spec. Always true.
 		self::assertTrue($sut->specified);
 	}
+
+	public function testValue():void {
+		$sut = (new Document())->createAttribute("example");
+		self::assertEquals("", $sut->value);
+		$sut->value = "test";
+		self::assertEquals("test", $sut->value);
+	}
 }
