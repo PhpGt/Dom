@@ -654,4 +654,9 @@ class DocumentTest extends TestCase {
 		}
 		self::assertNotNull($exception);
 	}
+
+	public function testTextContent():void {
+		$sut = DocumentTestFactory::createHTMLDocument();
+		self::assertNull($sut->textContent);
+	}
 }

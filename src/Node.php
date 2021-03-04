@@ -9,7 +9,6 @@ use Gt\Dom\Exception\NotFoundErrorException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WrongDocumentErrorException;
 use Gt\Dom\Facade\DOMDocumentFacade;
-use Gt\Dom\Facade\NodeClass\DOMDocumentFragmentFacade;
 use Gt\Dom\Facade\NodeClass\DOMElementFacade;
 use Gt\Dom\Facade\NodeListFactory;
 use Gt\PropFunc\MagicProp;
@@ -67,7 +66,7 @@ use Gt\PropFunc\MagicProp;
  * this property returns null.
  * @property-read ?Node $previousSibling Returns a Node representing the
  * previous node in the tree, or null if there isn't such node.
- * @property string $textContent Returns / Sets the textual content of an
+ * @property ?string $textContent Returns / Sets the textual content of an
  * element and all its descendants.
  */
 abstract class Node {
@@ -612,12 +611,38 @@ abstract class Node {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent */
-	protected function __prop_get_textContent():string {
+	protected function __prop_get_textContent():?string {
+		if($this instanceof Document
+		|| $this instanceof DocumentType) {
+			return null;
+		}
 
+		if($this instanceof CDATASection
+		|| $this instanceof Comment
+		|| $this instanceof ProcessingInstruction
+		|| $this instanceof Text) {
+			return $this->nodeValue;
+		}
+
+		$len = $this->childNodes->length;
+		if($len === 0) {
+			return "";
+		}
+
+		$text = "";
+		for($i = 0; $i < $len; $i++) {
+			$text .= $this->childNodes->item($i)->textContent;
+		}
+		return $text;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent */
-	protected function __prop_set_textContent():void {
+	protected function __prop_set_textContent(string $value):void {
+		while($this->firstChild) {
+			$this->removeChild($this->firstChild);
+		}
 
+		$text = $this->ownerDocument->createTextNode($value);
+		$this->appendChild($text);
 	}
 }

@@ -526,4 +526,42 @@ class NodeTest extends TestCase {
 		$sut->replaceChild($new, $old);
 		self::assertEquals("<new></new>", $sut->innerHTML);
 	}
+
+	public function testTextContentEmpty():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertEquals("", $sut->textContent);
+	}
+
+	public function testTextContentSingleTextNode():void {
+		$message = "Here is some content!";
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<p>$message</p>";
+		self::assertEquals($message, $sut->textContent);
+	}
+
+	public function testTextContentMultipleTextNode():void {
+		$message1 = "ONE";
+		$message2 = "TWO";
+		$message3 = "THREE";
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<ul><li>$message1</li><li>$message2</li><li>$message3</li></ul>";
+		self::assertEquals("ONETWOTHREE", $sut->textContent);
+	}
+
+	public function testTextContentSetFromEmpty():void {
+		$message = "A test message";
+		$sut = NodeTestFactory::createNode("example");
+		$sut->textContent = $message;
+		self::assertEquals($message, $sut->textContent);
+		self::assertCount(1, $sut->childNodes);
+	}
+
+	public function testTextContentSetFromNonEmpty():void {
+		$message = "A test message";
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<h1>This node has existing content!</h1>";
+		$sut->textContent = $message;
+		self::assertEquals($message, $sut->textContent);
+		self::assertCount(1, $sut->childNodes);
+	}
 }
