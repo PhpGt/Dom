@@ -59,4 +59,13 @@ class CharacterDataTest extends TestCase {
 			$sut->data
 		);
 	}
+
+	public function testSubstringData():void {
+		$message = "abcdefghijklmnopqurstvwxyz";
+		$sut = (new Document())->createTextNode($message);
+		self::assertEquals(
+			"efghij",
+			$sut->substringData(4, 6)
+		);
+	}
 }
