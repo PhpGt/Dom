@@ -28,4 +28,15 @@ class CharacterDataTest extends TestCase {
 			$sut->data
 		);
 	}
+
+	public function testDeleteData():void {
+		$message = "abcdefghijklmnopqurstvwxyz";
+		$sut = (new Document())->createTextNode($message);
+		$sut->deleteData(4, 6);
+		self::assertEquals(
+			substr($message, 0, 4)
+			. substr($message, 4 + 6),
+			$sut->data
+		);
+	}
 }
