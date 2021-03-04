@@ -545,7 +545,7 @@ class NodeTest extends TestCase {
 		$message3 = "THREE";
 		$sut = NodeTestFactory::createNode("example");
 		$sut->innerHTML = "<ul><li>$message1</li><li>$message2</li><li>$message3</li></ul>";
-		self::assertEquals("ONETWOTHREE", $sut->textContent);
+		self::assertEquals("ONE"."TWO"."THREE", $sut->textContent);
 	}
 
 	public function testTextContentSetFromEmpty():void {
