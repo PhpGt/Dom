@@ -50,4 +50,16 @@ class ElementTest extends TestCase {
 		$other->appendChild($child2);
 		self::assertFalse($sut->isEqualNode($other));
 	}
+
+	public function testAttributesLive():void {
+		$sut = NodeTestFactory::createNode("example");
+		$attributes = $sut->attributes;
+		self::assertCount(0, $attributes);
+		$sut->setAttribute("name", "unti-test");
+		self::assertCount(1, $attributes);
+		$sut->setAttribute("framework", "PHPUnit");
+		self::assertCount(2, $attributes);
+		$sut->setAttribute("name", "unit-test");
+		self::assertCount(2, $attributes);
+	}
 }

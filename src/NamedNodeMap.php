@@ -2,6 +2,7 @@
 namespace Gt\Dom;
 
 use ArrayAccess;
+use Countable;
 use DOMNamedNodeMap;
 use Gt\Dom\Exception\DOMException;
 use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
@@ -24,7 +25,7 @@ use Gt\PropFunc\MagicProp;
  * @property-read int $length Returns the amount of objects in the map.
  * @implements ArrayAccess<int|string, Attr>
  */
-class NamedNodeMap implements ArrayAccess {
+class NamedNodeMap implements ArrayAccess, Countable {
 	use MagicProp;
 
 	/** @var callable Returns a DOMNamedNodeMap */
@@ -234,6 +235,10 @@ class NamedNodeMap implements ArrayAccess {
 	 */
 	public function offsetUnset($offset):void {
 		throw new DOMException("Use removeNamedItem instead of ArrayAccess");
+	}
+
+	public function count() {
+		return $this->getNative()->length;
 	}
 
 	/** @return DOMNamedNodeMap<DOMNodeFacade> */
