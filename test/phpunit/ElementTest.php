@@ -115,6 +115,13 @@ class ElementTest extends TestCase {
 		);
 	}
 
+	public function testOuterHTMLNoParent():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->outerHTML = "<not-example></not-example>";
+// The original reference should not change.
+		self::assertEquals("<example></example>", $sut->outerHTML);
+	}
+
 	public function testOuterHTMLSet():void {
 		$sut = NodeTestFactory::createNode("example");
 		$sut->ownerDocument->appendChild($sut);

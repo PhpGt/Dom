@@ -147,11 +147,6 @@ class Element extends Node {
 			return;
 		}
 
-		while($child = $this->firstChild) {
-			/** @var Element $child */
-			$child->parentNode->removeChild($child);
-		}
-
 		$tempDocument = new Document();
 		/** @var DOMDocument $nativeTempDocument */
 		$nativeTempDocument = $tempDocument->domNode;
