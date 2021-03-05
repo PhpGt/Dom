@@ -185,4 +185,28 @@ class NamedNodeMapTest extends TestCase {
 		$element->attributes->removeNamedItemNS($ns, $attr);
 		self::assertCount(0, $element->attributes);
 	}
+
+	public function testOffsetExistsString():void {
+		$document = new DOMDocumentFacade(new Document());
+		$nativeElement = $document->createElement("example");
+		$nativeElement->setAttribute("one", "abc");
+		$nativeElement->setAttribute("two", "xyz");
+		/** @var Element $element */
+		$element = $document->getGtDomNode($nativeElement);
+		self::assertTrue(isset($element->attributes["one"]));
+		self::assertTrue(isset($element->attributes["two"]));
+		self::assertFalse(isset($element->attributes["three"]));
+	}
+
+	public function testOffsetGetString():void {
+		$document = new DOMDocumentFacade(new Document());
+		$nativeElement = $document->createElement("example");
+		$nativeElement->setAttribute("one", "abc");
+		$nativeElement->setAttribute("two", "xyz");
+		/** @var Element $element */
+		$element = $document->getGtDomNode($nativeElement);
+		self::assertEquals("abc", $element->attributes["one"]->value);
+		self::assertEquals("xyz", $element->attributes["two"]->value);
+		self::assertNull($element->attributes["three"]);
+	}
 }
