@@ -48,6 +48,7 @@ class DOMTokenList implements Countable {
 	protected function __prop_set_value(string $value):void {
 		$tokens = explode(" ", $value);
 		$this->accessCallback = fn() => $tokens;
+		$this->callMutator(...$tokens);
 	}
 
 	/**

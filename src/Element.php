@@ -52,7 +52,9 @@ class Element extends Node {
 	protected function __prop_get_classList():DOMTokenList {
 		return DOMTokenListFactory::create(
 			fn() => explode(" ", $this->className),
-			fn() => null
+			function(string...$tokens) {
+				$this->className = implode(" ", $tokens);
+			}
 		);
 	}
 

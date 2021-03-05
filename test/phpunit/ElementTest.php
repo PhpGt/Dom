@@ -75,6 +75,32 @@ class ElementTest extends TestCase {
 		self::assertTrue($classList->contains("a-class"));
 	}
 
+	public function testClassListMutate():void {
+		$sut = NodeTestFactory::createNode("example");
+		$classList = $sut->classList;
+		self::assertFalse($classList->contains("a-class"));
+		$sut->className = "something another-thing a-class final-class";
+		$classList->value = "totally different class-list";
+		self::assertFalse($classList->contains("something"));
+		self::assertFalse($classList->contains("another-thing"));
+		self::assertFalse($classList->contains("a-class"));
+		self::assertFalse($classList->contains("final-class"));
+	}
+
+	public function testClassListMutateUpdatesElement():void {
+		$sut = NodeTestFactory::createNode("example");
+		$classList = $sut->classList;
+		self::assertFalse($classList->contains("a-class"));
+		$sut->className = "something another-thing a-class final-class";
+		$classList->value = "updated";
+
+		self::assertFalse($classList->contains("something"));
+		self::assertFalse($sut->classList->contains("something"));
+
+		self::assertTrue($classList->contains("updated"));
+		self::assertTrue($sut->classList->contains("updated"));
+	}
+
 	public function testClassName():void {
 		$sut = NodeTestFactory::createNode("example");
 		$sut->className = "something another-thing a-class final-class";
