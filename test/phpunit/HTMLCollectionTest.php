@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\Exception\HTMLCollectionImmutableException;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
@@ -60,5 +61,33 @@ class HTMLCollectionTest extends TestCase {
 		self::assertSame($element2, $sut->namedItem("second"));
 		self::assertSame($element2, $sut->namedItem("xyz"));
 		self::assertNull($sut->namedItem("nope"));
+	}
+
+	public function testOffsetExists():void {
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			NodeTestFactory::createNode("example"),
+			NodeTestFactory::createNode("example")
+		));
+		self::assertTrue(isset($sut[0]));
+		self::assertTrue(isset($sut[1]));
+		self::assertFalse(isset($sut[2]));
+	}
+
+	public function testOffsetSetImmutable():void {
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			NodeTestFactory::createNode("example"),
+			NodeTestFactory::createNode("example")
+		));
+		self::expectException(HTMLCollectionImmutableException::class);
+		$sut[0] = "test";
+	}
+
+	public function testOffsetUnsetImmutable():void {
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			NodeTestFactory::createNode("example"),
+			NodeTestFactory::createNode("example")
+		));
+		self::expectException(HTMLCollectionImmutableException::class);
+		unset($sut[0]);
 	}
 }

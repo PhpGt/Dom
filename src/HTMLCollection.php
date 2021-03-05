@@ -3,6 +3,7 @@ namespace Gt\Dom;
 
 use ArrayAccess;
 use Countable;
+use Gt\Dom\Exception\HTMLCollectionImmutableException;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\PropFunc\MagicProp;
 use Iterator;
@@ -121,7 +122,7 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function offsetSet($offset, $value):void {
-		// TODO: Implement offsetSet() method.
+		throw new HTMLCollectionImmutableException();
 	}
 
 	/**
@@ -129,7 +130,7 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function offsetUnset($offset):void {
-		// TODO: Implement offsetUnset() method.
+		throw new HTMLCollectionImmutableException();
 	}
 
 	public function current():Element {
