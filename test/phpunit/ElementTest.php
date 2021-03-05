@@ -280,6 +280,39 @@ class ElementTest extends TestCase {
 		self::assertNull($sut->getAttributeNS($ns, "nothing"));
 	}
 
+	public function testGetElementsByClassName():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $child1 */
+		$child1 = $sut->cloneNode();
+		/** @var Element $child2 */
+		$child2 = $sut->cloneNode();
+		/** @var Element $child3 */
+		$child3 = $sut->cloneNode();
+
+		$child1->className = "one child-of-sut";
+		$child2->className = "two child-of-sut another-class";
+		$child3->className = "three child-of-sut another-class";
+
+		$sut->append($child1, $child2, $child3);
+		self::assertCount(1, $sut->getElementsByClassName("one"));
+		self::assertCount(1, $sut->getElementsByClassName("two"));
+		self::assertCount(1, $sut->getElementsByClassName("three"));
+		self::assertCount(3, $sut->getElementsByClassName("child-of-sut"));
+		self::assertCount(2, $sut->getElementsByClassName("another-class"));
+	}
+
+	public function testGetElementsByClassNameIsLive():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $child1 */
+		$child1 = $sut->cloneNode();
+
+		$child1->className = "one child-of-sut";
+		$sut->append($child1);
+		self::assertCount(1, $sut->getElementsByClassName("one"));
+		$child1->className = "not-one child-of-sut";
+		self::assertCount(0, $sut->getElementsByClassName("one"));
+	}
+
 	public function testSetAttributeNS():void {
 		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
 		$sut = $xmlDoc->getElementById("target");

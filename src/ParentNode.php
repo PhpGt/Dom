@@ -165,8 +165,18 @@ trait ParentNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/querySelectorAll
 	 */
 	public function querySelectorAll(string $selectors):NodeList {
-		$translator = new Translator($selectors, ".//");
-		$xpathResult = $this->ownerDocument->evaluate($translator);
+		$context = $this;
+		$prefix = ".//";
+		if($this instanceof Document) {
+			$context = $this->firstChild;
+			$prefix = "//";
+		}
+
+		$translator = new Translator($selectors, $prefix);
+		$xpathResult = $this->ownerDocument->evaluate(
+			$translator,
+			$context
+		);
 		$nodeArray = iterator_to_array($xpathResult);
 		return NodeListFactory::create(...$nodeArray);
 	}

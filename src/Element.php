@@ -6,6 +6,7 @@ use DOMAttr;
 use DOMDocument;
 use DOMElement;
 use Gt\Dom\Facade\DOMTokenListFactory;
+use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NamedNodeMapFactory;
 use Gt\Dom\Facade\NodeClass\DOMElementFacade;
 
@@ -277,7 +278,18 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByClassName
 	 */
 	public function getElementsByClassName(string $names):HTMLCollection {
+		$querySelector = "";
+		foreach(explode(" ", $names) as $name) {
+			if(strlen($querySelector) > 0) {
+				$querySelector .= " ";
+			}
 
+			$querySelector .= ".$name";
+		}
+
+		return HTMLCollectionFactory::create(
+			fn() => $this->querySelectorAll($querySelector)
+		);
 	}
 
 	/**
@@ -465,44 +477,6 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
 	 */
 	public function matches(string $selectorString):bool {
-
-	}
-
-	/**
-	 * The querySelector() method of the Element interface returns the first
-	 * element that is a descendant of the element on which it is invoked
-	 * that matches the specified group of selectors.
-	 *
-	 * @param string $selectors A group of selectors to match the descendant
-	 * elements of the Element baseElement against; this must be valid CSS
-	 * syntax, or a SyntaxException will occur. The first element
-	 * found which matches this group of selectors is returned.
-	 * @return ?Element
-	 * @throws SyntaxException
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector
-	 */
-	public function querySelector(string $selectors):?Element {
-
-	}
-
-	/**
-	 * The Element method querySelectorAll() returns a static (not live)
-	 * NodeList representing a list of elements matching the specified group
-	 * of selectors which are descendants of the element on which the method
-	 * was called.
-	 *
-	 * @param string $selectors A DOMString containing one or more selectors
-	 * to match against. This string must be a valid CSS selector string;
-	 * if it's not, a SyntaxException is thrown. See Locating DOM elements
-	 * using selectors for more information about using selectors to
-	 * identify elements. Multiple selectors may be specified by separating
-	 * them using commas.
-	 * @return HTMLCollection A non-live NodeList containing one Element
-	 * object for each descendant node that matches at least one of the
-	 * specified selectors.
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll
-	 */
-	public function querySelectorAll(string $selectors):HTMLCollection {
 
 	}
 
