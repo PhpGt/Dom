@@ -357,7 +357,17 @@ class Element extends Node {
 		string $namespaceURI,
 		string $localName
 	):HTMLCollection {
+		return HTMLCollectionFactory::create(
+			function() use($namespaceURI, $localName) {
+				$nodeArray = [];
+				foreach($this->getNativeElement()->getElementsByTagNameNS($namespaceURI, $localName) as $nativeElement) {
+					$element = $this->ownerDocument->getGtDomNode($nativeElement);
+					array_push($nodeArray, $element);
+				}
 
+				return NodeListFactory::create(...$nodeArray);
+			}
+		);
 	}
 
 	/**

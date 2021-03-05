@@ -242,6 +242,7 @@ XML;
     xmlns:test="http://www.example.com/2014/test" width="40" height="40">
   <circle id="target" cx="12" cy="12" r="10" stroke="#444" stroke-width="2"
       fill="none" test:foo="Foo value"/>
+  <test:rect id="namespaced" x="10" y="10" width="12" height="16" />
 </svg>
 
 XML;

@@ -324,6 +324,20 @@ class ElementTest extends TestCase {
 		);
 	}
 
+	public function testGetElementsByTagNameNS():void {
+		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->documentElement;
+		$ns = "http://www.example.com/2014/test";
+		self::assertCount(
+			1,
+			$sut->getElementsByTagNameNS($ns, "rect")
+		);
+		self::assertCount(
+			0,
+			$sut->getElementsByTagNameNS("another-namespace", "rect")
+		);
+	}
+
 	public function testSetAttributeNS():void {
 		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
 		$sut = $xmlDoc->getElementById("target");
