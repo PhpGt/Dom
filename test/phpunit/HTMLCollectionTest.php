@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\Element;
 use Gt\Dom\Exception\HTMLCollectionImmutableException;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NodeListFactory;
@@ -89,5 +90,16 @@ class HTMLCollectionTest extends TestCase {
 		));
 		self::expectException(HTMLCollectionImmutableException::class);
 		unset($sut[0]);
+	}
+
+	public function testIterator():void {
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			NodeTestFactory::createNode("example"),
+			NodeTestFactory::createNode("example")
+		));
+		foreach($sut as $key => $value) {
+			self::assertInstanceOf(Element::class, $value);
+		}
+		self::assertEquals(1, $key);
 	}
 }
