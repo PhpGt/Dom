@@ -22,25 +22,32 @@ class DOMTokenList implements Countable {
 	use MagicProp;
 
 	/** @var callable Return an indexed array of tokens */
-	private $callback;
+	private $accessCallback;
+	/** @var callable Variadic string parameters, void return */
+	private $mutateCallback;
 
-	protected function __construct(callable $callback) {
-		$this->callback = $callback;
+	protected function __construct(
+		callable $accessCallback,
+		callable $mutateCallback
+	) {
+		$this->accessCallback = $accessCallback;
+		$this->mutateCallback = $mutateCallback;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/length */
 	protected function __prop_get_length():int {
-		return count($this->call());
+		return count($this->callAccessor());
 	}
 
 	/** https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/value */
 	protected function __prop_get_value():string {
-		return implode(" ", $this->call());
+		return implode(" ", $this->callAccessor());
 	}
 
 	/** https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/value */
 	protected function __prop_set_value(string $value):void {
-
+		$tokens = explode(" ", $value);
+		$this->accessCallback = fn() => $tokens;
 	}
 
 	/**
@@ -70,7 +77,7 @@ class DOMTokenList implements Countable {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/contains
 	 */
 	public function contains(string $token):bool {
-		return in_array($token, $this->call());
+		return in_array($token, $this->callAccessor());
 	}
 
 	/**
@@ -191,7 +198,11 @@ class DOMTokenList implements Countable {
 	}
 
 	/** @return string[] */
-	private function call():array {
-		return call_user_func($this->callback);
+	private function callAccessor():array {
+		return call_user_func($this->accessCallback);
+	}
+
+	private function callMutator(string...$values):void {
+		call_user_func_array($this->mutateCallback, $values);
 	}
 }
