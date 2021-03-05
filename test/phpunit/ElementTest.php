@@ -314,4 +314,13 @@ class ElementTest extends TestCase {
 		);
 		self::assertFalse($sut->hasAttribute("required"));
 	}
+
+	public function testRemoveAttributeNS():void {
+		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->getElementById("target");
+		$ns = "http://www.example.com/2014/test";
+		$sut->removeAttributeNS($ns, "foo");
+		self::assertFalse(
+			$sut->hasAttributeNS($ns, "foo"));
+	}
 }
