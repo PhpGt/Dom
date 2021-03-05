@@ -5,6 +5,7 @@ use ArrayAccess;
 use Countable;
 use DOMNamedNodeMap;
 use Gt\Dom\Exception\DOMException;
+use Gt\Dom\Exception\NamedNodeMapImmutableException;
 use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
 use Gt\PropFunc\MagicProp;
 use Iterator;
@@ -223,7 +224,7 @@ class NamedNodeMap implements ArrayAccess, Countable, Iterator {
 	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function offsetSet($offset, $value):void {
-		throw new DOMException("Use setNamedItem instead of ArrayAccess");
+		throw new NamedNodeMapImmutableException("Use setNamedItem instead of ArrayAccess");
 	}
 
 	/**
@@ -231,7 +232,7 @@ class NamedNodeMap implements ArrayAccess, Countable, Iterator {
 	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function offsetUnset($offset):void {
-		throw new DOMException("Use removeNamedItem instead of ArrayAccess");
+		throw new NamedNodeMapImmutableException("Use removeNamedItem instead of ArrayAccess");
 	}
 
 	public function count() {

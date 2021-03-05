@@ -4,6 +4,7 @@ namespace Gt\Dom\Test;
 use Gt\Dom\Attr;
 use Gt\Dom\Document;
 use Gt\Dom\Element;
+use Gt\Dom\Exception\NamedNodeMapImmutableException;
 use Gt\Dom\Facade\DOMDocumentFacade;
 use Gt\Dom\Facade\NamedNodeMapFactory;
 use PHPUnit\Framework\TestCase;
@@ -208,5 +209,19 @@ class NamedNodeMapTest extends TestCase {
 		self::assertEquals("abc", $element->attributes["one"]->value);
 		self::assertEquals("xyz", $element->attributes["two"]->value);
 		self::assertNull($element->attributes["three"]);
+	}
+
+	public function testOffsetSetImmutable():void {
+		$owner = self::createMock(Element::class);
+		$sut = NamedNodeMapFactory::create(fn() => null, $owner);
+		self::expectException(NamedNodeMapImmutableException::class);
+		$sut["something"] = "nothing";
+	}
+
+	public function testOffsetUnsetImmutable():void {
+		$owner = self::createMock(Element::class);
+		$sut = NamedNodeMapFactory::create(fn() => null, $owner);
+		self::expectException(NamedNodeMapImmutableException::class);
+		unset($sut["something"]);
 	}
 }
