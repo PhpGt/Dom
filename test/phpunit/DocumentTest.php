@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test;
 
+use DOMDocument;
 use Gt\Dom\Document;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
@@ -520,6 +521,22 @@ class DocumentTest extends TestCase {
 
 		$selected = $sut->getElementById("id-of-child2");
 		self::assertSame($child2, $selected);
+	}
+
+	public function testGetElementByIdXMLBug():void {
+// There is a known bug in XML documents where getElementById doesn't actually
+// match elements. This has been patched by Gt\Dom, but to prove it, this test
+// will expose the original bug on the native document.
+		$bugDocument = new DOMDocument("1.0", "UTF-8");
+		$bugDocument->loadXML(DocumentTestFactory::XML_SHAPE);
+		$missingElement = $bugDocument->getElementById("target");
+// This _shouldn't_ be null, but it is in the libxml2 implementation (buggy!)
+		self::assertNull($missingElement);
+
+		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
+		$element = $sut->getElementById("target");
+		self::assertInstanceOf(Element::class, $element);
+		self::assertEquals("CIRCLE", $element->tagName);
 	}
 
 	public function testGetElementsByClassNameEmpty():void {
