@@ -192,4 +192,14 @@ class DOMTokenListTest extends TestCase {
 		}
 		self::assertSame([0, 1, 2], $received);
 	}
+
+	public function testValues():void {
+		$data = ["one", "two", "three"];
+		$received = [];
+		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+		foreach($sut->values() as $value) {
+			array_push($received, $value);
+		}
+		self::assertSame($data, $received);
+	}
 }

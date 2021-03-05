@@ -249,11 +249,13 @@ class DOMTokenList implements Countable, Iterator {
 	 * allowing developers to go through all values contained in the
 	 * DOMTokenList. The individual values are DOMString objects.
 	 *
-	 * @return iterable
+	 * @return iterable<string>
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/values
 	 */
 	public function values():iterable {
-
+		foreach($this as $key => $value) {
+			yield $value;
+		}
 	}
 
 	public function count() {
