@@ -90,7 +90,9 @@ class DOMTokenList implements Countable {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/add
 	 */
 	public function add(string...$tokens):void {
-
+		$currentTokens = $this->callAccessor();
+		$allTokens = array_merge($currentTokens, $tokens);
+		$this->accessCallback = fn() => $allTokens;
 	}
 
 	/**
