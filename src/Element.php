@@ -5,6 +5,7 @@ use DateTime;
 use DOMAttr;
 use DOMDocument;
 use DOMElement;
+use Gt\Dom\Exception\InvalidAdjacentPositionException;
 use Gt\Dom\Facade\DOMTokenListFactory;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NamedNodeMapFactory;
@@ -435,7 +436,40 @@ class Element extends Node {
 		string $position,
 		Element $element
 	):?Element {
+		$context = null;
+		$before = null;
 
+		switch($position) {
+		case "beforebegin":
+			$context = $this->parentNode;
+			$before = $this;
+			break;
+
+		case "afterbegin":
+			$context = $this;
+			$before = $this->firstChild;
+			break;
+
+		case "beforeend":
+			$context = $this;
+			$before = null;
+			break;
+
+		case "afterend":
+			$context = $this->parentNode;
+			$before = $this->nextSibling;
+			break;
+
+		default:
+			throw new InvalidAdjacentPositionException($position);
+		}
+
+		if(!$context) {
+			return null;
+		}
+
+		$context->insertBefore($element, $before);
+		return $element;
 	}
 
 	/**

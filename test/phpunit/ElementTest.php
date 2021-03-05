@@ -2,6 +2,7 @@
 namespace Gt\Dom\Test;
 
 use Gt\Dom\Element;
+use Gt\Dom\Exception\InvalidAdjacentPositionException;
 use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
@@ -343,6 +344,107 @@ class ElementTest extends TestCase {
 		self::assertFalse($sut->hasAttributes());
 		$sut->setAttribute("test", "123");
 		self::assertTrue($sut->hasAttributes());
+	}
+
+	public function testInsertAdjacentElementAfterBegin():void {
+		$sut = NodeTestFactory::createNode("example");
+		$pad = $sut->ownerDocument->createElement("pad");
+		$sut->append($pad);
+
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"afterbegin",
+			$toInsert
+		);
+		self::assertInstanceOf(Element::class, $inserted);
+		self::assertSame($sut, $inserted->parentNode);
+		self::assertSame($pad, $inserted->nextSibling);
+	}
+
+	public function testInsertAdjacentElementBeforeEnd():void {
+		$sut = NodeTestFactory::createNode("example");
+		$pad = $sut->ownerDocument->createElement("pad");
+		$sut->append($pad);
+
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"beforeend",
+			$toInsert
+		);
+		self::assertInstanceOf(Element::class, $inserted);
+		self::assertSame($sut, $inserted->parentNode);
+		self::assertSame($pad, $inserted->previousSibling);
+	}
+
+	public function testInsertAdjacentElementBeforeBeginNotConnected():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"beforebegin",
+			$toInsert
+		);
+		self::assertNull($inserted);
+	}
+
+	public function testInsertAdjacentElementBeforeBegin():void {
+		$sut = NodeTestFactory::createNode("example");
+		$root = $sut->ownerDocument->createElement("root");
+		$sut->ownerDocument->appendChild($root);
+		$pad = $sut->ownerDocument->createElement("pad");
+		$root->appendChild($pad);
+		$root->appendChild($sut);
+
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"beforebegin",
+			$toInsert
+		);
+		self::assertInstanceOf(Element::class, $inserted);
+		self::assertSame($pad, $inserted->previousSibling);
+	}
+
+	public function testInsertAdjacentElementAfterEndNotConnected():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"afterend",
+			$toInsert
+		);
+		self::assertNull($inserted);
+	}
+
+	public function testInsertAdjacentElementAfterEnd():void {
+		$sut = NodeTestFactory::createNode("example");
+		$root = $sut->ownerDocument->createElement("root");
+		$sut->ownerDocument->appendChild($root);
+		$pad = $sut->ownerDocument->createElement("pad");
+		$root->appendChild($sut);
+		$root->appendChild($pad);
+
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"afterend",
+			$toInsert
+		);
+		self::assertInstanceOf(Element::class, $inserted);
+		self::assertSame($pad, $inserted->nextSibling);
+	}
+
+	public function testInsertAdjacentElementInvalidPosition():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		self::expectException(InvalidAdjacentPositionException::class);
+		$sut->insertAdjacentElement(
+			"nowhere",
+			$toInsert
+		);
 	}
 
 	public function testSetAttributeNS():void {
