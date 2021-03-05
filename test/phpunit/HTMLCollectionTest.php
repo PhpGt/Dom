@@ -42,4 +42,23 @@ class HTMLCollectionTest extends TestCase {
 		));
 		self::assertNull($sut->item(2));
 	}
+
+	public function testNamedItem():void {
+		$element1 = NodeTestFactory::createNode("example");
+		$element1->id = "first";
+		$element1->setAttribute("name", "abc");
+		$element2 = NodeTestFactory::createNode("example");
+		$element2->id = "second";
+		$element2->setAttribute("name", "xyz");
+
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			$element1,
+			$element2
+		));
+		self::assertSame($element1, $sut->namedItem("first"));
+		self::assertSame($element1, $sut->namedItem("abc"));
+		self::assertSame($element2, $sut->namedItem("second"));
+		self::assertSame($element2, $sut->namedItem("xyz"));
+		self::assertNull($sut->namedItem("nope"));
+	}
 }

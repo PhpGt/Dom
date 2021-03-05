@@ -5,6 +5,7 @@ use ArrayAccess;
 use Countable;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\PropFunc\MagicProp;
+use Iterator;
 
 /**
  * The HTMLCollection interface represents a generic collection (array-like
@@ -23,16 +24,19 @@ use Gt\PropFunc\MagicProp;
  *
  * @property-read int $length Returns the number of items in the collection.
  * @implements ArrayAccess<int, Element>
+ * @implements Iterator<int, Element>
  */
-class HTMLCollection implements ArrayAccess, Countable {
+class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
 
 	/** @var callable():NodeList Returns a NodeList, called multiple times,
 	 * allowing the HTMLCollection to be "live" */
 	private $callback;
+	private int $iteratorIndex;
 
 	protected function __construct(callable $callback) {
 		$this->callback = $callback;
+		$this->iteratorIndex = 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/length */
@@ -83,7 +87,15 @@ class HTMLCollection implements ArrayAccess, Countable {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/namedItem
 	 */
 	public function namedItem(string $name):?Element {
+		foreach(["id", "name"] as $attribute) {
+			foreach($this as $element) {
+				if($element->getAttribute($attribute) === $name) {
+					return $element;
+				}
+			}
+		}
 
+		return null;
 	}
 
 	/**
@@ -118,5 +130,26 @@ class HTMLCollection implements ArrayAccess, Countable {
 	 */
 	public function offsetUnset($offset):void {
 		// TODO: Implement offsetUnset() method.
+	}
+
+	public function current():Element {
+		return $this->item($this->iteratorIndex);
+	}
+
+	public function next():void {
+		$this->iteratorIndex++;
+	}
+
+	public function key():int {
+		return $this->iteratorIndex;
+	}
+
+	public function valid():bool {
+		$item = $this->item($this->iteratorIndex);
+		return !is_null($item);
+	}
+
+	public function rewind():void {
+		$this->iteratorIndex = 0;
 	}
 }
