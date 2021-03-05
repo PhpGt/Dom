@@ -338,6 +338,13 @@ class ElementTest extends TestCase {
 		);
 	}
 
+	public function testHasAttributes():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertFalse($sut->hasAttributes());
+		$sut->setAttribute("test", "123");
+		self::assertTrue($sut->hasAttributes());
+	}
+
 	public function testSetAttributeNS():void {
 		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
 		$sut = $xmlDoc->getElementById("target");

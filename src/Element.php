@@ -410,7 +410,7 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/hasAttributes
 	 */
 	public function hasAttributes():bool {
-
+		return $this->getNativeElement()->hasAttributes();
 	}
 
 	/**
