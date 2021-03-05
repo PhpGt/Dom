@@ -9,6 +9,7 @@ use Gt\Dom\Facade\DOMTokenListFactory;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NamedNodeMapFactory;
 use Gt\Dom\Facade\NodeClass\DOMElementFacade;
+use Gt\Dom\Facade\NodeListFactory;
 
 /**
  * Element is the most general base class from which all element objects (i.e.
@@ -321,7 +322,17 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
 	 */
 	public function getElementsByTagName(string $tagName):HTMLCollection {
+		return HTMLCollectionFactory::create(
+			function() use($tagName) {
+				$nodeArray = [];
+				foreach($this->getNativeElement()->getElementsByTagName($tagName) as $nativeElement) {
+					$element = $this->ownerDocument->getGtDomNode($nativeElement);
+					array_push($nodeArray, $element);
+				}
 
+				return NodeListFactory::create(...$nodeArray);
+			}
+		);
 	}
 
 	/**

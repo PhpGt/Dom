@@ -314,6 +314,16 @@ class ElementTest extends TestCase {
 		self::assertCount(0, $sut->getElementsByClassName("one child-of-sut"));
 	}
 
+	public function testGetElementsByTagName():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child1 = $sut->cloneNode();
+		$sut->append($child1);
+		self::assertSame(
+			$child1,
+			$sut->getElementsByTagName("example")->item(0)
+		);
+	}
+
 	public function testSetAttributeNS():void {
 		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
 		$sut = $xmlDoc->getElementById("target");
