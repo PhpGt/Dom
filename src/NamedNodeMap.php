@@ -160,17 +160,13 @@ class NamedNodeMap implements ArrayAccess, Countable, Iterator {
 	 * Removes the Attr identified by the given namespace and related local
 	 * name.
 	 *
+	 * @param string $namespace
 	 * @param Attr $attr
-	 * @param string $localName
 	 * @return Attr The removed Attr
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/removeNamedItem
 	 */
-	public function removeNamedItemNS(Attr $attr, string $localName):Attr {
-		$nativeAttr = $this->owner->ownerDocument->getNativeDomNode($attr);
-		$this->getNative()->removeNamedItemNS(
-			$nativeAttr,
-			$localName
-		);
+	public function removeNamedItemNS(string $namespace, Attr $attr):Attr {
+		$this->owner->removeAttributeNS($namespace, $attr->name);
 		return $attr;
 	}
 

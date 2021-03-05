@@ -167,4 +167,22 @@ class NamedNodeMapTest extends TestCase {
 		$sut = $document->createAttribute("two");
 		self::assertSame($sut, $element->attributes->removeNamedItem($sut));
 	}
+
+	public function testRemoveNamedItemNS():void {
+		$ns = "example_namespace";
+
+		$document = new Document();
+		/** @var Element $element */
+		$element = $document->createElementNS(
+			$ns,
+			"test:example"
+		);
+		$document->appendChild($element);
+		$attr = $document->createAttributeNS($ns, "test");
+		$attr->value = "abc";
+		$element->attributes->setNamedItemNS($attr);
+		self::assertCount(1, $element->attributes);
+		$element->attributes->removeNamedItemNS($ns, $attr);
+		self::assertCount(0, $element->attributes);
+	}
 }
