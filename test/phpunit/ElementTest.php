@@ -6,6 +6,7 @@ use Gt\Dom\Exception\InvalidAdjacentPositionException;
 use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\Text;
 use PHPUnit\Framework\TestCase;
 
 class ElementTest extends TestCase {
@@ -460,6 +461,22 @@ class ElementTest extends TestCase {
 			$pad,
 			$sut->getElementsByTagName("inserted")->item(0)->nextSibling
 		);
+	}
+
+	public function testInsertAdjacentText():void {
+		$sut = NodeTestFactory::createNode("example");
+		$pad = $sut->ownerDocument->createElement("pad");
+		$sut->appendChild($pad);
+		$sut->insertAdjacentText(
+			"afterbegin",
+			"This is a text node!"
+		);
+		self::assertCount(2, $sut->childNodes);
+		self::assertSame(
+			$pad,
+			$sut->childNodes->item(0)->nextSibling
+		);
+		self::assertInstanceOf(Text::class, $sut->firstChild);
 	}
 
 	public function testSetAttributeNS():void {

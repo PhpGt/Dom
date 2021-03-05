@@ -470,6 +470,10 @@ class Element extends Node {
 
 		/** @var Element $inserted */
 		$inserted = $context->insertBefore($element, $before);
+		if(!$inserted instanceof Element) {
+			return null;
+		}
+
 		return $inserted;
 	}
 
@@ -517,15 +521,22 @@ class Element extends Node {
 	 * 'afterbegin': Just inside the element, before its first child.
 	 * 'beforeend': Just inside the element, after its last child.
 	 * 'afterend': After the element itself.
-	 * @param string $element A DOMString representing the text to be
+	 * @param string $text A DOMString representing the text to be
 	 * inserted into the tree.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentText
 	 */
 	public function insertAdjacentText(
 		string $position,
-		string $element
+		string $text
 	):void {
-
+		$tempTagName = "insert-adjacent-html-temp";
+		$tempElement = $this->ownerDocument->createElement($tempTagName);
+		$tempElement->textContent = $text;
+		$fragment = $this->ownerDocument->createDocumentFragment();
+		while($child = $tempElement->firstChild) {
+			$fragment->appendChild($child);
+		}
+		$this->insertAdjacentElement($position, $fragment);
 	}
 
 	/**
