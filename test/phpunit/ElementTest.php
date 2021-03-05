@@ -447,6 +447,21 @@ class ElementTest extends TestCase {
 		);
 	}
 
+	public function testInsertAdjacentHTML():void {
+		$sut = NodeTestFactory::createNode("example");
+		$pad = $sut->ownerDocument->createElement("pad");
+		$sut->appendChild($pad);
+		$sut->insertAdjacentHTML(
+			"afterbegin",
+			"<inserted>Testing</inserted>"
+		);
+		self::assertCount(2, $sut->childNodes);
+		self::assertSame(
+			$pad,
+			$sut->getElementsByTagName("inserted")->item(0)->nextSibling
+		);
+	}
+
 	public function testSetAttributeNS():void {
 		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
 		$sut = $xmlDoc->getElementById("target");

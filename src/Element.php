@@ -427,14 +427,14 @@ class Element extends Node {
 	 * 'beforeend': Just inside the targetElement, after its last child.
 	 * 'afterend': After the targetElement itself.
 	 *
-	 * @param Element $element The element to be inserted into the tree.
+	 * @param Node $element The element to be inserted into the tree.
 	 * @return ?Element The element that was inserted, or null, if the
 	 * insertion failed.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
 	 */
 	public function insertAdjacentElement(
 		string $position,
-		Element $element
+		Node $element
 	):?Element {
 		$context = null;
 		$before = null;
@@ -468,8 +468,9 @@ class Element extends Node {
 			return null;
 		}
 
-		$context->insertBefore($element, $before);
-		return $element;
+		/** @var Element $inserted */
+		$inserted = $context->insertBefore($element, $before);
+		return $inserted;
 	}
 
 	/**
@@ -495,7 +496,14 @@ class Element extends Node {
 		string $position,
 		string $text
 	):void {
-
+		$tempTagName = "insert-adjacent-html-temp";
+		$tempElement = $this->ownerDocument->createElement($tempTagName);
+		$tempElement->innerHTML = $text;
+		$fragment = $this->ownerDocument->createDocumentFragment();
+		while($child = $tempElement->firstChild) {
+			$fragment->appendChild($child);
+		}
+		$this->insertAdjacentElement($position, $fragment);
 	}
 
 	/**
