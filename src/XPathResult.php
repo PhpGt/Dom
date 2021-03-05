@@ -33,8 +33,12 @@ class XPathResult implements Iterator {
 		return null;
 	}
 
-	public function current():Node {
+	public function current():?Node {
 		$nativeNode = $this->domNodeList->item($this->iteratorKey);
+		if(!$nativeNode) {
+			return null;
+		}
+
 		/** @var DOMDocumentFacade $document */
 		$document = $nativeNode->ownerDocument;
 		return $document->getGtDomNode($nativeNode);

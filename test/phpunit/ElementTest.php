@@ -3,6 +3,7 @@ namespace Gt\Dom\Test;
 
 use Gt\Dom\Element;
 use Gt\Dom\Exception\InvalidCharacterException;
+use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -261,5 +262,14 @@ class ElementTest extends TestCase {
 		self::assertCount(2, $attributeNames);
 		self::assertContains("name", $attributeNames);
 		self::assertContains("framework", $attributeNames);
+	}
+
+	public function testGetAttributeNS():void {
+		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->getElementById("target");
+		$ns = "http://www.example.com/2014/test";
+		self::assertEquals(
+			"Foo value",
+			$sut->getAttributeNS($ns, "foo"));
 	}
 }

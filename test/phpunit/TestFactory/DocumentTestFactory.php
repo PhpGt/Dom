@@ -234,6 +234,19 @@ XML;
 </animal>
 XML;
 
+	const XML_SHAPE = <<<XML
+<?xml version="1.0"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+	"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg"
+    xmlns:test="http://www.example.com/2014/test" width="40" height="40">
+  <circle id="target" cx="12" cy="12" r="10" stroke="#444" stroke-width="2"
+      fill="none" test:foo="Foo value"/>
+</svg>
+
+XML;
+
+
 	public static function createHTMLDocument(
 		string $html = self::HTML_DEFAULT
 	):HTMLDocument {

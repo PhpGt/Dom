@@ -543,6 +543,14 @@ class Document extends Node implements StreamInterface {
 	public function getElementById(string $id):?Element {
 		$domElement = $this->domDocument->getElementById($id);
 		if(!$domElement) {
+			if($this instanceof XMLDocument) {
+// Known limitation in XML documents: IDs are not always registered.
+// Try using XPath instead.
+				/** @var ?Element $node */
+				$node = $this->evaluate("//*[@id='$id']")->current();
+				return $node;
+			}
+
 			return null;
 		}
 

@@ -253,7 +253,15 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttributeNS
 	 */
 	public function getAttributeNS(string $namespace, string $name):?string {
+		if(!
+		$this->hasAttributeNS($namespace, $name)) {
+			return null;
+		}
 
+		return $this->getNativeElement()->getAttributeNS(
+			$namespace,
+			$name
+		);
 	}
 
 	/**
@@ -356,7 +364,10 @@ class Element extends Node {
 		string $namespace,
 		string $localName
 	):bool {
-
+		return $this->getNativeElement()->hasAttributeNS(
+			$namespace,
+			$localName
+		);
 	}
 
 	/**
