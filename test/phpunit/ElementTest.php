@@ -189,6 +189,55 @@ class ElementTest extends TestCase {
 
 	public function testTagNameInvalid():void {
 		self::expectException(InvalidCharacterException::class);
-		$sut = NodeTestFactory::createNode("This can't be done");
+		NodeTestFactory::createNode("This can't be done");
+	}
+
+	public function testClosestNoMatch():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->closest("nothing"));
+	}
+
+	public function testClosestSelf():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->ownerDocument->appendChild($sut);
+		self::assertSame($sut, $sut->closest("example"));
+	}
+
+	public function testClosestParent():void {
+		$sut = NodeTestFactory::createNode("example");
+		$context = $sut->ownerDocument;
+		for($i = 0; $i < 10; $i++) {
+			$parent = $sut->ownerDocument->createElement("example-$i");
+			$context->appendChild($parent);
+			$context = $parent;
+		}
+		$context->appendChild($sut);
+
+		$element = $sut->ownerDocument->getElementsByTagName("example-3")->item(0);
+		$closest = $sut->closest("example-3");
+		self::assertSame(
+			$element,
+			$closest
+		);
+	}
+
+	public function testClosestWithAnotherMatchingAncestor():void {
+		$sut = NodeTestFactory::createNode("example");
+		$tagNames = ["this-example", "that-example"];
+		$context = $sut->ownerDocument;
+		for($i = 0; $i < 10; $i++) {
+			$tagName = $i % 2 ? $tagNames[0] : $tagNames[1];
+			$parent = $sut->ownerDocument->createElement($tagName);
+			$context->appendChild($parent);
+			$context = $parent;
+		}
+		$context->appendChild($sut);
+
+		$thatElements = $sut->ownerDocument->getElementsByTagName("that-example");
+		$closest = $sut->closest("that-example");
+		self::assertSame(
+			$thatElements->item($thatElements->length - 1),
+			$closest
+		);
 	}
 }
