@@ -159,4 +159,15 @@ class DOMTokenListTest extends TestCase {
 		);
 		self::assertFalse($sut->contains("four"));
 	}
+
+	public function testEntries():void {
+		$data = ["one", "two", "three"];
+		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+		foreach($sut->entries() as $key => $value) {
+			self::assertEquals($data[$key], $value);
+		}
+
+		/** @noinspection PhpUndefinedVariableInspection */
+		self::assertGreaterThan(0, $key);
+	}
 }

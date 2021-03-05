@@ -198,12 +198,14 @@ class DOMTokenList implements Countable {
 	 * go through all key/value pairs contained in this object. The values
 	 * are DOMString objects, each representing a single token.
 	 *
-	 * @return iterable<string> Each element represents the key and value,
-	 * for example: "0,first"
+	 * @return iterable<int, string> Each element represents the key and
+	 * value, for example: "0,first"
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/entries
 	 */
 	public function entries():iterable {
-
+		foreach($this->callAccessor() as $key => $value) {
+			yield $key => $value;
+		}
 	}
 
 	/**
