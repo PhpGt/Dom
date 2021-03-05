@@ -2,6 +2,7 @@
 namespace Gt\Dom\Test;
 
 use Gt\Dom\Element;
+use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -172,5 +173,22 @@ class ElementTest extends TestCase {
 		self::assertCount(2, $sut->children);
 		self::assertEquals("A paragraph", $sut->children[0]->innerHTML);
 		self::assertEquals("A div", $sut->children[1]->innerHTML);
+	}
+
+	public function testPrefix():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertEquals("", $sut->prefix);
+	}
+
+	public function testTagName():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertEquals("EXAMPLE", $sut->tagName);
+		$sut = NodeTestFactory::createNode("Example");
+		self::assertEquals("EXAMPLE", $sut->tagName);
+	}
+
+	public function testTagNameInvalid():void {
+		self::expectException(InvalidCharacterException::class);
+		$sut = NodeTestFactory::createNode("This can't be done");
 	}
 }

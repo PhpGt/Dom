@@ -172,7 +172,7 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/prefix */
 	protected function __prop_get_prefix():string {
-
+		return $this->domNode->prefix;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/tagName */

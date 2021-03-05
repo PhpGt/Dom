@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DOMException;
 use DOMNode;
 use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Exception\InvalidCharacterException;
@@ -352,9 +353,16 @@ class Document extends Node implements StreamInterface {
 			);
 		}
 		else {
-			$domElement = $this->domDocument->createElement(
-				$tagName
-			);
+			try {
+				$domElement = $this->domDocument->createElement(
+					$tagName
+				);
+			}
+			catch(DOMException $exception) {
+				if(strstr($exception->getMessage(), "Invalid Character Error")) {
+					throw new InvalidCharacterException($tagName);
+				}
+			}
 		}
 
 		/** @var Element $element */
