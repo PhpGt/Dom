@@ -115,4 +115,44 @@ class NamedNodeMapTest extends TestCase {
 		self::assertEquals("abc", $element->getAttribute("one"));
 		self::assertEquals("qwerty", $element->getAttribute("two"));
 	}
+
+	public function testSetNamedItemNS():void {
+		$ns = "example_namespace";
+
+		$document = new Document();
+		/** @var Element $element */
+		$element = $document->createElementNS(
+			$ns,
+			"test:example"
+		);
+		$document->appendChild($element);
+		$attr = $document->createAttributeNS($ns, "test");
+		$attr->value = "abc";
+		self::assertNull($element->attributes->setNamedItemNS($attr));
+		$sut = $element->attributes->item(0);
+		self::assertEquals(
+			$ns,
+			$sut->namespaceURI
+		);
+		self::assertEquals(
+			"abc",
+			$sut->value
+		);
+	}
+
+	public function testSetNamedItemNSExisting():void {
+		$ns = "example_namespace";
+
+		$document = new Document();
+		/** @var Element $element */
+		$element = $document->createElementNS(
+			$ns,
+			"test:example"
+		);
+		$document->appendChild($element);
+		$attr = $document->createAttributeNS($ns, "test");
+		$attr->value = "abc";
+		self::assertNull($element->attributes->setNamedItemNS($attr));
+		self::assertNotNull($element->attributes->setNamedItemNS($attr));
+	}
 }

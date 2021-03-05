@@ -124,8 +124,6 @@ class NamedNodeMap implements ArrayAccess, Countable, Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/setNamedItemNS
 	 */
 	public function setNamedItemNS(Attr $attr):?Attr {
-		$nativeAttr = $this->owner->ownerDocument->getNativeDomNode($attr);
-
 		$existing = false;
 		if($this->getNative()->getNamedItemNS(
 			$attr->namespaceURI,
