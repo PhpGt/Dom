@@ -105,7 +105,18 @@ class DOMTokenList implements Countable {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/remove
 	 */
 	public function remove(string...$tokens):void {
+		$currentTokens = $this->callAccessor();
+		foreach($tokens as $token) {
+			$key = array_search($token, $currentTokens);
+			if(is_null($key)) {
+				continue;
+			}
 
+			unset($currentTokens[$key]);
+		}
+
+		$currentTokens = array_values($currentTokens);
+		$this->accessCallback = fn() => $currentTokens;
 	}
 
 	/**

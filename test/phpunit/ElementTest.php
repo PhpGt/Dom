@@ -99,6 +99,8 @@ class ElementTest extends TestCase {
 
 		self::assertTrue($classList->contains("updated"));
 		self::assertTrue($sut->classList->contains("updated"));
+
+		self::assertEquals("updated", $sut->className);
 	}
 
 	public function testClassName():void {

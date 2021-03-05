@@ -83,4 +83,22 @@ class DOMTokenListTest extends TestCase {
 		self::assertTrue($sut->contains("five"));
 		self::assertTrue($sut->contains("six"));
 	}
+
+	public function testRemove():void {
+		$data = ["one", "two", "three"];
+		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+		$sut->remove("two");
+		self::assertTrue($sut->contains("one"));
+		self::assertFalse($sut->contains("two"));
+		self::assertTrue($sut->contains("three"));
+	}
+
+	public function testRemoveMultiple():void {
+		$data = ["one", "two", "three"];
+		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+		$sut->remove("two", "three");
+		self::assertTrue($sut->contains("one"));
+		self::assertFalse($sut->contains("two"));
+		self::assertFalse($sut->contains("three"));
+	}
 }
