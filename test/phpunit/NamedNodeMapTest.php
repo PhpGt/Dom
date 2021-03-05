@@ -155,4 +155,16 @@ class NamedNodeMapTest extends TestCase {
 		self::assertNull($element->attributes->setNamedItemNS($attr));
 		self::assertNotNull($element->attributes->setNamedItemNS($attr));
 	}
+
+	public function testRemoveNamedItem():void {
+		$document = new Document();
+		$nativeDocument = new DOMDocumentFacade($document);
+		$nativeElement = $nativeDocument->createElement("example");
+		$nativeElement->setAttribute("one", "abc");
+		$nativeElement->setAttribute("two", "xyz");
+		/** @var Element $element */
+		$element = $nativeDocument->getGtDomNode($nativeElement);
+		$sut = $document->createAttribute("two");
+		self::assertSame($sut, $element->attributes->removeNamedItem($sut));
+	}
 }
