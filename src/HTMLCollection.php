@@ -22,6 +22,7 @@ use Gt\PropFunc\MagicProp;
  * @see HTMLCollectionFactory
  *
  * @property-read int $length Returns the number of items in the collection.
+ * @implements ArrayAccess<int, Element>
  */
 class HTMLCollection implements ArrayAccess, Countable {
 	use MagicProp;
