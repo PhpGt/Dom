@@ -6,20 +6,29 @@ use PHPUnit\Framework\TestCase;
 
 class DOMTokenListTest extends TestCase {
 	public function testLength():void {
-		$example = ["one", "two", "three"];
-		$sut = DOMTokenListFactory::create(fn() => $example);
+		$data = ["one", "two", "three"];
+		$sut = DOMTokenListFactory::create(fn() => $data);
 		self::assertEquals(
-			count($example),
+			count($data),
 			$sut->length
 		);
 	}
 
 	public function testCount():void {
-		$example = ["one", "two", "three"];
-		$sut = DOMTokenListFactory::create(fn() => $example);
+		$data = ["one", "two", "three"];
+		$sut = DOMTokenListFactory::create(fn() => $data);
 		self::assertCount(
-			count($example),
+			count($data),
 			$sut
+		);
+	}
+
+	public function testValue():void {
+		$data = ["one", "two", "three"];
+		$sut = DOMTokenListFactory::create(fn() => $data);
+		self::assertEquals(
+			implode(" ", $data),
+			$sut->value
 		);
 	}
 }

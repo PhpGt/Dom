@@ -35,7 +35,7 @@ class DOMTokenList implements Countable {
 
 	/** https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/value */
 	protected function __prop_get_value():string {
-
+		return implode(" ", $this->call());
 	}
 
 	/** https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/value */
