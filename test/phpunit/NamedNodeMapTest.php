@@ -43,4 +43,45 @@ class NamedNodeMapTest extends TestCase {
 		$item = $sut->getNamedItem("two");
 		self::assertNull($item);
 	}
+
+	public function testGetNamedItemNS():void {
+		$ns = "example_namespace";
+
+		$document = new Document();
+		/** @var Element $element */
+		$element = $document->createElementNS(
+			$ns,
+			"test:example"
+		);
+		$element->setAttributeNS(
+			$ns,
+			"test",
+			"abc"
+		);
+		$sut = $element->attributes->getNamedItemNS($ns, "test");
+		self::assertEquals(
+			"abc",
+			$sut->value
+		);
+	}
+
+	public function testGetNamedItemNSNone():void {
+		$ns = "example_namespace";
+
+		$document = new Document();
+		/** @var Element $element */
+		$element = $document->createElementNS(
+			$ns,
+			"test:example"
+		);
+		$element->setAttributeNS(
+			$ns,
+			"test",
+			"abc"
+		);
+		$sut = $element->attributes->getNamedItemNS($ns, "not-here");
+		self::assertNull(
+			$sut
+		);
+	}
 }
