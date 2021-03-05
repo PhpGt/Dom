@@ -272,4 +272,14 @@ class ElementTest extends TestCase {
 			"Foo value",
 			$sut->getAttributeNS($ns, "foo"));
 	}
+
+	public function testSetAttributeNS():void {
+		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->getElementById("target");
+		$ns = "http://www.example.com/2014/test";
+		$sut->setAttributeNS($ns, "foo", "Updated value");
+		self::assertEquals(
+			"Updated value",
+			$sut->getAttributeNS($ns, "foo"));
+	}
 }

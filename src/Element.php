@@ -583,7 +583,11 @@ class Element extends Node {
 		string $name,
 		string $value
 	):void {
-
+		$this->getNativeElement()->setAttributeNS(
+			$namespace,
+			$name,
+			$value
+		);
 	}
 
 	/**
