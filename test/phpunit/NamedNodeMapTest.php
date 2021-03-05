@@ -84,4 +84,35 @@ class NamedNodeMapTest extends TestCase {
 			$sut
 		);
 	}
+
+	public function testSetNamedItem():void {
+		$document = new Document();
+		$nativeDocument = new DOMDocumentFacade($document);
+		$nativeElement = $nativeDocument->createElement("example");
+		$nativeElement->setAttribute("one", "abc");
+		$nativeElement->setAttribute("two", "xyz");
+		/** @var Element $element */
+		$element = $nativeDocument->getGtDomNode($nativeElement);
+		$sut = $document->createAttribute("three");
+		$sut->value = "123";
+		self::assertNull($element->attributes->setNamedItem($sut));
+		self::assertEquals("abc", $element->getAttribute("one"));
+		self::assertEquals("xyz", $element->getAttribute("two"));
+		self::assertEquals("123", $element->getAttribute("three"));
+	}
+
+	public function testSetNamedItemExisting():void {
+		$document = new Document();
+		$nativeDocument = new DOMDocumentFacade($document);
+		$nativeElement = $nativeDocument->createElement("example");
+		$nativeElement->setAttribute("one", "abc");
+		$nativeElement->setAttribute("two", "xyz");
+		/** @var Element $element */
+		$element = $nativeDocument->getGtDomNode($nativeElement);
+		$sut = $document->createAttribute("two");
+		$sut->value = "qwerty";
+		self::assertNotNull($element->attributes->setNamedItem($sut));
+		self::assertEquals("abc", $element->getAttribute("one"));
+		self::assertEquals("qwerty", $element->getAttribute("two"));
+	}
 }
