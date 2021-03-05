@@ -63,7 +63,7 @@ class DOMTokenList implements Countable {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/item
 	 */
 	public function item(int $index):string {
-
+		return $this->callAccessor()[$index];
 	}
 
 	/**

@@ -41,4 +41,15 @@ class DOMTokenListTest extends TestCase {
 			$sut->value
 		);
 	}
+
+	public function testItem():void {
+		$data = ["one", "two", "three"];
+		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+		for($i = 0; $i < count($data); $i++) {
+			self::assertEquals(
+				$data[$i],
+				$sut->item($i)
+			);
+		}
+	}
 }
