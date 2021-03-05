@@ -22,4 +22,24 @@ class HTMLCollectionTest extends TestCase {
 		));
 		self::assertCount(2, $sut);
 	}
+
+	public function testItem():void {
+		$element1 = NodeTestFactory::createNode("example");
+		$element2 = NodeTestFactory::createNode("example");
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			$element1,
+			$element2
+		));
+		self::assertSame($element2, $sut->item(1));
+	}
+
+	public function testItemNone():void {
+		$element1 = NodeTestFactory::createNode("example");
+		$element2 = NodeTestFactory::createNode("example");
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			$element1,
+			$element2
+		));
+		self::assertNull($sut->item(2));
+	}
 }
