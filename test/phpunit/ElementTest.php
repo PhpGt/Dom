@@ -282,4 +282,36 @@ class ElementTest extends TestCase {
 			"Updated value",
 			$sut->getAttributeNS($ns, "foo"));
 	}
+
+	public function testToggleAttribute():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertFalse($sut->hasAttribute("required"));
+		$requiredPresent = $sut->toggleAttribute("required");
+		self::assertTrue($sut->hasAttribute("required"));
+		self::assertTrue($requiredPresent);
+		$requiredPresent = $sut->toggleAttribute("required");
+		self::assertFalse($sut->hasAttribute("required"));
+		self::assertFalse($requiredPresent);
+	}
+
+	public function testToggleAttributeForced():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertTrue(
+			$sut->toggleAttribute("required", true)
+		);
+		self::assertTrue($sut->hasAttribute("required"));
+		self::assertTrue(
+			$sut->toggleAttribute("required", true)
+		);
+		self::assertTrue($sut->hasAttribute("required"));
+
+		self::assertFalse(
+			$sut->toggleAttribute("required", false)
+		);
+		self::assertFalse($sut->hasAttribute("required"));
+		self::assertFalse(
+			$sut->toggleAttribute("required", false)
+		);
+		self::assertFalse($sut->hasAttribute("required"));
+	}
 }

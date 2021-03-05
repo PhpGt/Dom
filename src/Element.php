@@ -347,7 +347,7 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/hasAttribute
 	 */
 	public function hasAttribute(string $name):bool {
-
+		return $this->getNativeElement()->hasAttribute($name);
 	}
 
 	/**
@@ -527,7 +527,7 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/removeAttribute
 	 */
 	public function removeAttribute(string $attrName):void {
-
+		$this->getNativeElement()->removeAttribute($attrName);
 	}
 
 	/**
@@ -608,9 +608,26 @@ class Element extends Node {
 	 */
 	public function toggleAttribute(
 		string $name,
-		bool $force = false
+		bool $force = null
 	):bool {
+		$add = true;
+		if(is_null($force)) {
+			if($this->hasAttribute($name)) {
+				$add = false;
+			}
+		}
+		else {
+			$add = $force;
+		}
 
+		if($add) {
+			$this->setAttribute($name, true);
+			return true;
+		}
+		else {
+			$this->removeAttribute($name);
+			return false;
+		}
 	}
 
 	private function getNativeElement():DOMElementFacade {
