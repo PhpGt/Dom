@@ -88,9 +88,11 @@ class DOMTokenListTest extends TestCase {
 		$data = ["one", "two", "three"];
 		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
 		$sut->remove("two");
+		$sut->remove("five");
 		self::assertTrue($sut->contains("one"));
 		self::assertFalse($sut->contains("two"));
 		self::assertTrue($sut->contains("three"));
+		self::assertFalse($sut->contains("five"));
 	}
 
 	public function testRemoveMultiple():void {
@@ -100,5 +102,21 @@ class DOMTokenListTest extends TestCase {
 		self::assertTrue($sut->contains("one"));
 		self::assertFalse($sut->contains("two"));
 		self::assertFalse($sut->contains("three"));
+	}
+
+	public function testReplace():void {
+		$data = ["one", "two", "three"];
+		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+
+		self::assertTrue(
+			$sut->replace("two", "updated")
+		);
+		self::assertFalse(
+			$sut->replace("not-there", "updated")
+		);
+		self::assertTrue($sut->contains("one"));
+		self::assertFalse($sut->contains("two"));
+		self::assertTrue($sut->contains("three"));
+		self::assertTrue($sut->contains("updated"));
 	}
 }

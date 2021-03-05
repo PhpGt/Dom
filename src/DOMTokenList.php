@@ -132,7 +132,17 @@ class DOMTokenList implements Countable {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/replace
 	 */
 	public function replace(string $oldToken, string $newToken):bool {
+		$currentTokens = $this->callAccessor();
+		$key = array_search($oldToken, $currentTokens);
+		if($key === false) {
+			return false;
+		}
 
+		$currentTokens[$key] = $newToken;
+
+		$currentTokens = array_values($currentTokens);
+		$this->accessCallback = fn() => $currentTokens;
+		return true;
 	}
 
 	/**
