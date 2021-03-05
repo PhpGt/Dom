@@ -239,6 +239,9 @@ class DOMTokenList implements Countable, Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/keys
 	 */
 	public function keys():iterable {
+		foreach($this as $key => $value) {
+			yield $key;
+		}
 	}
 
 	/**
