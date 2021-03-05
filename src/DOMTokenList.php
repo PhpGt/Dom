@@ -108,7 +108,7 @@ class DOMTokenList implements Countable {
 		$currentTokens = $this->callAccessor();
 		foreach($tokens as $token) {
 			$key = array_search($token, $currentTokens);
-			if(is_null($key)) {
+			if($key === false) {
 				continue;
 			}
 
