@@ -18,6 +18,7 @@ use Iterator;
  *
  * @property-read int $length Is an integer representing the number of objects stored in the object.
  * @property string $value A stringifier property that returns the value of the list as a DOMString.
+ * @implements Iterator<int, string>
  */
 class DOMTokenList implements Countable, Iterator {
 	use MagicProp;
