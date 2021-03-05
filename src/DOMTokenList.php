@@ -4,6 +4,7 @@ namespace Gt\Dom;
 use Countable;
 use Generator;
 use Gt\PropFunc\MagicProp;
+use Iterator;
 
 /**
  * The DOMTokenList interface represents a set of space-separated tokens. Such
@@ -18,13 +19,14 @@ use Gt\PropFunc\MagicProp;
  * @property-read int $length Is an integer representing the number of objects stored in the object.
  * @property string $value A stringifier property that returns the value of the list as a DOMString.
  */
-class DOMTokenList implements Countable {
+class DOMTokenList implements Countable, Iterator {
 	use MagicProp;
 
 	/** @var callable Return an indexed array of tokens */
 	private $accessCallback;
 	/** @var callable Variadic string parameters, void return */
 	private $mutateCallback;
+	private int $iteratorIndex;
 
 	protected function __construct(
 		callable $accessCallback,
@@ -32,6 +34,7 @@ class DOMTokenList implements Countable {
 	) {
 		$this->accessCallback = $accessCallback;
 		$this->mutateCallback = $mutateCallback;
+		$this->iteratorIndex = 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/length */
@@ -222,7 +225,9 @@ class DOMTokenList implements Countable {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/forEach
 	 */
 	public function forEach(callable $callback):void {
-
+		foreach($this as $value) {
+			call_user_func($callback, $value);
+		}
 	}
 
 	/**
@@ -259,5 +264,26 @@ class DOMTokenList implements Countable {
 
 	private function callMutator(string...$values):void {
 		call_user_func_array($this->mutateCallback, $values);
+	}
+
+	public function current():string {
+		return $this->callAccessor()[$this->iteratorIndex];
+	}
+
+	public function next():void {
+		$this->iteratorIndex++;
+	}
+
+	public function key():int {
+		return $this->iteratorIndex;
+	}
+
+	public function valid():bool {
+		$tokens = $this->callAccessor();
+		return isset($tokens[$this->iteratorIndex]);
+	}
+
+	public function rewind():void {
+		$this->iteratorIndex = 0;
 	}
 }

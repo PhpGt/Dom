@@ -170,4 +170,16 @@ class DOMTokenListTest extends TestCase {
 		/** @noinspection PhpUndefinedVariableInspection */
 		self::assertGreaterThan(0, $key);
 	}
+
+	public function testForEach():void {
+		$data = ["one", "two", "three"];
+		$received = [];
+
+		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+		$sut->forEach(function(string $token) use(&$received) {
+			array_push($received, $token);
+		});
+
+		self::assertSame($data, $received);
+	}
 }
