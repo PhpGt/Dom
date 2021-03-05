@@ -240,4 +240,11 @@ class ElementTest extends TestCase {
 			$closest
 		);
 	}
+
+	public function testGetAttribute():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->getAttribute("attr"));
+		$sut->setAttribute("attr", "content");
+		self::assertEquals("content", $sut->getAttribute("attr"));
+	}
 }

@@ -221,6 +221,10 @@ class Element extends Node {
 	public function getAttribute(string $attributeName):?string {
 		/** @var DOMElementFacade $nativeElement */
 		$nativeElement = $this->domNode;
+		if(!$nativeElement->hasAttribute($attributeName)) {
+			return null;
+		}
+
 		return $nativeElement->getAttribute($attributeName);
 	}
 
