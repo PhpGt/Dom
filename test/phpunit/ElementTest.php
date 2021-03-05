@@ -311,6 +311,7 @@ class ElementTest extends TestCase {
 		self::assertCount(1, $sut->getElementsByClassName("one"));
 		$child1->className = "not-one child-of-sut";
 		self::assertCount(0, $sut->getElementsByClassName("one"));
+		self::assertCount(0, $sut->getElementsByClassName("one child-of-sut"));
 	}
 
 	public function testSetAttributeNS():void {
