@@ -52,4 +52,13 @@ class DOMTokenListTest extends TestCase {
 			);
 		}
 	}
+
+	public function testContains():void {
+		$data = ["one", "two", "three"];
+		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+		self::assertTrue($sut->contains("one"));
+		self::assertTrue($sut->contains("two"));
+		self::assertTrue($sut->contains("three"));
+		self::assertFalse($sut->contains("four"));
+	}
 }
