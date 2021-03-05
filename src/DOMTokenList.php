@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use Countable;
 use Generator;
 use Gt\PropFunc\MagicProp;
 
@@ -17,7 +18,7 @@ use Gt\PropFunc\MagicProp;
  * @property-read int $length Is an integer representing the number of objects stored in the object.
  * @property string $value A stringifier property that returns the value of the list as a DOMString.
  */
-class DOMTokenList {
+class DOMTokenList implements Countable {
 	use MagicProp;
 
 	/** @var callable Return an indexed array of tokens */
@@ -29,7 +30,7 @@ class DOMTokenList {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/length */
 	protected function __prop_get_length():int {
-
+		return count($this->call());
 	}
 
 	/** https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/value */
@@ -69,7 +70,7 @@ class DOMTokenList {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/contains
 	 */
 	public function contains(string $token):bool {
-		return in_array($token, $this->assoc());
+		return in_array($token, $this->call());
 	}
 
 	/**
@@ -185,8 +186,12 @@ class DOMTokenList {
 
 	}
 
+	public function count() {
+		return $this->length;
+	}
+
 	/** @return string[] */
-	private function assoc():array {
+	private function call():array {
 		return call_user_func($this->callback);
 	}
 }
