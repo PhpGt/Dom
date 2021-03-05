@@ -5,7 +5,9 @@ use DateTime;
 use DOMAttr;
 use DOMDocument;
 use DOMElement;
+use Gt\CssXPath\Translator;
 use Gt\Dom\Exception\InvalidAdjacentPositionException;
+use Gt\Dom\Exception\XPathQueryException;
 use Gt\Dom\Facade\DOMTokenListFactory;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NamedNodeMapFactory;
@@ -547,11 +549,19 @@ class Element extends Node {
 	 * @param string $selectorString a string representing the selector to
 	 * test.
 	 * @return bool
-	 * @throws SyntaxException if the specified selector string is invalid.
+	 * @throws XPathQueryException if the specified selector string is
+	 * invalid.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
 	 */
 	public function matches(string $selectorString):bool {
+		$matches = $this->ownerDocument->querySelectorAll($selectorString);
+		foreach($matches as $match) {
+			if($match === $this) {
+				return true;
+			}
+		}
 
+		return false;
 	}
 
 	/**

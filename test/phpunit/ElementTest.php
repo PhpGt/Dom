@@ -479,6 +479,13 @@ class ElementTest extends TestCase {
 		self::assertInstanceOf(Text::class, $sut->firstChild);
 	}
 
+	public function testMatches():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->ownerDocument->appendChild($sut);
+		self::assertTrue($sut->matches("example"));
+		self::assertFalse($sut->matches("not-example"));
+	}
+
 	public function testSetAttributeNS():void {
 		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
 		$sut = $xmlDoc->getElementById("target");
