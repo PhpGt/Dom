@@ -119,4 +119,35 @@ class DOMTokenListTest extends TestCase {
 		self::assertTrue($sut->contains("three"));
 		self::assertTrue($sut->contains("updated"));
 	}
+
+	public function testToggle():void {
+		$data = ["one", "two", "three"];
+		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+
+		self::assertTrue(
+			$sut->toggle("four")
+		);
+		self::assertFalse(
+			$sut->toggle("two")
+		);
+		self::assertTrue($sut->contains("one"));
+		self::assertFalse($sut->contains("two"));
+		self::assertTrue($sut->contains("three"));
+		self::assertTrue($sut->contains("four"));
+	}
+
+	public function testToggleForce():void {
+		$data = ["one", "two", "three"];
+		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+
+		self::assertTrue(
+			$sut->toggle("one", true)
+		);
+		self::assertTrue($sut->contains("one"));
+
+		self::assertFalse(
+			$sut->toggle("four", false)
+		);
+		self::assertFalse($sut->contains("four"));
+	}
 }

@@ -161,7 +161,30 @@ class DOMTokenList implements Countable {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/toggle
 	 */
 	public function toggle(string $token, bool $force = null):bool {
+		/** @var ?bool $addRemove True to add, false to remove */
+		$addRemove = $force;
 
+		$currentTokens = $this->callAccessor();
+		$key = array_search($token, $currentTokens);
+		if($key === false) {
+			if($force !== false) {
+				$addRemove = true;
+			}
+		}
+		else {
+			if($force !== true) {
+				$addRemove = false;
+			}
+		}
+
+		if($addRemove) {
+			$this->add($token);
+			return true;
+		}
+		else {
+			$this->remove($token);
+			return false;
+		}
 	}
 
 	/**
