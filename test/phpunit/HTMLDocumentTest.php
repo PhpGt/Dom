@@ -2,6 +2,7 @@
 namespace Gt\Dom\Test;
 
 use Error;
+use Gt\Dom\Facade\HTMLDocumentFactory;
 use PHPUnit\Framework\TestCase;
 use Gt\Dom\HTMLDocument;
 
@@ -12,5 +13,13 @@ class HTMLDocumentTest extends TestCase {
 		$className = HTMLDocument::class;
 		/** @phpstan-ignore-next-line */
 		new $className();
+	}
+
+	public function testCreatesRootNode():void {
+		$sut = HTMLDocumentFactory::create("<h1>Test</h1>");
+		self::assertEquals(
+			"HTML",
+			$sut->documentElement->tagName
+		);
 	}
 }
