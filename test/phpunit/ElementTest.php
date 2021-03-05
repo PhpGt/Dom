@@ -273,6 +273,13 @@ class ElementTest extends TestCase {
 			$sut->getAttributeNS($ns, "foo"));
 	}
 
+	public function testGetAttributeNSNone():void {
+		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->getElementById("target");
+		$ns = "http://www.example.com/2014/test";
+		self::assertNull($sut->getAttributeNS($ns, "nothing"));
+	}
+
 	public function testSetAttributeNS():void {
 		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
 		$sut = $xmlDoc->getElementById("target");
