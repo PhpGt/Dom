@@ -52,27 +52,24 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/className */
 	protected function __prop_get_className():string {
-		return $this->getAttribute("class");
+		return $this->getAttribute("class") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/className */
 	protected function __prop_set_className(string $className):void {
-		/** @var DOMElement $domElement */
-		$domElement = $this->domNode;
+		$domElement = $this->getNativeElement();
 		$domElement->setAttribute("class", $className);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */
 	protected function __prop_get_id():string {
-		/** @var Element $nativeElement */
-		$nativeElement = $this->domNode;
+		$nativeElement = $this->getNativeElement();
 		return $nativeElement->getAttribute("id");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */
 	protected function __prop_set_id(string $id):void {
-		/** @var DOMElement $element */
-		$element = $this->domNode;
+		$element = $this->getNativeElement();
 		$element->setAttribute("id", $id);
 	}
 
@@ -219,8 +216,7 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute
 	 */
 	public function getAttribute(string $attributeName):?string {
-		/** @var DOMElementFacade $nativeElement */
-		$nativeElement = $this->domNode;
+		$nativeElement = $this->getNativeElement();
 		if(!$nativeElement->hasAttribute($attributeName)) {
 			return null;
 		}
@@ -241,7 +237,8 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttributeNames
 	 */
 	public function getAttributeNames():array {
-
+		$attributeArray = iterator_to_array($this->attributes);
+		return array_keys($attributeArray);
 	}
 
 	/**
@@ -555,9 +552,7 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute
 	 */
 	public function setAttribute(string $name, string $value):void {
-		/** @var DOMElementFacade $nativeElement */
-		$nativeElement = $this->domNode;
-		$nativeElement->setAttribute($name, $value);
+		$this->getNativeElement()->setAttribute($name, $value);
 	}
 
 	/**
@@ -601,5 +596,11 @@ class Element extends Node {
 		bool $force = false
 	):bool {
 
+	}
+
+	private function getNativeElement():DOMElementFacade {
+		/** @var DOMElementFacade $native */
+		$native = $this->domNode;
+		return $native;
 	}
 }

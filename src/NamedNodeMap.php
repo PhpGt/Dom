@@ -7,6 +7,7 @@ use DOMNamedNodeMap;
 use Gt\Dom\Exception\DOMException;
 use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
 use Gt\PropFunc\MagicProp;
+use Iterator;
 
 /**
  * The NamedNodeMap interface represents a collection of Attr objects. Objects
@@ -24,12 +25,14 @@ use Gt\PropFunc\MagicProp;
  *
  * @property-read int $length Returns the amount of objects in the map.
  * @implements ArrayAccess<int|string, Attr>
+ * @implements Iterator<string, string>
  */
-class NamedNodeMap implements ArrayAccess, Countable {
+class NamedNodeMap implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
 
 	/** @var callable Returns a DOMNamedNodeMap */
 	private $callback;
+	private int $iteratorIndex;
 
 	/** @param callable $callback Returns a DOMNamedNodeMapFacade */
 	protected function __construct(
@@ -37,6 +40,7 @@ class NamedNodeMap implements ArrayAccess, Countable {
 		private Element $owner
 	) {
 		$this->callback = $callback;
+		$this->iteratorIndex = 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NamedNodeMap/length */
@@ -246,5 +250,25 @@ class NamedNodeMap implements ArrayAccess, Countable {
 		/** @var DOMNamedNodeMap<DOMNodeFacade> $nativeNamedNodeMap */
 		$nativeNamedNodeMap = call_user_func($this->callback);
 		return $nativeNamedNodeMap;
+	}
+
+	public function current():string {
+		return $this->item($this->iteratorIndex)->value;
+	}
+
+	public function next():void {
+		$this->iteratorIndex++;
+	}
+
+	public function key():string {
+		return $this->item($this->iteratorIndex)->name;
+	}
+
+	public function valid():bool {
+		return $this->offsetExists($this->iteratorIndex);
+	}
+
+	public function rewind():void {
+		$this->iteratorIndex = 0;
 	}
 }

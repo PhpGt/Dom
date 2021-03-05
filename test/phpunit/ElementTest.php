@@ -247,4 +247,19 @@ class ElementTest extends TestCase {
 		$sut->setAttribute("attr", "content");
 		self::assertEquals("content", $sut->getAttribute("attr"));
 	}
+
+	public function testGetAttributeNamesNone():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertCount(0, $sut->getAttributeNames());
+	}
+
+	public function testGetAttributeNames():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->setAttribute("name", "test");
+		$sut->setAttribute("framework", "phpunit");
+		$attributeNames = $sut->getAttributeNames();
+		self::assertCount(2, $attributeNames);
+		self::assertContains("name", $attributeNames);
+		self::assertContains("framework", $attributeNames);
+	}
 }
