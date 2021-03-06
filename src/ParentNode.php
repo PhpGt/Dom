@@ -67,7 +67,16 @@ trait ParentNode {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/firstElementChild */
 	protected function __prop_get_firstElementChild():?Element {
+		for($i = 0, $len = $this->childNodes->length; $i < $len; $i++) {
+			$child = $this->childNodes->item($i);
+			if(!$child instanceof Element) {
+				continue;
+			}
 
+			return $child;
+		}
+
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/lastElementChild */

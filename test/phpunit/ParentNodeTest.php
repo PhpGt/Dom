@@ -76,4 +76,34 @@ class ParentNodeTest extends TestCase {
 		self::assertEquals($count - $textCount, $sut->children->length);
 		self::assertCount($count - $textCount, $sut->children);
 	}
+
+	public function testFirstElementChildEmpty():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->firstElementChild);
+	}
+
+	public function testFirstElementChild():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child1 = $sut->ownerDocument->createElement("child");
+		$child2 = $sut->ownerDocument->createElement("child");
+		$sut->append($child1, $child2);
+		self::assertSame($child1, $sut->firstElementChild);
+	}
+
+	public function testFirstElementChildTextNode():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child1 = $sut->ownerDocument->createElement("child");
+		$child2 = $sut->ownerDocument->createElement("child");
+		$text = $sut->ownerDocument->createTextNode("Some text");
+		$sut->append($text, $child1, $child2);
+		self::assertSame($child1, $sut->firstElementChild);
+	}
+
+	public function testFirstElementChildAllTextNodes():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child1 = $sut->ownerDocument->createTextNode("Some text");
+		$child2 = $sut->ownerDocument->createTextNode("Some more text");
+		$sut->append($child1, $child2);
+		self::assertNull($sut->firstElementChild);
+	}
 }
