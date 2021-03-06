@@ -103,7 +103,17 @@ trait ParentNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/prepend
 	 */
 	public function prepend(string|Node...$nodesOrDOMStrings):void {
+		$nodesOrDOMStrings = array_reverse($nodesOrDOMStrings);
+		foreach($nodesOrDOMStrings as $nodeOrString) {
+			$node = $nodeOrString;
+			if(is_string($nodeOrString)) {
+				/** @var Document $doc */
+				$doc = $this->ownerDocument ?? $this;
+				$node = $doc->createTextNode($nodeOrString);
+			}
 
+			$this->insertBefore($node, $this->firstChild);
+		}
 	}
 
 	/**

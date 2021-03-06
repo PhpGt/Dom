@@ -1,7 +1,9 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\Element;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\Text;
 use PHPUnit\Framework\TestCase;
 
 class ParentNodeTest extends TestCase {
@@ -135,5 +137,57 @@ class ParentNodeTest extends TestCase {
 		$child3 = $sut->ownerDocument->createTextNode("Some more text");
 		$sut->append($child1, $child2, $child3);
 		self::assertSame($child1, $sut->lastElementChild);
+	}
+
+	public function testPrependString():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child = $sut->ownerDocument->createElement("child");
+		$sut->appendChild($child);
+		$sut->prepend("Some text");
+		self::assertInstanceOf(Text::class, $sut->firstChild);
+	}
+
+	public function testPrependNode():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child = $sut->ownerDocument->createElement("child");
+		$toPrepend = $sut->ownerDocument->createElement("prepend-me");
+		$sut->appendChild($child);
+		$sut->prepend($toPrepend);
+		self::assertSame($toPrepend, $sut->firstChild);
+	}
+
+	public function testPrependMixed():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child = $sut->ownerDocument->createElement("child");
+		$sut->appendChild($child);
+
+		$toPrepend = [
+			$sut->ownerDocument->createElement("first-prepend"),
+			$sut->ownerDocument->createElement("second-prepend"),
+			"First text",
+			$sut->ownerDocument->createElement("third-prepend"),
+			$sut->ownerDocument->createTextNode("Second text"),
+		];
+		$sut->prepend(...$toPrepend);
+
+		foreach($sut->childNodes as $i => $node) {
+			if($i < count($toPrepend)) {
+				$expected = $toPrepend[$i];
+				if($expected instanceof Element) {
+					self::assertSame($toPrepend[$i], $node);
+				}
+				else {
+					$text = $expected;
+					if($text instanceof Text) {
+						$text = $text->nodeValue;
+					}
+
+					self::assertSame($text, $node->nodeValue);
+				}
+			}
+			else {
+				self::assertSame($child, $node);
+			}
+		}
 	}
 }
