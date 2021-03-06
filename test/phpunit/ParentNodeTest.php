@@ -21,6 +21,24 @@ class ParentNodeTest extends TestCase {
 		self::assertEquals($count, $sut->childElementCount);
 	}
 
+	public function testChildElementCountNonElement():void {
+		$sut = NodeTestFactory::createNode("example");
+		$count = rand(50, 500);
+		$textCount = 0;
+		for($i = 0; $i < $count; $i++) {
+			if($i % 25 === 0) {
+				$child = $sut->ownerDocument->createTextNode("Some text");
+				$textCount++;
+			}
+			else {
+				$child = $sut->ownerDocument->createElement("child");
+			}
+			$sut->appendChild($child);
+		}
+
+		self::assertEquals($count - $textCount, $sut->childElementCount);
+	}
+
 	public function testChildrenEmpty():void {
 		$sut = NodeTestFactory::createNode("example");
 		self::assertCount(0, $sut->children);
@@ -38,5 +56,24 @@ class ParentNodeTest extends TestCase {
 
 		self::assertCount($count, $sut->children);
 		self::assertEquals($count, $sut->children->length);
+	}
+
+	public function testChildrenNonElement():void {
+		$sut = NodeTestFactory::createNode("example");
+		$count = rand(50, 500);
+		$textCount = 0;
+		for($i = 0; $i < $count; $i++) {
+			if($i % 25 === 0) {
+				$child = $sut->ownerDocument->createTextNode("Some text");
+				$textCount++;
+			}
+			else {
+				$child = $sut->ownerDocument->createElement("child");
+			}
+			$sut->appendChild($child);
+		}
+
+		self::assertEquals($count - $textCount, $sut->children->length);
+		self::assertCount($count - $textCount, $sut->children);
 	}
 }
