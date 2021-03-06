@@ -106,4 +106,34 @@ class ParentNodeTest extends TestCase {
 		$sut->append($child1, $child2);
 		self::assertNull($sut->firstElementChild);
 	}
+
+	public function testLastElementChildEmpty():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->lastElementChild);
+	}
+
+	public function testLastElementChild():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child1 = $sut->ownerDocument->createElement("child");
+		$child2 = $sut->ownerDocument->createElement("child");
+		$sut->append($child1, $child2);
+		self::assertSame($child2, $sut->lastElementChild);
+	}
+
+	public function testLastElementChildAllTextNodes():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child1 = $sut->ownerDocument->createTextNode("Some text");
+		$child2 = $sut->ownerDocument->createTextNode("Some more text");
+		$sut->append($child1, $child2);
+		self::assertNull($sut->lastElementChild);
+	}
+
+	public function testLastElementChildAllTextNodesAfterFirst():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child1 = $sut->ownerDocument->createElement("child");
+		$child2 = $sut->ownerDocument->createTextNode("Some text");
+		$child3 = $sut->ownerDocument->createTextNode("Some more text");
+		$sut->append($child1, $child2, $child3);
+		self::assertSame($child1, $sut->lastElementChild);
+	}
 }

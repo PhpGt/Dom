@@ -81,7 +81,16 @@ trait ParentNode {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/lastElementChild */
 	protected function __prop_get_lastElementChild():?Element {
+		for($i = $this->childNodes->length - 1; $i >= 0; $i--) {
+			$child = $this->childNodes->item($i);
+			if(!$child instanceof Element) {
+				continue;
+			}
 
+			return $child;
+		}
+
+		return null;
 	}
 
 	/**
