@@ -208,4 +208,36 @@ class ParentNodeTest extends TestCase {
 		self::assertEquals("One", $sut->childNodes[1]->nodeValue);
 		self::assertEquals("Two", $sut->childNodes[2]->nodeValue);
 	}
+
+	public function testReplaceChildren():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child = $sut->ownerDocument->createElement("child");
+		$sut->appendChild($child->cloneNode());
+		$sut->appendChild($child->cloneNode());
+		$sut->appendChild($child->cloneNode());
+		self::assertCount(3, $sut->childNodes);
+		$sut->replaceChildren("Hello!");
+		self::assertCount(1, $sut->childNodes);
+		self::assertInstanceOf(Text::class, $sut->firstChild);
+		self::assertEquals("Hello!", $sut->firstChild->nodeValue);
+	}
+
+	public function testReplaceChildrenMultiple():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child = $sut->ownerDocument->createElement("child");
+		$sut->appendChild($child->cloneNode());
+		$sut->appendChild($child->cloneNode());
+		$sut->appendChild($child->cloneNode());
+		self::assertCount(3, $sut->childNodes);
+		$sut->replaceChildren(
+			"Hello!",
+			$sut->ownerDocument->createElement("replacer"),
+			"PHPUnit!",
+		);
+		self::assertCount(3, $sut->childNodes);
+		self::assertCount(1, $sut->children);
+		self::assertEquals("Hello!", $sut->firstChild->nodeValue);
+		self::assertEquals("PHPUnit!", $sut->lastChild->nodeValue);
+		self::assertEquals("REPLACER", $sut->firstElementChild->tagName);
+	}
 }

@@ -150,7 +150,11 @@ trait ParentNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/replaceChildren
 	 */
 	public function replaceChildren(string|Node...$nodesOrDOMStrings):void {
+		while($this->firstChild) {
+			$this->removeChild($this->firstChild);
+		}
 
+		$this->append(...$nodesOrDOMStrings);
 	}
 
 	/**
