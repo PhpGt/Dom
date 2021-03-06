@@ -35,7 +35,7 @@ trait ParentNode {
 
 		/** @var Node $this */
 		/** @var DOMNodeFacade $nativeNode */
-		$nativeNode = $this->getNativeDomNode($this);
+		$nativeNode = $this->ownerDocument->getNativeDomNode($this);
 		$childNodes = $nativeNode->childNodes;
 		for($i = 0, $len = $childNodes->length; $i < $len; $i++) {
 			$nativeChild = $childNodes->item($i);
