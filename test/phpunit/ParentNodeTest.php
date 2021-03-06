@@ -20,4 +20,23 @@ class ParentNodeTest extends TestCase {
 
 		self::assertEquals($count, $sut->childElementCount);
 	}
+
+	public function testChildrenEmpty():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertCount(0, $sut->children);
+		self::assertEquals(0, $sut->children->length);
+	}
+
+	public function testChildren():void {
+		$sut = NodeTestFactory::createNode("example");
+
+		$count = rand(50, 500);
+		for($i = 0; $i < $count; $i++) {
+			$child = $sut->ownerDocument->createElement("child");
+			$sut->appendChild($child);
+		}
+
+		self::assertCount($count, $sut->children);
+		self::assertEquals($count, $sut->children->length);
+	}
 }
