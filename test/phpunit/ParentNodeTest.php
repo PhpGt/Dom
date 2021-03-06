@@ -257,4 +257,21 @@ class ParentNodeTest extends TestCase {
 		self::assertSame($inner, $sut->querySelector("inner"));
 		self::assertNull($sut->querySelector("nothing"));
 	}
+
+	public function testQuerySelectorAll():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->ownerDocument->appendChild($sut);
+
+		$child1 = $sut->ownerDocument->createElement("child");
+		$child2 = $sut->ownerDocument->createElement("child");
+		$child3 = $sut->ownerDocument->createElement("child");
+		$inner = $sut->ownerDocument->createElement("inner");
+
+		$sut->append($child1, $child2, $child3);
+		$child2->append($inner);
+
+		self::assertCount(3, $sut->querySelectorAll("child"));
+		self::assertCount(4, $sut->querySelectorAll("child, inner"));
+		self::assertCount(4, $sut->querySelectorAll("child, inner, inner>child, child>inner"));
+	}
 }
