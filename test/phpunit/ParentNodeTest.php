@@ -240,4 +240,21 @@ class ParentNodeTest extends TestCase {
 		self::assertEquals("PHPUnit!", $sut->lastChild->nodeValue);
 		self::assertEquals("REPLACER", $sut->firstElementChild->tagName);
 	}
+
+	public function testQuerySelector():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->ownerDocument->appendChild($sut);
+
+		$child1 = $sut->ownerDocument->createElement("child");
+		$child2 = $sut->ownerDocument->createElement("child");
+		$child3 = $sut->ownerDocument->createElement("child");
+		$inner = $sut->ownerDocument->createElement("inner");
+
+		$sut->append($child1, $child2, $child3);
+		$child2->append($inner);
+
+		self::assertSame($inner, $sut->querySelector("child>inner"));
+		self::assertSame($inner, $sut->querySelector("inner"));
+		self::assertNull($sut->querySelector("nothing"));
+	}
 }
