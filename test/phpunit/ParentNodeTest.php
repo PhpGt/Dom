@@ -190,4 +190,22 @@ class ParentNodeTest extends TestCase {
 			}
 		}
 	}
+
+	public function testAppendElement():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child = $sut->ownerDocument->createElement("child");
+		$sut->appendChild($child);
+		$toAppend = $sut->ownerDocument->createElement("to-append");
+		$sut->append($toAppend);
+		self::assertSame($toAppend, $sut->lastChild);
+	}
+
+	public function testAppendText():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child = $sut->ownerDocument->createElement("child");
+		$sut->append($child, "One", "Two");
+		self::assertCount(3, $sut->childNodes);
+		self::assertEquals("One", $sut->childNodes[1]->nodeValue);
+		self::assertEquals("Two", $sut->childNodes[2]->nodeValue);
+	}
 }
