@@ -5,530 +5,697 @@ use DateTime;
 use DOMAttr;
 use DOMDocument;
 use DOMElement;
+use Gt\CssXPath\Translator;
+use Gt\Dom\Exception\InvalidAdjacentPositionException;
+use Gt\Dom\Exception\XPathQueryException;
+use Gt\Dom\Facade\DOMTokenListFactory;
+use Gt\Dom\Facade\HTMLCollectionFactory;
+use Gt\Dom\Facade\NamedNodeMapFactory;
+use Gt\Dom\Facade\NodeClass\DOMElementFacade;
+use Gt\Dom\Facade\NodeListFactory;
 
 /**
- * The most general base class from which all objects in a Document inherit.
+ * Element is the most general base class from which all element objects (i.e.
+ * objects that represent elements) in a Document inherit. It only has methods
+ * and properties common to all kinds of elements. More specific classes inherit
+ * from Element. For example, the HTMLElement interface is the base interface
+ * for HTML elements, while the SVGElement interface is the basis for all SVG
+ * elements. Most functionality is specified further down the class hierarchy.
  *
- * @property-read Attr[] $attributes
- * @property string $className Gets and sets the value of the class attribute
- * @property-read TokenList $classList Returns a live TokenList collection of
- * the class attributes of the element
- * @property string $value Gets or sets the value of the element according to
- * its element type
- * @property string $id Gets or sets the value of the id attribute
- * @property string $innerHTML Gets or sets the HTML syntax describing the
- * element's descendants
- * @property string $outerHTML Gets or sets the HTML syntax describing the
- * element and its descendants. It can be set to replace the element with nodes
- * parsed from the given string
- * @property string $innerText
- * @property-read StringMap $dataset
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/Element
  *
- * @property bool allowfullscreen
- * @property bool allowpaymentrequest
- * @property bool async
- * @property bool autocapitalize
- * @property bool autocomplete
- * @property bool autofocus
- * @property bool autoplay
- * @property bool checked Indicates whether the element is checked or not
- * @property bool contentEditable
- * @property bool controls
- * @property bool default
- * @property bool defer
- * @property bool disabled
- * @property bool formnovalidate
- * @property bool hidden
- * @property bool ismap
- * @property bool loop
- * @property bool multiple
- * @property bool muted
- * @property bool novalidate
- * @property bool open
- * @property bool optimum
- * @property bool preload
- * @property bool readonly
- * @property bool required
- * @property bool reversed
- * @property bool selected Indicates whether the element is selected or not
- * @property bool typemustmatch
- *
- * @property string accept
- * @property string acceptCharset
- * @property string accessKey
- * @property string action
- * @property string alt
- * @property string charset
- * @property string cite
- * @property string cols
- * @property string data
- * @property string dateTime
- * @property string dir
- * @property string download
- * @property string encoding
- * @property string enctype
- * @property string form
- * @property string height
- * @property string high
- * @property string htmlFor
- * @property string href
- * @property string kind
- * @property string label
- * @property string lang
- * @property string low
- * @property string min
- * @property string max
- * @property string maxLength
- * @property string mediaGroup
- * @property string name
- * @property string pattern
- * @property string placeholder
- * @property string poster
- * @property string readOnly
- * @property string rel
- * @property string rows
- * @property string start
- * @property string step
- * @property string style
- * @property string size
- * @property string span
- * @property string src
- * @property string srcset
- * @property string tabindex
- * @property string target
- * @property string title
- * @property string type
- * @property string width
- * @property string wrap
- *
- * @method Attr setAttribute(string $name, string $value)
- * @method Attr setAttributeNode(DOMAttr $attr)
- * @method Attr getAttributeNode(string $name)
+ * @property-read NamedNodeMap<Attr> $attributes Returns a NamedNodeMap object containing the assigned attributes of the corresponding HTML element.
+ * @property-read DOMTokenList $classList Returns a DOMTokenList containing the list of class attributes.
+ * @property string $className Is a DOMString representing the class of the element.
+ * @property string $id Is a DOMString representing the id of the element.
+ * @property string $innerHTML Is a DOMString representing the markup of the element's content.
+ * @property-read string $localName A DOMString representing the local part of the qualified name of the element.
+ * @property-read ?string $namespaceURI The namespace URI of the element, or null if it is no namespace.
+ * @property string $outerHTML Is a DOMString representing the markup of the element including its content. When used as a setter, replaces the element with nodes parsed from the given string.
+ * @property-read string $prefix A DOMString representing the namespace prefix of the element, or null if no prefix is specified.
+ * @property-read string $tagName Returns a String with the name of the tag for the given element.
  */
-class Element extends DOMElement {
-	use LiveProperty, NonDocumentTypeChildNode, ChildNode, ParentNode;
+class Element extends Node {
+	use NonDocumentTypeChildNode;
+	use ChildNode;
+	use ParentNode;
 
-	const VALUE_ELEMENTS = ["BUTTON", "INPUT", "METER", "OPTION", "PROGRESS", "PARAM"];
-	const BOOLEAN_ATTRIBUTES = [
-		"allowfullscreen",
-		"allowpaymentrequest",
-		"async",
-		"autofocus",
-		"autoplay",
-		"checked",
-		"controls",
-		"default",
-		"defer",
-		"disabled",
-		"formnovalidate",
-		"hidden",
-		"ismap",
-		"loop",
-		"multiple",
-		"muted",
-		"novalidate",
-		"open",
-		"readonly",
-		"required",
-		"reversed",
-		"selected",
-		"typemustmatch",
-	];
-
-	/** @var TokenList */
-	protected $liveProperty_classList;
-	/** @var StringMap */
-	protected $liveProperty_dataset;
-	/** @var ?DateTime */
-	protected $liveProperty_valueAsDate;
-	/** @var ?float */
-	protected $liveProperty_valueAsNumber;
-	/**
-	 * @const Array
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement#Elements_that_are_considered_form_controls
-	 */
-	const FORM_CONTROL_ELEMENTS = ['button', 'fieldset', 'input', 'object', 'output', 'select', 'textarea'];
-
-	/**
-	 * returns true if the element would be selected by the specified selector
-	 * string; otherwise, returns false.
-	 * @param string $selectors The CSS selector(s) to check against
-	 * @return bool True if this element is selectable by provided selector
-	 */
-	public function matches(string $selectors):bool {
-		$matches = $this->getRootDocument()->querySelectorAll($selectors);
-		$i = $matches->length;
-		/** @noinspection PhpStatementHasEmptyBodyInspection */
-		while(--$i >= 0 && $matches->item($i) !== $this) {
-			;
-		}
-
-		return ($i >= 0);
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/attributes */
+	protected function __prop_get_attributes():NamedNodeMap {
+		return NamedNodeMapFactory::create(
+			fn() => $this->domNode->attributes,
+			$this
+		);
 	}
 
-	/**
-	 * Returns a live HTMLCollection containing all child elements which have all
-	 * of the given class names. When called on the document object, the complete
-	 * document is searched, including the root node.
-	 * @param string $names a string representing the list of class names to
-	 *  match; class names are separated by whitespace
-	 * @return HTMLCollection
-	 */
-	public function getElementsByClassName(string $names):HTMLCollection {
-		$namesArray = explode(" ", $names);
-		$dots = "." . implode(".", $namesArray);
-
-		return $this->css($dots);
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/classList */
+	protected function __prop_get_classList():DOMTokenList {
+		return DOMTokenListFactory::create(
+			fn() => explode(" ", $this->className),
+			function(string...$tokens) {
+				$this->className = implode(" ", $tokens);
+			}
+		);
 	}
 
-	/**
-	 * Returns the closest ancestor of the current element (or itself)
-	 * which matches the selectors.
-	 * @param string $selectors CSS selector(s)
-	 * @return Element|null
-	 */
-	public function closest(string $selectors) {
-		$collection = $this->css($selectors, "ancestor-or-self::");
-
-		return $collection->item(count($collection) - 1);
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/className */
+	protected function __prop_get_className():string {
+		return $this->getAttribute("class") ?? "";
 	}
 
-	public function getAttribute($name):?string {
-		$value = parent::getAttribute($name);
-		if(strlen($value) === 0) {
-			return null;
-		}
-
-		return $value;
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/className */
+	protected function __prop_set_className(string $className):void {
+		$domElement = $this->getNativeElement();
+		$domElement->setAttribute("class", $className);
 	}
 
-	public function prop_get_className() {
-		return $this->getAttribute("class");
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */
+	protected function __prop_get_id():string {
+		$nativeElement = $this->getNativeElement();
+		return $nativeElement->getAttribute("id");
 	}
 
-	public function prop_set_className(string $value):void {
-		$this->setAttribute("class", $value);
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */
+	protected function __prop_set_id(string $id):void {
+		$element = $this->getNativeElement();
+		$element->setAttribute("id", $id);
 	}
 
-	public function prop_get_classList() {
-		if(!$this->liveProperty_classList) {
-			$this->liveProperty_classList = new TokenList($this, "class");
-		}
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML */
+	protected function __prop_get_innerHTML():string {
+		$html = "";
 
-		return $this->liveProperty_classList;
-	}
+		/** @var DOMDocument $nativeDocument */
+		$nativeDocument = $this->ownerDocument->domNode;
 
-	public function prop_get_value() {
-		$methodName = 'value_get_' . $this->tagName;
-		if(method_exists($this, $methodName)) {
-			return $this->$methodName();
-		}
-
-		if(in_array(strtoupper($this->tagName), self::VALUE_ELEMENTS)) {
-			return $this->getAttribute("value");
-		}
-
-		return null;
-	}
-
-	public function prop_set_value(string $newValue) {
-		$methodName = 'value_set_' . $this->tagName;
-		if(method_exists($this, $methodName)) {
-			return $this->$methodName($newValue);
-		}
-
-		$this->setAttribute("value", $newValue);
-	}
-
-	public function prop_get_id():?string {
-		return $this->getAttribute("id");
-	}
-
-	public function prop_set_id(string $newValue):void {
-		$this->setAttribute("id", $newValue);
-	}
-
-	public function prop_get_innerHTML():string {
-		$childHtmlArray = [];
 		foreach($this->childNodes as $child) {
-			$childHtmlArray [] = $this->ownerDocument->saveHTML($child);
+			$nativeChild = $this->ownerDocument->getNativeDomNode($child);
+			$html .= $nativeDocument->saveHTML($nativeChild);
 		}
 
-		return implode(PHP_EOL, $childHtmlArray);
+		return $html;
 	}
 
-	public function prop_set_innerHTML(string $html):void {
-		while($this->firstChild) {
-			$this->removeChild($this->firstChild);
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML */
+	protected function __prop_set_innerHTML(string $innerHTML):void {
+		while($child = $this->firstChild) {
+			/** @var Element $child */
+			$child->parentNode->removeChild($child);
 		}
 
-		if($html === "") {
-			return;
-		}
-
-		$importDocument = new DOMDocument(
-			"1.0",
-			"utf-8"
+		$tempDocument = new Document();
+		/** @var DOMDocument $nativeTempDocument */
+		$nativeTempDocument = $tempDocument->domNode;
+		$nativeTempDocument->loadHTML(
+			"<html-fragment>$innerHTML</html-fragment>"
 		);
+		$innerFragmentNode = $nativeTempDocument->getElementsByTagName(
+			"html-fragment")->item(0);
 
-		$htmlWrapped = "<!doctype html><html><body>$html</body></html>";
-		$htmlWrapped = mb_convert_encoding(
-			$htmlWrapped,
-			"HTML-ENTITIES",
-			"UTF-8"
-		);
-
-		$importDocument->loadHTML($htmlWrapped);
-		$importBody = $importDocument->getElementsByTagName(
-			"body"
-		)->item(0);
-		$node = $this->ownerDocument->importNode(
-			$importBody,
+		/** @var DOMDocument $nativeDocument */
+		$nativeDocument = $this->ownerDocument->domNode;
+		$imported = $nativeDocument->importNode(
+			$innerFragmentNode,
 			true
 		);
 
-		$fragment = $this->ownerDocument->createDocumentFragment();
-		while($node->firstChild) {
-			$fragment->appendChild($node->firstChild);
+		$nativeDomNode = $this->ownerDocument->getNativeDomNode($this);
+		while($imported->firstChild) {
+			$nativeDomNode->appendChild($imported->firstChild);
 		}
-
-		$this->appendChild($fragment);
 	}
 
-	public function prop_get_outerHTML():string {
-		return $this->ownerDocument->saveHTML($this);
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/localName */
+	protected function __prop_get_localName():string {
+		return $this->domNode->localName;
 	}
 
-	public function prop_set_outerHTML(string $html):void {
-		$fragment = $this->ownerDocument->createDocumentFragment();
-		$fragment->appendXML($html);
-		$this->replaceWith($fragment);
-	}
-
-	public function prop_get_innerText():string {
-		return $this->textContent;
-	}
-
-	public function prop_set_innerText(string $value):string {
-		$this->textContent = $value;
-		return $this->textContent;
-	}
-
-	public function prop_get_dataset():StringMap {
-		if(empty($this->liveProperty_dataset)) {
-			$this->liveProperty_dataset = $this->createDataset();
-		}
-
-		return $this->liveProperty_dataset;
-	}
-
-	public function prop_get_checked():bool {
-		return $this->hasAttribute("checked");
-	}
-
-	public function prop_set_checked(bool $checked):bool {
-		if($checked) {
-			if($this->getAttribute("type") === "radio") {
-// TODO: Use `form` attribute when implemented: https://github.com/PhpGt/Dom/issues/161
-				$parentForm = $this->closest("form");
-				if(!is_null($parentForm)) {
-					$this->removeAttributeFromNamedElementAndChildren(
-						$parentForm,
-						$this->getAttribute("name"),
-						"checked"
-					);
-				}
-			}
-
-			$this->setAttribute("checked", "checked");
-		}
-		else {
-			$this->removeAttribute("checked");
-		}
-
-		return $this->checked;
-	}
-
-	public function prop_get_selected():bool {
-		return $this->hasAttribute("selected");
-	}
-
-	public function prop_set_selected(bool $selected):bool {
-		if($selected) {
-			$selectElement = $this->closest("select");
-			if(!$selectElement->hasAttribute("multiple")) {
-				$this->removeAttributeFromNamedElementAndChildren(
-					$selectElement->closest("form"),
-					$selectElement->getAttribute("name"),
-					"selected"
-				);
-			}
-
-			$this->setAttribute("selected", true);
-		}
-		else {
-			$this->removeAttribute("selected");
-		}
-
-		return $this->selected;
-	}
-
-	public function prop_get_form() {
-		if(in_array($this->tagName, self::FORM_CONTROL_ELEMENTS)) {
-			if($this->tagName === "input"
-			&& $this->getAttribute("type") === "image") {
-				return null;
-			}
-
-			if($this->hasAttribute("form")) {
-				return $this->getRootDocument()->getElementById(
-					$this->getAttribute("form")
-				);
-			}
-			else {
-				return $this->closest('form');
-			}
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/namespaceURI */
+	protected function __prop_get_namespaceURI():?string {
+		if(isset($this->domNode->namespaceURI)) {
+			return $this->domNode->namespaceURI;
 		}
 
 		return null;
 	}
 
-	public function prop_get_valueAsDate() {
-		if($this->tagName === "input") {
-			return new DateTime($this->value);
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
+	protected function __prop_get_outerHTML():string {
+		/** @var DOMDocument $nativeDocument */
+		$nativeDocument = $this->ownerDocument->domNode;
+		return $nativeDocument->saveHTML($this->domNode);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
+	protected function __prop_set_outerHTML(string $outerHTML):void {
+		if(!$this->parentNode) {
+			return;
+		}
+
+		$tempDocument = new Document();
+		/** @var DOMDocument $nativeTempDocument */
+		$nativeTempDocument = $tempDocument->domNode;
+		$nativeTempDocument->loadHTML($outerHTML);
+		$body = $nativeTempDocument->getElementsByTagName("body")->item(0);
+		/** @var DOMDocument $nativeThisDocument */
+		$nativeThisDocument = $this->ownerDocument->domNode;
+		$nativeNextSibling = $this->domNode->nextSibling;
+		$nativeParent = $this->domNode->parentNode;
+
+		$nativeParent->removeChild($this->domNode);
+		for($i = 0, $len = $body->childNodes->length; $i < $len; $i++) {
+			$imported = $nativeThisDocument->importNode(
+				$body->childNodes->item($i),
+				true
+			);
+			$nativeParent->insertBefore(
+				$imported,
+				$nativeNextSibling
+			);
 		}
 	}
 
-	public function prop_get_valueAsNumber() {
-		if($this->tagName === "input") {
-			return (float)$this->value;
-		}
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/prefix */
+	protected function __prop_get_prefix():string {
+		return $this->domNode->prefix;
 	}
 
-	protected function createDataset():StringMap {
-		return new StringMap(
-			$this,
-			$this->attributes
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/tagName */
+	protected function __prop_get_tagName():string {
+		return strtoupper($this->domNode->localName);
+	}
+
+	/**
+	 * The closest() method traverses the Element and its parents (heading
+	 * toward the document root) until it finds a node that matches the
+	 * provided selector string. Will return itself or the matching
+	 * ancestor. If no such element exists, it returns null.
+	 *
+	 * @param string $selectors a DOMString containing a selector list.
+	 * ex: p:hover, .toto + q
+	 * @return ?Element The Element which is the closest ancestor of the
+	 * selected element. It may be null.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
+	 */
+	public function closest(string $selectors):?Element {
+		$matchesArray = iterator_to_array(
+			$this->ownerDocument->querySelectorAll($selectors)
+		);
+		$context = $this;
+
+		do {
+			if(in_array($context, $matchesArray, true)) {
+				return $context;
+			}
+		}
+		while($context = $context->parentElement);
+
+		return null;
+	}
+
+	/**
+	 * The getAttribute() method of the Element interface returns the value
+	 * of a specified attribute on the element. If the given attribute does
+	 * not exist, the value returned will be null.
+	 *
+	 * @param string $attributeName The name of the attribute whose value
+	 * you want to get.
+	 * @return ?string A string containing the value of attributeName.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute
+	 */
+	public function getAttribute(string $attributeName):?string {
+		$nativeElement = $this->getNativeElement();
+		if(!$nativeElement->hasAttribute($attributeName)) {
+			return null;
+		}
+
+		return $nativeElement->getAttribute($attributeName);
+	}
+
+	/**
+	 * The getAttributeNames() method of the Element interface returns the
+	 * attribute names of the element as an Array of strings. If the element
+	 * has no attributes it returns an empty array.
+	 *
+	 * Using getAttributeNames() along with getAttribute(), is a
+	 * memory-efficient and performant alternative to accessing
+	 * Element.attributes.
+	 *
+	 * @return string[]
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttributeNames
+	 */
+	public function getAttributeNames():array {
+		$attributeArray = iterator_to_array($this->attributes);
+		return array_keys($attributeArray);
+	}
+
+	/**
+	 * The getAttributeNS() method of the Element interface returns the
+	 * string value of the attribute with the specified namespace and name.
+	 * If the named attribute does not exist, the value returned will be
+	 * null.
+	 *
+	 * @param string $namespace The namespace in which to look for the
+	 * specified attribute.
+	 * @param string $name The name of the attribute to look for.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttributeNS
+	 */
+	public function getAttributeNS(string $namespace, string $name):?string {
+		if(!$this->hasAttributeNS($namespace, $name)) {
+			return null;
+		}
+
+		return $this->getNativeElement()->getAttributeNS(
+			$namespace,
+			$name
 		);
 	}
 
-	protected function getRootDocument():Document {
-		return $this->ownerDocument;
+	/**
+	 * The Element method getElementsByClassName() returns a live
+	 * HTMLCollection which contains every descendant element which has the
+	 * specified class name or names.
+	 *
+	 * The method getElementsByClassName() on the Document interface works
+	 * essentially the same way, except it acts on the entire document,
+	 * starting at the document root.
+	 *
+	 * @param string $names A DOMString containing one or more class names to match on, separated by whitespace.
+	 * @return HTMLCollection An HTMLCollection providing a live-updating list of every element which is a member of every class in names.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByClassName
+	 */
+	public function getElementsByClassName(string $names):HTMLCollection {
+		$querySelector = "";
+		foreach(explode(" ", $names) as $name) {
+			if(strlen($querySelector) > 0) {
+				$querySelector .= " ";
+			}
+
+			$querySelector .= ".$name";
+		}
+
+		return HTMLCollectionFactory::create(
+			fn() => $this->querySelectorAll($querySelector)
+		);
 	}
 
-	private function getBooleanAttribute(string $attribute):bool {
-		return $this->hasAttribute($attribute);
-	}
-
-	private function setBooleanAttribute(string $attribute, bool $value) {
-		if(($this->tagName === "input" && $this->type === "radio" && $attribute === "checked")
-		|| ($this->tagName === "option" && !$this->parentNode->hasAttribute("multiple")) && $attribute === "selected") {
-			if($form = $this->closest("form")) {
-				$elementName = $this->getAttribute("name");
-				if(!$elementName && $this->tagName === "option") {
-					$elementName = $this->parentNode->getAttribute("name");
+	/**
+	 * The Element.getElementsByTagName() method returns a live
+	 * HTMLCollection of elements with the given tag name. All descendants
+	 * of the specified element are searched, but not the element itself.
+	 * The returned list is live, which means it updates itself with the
+	 * DOM tree automatically. Therefore, there is no need to call
+	 * Element.getElementsByTagName() with the same element and arguments
+	 * repeatedly if the DOM changes in between calls.
+	 *
+	 * When called on an HTML element in an HTML document,
+	 * getElementsByTagName lower-cases the argument before searching for
+	 * it. This is undesirable when trying to match camel-cased SVG
+	 * elements (such as <linearGradient>) in an HTML document. Instead,
+	 * use Element.getElementsByTagNameNS(), which preserves the
+	 * capitalization of the tag name.
+	 *
+	 * Element.getElementsByTagName is similar to
+	 * Document.getElementsByTagName(), except that it only searches for
+	 * elements that are descendants of the specified element.
+	 *
+	 * @param string $tagName the qualified name to look for. The special
+	 * string "*" represents all elements. For compatibility with XHTML,
+	 * lower-case should be used.
+	 * @return HTMLCollection a live HTMLCollection of elements with a
+	 * matching tag name, in the order they appear. If no elements are
+	 * found, the HTMLCollection is empty.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
+	 */
+	public function getElementsByTagName(string $tagName):HTMLCollection {
+		return HTMLCollectionFactory::create(
+			function() use($tagName) {
+				$nodeArray = [];
+				foreach($this->getNativeElement()->getElementsByTagName($tagName) as $nativeElement) {
+					$element = $this->ownerDocument->getGtDomNode($nativeElement);
+					array_push($nodeArray, $element);
 				}
 
-				$this->removeAttributeFromNamedElementAndChildren(
-					$form,
-					$elementName,
-					$attribute
-				);
+				return NodeListFactory::create(...$nodeArray);
+			}
+		);
+	}
+
+	/**
+	 * The Element.getElementsByTagNameNS() method returns a live
+	 * HTMLCollection of elements with the given tag name belonging to the
+	 * given namespace. It is similar to Document.getElementsByTagNameNS,
+	 * except that its search is restricted to descendants of the specified
+	 * element.
+	 *
+	 * @param string $namespaceURI the namespace URI of elements to look for
+	 * (see Element.namespaceURI and Attr.namespaceURI). For example, if you
+	 * need to look for XHTML elements, use the XHTML namespace URI,
+	 * http://www.w3.org/1999/xhtml.
+	 * @param string $localName either the local name of elements to look
+	 * for or the special value "*", which matches all elements (see
+	 * Element.localName and Attr.localName).
+	 * @return HTMLCollection a live HTMLCollection of found elements in
+	 * the order they appear in the tree.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagNameNS
+	 */
+	public function getElementsByTagNameNS(
+		string $namespaceURI,
+		string $localName
+	):HTMLCollection {
+		return HTMLCollectionFactory::create(
+			function() use($namespaceURI, $localName) {
+				$nodeArray = [];
+				foreach($this->getNativeElement()->getElementsByTagNameNS($namespaceURI, $localName) as $nativeElement) {
+					$element = $this->ownerDocument->getGtDomNode($nativeElement);
+					array_push($nodeArray, $element);
+				}
+
+				return NodeListFactory::create(...$nodeArray);
+			}
+		);
+	}
+
+	/**
+	 * The Element.hasAttribute() method returns a Boolean value indicating
+	 * whether the specified element has the specified attribute or not.
+	 *
+	 * @param string $name a string representing the name of the attribute.
+	 * @return bool
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/hasAttribute
+	 */
+	public function hasAttribute(string $name):bool {
+		return $this->getNativeElement()->hasAttribute($name);
+	}
+
+	/**
+	 * hasAttributeNS returns a boolean value indicating whether the current
+	 * element has the specified attribute.
+	 *
+	 * @param string $namespace a string specifying the namespace of the
+	 * attribute.
+	 * @param string $localName the name of the attribute.
+	 * @return bool
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/hasAttributeNS
+	 */
+	public function hasAttributeNS(
+		string $namespace,
+		string $localName
+	):bool {
+		return $this->getNativeElement()->hasAttributeNS(
+			$namespace,
+			$localName
+		);
+	}
+
+	/**
+	 * The hasAttributes() method of the Element interface returns a Boolean
+	 * indicating whether the current element has any attributes or not.
+	 *
+	 * @return bool
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/hasAttributes
+	 */
+	public function hasAttributes():bool {
+		return $this->getNativeElement()->hasAttributes();
+	}
+
+	/**
+	 * The insertAdjacentElement() method of the Element interface inserts
+	 * a given element node at a given position relative to the element it
+	 * is invoked upon.
+	 *
+	 * @param string $position A DOMString representing the position
+	 * relative to the targetElement; must match (case-insensitively) one
+	 * of the following strings:
+	 * 'beforebegin': Before the targetElement itself.
+	 * 'afterbegin': Just inside the targetElement, before its first child.
+	 * 'beforeend': Just inside the targetElement, after its last child.
+	 * 'afterend': After the targetElement itself.
+	 *
+	 * @param Node $element The element to be inserted into the tree.
+	 * @return ?Element The element that was inserted, or null, if the
+	 * insertion failed.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
+	 */
+	public function insertAdjacentElement(
+		string $position,
+		Node $element
+	):?Element {
+		$context = null;
+		$before = null;
+
+		switch($position) {
+		case "beforebegin":
+			$context = $this->parentNode;
+			$before = $this;
+			break;
+
+		case "afterbegin":
+			$context = $this;
+			$before = $this->firstChild;
+			break;
+
+		case "beforeend":
+			$context = $this;
+			$before = null;
+			break;
+
+		case "afterend":
+			$context = $this->parentNode;
+			$before = $this->nextSibling;
+			break;
+
+		default:
+			throw new InvalidAdjacentPositionException($position);
+		}
+
+		if(!$context) {
+			return null;
+		}
+
+		/** @var Element $inserted */
+		$inserted = $context->insertBefore($element, $before);
+		if(!$inserted instanceof Element) {
+			return null;
+		}
+
+		return $inserted;
+	}
+
+	/**
+	 * The insertAdjacentHTML() method of the Element interface parses the
+	 * specified text as HTML or XML and inserts the resulting nodes into
+	 * the DOM tree at a specified position. It does not reparse the element
+	 * it is being used on, and thus it does not corrupt the existing
+	 * elements inside that element. This avoids the extra step of
+	 * serialization, making it much faster than direct innerHTML
+	 * manipulation.
+	 *
+	 * @param string $position A DOMString representing the position
+	 * relative to the element; must be one of the following strings:
+	 * 'beforebegin': Before the element itself.
+	 * 'afterbegin': Just inside the element, before its first child.
+	 * 'beforeend': Just inside the element, after its last child.
+	 * 'afterend': After the element itself.
+	 * @param string $text The string to be parsed as HTML or XML and
+	 * inserted into the tree.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
+	 */
+	public function insertAdjacentHTML(
+		string $position,
+		string $text
+	):void {
+		$tempTagName = "insert-adjacent-html-temp";
+		$tempElement = $this->ownerDocument->createElement($tempTagName);
+		$tempElement->innerHTML = $text;
+		$fragment = $this->ownerDocument->createDocumentFragment();
+		while($child = $tempElement->firstChild) {
+			$fragment->appendChild($child);
+		}
+		$this->insertAdjacentElement($position, $fragment);
+	}
+
+	/**
+	 * The insertAdjacentText() method of the Element interface inserts a
+	 * given text node at a given position relative to the element it is
+	 * invoked upon.
+	 *
+	 * @param string $position A DOMString representing the position
+	 * relative to the element; must be one of the following strings:
+	 * 'beforebegin': Before the element itself.
+	 * 'afterbegin': Just inside the element, before its first child.
+	 * 'beforeend': Just inside the element, after its last child.
+	 * 'afterend': After the element itself.
+	 * @param string $text A DOMString representing the text to be
+	 * inserted into the tree.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentText
+	 */
+	public function insertAdjacentText(
+		string $position,
+		string $text
+	):void {
+		$tempTagName = "insert-adjacent-html-temp";
+		$tempElement = $this->ownerDocument->createElement($tempTagName);
+		$tempElement->textContent = $text;
+		$fragment = $this->ownerDocument->createDocumentFragment();
+		while($child = $tempElement->firstChild) {
+			$fragment->appendChild($child);
+		}
+		$this->insertAdjacentElement($position, $fragment);
+	}
+
+	/**
+	 * The matches() method checks to see if the Element would be selected
+	 * by the provided selectorString -- in other words -- checks if the
+	 * element "is" the selector.
+	 *
+	 * @param string $selectorString a string representing the selector to
+	 * test.
+	 * @return bool
+	 * @throws XPathQueryException if the specified selector string is
+	 * invalid.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
+	 */
+	public function matches(string $selectorString):bool {
+		$matches = $this->ownerDocument->querySelectorAll($selectorString);
+		foreach($matches as $match) {
+			if($match === $this) {
+				return true;
 			}
 		}
-		if($value) {
-			$this->setAttribute($attribute, $attribute);
+
+		return false;
+	}
+
+	/**
+	 * The ChildNode.remove() method removes the object from the tree it
+	 * belongs to.
+	 *
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
+	 */
+	public function remove():void {
+		$this->domNode->parentNode->removeChild($this->domNode);
+	}
+
+	/**
+	 * The Element method removeAttribute() removes the attribute with the
+	 * specified name from the element.
+	 *
+	 * @param string $attrName A DOMString specifying the name of the
+	 * attribute to remove from the element. If the specified attribute does
+	 * not exist, removeAttribute() returns without generating an error.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/removeAttribute
+	 */
+	public function removeAttribute(string $attrName):void {
+		$this->getNativeElement()->removeAttribute($attrName);
+	}
+
+	/**
+	 * The removeAttributeNS() method of the Element interface removes the
+	 * specified attribute from an element.
+	 *
+	 * @param string $namespace
+	 * @param string $attrName
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/removeAttributeNS
+	 */
+	public function removeAttributeNS(
+		string $namespace,
+		string $attrName
+	):void {
+		$this->getNativeElement()->removeAttributeNS(
+			$namespace,
+			$attrName
+		);
+	}
+
+	/**
+	 * Sets the value of an attribute on the specified element. If the
+	 * attribute already exists, the value is updated; otherwise a new
+	 * attribute is added with the specified name and value.
+	 *
+	 * To get the current value of an attribute, use getAttribute(); to
+	 * remove an attribute, call removeAttribute().
+	 *
+	 * @param string $name A DOMString specifying the name of the attribute
+	 * whose value is to be set. The attribute name is automatically
+	 * converted to all lower-case when setAttribute() is called on an HTML
+	 * element in an HTML document.
+	 * @param string $value A DOMString containing the value to assign to
+	 * the attribute. Any non-string value specified is converted
+	 * automatically into a string.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute
+	 */
+	public function setAttribute(string $name, string $value):void {
+		$this->getNativeElement()->setAttribute($name, $value);
+	}
+
+	/**
+	 * setAttributeNS adds a new attribute or changes the value of an
+	 * attribute with the given namespace and name.
+	 *
+	 * @param string $namespace a string specifying the namespace of the
+	 * attribute.
+	 * @param string $name a string identifying the attribute by its
+	 * qualified name; that is, a namespace prefix followed by a colon
+	 * followed by a local name.
+	 * @param string $value the desired string value of the new attribute.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttributeNS
+	 */
+	public function setAttributeNS(
+		string $namespace,
+		string $name,
+		string $value
+	):void {
+		$this->getNativeElement()->setAttributeNS(
+			$namespace,
+			$name,
+			$value
+		);
+	}
+
+	/**
+	 * The toggleAttribute() method of the Element interface toggles a
+	 * Boolean attribute (removing it if it is present and adding it if it
+	 * is not present) on the given element.
+	 *
+	 * @param string $name A DOMString specifying the name of the attribute
+	 * to be toggled. The attribute name is automatically converted to all
+	 * lower-case when toggleAttribute() is called on an HTML element in an
+	 * HTML document.
+	 * @param bool $force A boolean value to determine whether the attribute
+	 * should be added or removed, no matter whether the attribute is
+	 * present or not at the moment.
+	 * @return true if attribute name is eventually present, and false
+	 * otherwise.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/toggleAttribute
+	 */
+	public function toggleAttribute(
+		string $name,
+		bool $force = null
+	):bool {
+		$add = true;
+		if(is_null($force)) {
+			if($this->hasAttribute($name)) {
+				$add = false;
+			}
 		}
 		else {
-			$this->removeAttribute($attribute);
-		}
-	}
-
-	private function value_set_select(string $newValue):void {
-		$options = $this->getElementsByTagName('option');
-		$selectedIndexes = [];
-		$newSelectedIndex = null;
-
-		for($i = $options->length - 1; $i >= 0; --$i) {
-			$option = $options->item($i);
-
-			if($this->isSelectOptionSelected($option)) {
-				$selectedIndexes []= $i;
-			}
-
-			if($option->hasAttribute("value")) {
-				if($option->getAttribute("value") == $newValue) {
-					$newSelectedIndex = $i;
-				}
-			}
-			else {
-				if(trim($option->innerText) === $newValue) {
-					$newSelectedIndex = $i;
-				}
-			}
+			$add = $force;
 		}
 
-		if($newSelectedIndex !== null) {
-			foreach($selectedIndexes as $i) {
-				$options->item($i)->removeAttribute('selected');
-			}
-
-			$options->item($newSelectedIndex)->setAttribute('selected', 'selected');
-		}
-	}
-
-	private function value_get_select():string {
-		$options = $this->getElementsByTagName('option');
-		if($options->length == 0) {
-			$value = '';
+		if($add) {
+			$this->setAttribute($name, true);
+			return true;
 		}
 		else {
-			$value = $options->item(0)->getAttribute('value');
+			$this->removeAttribute($name);
+			return false;
 		}
-
-		foreach($options as $option) {
-			if($this->isSelectOptionSelected($option)) {
-				$value = $option->getAttribute('value')
-					?? trim($option->innerText);
-				break;
-			}
-		}
-
-		return $value ?? "";
 	}
 
-	private function value_set_input(string $newValue) {
-		return $this->setAttribute("value", $newValue);
-	}
-
-	private function value_get_input() {
-		return $this->getAttribute("value");
-	}
-
-	private function value_set_textarea(string $newValue) {
-		$this->innerHTML = $newValue;
-		return $this->innerHTML;
-	}
-
-	private function value_get_textarea() {
-		return $this->innerHTML;
-	}
-
-	public function isSelectOptionSelected(Element $option) {
-		return $option->hasAttribute('selected') && $option->getAttribute('selected');
-	}
-
-	public function __debugInfo() {
-		return [
-			'nodeName' => $this->nodeName,
-			'nodeValue' => $this->nodeValue,
-			'innerHTML' => $this->innerHTML,
-			"class" => $this->className,
-			"id" => $this->id,
-			"name" => $this->getAttribute("name"),
-			"type" => $this->getAttribute("type"),
-			"src" => $this->getAttribute("src"),
-			"href" => $this->getAttribute("href"),
-		];
+	private function getNativeElement():DOMElementFacade {
+		/** @var DOMElementFacade $native */
+		$native = $this->domNode;
+		return $native;
 	}
 }

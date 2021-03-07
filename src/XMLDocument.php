@@ -1,20 +1,21 @@
 <?php
 namespace Gt\Dom;
 
-use DOMDocument;
-
-/**
- * Provides access to special properties and methods not present by default
- * on a regular document.
- */
 class XMLDocument extends Document {
-	use LiveProperty, ParentNode;
+	const EMPTY_DOCUMENT_STRING = "<?xml ?>";
 
-	public function __construct($document) {
-		parent::__construct($document);
+	protected function __construct(string $xml = "") {
+		parent::__construct();
 
-		if(!$document instanceof DOMDocument) {
-			$this->loadXML($document);
+		if(strlen($xml) === 0) {
+			$xml = self::EMPTY_DOCUMENT_STRING;
 		}
+
+		$this->open();
+		$this->domDocument->loadXML($xml);
+	}
+
+	protected function __prop_get_contentType():string {
+		return "text/xml";
 	}
 }

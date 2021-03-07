@@ -5,98 +5,211 @@ use DOMDocument;
 use DOMNode;
 use DOMXPath;
 use Gt\CssXPath\Translator;
+use Gt\Dom\Facade\DOMDocumentFacade;
+use Gt\Dom\Facade\HTMLCollectionFactory;
+use Gt\Dom\Facade\NodeClass\DOMElementFacade;
+use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
+use Gt\Dom\Facade\NodeListFactory;
 
 /**
- * Contains methods that are particular to Node objects that can have children.
+ * @link https://dom.spec.whatwg.org/#parentnode
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode
  *
- * This trait can only be used in a class that is a trait of LiveProperty.
+ * Contains methods and properties that are common to all types of Node objects
+ * that can have children. It's implemented by Element, Document, and
+ * DocumentFragment objects.
  *
- * This trait is used by the following classes:
- *  - Element
- *  - Document and its subclasses XMLDocument and HTMLDocument
- *  - DocumentFragment
+ * @property-read int $childElementCount The number of children of this
+ * ParentNode which are elements.
  * @property-read HTMLCollection $children A live HTMLCollection containing all
  *  objects of type Element that are children of this ParentNode.
- * @property-read Node|Element|null $firstChild
- * @property-read Element|null $firstElementChild The Element that is the first
+ * @property-read ?Element $firstElementChild The Element that is the first
  *  child of this ParentNode.
- * @property-read Node|Element|null $lastChild
- * @property-read Element|null $lastElementChild The Element that is the last
+ * @property-read ?Element $lastElementChild The Element that is the last
  *  child of this ParentNode.
- * @property-read int $childElementCount The amount of children that the
- *  ParentNode has.
- *
- * @method Element getElementById(string $id)
- * @method Node|Element importNode(DOMNode $importedNode, bool $deep = false)
- * @method Node|Element insertBefore(DOMNode $newNode, DOMNode $refNode = false)
- * @method Node|Element removeChild(DOMNode $oldNode)
- * @method Node|Element replaceChild(DOMNode $newNode, DOMNode $oldNode)
  */
 trait ParentNode {
-	public function querySelector(string $selector):?Element {
-		$htmlCollection = $this->css($selector);
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/childElementCount */
+	protected function __prop_get_childElementCount():int {
+		$count = 0;
 
-		return $htmlCollection->item(0);
-	}
-
-	public function querySelectorAll(string $selector):HTMLCollection {
-		return $this->css($selector);
-	}
-
-	protected function prop_get_children():HTMLCollection {
-		return new HTMLCollection($this->childNodes);
-	}
-
-	protected function prop_get_firstElementChild():?Element {
-		return $this->children->item(0);
-	}
-
-	protected function prop_get_lastElementChild():?Element {
-		return $this->children->item($this->children->length - 1);
-	}
-
-	protected function prop_get_childElementCount():int {
-		return $this->children->length;
-	}
-
-	public function css(
-		string $selectors,
-		string $prefix = ".//"
-	):HTMLCollection {
-		$translator = new Translator($selectors, $prefix);
-		return $this->xPath($translator);
-	}
-
-	public function xPath(string $selector):HTMLCollection {
-		$x = new DOMXPath($this->getRootDocument());
-		return new HTMLCollection($x->query($selector, $this));
-	}
-
-	public function getElementsByTagName($name):HTMLCollection {
-		$nodeList = parent::getElementsByTagName($name);
-		if($nodeList instanceof NodeList) {
-			return $nodeList;
+		/** @var Node $this */
+		/** @var DOMNodeFacade $nativeNode */
+		$nativeNode = $this->ownerDocument->getNativeDomNode($this);
+		$childNodes = $nativeNode->childNodes;
+		for($i = 0, $len = $childNodes->length; $i < $len; $i++) {
+			$nativeChild = $childNodes->item($i);
+			if($nativeChild instanceof DOMElementFacade) {
+				$count++;
+			}
 		}
 
-		return new HTMLCollection($nodeList);
+		return $count;
 	}
 
-	public function removeAttributeFromNamedElementAndChildren(
-		Element $form,
-		string $name,
-		string $attribute
-	):void {
-		$selector = "[name='$name'], [name='$name'] *";
-		foreach($form->querySelectorAll($selector) as $element) {
-			$element->removeAttribute($attribute);
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children */
+	protected function __prop_get_children():HTMLCollection {
+		return HTMLCollectionFactory::create(function() {
+			$elementArray = [];
+
+			for($i = 0, $len = $this->childNodes->length; $i < $len; $i++) {
+				$child = $this->childNodes->item($i);
+				if(!$child instanceof Element) {
+					continue;
+				}
+
+				array_push($elementArray, $child);
+			}
+
+			return NodeListFactory::create(...$elementArray);
+		});
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/firstElementChild */
+	protected function __prop_get_firstElementChild():?Element {
+		for($i = 0, $len = $this->childNodes->length; $i < $len; $i++) {
+			$child = $this->childNodes->item($i);
+			if(!$child instanceof Element) {
+				continue;
+			}
+
+			return $child;
+		}
+
+		return null;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/lastElementChild */
+	protected function __prop_get_lastElementChild():?Element {
+		for($i = $this->childNodes->length - 1; $i >= 0; $i--) {
+			$child = $this->childNodes->item($i);
+			if(!$child instanceof Element) {
+				continue;
+			}
+
+			return $child;
+		}
+
+		return null;
+	}
+
+	/**
+	 * The ParentNode.prepend() method inserts a set of Node objects or
+	 * DOMString objects before the first child of the ParentNode.
+	 * DOMString objects are inserted as equivalent Text nodes.
+	 *
+	 * @param string|Node ...$nodesOrDOMStrings A set of Node or DOMString
+	 * objects to insert.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/prepend
+	 */
+	public function prepend(string|Node...$nodesOrDOMStrings):void {
+		$nodesOrDOMStrings = array_reverse($nodesOrDOMStrings);
+		foreach($nodesOrDOMStrings as $nodeOrString) {
+			$node = $nodeOrString;
+			if(is_string($nodeOrString)) {
+				/** @var Document $doc */
+				$doc = $this->ownerDocument ?? $this;
+				$node = $doc->createTextNode($nodeOrString);
+			}
+
+			$this->insertBefore($node, $this->firstChild);
 		}
 	}
 
 	/**
-	 * Normalises access to the parent dom document, which may be located in various places
-	 * depending on what type of object is using the trait
+	 * Inserts a set of Node objects or DOMString objects after the last
+	 * child of the ParentNode. DOMString objects are inserted as
+	 * equivalent Text nodes.
 	 *
-	 * @return DOMDocument
+	 * @param string|Node ...$nodesOrDOMStrings A set of Node or DOMString
+	 * objects to insert.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/append
 	 */
-	protected abstract function getRootDocument():DOMDocument;
+	public function append(string|Node...$nodesOrDOMStrings):void {
+		foreach($nodesOrDOMStrings as $nodeOrString) {
+			$node = $nodeOrString;
+			if(is_string($nodeOrString)) {
+				/** @var Document $doc */
+				$doc = $this->ownerDocument ?? $this;
+				$node = $doc->createTextNode($nodeOrString);
+			}
+
+			$this->appendChild($node);
+		}
+	}
+
+	/**
+	 * The ParentNode.replaceChildren() method replaces the existing
+	 * children of a Node with a specified new set of children. These can
+	 * be DOMString or Node objects.
+	 *
+	 * @param string|Node ...$nodesOrDOMStrings A set of Node or DOMString
+	 * objects to replace the ParentNode's existing children with. If no
+	 * replacement objects are specified, then the ParentNode is emptied of
+	 * all child nodes.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/replaceChildren
+	 */
+	public function replaceChildren(string|Node...$nodesOrDOMStrings):void {
+		while($this->firstChild) {
+			$this->removeChild($this->firstChild);
+		}
+
+		$this->append(...$nodesOrDOMStrings);
+	}
+
+	/**
+	 * The Document method querySelector() returns the first Element within
+	 * the document that matches the specified selector, or group of
+	 * selectors. If no matches are found, null is returned.
+	 *
+	 * @param string $selectors A DOMString containing one or more selectors
+	 * to match against. This string must be a valid compound selector list
+	 * supported by the browser; if it's not, a SyntaxError exception is
+	 * thrown. See Locating DOM elements using selectors for more
+	 * information about using selectors to identify elements. Multiple
+	 * selectors may be specified by separating them using commas.
+	 * @return ?Element The first Element that matches at least one of the
+	 * specified selectors or null if no such element is found.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/querySelector
+	 */
+	public function querySelector(string $selectors):?Element {
+		/** @var Element[] $all */
+		$all = $this->querySelectorAll($selectors);
+// TODO: Is there a case for optimisation here?
+// Test with a document of thousands of nodes to compare efficiency.
+		return $all[0] ?? null;
+	}
+
+	/**
+	 * The Document method querySelectorAll() returns a static (not live)
+	 * NodeList representing a list of the document's elements that match
+	 * the specified group of selectors.
+	 *
+	 * @param string $selectors A DOMString containing one or more selectors
+	 * to match against. This string must be a valid CSS selector string; if
+	 * it's not, a SyntaxError exception is thrown. See Locating DOM
+	 * elements using selectors for more information about using selectors
+	 * to identify elements. Multiple selectors may be specified by
+	 * separating them using commas.
+	 * @return NodeList A non-live NodeList containing one Element object
+	 * for each descendant node that matches at least one of the specified
+	 * selectors.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/querySelectorAll
+	 */
+	public function querySelectorAll(string $selectors):NodeList {
+		$context = $this;
+		$prefix = ".//";
+		if($this instanceof Document) {
+			$context = $this->firstChild;
+			$prefix = "//";
+		}
+
+		$translator = new Translator($selectors, $prefix);
+		$xpathResult = $this->ownerDocument->evaluate(
+			$translator,
+			$context
+		);
+		$nodeArray = iterator_to_array($xpathResult);
+		return NodeListFactory::create(...$nodeArray);
+	}
 }

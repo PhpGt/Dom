@@ -1,11 +1,38 @@
 <?php
 namespace Gt\Dom;
 
-use DOMDocumentType;
+use Gt\Dom\Facade\NodeClass\DOMDocumentTypeFacade;
 
 /**
- * Represents a Node containing a doctype.
+ * The DocumentType interface represents a Node containing a doctype.
+ *
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/DocumentType
+ *
+ * @property-read string $name A DOMString, eg "html" for <!DOCTYPE HTML>.
+ * @property-read string $publicId A DOMString, eg "-//W3C//DTD HTML 4.01//EN", empty string for HTML5.
+ * @property-read string $systemId A DOMString, eg "http://www.w3.org/TR/html4/strict.dtd", empty string for HTML5.
  */
-class DocumentType extends DOMDocumentType {
+class DocumentType extends Node {
 	use ChildNode;
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/DocumentType/name */
+	protected function __prop_get_name():string {
+		/** @var DOMDocumentTypeFacade $nativeNode */
+		$nativeNode = $this->domNode;
+		return $nativeNode->name;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/DocumentType/publicId */
+	protected function __prop_get_publicId():string {
+		/** @var DOMDocumentTypeFacade $nativeNode */
+		$nativeNode = $this->domNode;
+		return $nativeNode->publicId;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/DocumentType/systemId */
+	protected function __prop_get_systemId():string {
+		/** @var DOMDocumentTypeFacade $nativeNode */
+		$nativeNode = $this->domNode;
+		return $nativeNode->systemId;
+	}
 }

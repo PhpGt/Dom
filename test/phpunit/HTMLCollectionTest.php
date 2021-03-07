@@ -1,98 +1,105 @@
 <?php
 namespace Gt\Dom\Test;
 
-use ArrayAccess;
-use BadMethodCallException;
-use DOMNodeList;
 use Gt\Dom\Element;
-use Gt\Dom\HTMLCollection;
-use Gt\Dom\HTMLDocument;
-use Gt\Dom\Test\Helper\Helper;
-use Gt\Dom\Text;
+use Gt\Dom\Exception\HTMLCollectionImmutableException;
+use Gt\Dom\Facade\HTMLCollectionFactory;
+use Gt\Dom\Facade\NodeListFactory;
+use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
 
 class HTMLCollectionTest extends TestCase {
-	public function testType() {
-		$document = new HTMLDocument(Helper::HTML);
-		$this->assertInstanceOf(HTMLCollection::class, $document->children);
+	public function testLength():void {
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			NodeTestFactory::createNode("example"),
+			NodeTestFactory::createNode("example")
+		));
+		self::assertEquals(2, $sut->length);
 	}
 
-	public function testNonElementsRemoved() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$bodyChildNodes = $document->body->childNodes;
-		$bodyChildren = $document->body->children;
-
-		$this->assertInstanceOf(DOMNodeList::class, $bodyChildNodes);
-		$this->assertInstanceOf(HTMLCollection::class, $bodyChildren);
-
-		$this->assertInstanceOf(Text::class, $bodyChildNodes->item(0));
-		$this->assertInstanceOf(Element::class, $bodyChildren->item(0));
+	public function testCount():void {
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			NodeTestFactory::createNode("example"),
+			NodeTestFactory::createNode("example")
+		));
+		self::assertCount(2, $sut);
 	}
 
-	public function testArrayAccessImplementation() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$collection = $document->body->children;
-
-// test if the collection implements ArrayAccess
-		$this->assertInstanceOf(ArrayAccess::class, $collection);
-
-// test if offset 0 exists
-		$this->assertArrayHasKey(0, $collection);
-
-// test if the first item is an Element instance
-		$first = $collection[0];
-		$this->assertInstanceOf(Element::class, $first);
-
-// test if the collection is read only
-		$this->expectException(BadMethodCallException::class);
-		$collection[$collection->length] = new Element('br');
-		unset($collection[0]);
-
+	public function testItem():void {
+		$element1 = NodeTestFactory::createNode("example");
+		$element2 = NodeTestFactory::createNode("example");
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			$element1,
+			$element2
+		));
+		self::assertSame($element2, $sut->item(1));
 	}
 
-	public function testCountMethod() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$childrenCount = count($document->body->children);
-		$this->assertEquals(11, $childrenCount);
+	public function testItemNone():void {
+		$element1 = NodeTestFactory::createNode("example");
+		$element2 = NodeTestFactory::createNode("example");
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			$element1,
+			$element2
+		));
+		self::assertNull($sut->item(2));
 	}
 
-	public function testNamedItem() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$whoNamed = $document->body->children->namedItem("who");
-		$whoH2 = $document->getElementById("who");
+	public function testNamedItem():void {
+		$element1 = NodeTestFactory::createNode("example");
+		$element1->id = "first";
+		$element1->setAttribute("name", "abc");
+		$element2 = NodeTestFactory::createNode("example");
+		$element2->id = "second";
+		$element2->setAttribute("name", "xyz");
 
-		$this->assertSame($whoNamed, $whoH2,
-			"Named item should match by id first");
-
-		$formsNamed = $document->body->children->namedItem("forms");
-		$formsAnchor = $document->querySelector("a[name='forms']");
-
-		$this->assertSame($formsNamed, $formsAnchor,
-			"Named item should match name when no id match");
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			$element1,
+			$element2
+		));
+		self::assertSame($element1, $sut->namedItem("first"));
+		self::assertSame($element1, $sut->namedItem("abc"));
+		self::assertSame($element2, $sut->namedItem("second"));
+		self::assertSame($element2, $sut->namedItem("xyz"));
+		self::assertNull($sut->namedItem("nope"));
 	}
 
-	public function testIteration() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		foreach($document->querySelectorAll("p") as $i => $p) {
-			$paragraphItem = $document->getElementsByTagName("p")[$i];
-			$this->assertSame($paragraphItem, $p);
+	public function testOffsetExists():void {
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			NodeTestFactory::createNode("example"),
+			NodeTestFactory::createNode("example")
+		));
+		self::assertTrue(isset($sut[0]));
+		self::assertTrue(isset($sut[1]));
+		self::assertFalse(isset($sut[2]));
+	}
+
+	public function testOffsetSetImmutable():void {
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			NodeTestFactory::createNode("example"),
+			NodeTestFactory::createNode("example")
+		));
+		self::expectException(HTMLCollectionImmutableException::class);
+		$sut[0] = "test";
+	}
+
+	public function testOffsetUnsetImmutable():void {
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			NodeTestFactory::createNode("example"),
+			NodeTestFactory::createNode("example")
+		));
+		self::expectException(HTMLCollectionImmutableException::class);
+		unset($sut[0]);
+	}
+
+	public function testIterator():void {
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			NodeTestFactory::createNode("example"),
+			NodeTestFactory::createNode("example")
+		));
+		foreach($sut as $key => $value) {
+			self::assertInstanceOf(Element::class, $value);
 		}
-	}
-
-	public function testLengthProperty() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$nodeList = $document->querySelectorAll("form>input");
-		$this->assertCount(3, $nodeList);
-		$this->assertEquals(3, $nodeList->length);
-	}
-
-	public function testItemProperty() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$nodeList = $document->getElementsByTagName("p");
-		$first = $nodeList->item(0);
-		$third = $nodeList->item(2);
-
-		$this->assertStringContainsString("There are a few elements", $first->textContent);
-		$this->assertTrue($third->classList->contains("plug"));
+		self::assertEquals(1, $key);
 	}
 }
