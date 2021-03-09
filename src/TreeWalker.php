@@ -186,6 +186,11 @@ class TreeWalker {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/nextNode
 	 */
 	public function nextNode():?Node {
+		$node = $this->nextSibling();
+		if(!$node) {
+			$node = $this->firstChild();
+		}
 
+		return $node;
 	}
 }
