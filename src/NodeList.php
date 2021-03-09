@@ -3,6 +3,8 @@ namespace Gt\Dom;
 
 use ArrayAccess;
 use Countable;
+use Gt\Dom\Exception\NamedNodeMapImmutableException;
+use Gt\Dom\Exception\NodeListImmutableException;
 use Gt\PropFunc\MagicProp;
 use Iterator;
 use Traversable;
@@ -72,9 +74,9 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 			return null;
 		}
 
-		/** @var NodeList $staticNodeList */
-		$staticNodeList = call_user_func($this->callback);
-		return $staticNodeList->item($index);
+		/** @var NodeList $nodeArray */
+		$nodeArray = call_user_func($this->callback);
+		return $nodeArray[$index] ?? null;
 	}
 
 	/**
@@ -138,9 +140,9 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 			return count($this->nodeList);
 		}
 
-		/** @var NodeList $staticNodeList */
-		$staticNodeList = call_user_func($this->callback);
-		return count($staticNodeList);
+		/** @var NodeList $nodeArray */
+		$nodeArray = call_user_func($this->callback);
+		return count($nodeArray);
 	}
 
 	public function offsetExists($offset):bool {
@@ -148,7 +150,9 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 			return isset($this->nodeList[$offset]);
 		}
 
-		return false;
+		/** @var NodeList $nodeArray */
+		$nodeArray = call_user_func($this->callback);
+		return isset($nodeArray[$offset]);
 	}
 
 	public function offsetGet($offset):?Node {
@@ -162,11 +166,11 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	}
 
 	public function offsetSet($offset, $value):void {
-		// TODO: Implement offsetSet() method.
+		throw new NodeListImmutableException();
 	}
 
 	public function offsetUnset($offset):void {
-		// TODO: Implement offsetUnset() method.
+		throw new NodeListImmutableException();
 	}
 
 	public function current():Node {
