@@ -54,7 +54,7 @@ class TreeWalker {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/root */
 	protected function __prop_get_root():Node {
-
+		return $this->root;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/whatToShow */

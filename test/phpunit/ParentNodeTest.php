@@ -50,7 +50,7 @@ class ParentNodeTest extends TestCase {
 	public function testChildren():void {
 		$sut = NodeTestFactory::createNode("example");
 
-		$count = rand(50, 500);
+		$count = rand(10, 50);
 		for($i = 0; $i < $count; $i++) {
 			$child = $sut->ownerDocument->createElement("child");
 			$sut->appendChild($child);
@@ -62,7 +62,7 @@ class ParentNodeTest extends TestCase {
 
 	public function testChildrenNonElement():void {
 		$sut = NodeTestFactory::createNode("example");
-		$count = rand(50, 500);
+		$count = rand(10, 50);
 		$textCount = 0;
 		for($i = 0; $i < $count; $i++) {
 			if($i % 25 === 0) {
