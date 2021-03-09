@@ -64,7 +64,7 @@ class TreeWalker {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/filter */
 	protected function __prop_get_filter():NodeFilter {
-
+		return $this->pFilter;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/currentNode */
