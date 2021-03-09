@@ -2,6 +2,7 @@
 namespace Gt\Dom;
 
 use Gt\PropFunc\MagicProp;
+use Iterator;
 
 /**
  * The TreeWalker object represents the nodes of a document subtree and a
@@ -15,12 +16,15 @@ use Gt\PropFunc\MagicProp;
  * @property-read int $whatToShow Returns an unsigned long being a bitmask made  of constants describing the types of Node that must be presented. Non-matching nodes are skipped, but their children may be included, if relevant. The possible values are NodeFilter.SHOW_* constants.
  * @property-read NodeFilter $filter Returns a NodeFilter used to select the relevant nodes.
  * @property-read Node $currentNode Is the Node on which the TreeWalker is currently pointing at.
+ *
+ * @implements Iterator<Node>
  */
-class TreeWalker {
+class TreeWalker implements Iterator {
 	use MagicProp;
 
 	private Node $pCurrent;
 	private NodeFilter $pFilter;
+	private int $iteratorIndex;
 
 	protected function __construct(
 		private Node $root,
@@ -28,6 +32,7 @@ class TreeWalker {
 		NodeFilter|callable $filter = null
 	) {
 		$this->pCurrent = $root;
+		$this->iteratorIndex = 0;
 
 		if($filter) {
 			if(is_callable($filter)) {
@@ -186,11 +191,38 @@ class TreeWalker {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/nextNode
 	 */
 	public function nextNode():?Node {
-		$node = $this->nextSibling();
+		$node = $this->firstChild();
 		if(!$node) {
-			$node = $this->firstChild();
+			$node = $this->nextSibling();
 		}
 
 		return $node;
+	}
+
+	public function current():Node {
+		return $this->currentNode;
+	}
+
+	public function next():void {
+		$this->iteratorIndex++;
+		$this->nextNode();
+	}
+
+	public function key():int {
+		return $this->iteratorIndex;
+	}
+
+	public function valid():bool {
+		if($next = $this->nextNode()) {
+			$this->previousNode();
+			return true;
+		}
+
+		return false;
+	}
+
+	public function rewind():void {
+		$this->iteratorIndex = 0;
+		$this->pCurrent = $this->root;
 	}
 }

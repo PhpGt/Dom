@@ -4,6 +4,7 @@ namespace Gt\Dom\Test;
 use Gt\Dom\Facade\TreeWalkerFactory;
 use Gt\Dom\Node;
 use Gt\Dom\NodeFilter;
+use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -164,5 +165,16 @@ class TreeWalkerTest extends TestCase {
 		self::assertSame($other3, $sut->nextNode());
 		self::assertNull($sut->nextNode());
 		self::assertSame($other3, $sut->currentNode);
+	}
+
+	public function testIteration():void {
+		$document = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_IMAGES);
+		$sut = TreeWalkerFactory::create($document->body);
+		$collectedNodes = [];
+		foreach($sut as $node) {
+			array_push($collectedNodes, $node);
+		}
+
+		self::assertSame($collectedNodes[1], $document->querySelector("h1"));
 	}
 }
