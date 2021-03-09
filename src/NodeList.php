@@ -17,7 +17,8 @@ use Traversable;
  * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList
  *
  * @property-read int $length The number of nodes in the NodeList.
- * @implements Iterator<Node>
+ * @implements Iterator<int, Node>
+ * @implements ArrayAccess<int, Node>
  */
 class NodeList implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
@@ -109,11 +110,13 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * through all keys contained in this object. The keys are unsigned
 	 * integer.
 	 *
-	 * @return iterable<int>
+	 * @return Traversable<int>
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/keys
 	 */
-	public function keys():iterable {
-
+	public function keys():Traversable {
+		foreach($this as $key => $value) {
+			yield $key;
+		}
 	}
 
 	/**
