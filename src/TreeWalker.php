@@ -83,7 +83,7 @@ class TreeWalker {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/parentNode
 	 */
 	public function parentNode():?Node {
-
+		return null;
 	}
 
 	/**
@@ -96,7 +96,12 @@ class TreeWalker {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/firstChild
 	 */
 	public function firstChild():?Node {
+		$node = $this->pCurrent->firstChild;
+		if($node) {
+			$this->pCurrent = $node;
+		}
 
+		return $node;
 	}
 
 	/**

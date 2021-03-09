@@ -4,6 +4,7 @@ namespace Gt\Dom\Test;
 use Gt\Dom\Facade\TreeWalkerFactory;
 use Gt\Dom\Node;
 use Gt\Dom\NodeFilter;
+use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
 
 class TreeWalkerTest extends TestCase {
@@ -38,5 +39,30 @@ class TreeWalkerTest extends TestCase {
 		$accept = $nodeFilter->acceptNode($root);
 		self::assertEquals(1, $callCount);
 		self::assertEquals(1, $accept);
+	}
+
+	public function testParentNode():void {
+		$root = NodeTestFactory::createNode("root");
+		$sut = TreeWalkerFactory::create($root);
+		self::assertNull($sut->parentNode());
+		self::assertSame($root, $sut->currentNode);
+	}
+
+	public function testFirstChildNone():void {
+		$root = NodeTestFactory::createNode("root");
+		$sut = TreeWalkerFactory::create($root);
+		self::assertNull($sut->firstChild());
+		self::assertSame($root, $sut->currentNode);
+	}
+
+	public function testFirstChild():void {
+		$root = NodeTestFactory::createNode("root");
+		$child1 = $root->ownerDocument->createElement("child");
+		$child2 = $root->ownerDocument->createElement("child");
+		$child3 = $root->ownerDocument->createElement("child");
+		$root->append($child1, $child2, $child3);
+		$sut = TreeWalkerFactory::create($root);
+		self::assertSame($child1, $sut->firstChild());
+		self::assertSame($child1, $sut->currentNode);
 	}
 }
