@@ -132,7 +132,12 @@ class TreeWalker {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/previousSibling
 	 */
 	public function previousSibling():?Node {
+		$node = $this->pCurrent->previousSibling;
+		if($node) {
+			$this->pCurrent = $node;
+		}
 
+		return $node;
 	}
 
 	/**
