@@ -82,12 +82,12 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * through all key/value pairs contained in this object. The values are
 	 * Node objects.
 	 *
-	 * @return Traversable<Node>
+	 * @return Traversable<int, Node>
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/entries
 	 */
 	public function entries():Traversable {
-		foreach($this as $node) {
-			yield $node;
+		foreach($this as $key => $node) {
+			yield $key => $node;
 		}
 	}
 
@@ -124,11 +124,13 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * through all values contained in this object. The values are Node
 	 * objects.
 	 *
-	 * @return iterable
+	 * @return Traversable<Node>
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/values
 	 */
-	public function values():iterable {
-
+	public function values():Traversable {
+		foreach($this as $node) {
+			yield $node;
+		}
 	}
 
 	public function count():int {
@@ -145,6 +147,8 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 		if(isset($this->nodeList)) {
 			return isset($this->nodeList[$offset]);
 		}
+
+		return false;
 	}
 
 	public function offsetGet($offset):?Node {

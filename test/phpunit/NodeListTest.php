@@ -97,4 +97,22 @@ class NodeListTest extends TestCase {
 		self::assertSame(1, $array[1]);
 		self::assertSame(2, $array[2]);
 	}
+
+	public function testValuesEmpty():void {
+		$sut = NodeListFactory::create();
+		$iterable = $sut->values();
+		self::assertEmpty(iterator_to_array($iterable));
+	}
+
+	public function testValues():void {
+		$node1 = self::createMock(Node::class);
+		$node2 = self::createMock(Node::class);
+		$node3 = self::createMock(Node::class);
+		$sut = NodeListFactory::create($node1, $node2, $node3);
+		$array = iterator_to_array($sut->values());
+		self::assertCount(3, $array);
+		self::assertSame($node1, $array[0]);
+		self::assertSame($node2, $array[1]);
+		self::assertSame($node3, $array[2]);
+	}
 }
