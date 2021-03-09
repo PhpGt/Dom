@@ -19,4 +19,22 @@ class NodeListTest extends TestCase {
 		$sut = NodeListFactory::create($node1, $node2, $node3);
 		self::assertEquals(3, $sut->length);
 	}
+
+	public function testItemEmpty():void {
+		$sut = NodeListFactory::create();
+		self::assertNull($sut->item(0));
+		self::assertNull($sut->item(1));
+		self::assertNull($sut->item(2));
+	}
+
+	public function testItem():void {
+		$node1 = self::createMock(Node::class);
+		$node2 = self::createMock(Node::class);
+		$node3 = self::createMock(Node::class);
+		$sut = NodeListFactory::create($node1, $node2, $node3);
+		self::assertSame($node1, $sut->item(0));
+		self::assertSame($node3, $sut->item(2));
+		self::assertSame($node2, $sut->item(1));
+		self::assertNull($sut->item(3));
+	}
 }
