@@ -3,6 +3,7 @@ namespace Gt\Dom\Test;
 
 use Gt\Dom\Facade\TreeWalkerFactory;
 use Gt\Dom\Node;
+use Gt\Dom\NodeFilter;
 use PHPUnit\Framework\TestCase;
 
 class TreeWalkerTest extends TestCase {
@@ -10,5 +11,14 @@ class TreeWalkerTest extends TestCase {
 		$root = self::createMock(Node::class);
 		$sut = TreeWalkerFactory::create($root);
 		self::assertSame($root, $sut->root);
+	}
+
+	public function testWhatToShow():void {
+		$whatToShow = NodeFilter::SHOW_DOCUMENT_FRAGMENT;
+		$sut = TreeWalkerFactory::create(
+			self::createMock(Node::class),
+			$whatToShow
+		);
+		self::assertSame($whatToShow, $sut->whatToShow);
 	}
 }

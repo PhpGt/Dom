@@ -59,7 +59,7 @@ class TreeWalker {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/whatToShow */
 	protected function __prop_get_whatToShow():int {
-
+		return $this->whatToShow;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/filter */
