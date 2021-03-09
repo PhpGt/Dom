@@ -114,7 +114,12 @@ class TreeWalker {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/lastChild
 	 */
 	public function lastChild():?Node {
+		$node = $this->pCurrent->lastChild;
+		if($node) {
+			$this->pCurrent = $node;
+		}
 
+		return $node;
 	}
 
 	/**
