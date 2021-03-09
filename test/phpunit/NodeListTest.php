@@ -55,4 +55,28 @@ class NodeListTest extends TestCase {
 		self::assertSame($node2, $array[1]);
 		self::assertSame($node3, $array[2]);
 	}
+
+	public function testForEachEmpty():void {
+		$called = [];
+		$sut = NodeListFactory::create();
+		$sut->forEach(function(Node $node) use(&$called) {
+			array_push($called, $node);
+		});
+		self::assertEmpty($called);
+	}
+
+	public function testForEach():void {
+		$called = [];
+		$node1 = self::createMock(Node::class);
+		$node2 = self::createMock(Node::class);
+		$node3 = self::createMock(Node::class);
+		$sut = NodeListFactory::create($node1, $node2, $node3);
+		$sut->forEach(function(Node $node) use(&$called) {
+			array_push($called, $node);
+		});
+		self::assertCount(3, $called);
+		self::assertSame($node1, $called[0]);
+		self::assertSame($node2, $called[1]);
+		self::assertSame($node3, $called[2]);
+	}
 }

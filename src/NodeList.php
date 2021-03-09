@@ -99,7 +99,9 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/forEach
 	 */
 	public function forEach(callable $callback):void {
-
+		foreach($this as $node) {
+			call_user_func($callback, $node);
+		}
 	}
 
 	/**
