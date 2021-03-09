@@ -103,4 +103,24 @@ class TreeWalkerTest extends TestCase {
 		self::assertSame($other1, $sut->previousSibling());
 		self::assertSame($other1, $sut->currentNode);
 	}
+
+	public function testNextSiblingNone():void {
+		$root = NodeTestFactory::createNode("root");
+		$root->ownerDocument->appendChild($root);
+		$sut = TreeWalkerFactory::create($root);
+		self::assertNull($sut->nextSibling());
+		self::assertSame($root, $sut->currentNode);
+	}
+
+	public function testNextSibling():void {
+		$root = NodeTestFactory::createNode("root");
+		$root->ownerDocument->appendChild($root);
+		$other1 = $root->ownerDocument->createElement("other");
+		$other2 = $root->ownerDocument->createElement("other");
+		$other3 = $root->ownerDocument->createElement("other");
+		$root->append($other1, $other2, $other3);
+		$sut = TreeWalkerFactory::create($other2);
+		self::assertSame($other3, $sut->nextSibling());
+		self::assertSame($other3, $sut->currentNode);
+	}
 }
