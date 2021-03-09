@@ -5,6 +5,7 @@ use ArrayAccess;
 use Countable;
 use Gt\PropFunc\MagicProp;
 use Iterator;
+use Traversable;
 
 /**
  * NodeList objects are collections of nodes, usually returned by properties
@@ -80,11 +81,13 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * through all key/value pairs contained in this object. The values are
 	 * Node objects.
 	 *
-	 * @return iterable<Node>
+	 * @return Traversable<Node>
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/entries
 	 */
-	public function entries():iterable {
-
+	public function entries():Traversable {
+		foreach($this as $node) {
+			yield $node;
+		}
 	}
 
 	/**
