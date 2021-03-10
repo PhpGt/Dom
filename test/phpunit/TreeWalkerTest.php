@@ -26,7 +26,7 @@ class TreeWalkerTest extends TestCase {
 			self::createMock(Node::class),
 			$whatToShow
 		);
-		self::assertSame($whatToShow, $sut->pWhatToShow);
+		self::assertSame($whatToShow, $sut->whatToShow);
 	}
 
 	public function testFilterFromCallable():void {
@@ -282,16 +282,5 @@ class TreeWalkerTest extends TestCase {
 		self::assertInstanceOf(HTMLHeadingElement::class, $sut->previousNode());
 		self::assertInstanceOf(HTMLBodyElement::class, $sut->previousNode());
 		self::assertNull($sut->previousNode());
-
-//		self::assertInstanceOf(HTMLBodyElement::class, $collectedNodes[0]);
-//		self::assertInstanceOf(HTMLHeadingElement::class, $collectedNodes[1]);
-//		self::assertInstanceOf(HTMLUListElement::class, $collectedNodes[2]);
-//		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[3]);
-//		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[4]);
-//		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[5]);
-//		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[6]);
-//		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[7]);
-//		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[8]);
-//		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[9]);
 	}
 }
