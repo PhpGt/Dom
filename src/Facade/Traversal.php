@@ -439,7 +439,7 @@ trait Traversal {
 		while(!is_null($node->parentNode)) {
 			$node = $node->parentNode;
 			if($node === $stayWithin) {
-				return null;
+				break;
 			}
 			if(!is_null($node->nextSibling)) {
 				return $node->nextSibling;
