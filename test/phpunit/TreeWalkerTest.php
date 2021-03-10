@@ -2,6 +2,11 @@
 namespace Gt\Dom\Test;
 
 use Gt\Dom\Facade\TreeWalkerFactory;
+use Gt\Dom\HTMLElement\HTMLBodyElement;
+use Gt\Dom\HTMLElement\HTMLHeadingElement;
+use Gt\Dom\HTMLElement\HTMLImageElement;
+use Gt\Dom\HTMLElement\HTMLLiElement;
+use Gt\Dom\HTMLElement\HTMLUListElement;
 use Gt\Dom\Node;
 use Gt\Dom\NodeFilter;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
@@ -47,6 +52,24 @@ class TreeWalkerTest extends TestCase {
 		$sut = TreeWalkerFactory::create($root);
 		self::assertNull($sut->parentNode());
 		self::assertSame($root, $sut->currentNode);
+	}
+
+	public function testParentNodeDeep():void {
+		$root = NodeTestFactory::createNode("root");
+		$trunk = $root->ownerDocument->createElement("trunk");
+		$branch = $root->ownerDocument->createElement("branch");
+		$leaf1 = $root->ownerDocument->createElement("leaf");
+		$leaf2 = $root->ownerDocument->createElement("leaf");
+		$leaf3 = $root->ownerDocument->createElement("leaf");
+		$root->appendChild($trunk);
+		$trunk->appendChild($branch);
+		$branch->append($leaf1, $leaf2, $leaf3);
+		$sut = $root->ownerDocument->createTreeWalker($root);
+		while($node = $sut->nextNode()) {}
+		self::assertSame($branch, $sut->parentNode());
+		self::assertSame($trunk, $sut->parentNode());
+		self::assertSame($root, $sut->parentNode());
+		self::assertNull($sut->parentNode());
 	}
 
 	public function testFirstChildNone():void {
@@ -100,7 +123,9 @@ class TreeWalkerTest extends TestCase {
 		$other2 = $root->ownerDocument->createElement("other");
 		$other3 = $root->ownerDocument->createElement("other");
 		$root->append($other1, $other2, $other3);
-		$sut = TreeWalkerFactory::create($other2);
+		$sut = TreeWalkerFactory::create($root);
+		$sut->nextNode();
+		$sut->nextNode();
 		self::assertSame($other1, $sut->previousSibling());
 		self::assertSame($other1, $sut->currentNode);
 	}
@@ -120,7 +145,9 @@ class TreeWalkerTest extends TestCase {
 		$other2 = $root->ownerDocument->createElement("other");
 		$other3 = $root->ownerDocument->createElement("other");
 		$root->append($other1, $other2, $other3);
-		$sut = TreeWalkerFactory::create($other2);
+		$sut = TreeWalkerFactory::create($root);
+		$sut->nextNode();
+		$sut->nextNode();
 		self::assertSame($other3, $sut->nextSibling());
 		self::assertSame($other3, $sut->currentNode);
 	}
@@ -132,6 +159,32 @@ class TreeWalkerTest extends TestCase {
 		self::assertSame($root, $sut->currentNode);
 	}
 
+	public function testPreviousNodeDeep():void {
+		$root = NodeTestFactory::createNode("root");
+		$sibling = $root->ownerDocument->createElement("sibling");
+		$trunk = $root->ownerDocument->createElement("trunk");
+		$branch = $root->ownerDocument->createElement("branch");
+		$leaf1 = $root->ownerDocument->createElement("leaf");
+		$leaf2 = $root->ownerDocument->createElement("leaf");
+		$leaf3 = $root->ownerDocument->createElement("leaf");
+		$docRoot = $root->ownerDocument->createElement("doc-root");
+		$root->ownerDocument->appendChild($docRoot);
+		$docRoot->appendChild($sibling);
+		$docRoot->appendChild($root);
+		$root->appendChild($trunk);
+		$trunk->appendChild($branch);
+		$branch->append($leaf1, $leaf2, $leaf3);
+		$sut = $root->ownerDocument->createTreeWalker($root);
+		while($node = $sut->nextNode()) {}
+		self::assertSame($leaf3, $sut->currentNode);
+		self::assertSame($leaf2, $sut->previousNode());
+		self::assertSame($leaf1, $sut->previousNode());
+		self::assertSame($branch, $sut->previousNode());
+		self::assertSame($trunk, $sut->previousNode());
+		self::assertSame($root, $sut->previousNode());
+		self::assertNull($sut->previousNode());
+	}
+
 	public function testPreviousNode():void {
 		$root = NodeTestFactory::createNode("root");
 		$root->ownerDocument->appendChild($root);
@@ -139,11 +192,15 @@ class TreeWalkerTest extends TestCase {
 		$other2 = $root->ownerDocument->createElement("other");
 		$other3 = $root->ownerDocument->createElement("other");
 		$root->append($other1, $other2, $other3);
-		$sut = TreeWalkerFactory::create($other3);
+		$sut = TreeWalkerFactory::create($root);
+		$sut->nextNode();
+		$sut->nextNode();
+		$sut->nextNode();
 		self::assertSame($other2, $sut->previousNode());
 		self::assertSame($other1, $sut->previousNode());
+		self::assertSame($root, $sut->previousNode());
 		self::assertNull($sut->previousNode());
-		self::assertSame($other1, $sut->currentNode);
+		self::assertSame($root, $sut->currentNode);
 	}
 
 	public function testNextNodeNode():void {
@@ -160,7 +217,8 @@ class TreeWalkerTest extends TestCase {
 		$other2 = $root->ownerDocument->createElement("other");
 		$other3 = $root->ownerDocument->createElement("other");
 		$root->append($other1, $other2, $other3);
-		$sut = TreeWalkerFactory::create($other1);
+		$sut = TreeWalkerFactory::create($root);
+		self::assertSame($other1, $sut->nextNode());
 		self::assertSame($other2, $sut->nextNode());
 		self::assertSame($other3, $sut->nextNode());
 		self::assertNull($sut->nextNode());
@@ -175,6 +233,65 @@ class TreeWalkerTest extends TestCase {
 			array_push($collectedNodes, $node);
 		}
 
-		self::assertSame($collectedNodes[1], $document->querySelector("h1"));
+		self::assertSame($collectedNodes[2], $document->querySelector("h1"));
+		self::assertSame("Take a look at these amazing photos!", $collectedNodes[3]->textContent);
+	}
+
+	public function testIteratorWhatToShow():void {
+		$document = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_IMAGES);
+		$sut = TreeWalkerFactory::create(
+			$document->body,
+			NodeFilter::SHOW_ELEMENT,
+		);
+		$collectedNodes = [];
+		foreach($sut as $i => $node) {
+			array_push($collectedNodes, $node);
+		}
+
+		self::assertInstanceOf(HTMLBodyElement::class, $collectedNodes[0]);
+		self::assertInstanceOf(HTMLHeadingElement::class, $collectedNodes[1]);
+		self::assertInstanceOf(HTMLUListElement::class, $collectedNodes[2]);
+		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[3]);
+		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[4]);
+		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[5]);
+		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[6]);
+		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[7]);
+		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[8]);
+		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[9]);
+		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[10]);
+	}
+
+	public function testPreviousNodeWhatToShow():void {
+		$document = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_IMAGES);
+		$sut = TreeWalkerFactory::create(
+			$document->body,
+			NodeFilter::SHOW_ELEMENT,
+		);
+		$collectedNodes = [];
+		while($sut->nextNode()){}
+
+		self::assertInstanceOf(HTMLImageElement::class, $sut->currentNode);
+		self::assertInstanceOf(HTMLLiElement::class, $sut->previousNode());
+		self::assertInstanceOf(HTMLImageElement::class, $sut->previousNode());
+		self::assertInstanceOf(HTMLLiElement::class, $sut->previousNode());
+		self::assertInstanceOf(HTMLImageElement::class, $sut->previousNode());
+		self::assertInstanceOf(HTMLLiElement::class, $sut->previousNode());
+		self::assertInstanceOf(HTMLImageElement::class, $sut->previousNode());
+		self::assertInstanceOf(HTMLLiElement::class, $sut->previousNode());
+		self::assertInstanceOf(HTMLUListElement::class, $sut->previousNode());
+		self::assertInstanceOf(HTMLHeadingElement::class, $sut->previousNode());
+		self::assertInstanceOf(HTMLBodyElement::class, $sut->previousNode());
+		self::assertNull($sut->previousNode());
+
+//		self::assertInstanceOf(HTMLBodyElement::class, $collectedNodes[0]);
+//		self::assertInstanceOf(HTMLHeadingElement::class, $collectedNodes[1]);
+//		self::assertInstanceOf(HTMLUListElement::class, $collectedNodes[2]);
+//		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[3]);
+//		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[4]);
+//		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[5]);
+//		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[6]);
+//		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[7]);
+//		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[8]);
+//		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[9]);
 	}
 }

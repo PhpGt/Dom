@@ -18,43 +18,100 @@ use Iterator;
  * @property-read Node $currentNode Is the Node on which the TreeWalker is currently pointing at.
  *
  * @implements Iterator<Node>
+ *
+ * Many thanks to Timo Tijhof for their dom-TreeWalker-polyfill project which
+ * helped as reference while implementing this functionality:
+ * https://github.com/Krinkle/dom-TreeWalker-polyfill
  */
 class TreeWalker implements Iterator {
 	use MagicProp;
 
-	private Node $pCurrent;
+	private Node $pCurrentNode;
 	private NodeFilter $pFilter;
 	private int $iteratorIndex;
+	private ?Node $validity;
 
 	protected function __construct(
 		private Node $root,
 		private int $whatToShow = NodeFilter::SHOW_ALL,
 		NodeFilter|callable $filter = null
 	) {
-		$this->pCurrent = $root;
+		$this->pCurrentNode = $root;
 		$this->iteratorIndex = 0;
+		$this->validity = null;
 
-		if($filter) {
-			if(is_callable($filter)) {
-				$filter = new class($filter) extends NodeFilter {
-					/** @var callable */
-					private $callback;
+		if(!$filter) {
+			$filter = function(Node $node):int {
+				$show = $this->whatToShow;
+				if($show === NodeFilter::SHOW_ALL) {
+					return NodeFilter::FILTER_ACCEPT;
+				}
 
-					/** @param callable $callback */
-					public function __construct($callback) {
-						$this->callback = $callback;
+				$return = NodeFilter::FILTER_ACCEPT;
+				if($show & NodeFilter::SHOW_ELEMENT) {
+					if(!$node instanceof Element) {
+						$return = NodeFilter::FILTER_REJECT;
 					}
-
-					public function acceptNode(Node $node):int {
-						return call_user_func(
-							$this->callback,
-							$node
-						);
+				}
+				if($show & NodeFilter::SHOW_ATTRIBUTE) {
+					if(!$node instanceof Attr) {
+						$return = NodeFilter::FILTER_REJECT;
 					}
-				};
-			}
-			$this->pFilter = $filter;
+				}
+				if($show & NodeFilter::SHOW_TEXT) {
+					if(!$node instanceof Text) {
+						$return = NodeFilter::FILTER_REJECT;
+					}
+				}
+				if($show & NodeFilter::SHOW_PROCESSING_INSTRUCTION) {
+					if(!$node instanceof ProcessingInstruction) {
+						$return = NodeFilter::FILTER_REJECT;
+					}
+				}
+				if($show & NodeFilter::SHOW_COMMENT) {
+					if(!$node instanceof Comment) {
+						$return = NodeFilter::FILTER_REJECT;
+					}
+				}
+				if($show & NodeFilter::SHOW_DOCUMENT) {
+					if(!$node instanceof Document) {
+						$return = NodeFilter::FILTER_REJECT;
+					}
+				}
+				if($show & NodeFilter::SHOW_DOCUMENT_TYPE) {
+					if(!$node instanceof DocumentType) {
+						$return = NodeFilter::FILTER_REJECT;
+					}
+				}
+				if($show & NodeFilter::SHOW_DOCUMENT_FRAGMENT) {
+					if(!$node instanceof DocumentFragment) {
+						$return = NodeFilter::FILTER_REJECT;
+					}
+				}
+
+				return $return;
+			};
 		}
+
+		if(is_callable($filter)) {
+			$filter = new class($filter) extends NodeFilter {
+				/** @var callable */
+				private $callback;
+
+				public function __construct(callable $callback) {
+					$this->callback = $callback;
+				}
+
+				public function acceptNode(Node $node):int {
+					return call_user_func(
+						$this->callback,
+						$node
+					);
+				}
+			};
+		}
+		/** @var NodeFilter $filter */
+		$this->pFilter = $filter;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/root */
@@ -74,7 +131,7 @@ class TreeWalker implements Iterator {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/currentNode */
 	protected function __prop_get_currentNode():Node {
-		return $this->pCurrent;
+		return $this->pCurrentNode;
 	}
 
 	/**
@@ -88,6 +145,17 @@ class TreeWalker implements Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/parentNode
 	 */
 	public function parentNode():?Node {
+		$node = $this->pCurrentNode;
+
+		while($node && $node !== $this->root) {
+			$node = $node->parentNode;
+
+			if($node && $this->filter->acceptNode($node) === NodeFilter::FILTER_ACCEPT) {
+				$this->pCurrentNode = $node;
+				return $node;
+			}
+		}
+
 		return null;
 	}
 
@@ -101,12 +169,7 @@ class TreeWalker implements Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/firstChild
 	 */
 	public function firstChild():?Node {
-		$node = $this->pCurrent->firstChild;
-		if($node) {
-			$this->pCurrent = $node;
-		}
-
-		return $node;
+		return $this->traverseChildren("first");
 	}
 
 	/**
@@ -119,12 +182,7 @@ class TreeWalker implements Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/lastChild
 	 */
 	public function lastChild():?Node {
-		$node = $this->pCurrent->lastChild;
-		if($node) {
-			$this->pCurrent = $node;
-		}
-
-		return $node;
+		return $this->traverseChildren("last");
 	}
 
 	/**
@@ -137,12 +195,7 @@ class TreeWalker implements Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/previousSibling
 	 */
 	public function previousSibling():?Node {
-		$node = $this->pCurrent->previousSibling;
-		if($node) {
-			$this->pCurrent = $node;
-		}
-
-		return $node;
+		return $this->traverseSiblings("previous");
 	}
 
 	/**
@@ -154,12 +207,7 @@ class TreeWalker implements Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/nextSibling
 	 */
 	public function nextSibling():?Node {
-		$node = $this->pCurrent->nextSibling;
-		if($node) {
-			$this->pCurrent = $node;
-		}
-
-		return $node;
+		return $this->traverseSiblings("next");
 	}
 
 	/**
@@ -173,12 +221,40 @@ class TreeWalker implements Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/previousNode
 	 */
 	public function previousNode():?Node {
-		$node = $this->previousSibling();
-		if(!$node) {
-			$node = $this->parentNode();
+		$node = $this->pCurrentNode;
+
+		while($node !== $this->root) {
+			$sibling = $node->previousSibling;
+
+			while(!is_null($sibling)) {
+				$node = $sibling;
+				$result = $this->filter->acceptNode($node);
+
+				while($result !== NodeFilter::FILTER_REJECT
+				&& !is_null($node->lastChild)) {
+					$node = $node->lastChild;
+					$result = $this->filter->acceptNode($node);
+				}
+				if($result === NodeFilter::FILTER_ACCEPT) {
+					$this->pCurrentNode = $node;
+					return $node;
+				}
+
+				$sibling = $node->previousSibling;
+			}
+
+// The referenced polyfill for this implementation includes an extra check to
+// the parentNode here, but as far as I can tell, this logic never be hit.
+// See: https://github.com/Krinkle/dom-TreeWalker-polyfill/blob/master/src/TreeWalker-polyfill.js#L336-L338
+
+			$node = $node->parentNode;
+			if($this->filter->acceptNode($node) === NodeFilter::FILTER_ACCEPT) {
+				$this->pCurrentNode = $node;
+				return $node;
+			}
 		}
 
-		return $node;
+		return null;
 	}
 
 	/**
@@ -191,12 +267,42 @@ class TreeWalker implements Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/nextNode
 	 */
 	public function nextNode():?Node {
-		$node = $this->firstChild();
-		if(!$node) {
-			$node = $this->nextSibling();
+		if($node = $this->getNextNode($this->pCurrentNode)) {
+			$this->pCurrentNode = $node;
+			return $node;
 		}
 
-		return $node;
+		return null;
+	}
+
+	private function getNextNode(Node $node):?Node {
+		$result = NodeFilter::FILTER_ACCEPT;
+
+		while(true) {
+			while($result !== NodeFilter::FILTER_REJECT
+				&& !is_null($node->firstChild)) {
+				$node = $node->firstChild;
+				$result = $this->filter->acceptNode($node);
+				if($result === NodeFilter::FILTER_ACCEPT) {
+					return $node;
+				}
+			}
+
+			$following = $this->nextSkippingChildren($node, $this->root);
+			if(!is_null($following)) {
+				$node = $following;
+			}
+			else {
+				break;
+			}
+
+			$result = $this->filter->acceptNode($node);
+			if($result === NodeFilter::FILTER_ACCEPT) {
+				return $node;
+			}
+		}
+
+		return null;
 	}
 
 	public function current():Node {
@@ -213,16 +319,135 @@ class TreeWalker implements Iterator {
 	}
 
 	public function valid():bool {
-		if($next = $this->nextNode()) {
-			$this->previousNode();
-			return true;
-		}
-
-		return false;
+		$valid = $this->validity !== $this->pCurrentNode;
+		$this->validity = $this->pCurrentNode;
+		return $valid;
 	}
 
 	public function rewind():void {
 		$this->iteratorIndex = 0;
-		$this->pCurrent = $this->root;
+		$this->pCurrentNode = $this->root;
+	}
+
+	private function traverseChildren(string $direction):?Node {
+		$node = $this->matchChild($this->pCurrentNode, $direction);
+
+		while($node) {
+			$result = $this->filter->acceptNode($node);
+			if($result === NodeFilter::FILTER_ACCEPT) {
+				$this->pCurrentNode = $node;
+				return $node;
+			}
+			if($result === NodeFilter::FILTER_SKIP) {
+				$child = $this->matchChild($node, $direction);
+				if($child) {
+					$node = $child;
+					continue;
+				}
+			}
+
+			while($node) {
+				$sibling = $this->matchChild($node, $direction);
+				if($sibling) {
+					$node = $sibling;
+					break;
+				}
+
+				$parent = $node->parentNode;
+				if(is_null($parent)
+				|| $parent === $this->root
+				|| $parent === $this->pCurrentNode) {
+					return null;
+				}
+				else {
+					$node = $parent;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	private function traverseSiblings(string $direction):?Node {
+		$node = $this->pCurrentNode;
+
+		if($node === $this->root) {
+			return null;
+		}
+		while(true) {
+			$sibling = $this->matchSibling(
+				$node,
+				$direction
+			);
+			while($sibling) {
+				$node = $sibling;
+				$result = $this->filter->acceptNode($node);
+				if($result === NodeFilter::FILTER_ACCEPT) {
+					$this->pCurrentNode = $node;
+					return $node;
+				}
+
+				$sibling = $this->matchChild(
+					$node,
+					$direction
+				);
+				if($result === NodeFilter::FILTER_REJECT) {
+					$sibling = $this->matchSibling(
+						$node,
+						$direction
+					);
+				}
+			}
+
+			$node = $node->parentNode;
+			if(is_null($node)
+			|| $node === $this->root) {
+				return null;
+			}
+
+			if($this->filter->acceptNode($node) === NodeFilter::FILTER_ACCEPT) {
+				return null;
+			}
+		}
+	}
+
+	private function matchChild(Node $node, string $direction):?Node {
+		return match($direction) {
+			"first" => $node->firstChild,
+			"last", "next", "previous" => $node->lastChild,
+			default => null,
+		};
+	}
+
+	private function matchSibling(Node $node, string $direction):?Node {
+		return match($direction) {
+			"next" => $node->nextSibling,
+			"previous" => $node->previousSibling,
+			default => null,
+		};
+	}
+
+	private function nextSkippingChildren(
+		Node $node,
+		Node $stayWithin
+	):?Node {
+		if($node === $stayWithin) {
+			return null;
+		}
+		if(!is_null($node->nextSibling)) {
+			return $node->nextSibling;
+		}
+
+		while(!is_null($node->parentNode)) {
+			$node = $node->parentNode;
+			if($node === $stayWithin) {
+				return null;
+			}
+			if(!is_null($node->nextSibling)) {
+				return $node->nextSibling;
+			}
+		}
+
+		return null;
 	}
 }
