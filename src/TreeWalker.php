@@ -13,7 +13,7 @@ use Iterator;
  * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker
  *
  * @property-read Node $root Returns a Node representing the root node as specified when the TreeWalker was created.
- * @property-read int $whatToShow Returns an unsigned long being a bitmask made  of constants describing the types of Node that must be presented. Non-matching nodes are skipped, but their children may be included, if relevant. The possible values are NodeFilter.SHOW_* constants.
+ * @property-read int $pWhatToShow Returns an unsigned long being a bitmask made  of constants describing the types of Node that must be presented. Non-matching nodes are skipped, but their children may be included, if relevant. The possible values are NodeFilter.SHOW_* constants.
  * @property-read NodeFilter $filter Returns a NodeFilter used to select the relevant nodes.
  * @property-read Node $currentNode Is the Node on which the TreeWalker is currently pointing at.
  *
@@ -32,17 +32,17 @@ class TreeWalker implements Iterator {
 	private ?Node $validity;
 
 	protected function __construct(
-		private Node $root,
+		private Node $pRoot,
 		private int $whatToShow = NodeFilter::SHOW_ALL,
 		NodeFilter|callable $filter = null
 	) {
-		$this->pCurrentNode = $root;
+		$this->pCurrentNode = $pRoot;
 		$this->iteratorIndex = 0;
 		$this->validity = null;
 
 		if(!$filter) {
 			$filter = function(Node $node):int {
-				$show = $this->whatToShow;
+				$show = $this->pWhatToShow;
 				if($show === NodeFilter::SHOW_ALL) {
 					return NodeFilter::FILTER_ACCEPT;
 				}
@@ -121,7 +121,7 @@ class TreeWalker implements Iterator {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/whatToShow */
 	protected function __prop_get_whatToShow():int {
-		return $this->whatToShow;
+		return $this->pWhatToShow;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/filter */

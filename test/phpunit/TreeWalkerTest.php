@@ -26,7 +26,7 @@ class TreeWalkerTest extends TestCase {
 			self::createMock(Node::class),
 			$whatToShow
 		);
-		self::assertSame($whatToShow, $sut->whatToShow);
+		self::assertSame($whatToShow, $sut->pWhatToShow);
 	}
 
 	public function testFilterFromCallable():void {
