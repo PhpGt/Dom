@@ -1,17 +1,20 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\Dom\Exception\DocumentStreamIsClosedException;
 use Gt\Dom\Exception\DocumentStreamNotWritableException;
+use Gt\Dom\Exception\DocumentStreamSeekFailureException;
 use Gt\Dom\Exception\DOMException;
 use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
+use TypeError;
 
 trait DocumentStream {
 	/** @var ?resource */
 	protected $stream;
-	protected ?int $streamBytesFilled;
+	protected int $streamBytesFilled;
 
 	/**
 	 * Closes the stream and any underlying resources.
@@ -38,7 +41,8 @@ trait DocumentStream {
 	 * Get the size of the stream if known.
 	 */
 	public function getSize():?int {
-
+		$this->fillStream();
+		return $this->streamBytesFilled;
 	}
 
 	/**
@@ -52,14 +56,18 @@ trait DocumentStream {
 	 * Returns true if the stream is at the end of the stream.
 	 */
 	public function eof():bool {
-		return feof($this->stream);
+		$tell = $this->tell();
+		$this->fillStream();
+		$this->seek($tell);
+		return feof($this->stream) || $tell >= $this->streamBytesFilled;
 	}
 
 	/**
 	 * Returns whether or not the stream is seekable.
 	 */
 	public function isSeekable():bool {
-		return $this->getMetadata("seekable");
+		$seekable = $this->getMetadata("seekable");
+		return $seekable ?? false;
 	}
 
 	/**
@@ -76,10 +84,14 @@ trait DocumentStream {
 	 */
 	public function seek($offset, $whence = SEEK_SET):void {
 		$this->fillStream();
-		$result = fseek($this->stream, $offset, $whence);
-
-		if($result === -1) {
-			throw new RuntimeException("Error seeking Document Stream");
+		$result = null;
+		try {
+			$result = fseek($this->stream, $offset, $whence);
+		}
+		finally {
+			if($result === -1 || $result === null) {
+				throw new DocumentStreamSeekFailureException("Error seeking Document Stream");
+			}
 		}
 	}
 
@@ -149,7 +161,6 @@ trait DocumentStream {
 	 * @return bool
 	 */
 	public function isReadable():bool {
-		$this->fillStream();
 		$mode = $this->getMetadata("mode");
 		$readable = false;
 
@@ -178,10 +189,10 @@ trait DocumentStream {
 	 * @throws RuntimeException if an error occurs.
 	 */
 	public function read($length):string {
+		$tell = $this->tell();
 		$this->fillStream();
-		$bytesRead = fread($this->stream, $length);
-
-		return $bytesRead;
+		$this->seek($tell);
+		return fread($this->stream, $length);
 	}
 
 	/**
@@ -193,13 +204,7 @@ trait DocumentStream {
 	 */
 	public function getContents():string {
 		$this->fillStream();
-
-		if(!is_resource($this->stream)) {
-			throw new RuntimeException("Stream is not available");
-		}
-
-		$string = stream_get_contents($this->stream);
-		return $string;
+		return stream_get_contents($this->stream);
 	}
 
 	/**
@@ -214,8 +219,13 @@ trait DocumentStream {
 	 *     provided. Returns a specific key value if a key is provided and the
 	 *     value is found, or null if the key is not found.
 	 */
-	public function getMetadata($key = null) {
-		$metaData = stream_get_meta_data($this->stream);
+	public function getMetadata($key = null):mixed {
+		try {
+			$metaData = stream_get_meta_data($this->stream);
+		}
+		catch(TypeError) {
+			return null;
+		}
 
 		if(is_null($key)) {
 			return $metaData;
@@ -226,7 +236,11 @@ trait DocumentStream {
 
 	private function fillStream():void {
 		if(!isset($this->stream)) {
-			throw new DOMException("DocumentStream is closed");
+			throw new DocumentStreamIsClosedException("DocumentStream is closed");
+		}
+
+		if(isset($this->streamBytesFilled)) {
+			return;
 		}
 
 		$this->streamBytesFilled = fwrite($this->stream, $this->__toString());
