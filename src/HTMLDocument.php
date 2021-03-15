@@ -15,6 +15,11 @@ class HTMLDocument extends Document {
 		$this->open();
 		$this->domDocument->loadHTML($html);
 
+		if(!$this->domDocument->documentElement) {
+			$html = $this->domDocument->createElement("html");
+			$this->domDocument->appendChild($html);
+		}
+
 		if(!$this->domDocument->getElementsByTagName("head")->item(0)
 		) {
 			$head = $this->domDocument->createElement("head");

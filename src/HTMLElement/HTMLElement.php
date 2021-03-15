@@ -2,6 +2,7 @@
 namespace Gt\Dom\HTMLElement;
 
 use Gt\Dom\Element;
+use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
 
 /**
  * The HTMLElement interface represents any HTML element. Some elements directly
@@ -30,17 +31,17 @@ abstract class HTMLElement extends Element {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/accessKey */
 	protected function __prop_get_accessKey():string {
-
+		return $this->getAttribute("accesskey") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/accessKey */
 	protected function __prop_set_accessKey(string $value):void {
-
+		$this->setAttribute("accesskey", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/accessKeyLabel */
 	protected function __prop_get_accessKeyLabel():string {
-
+		throw new FunctionalityNotAvailableOnServerException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/contentEditable */
