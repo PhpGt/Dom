@@ -212,4 +212,19 @@ class HTMLElementTest extends TestCase {
 		self::assertEquals("en", $sut->lang);
 		self::assertEquals("en", $sut->getAttribute("lang"));
 	}
+
+	public function testTabIndexDefault():void {
+		$sut = HTMLElementTestFactory::create();
+		self::assertEquals(-1, $sut->tabIndex);
+	}
+
+	public function testTabIndex():void {
+		$sut = HTMLElementTestFactory::create();
+		$sut->tabIndex = 1;
+		self::assertEquals(1, $sut->tabIndex);
+		self::assertEquals("1", $sut->getAttribute("tabindex"));
+		$sut->tabIndex = 10;
+		self::assertEquals("10", $sut->getAttribute("tabindex"));
+		self::assertEquals(10, $sut->tabIndex);
+	}
 }
