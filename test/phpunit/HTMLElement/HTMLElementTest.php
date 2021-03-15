@@ -8,12 +8,12 @@ use PHPUnit\Framework\TestCase;
 
 class HTMLElementTest extends TestCase {
 	public function testAccessKeyNone():void {
-		$sut = HTMLElementTestFactory::create("div");
+		$sut = HTMLElementTestFactory::create();
 		self::assertEquals("", $sut->accessKey);
 	}
 
 	public function testAccessKeySetGet():void {
-		$sut = HTMLElementTestFactory::create("div");
+		$sut = HTMLElementTestFactory::create();
 		$sut->accessKey = "a";
 		self::assertEquals("a", $sut->accessKey);
 		self::assertEquals(
@@ -23,18 +23,18 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testAccessKeyLabelThrows():void {
-		$sut = HTMLElementTestFactory::create("div");
+		$sut = HTMLElementTestFactory::create();
 		self::expectException(FunctionalityNotAvailableOnServerException::class);
 		$test = $sut->accessKeyLabel;
 	}
 
 	public function testContentEditableInherit():void {
-		$sut = HTMLElementTestFactory::create("div");
+		$sut = HTMLElementTestFactory::create();
 		self::assertEquals("inherit", $sut->contentEditable);
 	}
 
 	public function testContentEditable():void {
-		$sut = HTMLElementTestFactory::create("div");
+		$sut = HTMLElementTestFactory::create();
 		$sut->contentEditable = "true";
 		self::assertEquals("true", $sut->contentEditable);
 		$sut->contentEditable = "false";
@@ -50,12 +50,12 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testIsContentEditableDefault():void {
-		$sut = HTMLElementTestFactory::create("div");
+		$sut = HTMLElementTestFactory::create();
 		self::assertFalse($sut->isContentEditable);
 	}
 
 	public function testIsContentEditableTrueFalse():void {
-		$sut = HTMLElementTestFactory::create("div");
+		$sut = HTMLElementTestFactory::create();
 		$sut->contentEditable = "true";
 		self::assertTrue($sut->isContentEditable);
 		$sut->contentEditable = "false";
@@ -63,13 +63,13 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testIsContentEditableInheritNoParent():void {
-		$sut = HTMLElementTestFactory::create("div");
+		$sut = HTMLElementTestFactory::create();
 		$sut->contentEditable = "inherit";
 		self::assertFalse($sut->isContentEditable);
 	}
 
 	public function testIsContentEditableInheritParentWithFalse():void {
-		$sut = HTMLElementTestFactory::create("div");
+		$sut = HTMLElementTestFactory::create();
 		$sut->contentEditable = "inherit";
 		$falseContentEditable = $sut->ownerDocument->createElement("div");
 		$falseContentEditable->contentEditable = "false";
@@ -78,11 +78,22 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testIsContentEditableInheritParentWithTrue():void {
-		$sut = HTMLElementTestFactory::create("div");
+		$sut = HTMLElementTestFactory::create();
 		$sut->contentEditable = "inherit";
 		$falseContentEditable = $sut->ownerDocument->createElement("div");
 		$falseContentEditable->contentEditable = "true";
 		$falseContentEditable->appendChild($sut);
 		self::assertTrue($sut->isContentEditable);
+	}
+
+	public function testDirNone():void {
+		$sut = HTMLElementTestFactory::create();
+		self::assertEquals("", $sut->dir);
+	}
+
+	public function testDirGetSet():void {
+		$sut = HTMLElementTestFactory::create();
+		$sut->dir = "ltr";
+		self::assertEquals("ltr", $sut->dir);
 	}
 }

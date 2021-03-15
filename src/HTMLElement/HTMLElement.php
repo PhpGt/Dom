@@ -96,12 +96,12 @@ abstract class HTMLElement extends Element {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dir */
 	protected function __prop_get_dir():string {
-
+		return $this->getAttribute("dir") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dir */
 	protected function __prop_set_dir(string $value):void {
-
+		$this->setAttribute("dir", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/draggable */

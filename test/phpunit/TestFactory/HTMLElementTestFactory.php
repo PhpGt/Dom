@@ -7,7 +7,7 @@ use Gt\Dom\HTMLElement\HTMLElement;
 
 class HTMLElementTestFactory {
 	public static function create(
-		string $tagName,
+		string $tagName = "div",
 		HTMLDocument $document = null
 	):HTMLElement {
 		if(!$document) {
