@@ -227,4 +227,16 @@ class HTMLElementTest extends TestCase {
 		self::assertEquals("10", $sut->getAttribute("tabindex"));
 		self::assertEquals(10, $sut->tabIndex);
 	}
+
+	public function testTitleDefault():void {
+		$sut = HTMLElementTestFactory::create();
+		self::assertEquals("", $sut->title);
+	}
+
+	public function testTitle():void {
+		$sut = HTMLElementTestFactory::create();
+		$sut->title = "Example";
+		self::assertEquals("Example", $sut->title);
+		self::assertEquals("Example", $sut->getAttribute("title"));
+	}
 }

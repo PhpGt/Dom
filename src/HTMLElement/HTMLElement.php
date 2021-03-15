@@ -227,11 +227,11 @@ abstract class HTMLElement extends Element {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/title */
 	protected function __prop_get_title():string {
-
+		return $this->getAttribute("title") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/title */
 	protected function __prop_set_title(string $value):void {
-
+		$this->setAttribute("title", $value);
 	}
 }
