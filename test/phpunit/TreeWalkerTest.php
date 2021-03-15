@@ -11,6 +11,7 @@ use Gt\Dom\Node;
 use Gt\Dom\NodeFilter;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\Text;
 use PHPUnit\Framework\TestCase;
 
 class TreeWalkerTest extends TestCase {
@@ -267,7 +268,6 @@ class TreeWalkerTest extends TestCase {
 			$document->body,
 			NodeFilter::SHOW_ELEMENT,
 		);
-		$collectedNodes = [];
 		while($sut->nextNode()){}
 
 		self::assertInstanceOf(HTMLImageElement::class, $sut->currentNode);
@@ -282,5 +282,21 @@ class TreeWalkerTest extends TestCase {
 		self::assertInstanceOf(HTMLHeadingElement::class, $sut->previousNode());
 		self::assertInstanceOf(HTMLBodyElement::class, $sut->previousNode());
 		self::assertNull($sut->previousNode());
+	}
+
+	public function testIterateOverTextNodesOnly():void {
+		$document = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_PAGE);
+		$sut = TreeWalkerFactory::create(
+			$document->body,
+			NodeFilter::SHOW_TEXT
+		);
+		foreach($sut as $i => $node) {
+			if($i === 0) {
+				self::assertSame($document->body, $node);
+			}
+			else {
+				self::assertInstanceOf(Text::class, $node);
+			}
+		}
 	}
 }

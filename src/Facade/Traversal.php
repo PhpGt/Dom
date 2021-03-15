@@ -278,7 +278,7 @@ trait Traversal {
 
 		while(true) {
 			while($result !== NodeFilter::FILTER_REJECT
-				&& !is_null($node->firstChild)) {
+			&& !is_null($node->firstChild)) {
 				$node = $node->firstChild;
 				$result = $this->filter->acceptNode($node);
 				if($result === NodeFilter::FILTER_ACCEPT) {
