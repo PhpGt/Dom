@@ -200,4 +200,16 @@ class HTMLElementTest extends TestCase {
 		$child2->hidden = true;
 		self::assertEquals("Child 1Child 3", $sut->innerText);
 	}
+
+	public function testLangDefault():void {
+		$sut = HTMLElementTestFactory::create();
+		self::assertEquals("", $sut->lang);
+	}
+
+	public function testLang():void {
+		$sut = HTMLElementTestFactory::create();
+		$sut->lang = "en";
+		self::assertEquals("en", $sut->lang);
+		self::assertEquals("en", $sut->getAttribute("lang"));
+	}
 }
