@@ -156,12 +156,17 @@ abstract class HTMLElement extends Element {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert */
 	protected function __prop_get_inert():bool {
-
+		return $this->hasAttribute("inert");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert */
 	protected function __prop_set_inert(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("inert", "");
+		}
+		else {
+			$this->removeAttribute("inert");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText */

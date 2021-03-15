@@ -148,4 +148,20 @@ class HTMLElementTest extends TestCase {
 		self::assertFalse($sut->hidden);
 		self::assertFalse($sut->hasAttribute("hidden"));
 	}
+
+	public function testInertDefault():void {
+		$sut = HTMLElementTestFactory::create();
+		self::assertFalse($sut->inert);
+	}
+
+	public function testInert():void {
+		$sut = HTMLElementTestFactory::create();
+		$sut->inert = true;
+		self::assertTrue($sut->inert);
+		self::assertTrue($sut->hasAttribute("inert"));
+		self::assertEquals("", $sut->getAttribute("inert"));
+		$sut->inert = false;
+		self::assertFalse($sut->inert);
+		self::assertFalse($sut->hasAttribute("inert"));
+	}
 }
