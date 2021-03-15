@@ -11,6 +11,7 @@ class NodeIteratorFactory extends NodeIterator {
 		int $whatToShow = NodeFilter::SHOW_ALL,
 		NodeFilter|callable $filter = null
 	):NodeIterator {
-		return new NodeIterator($root, $whatToShow, $filter);
+		$class = NodeIterator::class;
+		return new $class($root, $whatToShow, $filter);
 	}
 }

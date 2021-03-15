@@ -11,6 +11,7 @@ class TreeWalkerFactory extends TreeWalker {
 		int $whatToShow = NodeFilter::SHOW_ALL,
 		NodeFilter|callable $filter = null
 	):TreeWalker {
-		return new TreeWalker($root, $whatToShow, $filter);
+		$class = TreeWalker::class;
+		return new $class($root, $whatToShow, $filter);
 	}
 }
