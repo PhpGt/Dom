@@ -2,7 +2,9 @@
 namespace Gt\Dom\HTMLElement;
 
 use Gt\Dom\Element;
+use Gt\Dom\Exception\EnumeratedValueException;
 use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
+use Gt\Dom\HTMLDocument;
 
 /**
  * The HTMLElement interface represents any HTML element. Some elements directly
@@ -24,6 +26,8 @@ use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
  * @property string $lang Is a DOMString representing the language of an element's attributes, text, and element contents.
  * @property int $tabIndex Is a long that represents this element's position in the tabbing order.
  * @property string $title Is a DOMString containing the text that appears in a popup box when mouse is over the element.
+ * Inherited properties with extended types:
+ * @property-read HTMLDocument $ownerDocument
  */
 abstract class HTMLElement extends Element {
 	use HTMLOrForeignElement;
@@ -46,17 +50,48 @@ abstract class HTMLElement extends Element {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/contentEditable */
 	protected function __prop_get_contentEditable():string {
-
+		$attr = $this->getAttribute("contenteditable");
+		return $attr ?: "inherit";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/contentEditable */
 	protected function __prop_set_contentEditable(string $value):void {
-
+		switch($value) {
+		case "true":
+		case "false":
+		case "inherit":
+			$this->setAttribute("contenteditable", $value);
+			break;
+		default:
+			throw new EnumeratedValueException("Must be 'true', 'false' or 'inherit'");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/isContentEditable */
 	protected function __prop_get_isContentEditable():bool {
+		$attr = $this->getAttribute("contenteditable");
+		if(!$attr || $attr === "false") {
+			return false;
+		}
 
+		if($attr === "true") {
+			return true;
+		}
+
+		$context = $this;
+		while($parent = $context->parentElement) {
+			$parentAttr = $parent->getAttribute("contenteditable");
+			if($parentAttr === "true") {
+				return true;
+			}
+			if($parentAttr === "false") {
+				return false;
+			}
+
+			$context = $parent;
+		}
+
+		return false;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dir */

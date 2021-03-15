@@ -1,6 +1,11 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\Dom\HTMLElement\HTMLElement;
+
+/**
+ * @method HTMLElement createElement(string $tagName)
+ */
 class HTMLDocument extends Document {
 	const EMPTY_DOCUMENT_STRING = "<!doctype html><html></html>";
 	const W3_NAMESPACE = "http://www.w3.org/1999/xhtml";
