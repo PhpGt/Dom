@@ -22,4 +22,14 @@ class HTMLDocumentTest extends TestCase {
 			$sut->documentElement->tagName
 		);
 	}
+
+	public function testCreatedElementsAreNotNamespaced():void {
+		$sut = HTMLDocumentFactory::create('<html lang="en"><head><title>Test</title></head><body></body></html>');
+		$div = $sut->createElement("div");
+		$sut->body->appendChild($div);
+		self::assertEquals(
+			"<div></div>",
+			$sut->body->innerHTML
+		);
+	}
 }

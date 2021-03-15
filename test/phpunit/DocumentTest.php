@@ -444,10 +444,7 @@ class DocumentTest extends TestCase {
 		foreach(["one", "two", "three"] as $number) {
 			$elementName = "element-$number";
 			$element = $sut->createElement($elementName);
-			self::assertEquals(
-				HTMLDocument::W3_NAMESPACE,
-				$element->namespaceURI
-			);
+			self::assertNull($element->namespaceURI);
 		}
 	}
 

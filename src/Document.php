@@ -346,22 +346,15 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
 	 */
 	public function createElement(string $tagName):Element {
-		if($this instanceof HTMLDocument) {
-			$domElement = $this->domDocument->createElementNS(
-				HTMLDocument::W3_NAMESPACE,
+		try {
+			$domElement = $this->domDocument->createElement(
 				$tagName
 			);
 		}
-		else {
-			try {
-				$domElement = $this->domDocument->createElement(
-					$tagName
-				);
-			}
-			catch(DOMException $exception) {
-				if(strstr($exception->getMessage(), "Invalid Character Error")) {
-					throw new InvalidCharacterException($tagName);
-				}
+		/** @noinspection PhpRedundantCatchClauseInspection */
+		catch(DOMException $exception) {
+			if(strstr($exception->getMessage(), "Invalid Character Error")) {
+				throw new InvalidCharacterException($tagName);
 			}
 		}
 
