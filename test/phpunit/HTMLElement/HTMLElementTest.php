@@ -164,4 +164,15 @@ class HTMLElementTest extends TestCase {
 		self::assertFalse($sut->inert);
 		self::assertFalse($sut->hasAttribute("inert"));
 	}
+
+	public function testInnerTextEmpty():void {
+		$sut = HTMLElementTestFactory::create();
+		self::assertEquals("", $sut->innerText);
+	}
+
+	public function testInnerText():void {
+		$sut = HTMLElementTestFactory::create();
+		$sut->innerText = "Hello, PHPUnit!";
+		self::assertEquals("Hello, PHPUnit!", $sut->innerText);
+	}
 }

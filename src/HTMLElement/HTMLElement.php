@@ -4,7 +4,10 @@ namespace Gt\Dom\HTMLElement;
 use Gt\Dom\Element;
 use Gt\Dom\Exception\EnumeratedValueException;
 use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
+use Gt\Dom\Facade\NodeIteratorFactory;
+use Gt\Dom\Facade\TreeWalkerFactory;
 use Gt\Dom\HTMLDocument;
+use Gt\Dom\NodeFilter;
 
 /**
  * The HTMLElement interface represents any HTML element. Some elements directly
@@ -171,12 +174,12 @@ abstract class HTMLElement extends Element {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText */
 	protected function __prop_get_innerText():string {
-
+		return $this->textContent;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText */
 	protected function __prop_set_innerText(string $value):void {
-
+		$this->textContent = $value;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/lang */
