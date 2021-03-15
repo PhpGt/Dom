@@ -106,12 +106,14 @@ abstract class HTMLElement extends Element {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/draggable */
 	protected function __prop_get_draggable():bool {
-
+		$attr = $this->getAttribute("draggable");
+		return !is_null($attr) && $attr === "true";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/draggable */
 	protected function __prop_set_draggable(bool $value):void {
-
+		$strValue = $value ? "true" : "false";
+		$this->setAttribute("draggable", $strValue);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/enterKeyHint */

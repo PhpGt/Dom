@@ -96,4 +96,19 @@ class HTMLElementTest extends TestCase {
 		$sut->dir = "ltr";
 		self::assertEquals("ltr", $sut->dir);
 	}
+
+	public function testDraggableNone():void {
+		$sut = HTMLElementTestFactory::create();
+		self::assertFalse($sut->draggable);
+	}
+
+	public function testDraggable():void {
+		$sut = HTMLElementTestFactory::create();
+		$sut->draggable = true;
+		self::assertTrue($sut->draggable);
+		self::assertEquals("true", $sut->getAttribute("draggable"));
+		$sut->draggable = false;
+		self::assertFalse($sut->draggable);
+		self::assertEquals("false", $sut->getAttribute("draggable"));
+	}
 }
