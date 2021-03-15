@@ -111,4 +111,25 @@ class HTMLElementTest extends TestCase {
 		self::assertFalse($sut->draggable);
 		self::assertEquals("false", $sut->getAttribute("draggable"));
 	}
+
+	public function testEnterKeyHintNone():void {
+		$sut = HTMLElementTestFactory::create();
+		self::assertEquals("", $sut->enterKeyHint);
+	}
+
+	public function testEnterKeyHint():void {
+		$sut = HTMLElementTestFactory::create();
+		$sut->enterKeyHint = "go";
+		self::assertEquals("go", $sut->enterKeyHint);
+		self::assertEquals("go", $sut->getAttribute("enterkeyhint"));
+		$sut->enterKeyHint = "next";
+		self::assertEquals("next", $sut->enterKeyHint);
+		self::assertEquals("next", $sut->getAttribute("enterkeyhint"));
+	}
+
+	public function testEnterKeyHintBadEnum():void {
+		$sut = HTMLElementTestFactory::create();
+		self::expectException(EnumeratedValueException::class);
+		$sut->enterKeyHint = "lalala";
+	}
 }

@@ -63,7 +63,7 @@ abstract class HTMLElement extends Element {
 			$this->setAttribute("contenteditable", $value);
 			break;
 		default:
-			throw new EnumeratedValueException("Must be 'true', 'false' or 'inherit'");
+			throw new EnumeratedValueException($value);
 		}
 	}
 
@@ -118,12 +118,25 @@ abstract class HTMLElement extends Element {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/enterKeyHint */
 	protected function __prop_get_enterKeyHint():string {
-
+		return $this->getAttribute("enterkeyhint") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/enterKeyHint */
 	protected function __prop_set_enterKeyHint(string $value):void {
+		switch($value) {
+		case "enter":
+		case "done":
+		case "go":
+		case "next":
+		case "previous":
+		case "search":
+		case "send":
+			$this->setAttribute("enterkeyhint", $value);
+			break;
 
+		default:
+			throw new EnumeratedValueException($value);
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/hidden */
