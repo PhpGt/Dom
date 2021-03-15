@@ -198,8 +198,16 @@ class Element extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
 	 */
 	public function closest(string $selectors):?Element {
+		$furthestAncestor = $this;
+		while($furthestAncestor->parentElement) {
+			$furthestAncestor = $furthestAncestor->parentElement;
+		}
+		if($furthestAncestor === $this) {
+			$furthestAncestor = $this->ownerDocument;
+		}
+
 		$matchesArray = iterator_to_array(
-			$this->ownerDocument->querySelectorAll($selectors)
+			$furthestAncestor->querySelectorAll($selectors)
 		);
 		$context = $this;
 

@@ -277,14 +277,21 @@ trait Traversal {
 		$result = NodeFilter::FILTER_ACCEPT;
 
 		while(true) {
-			while($result !== NodeFilter::FILTER_REJECT
-			&& !is_null($node->firstChild)) {
-				$node = $node->firstChild;
+			do {
+				if($node->firstChild) {
+					$node = $node->firstChild;
+				}
+				else {
+					continue;
+				}
+
 				$result = $this->filter->acceptNode($node);
 				if($result === NodeFilter::FILTER_ACCEPT) {
 					return $node;
 				}
 			}
+			while($result === NodeFilter::FILTER_REJECT
+			&& !is_null($node->firstChild));
 
 			$following = $this->nextSkippingChildren($node, $this->pRoot);
 			if(!is_null($following)) {

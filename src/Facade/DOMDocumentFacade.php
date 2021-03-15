@@ -39,6 +39,7 @@ use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
 use Gt\Dom\Facade\NodeClass\DOMNotationFacade;
 use Gt\Dom\Facade\NodeClass\DOMProcessingInstructionFacade;
 use Gt\Dom\Facade\NodeClass\DOMTextFacade;
+use Gt\Dom\HTMLDocument;
 use Gt\Dom\HTMLElement\HTMLAnchorElement;
 use Gt\Dom\HTMLElement\HTMLAreaElement;
 use Gt\Dom\HTMLElement\HTMLAudioElement;
@@ -97,6 +98,7 @@ use Gt\Dom\HTMLElement\HTMLTimeElement;
 use Gt\Dom\HTMLElement\HTMLTitleElement;
 use Gt\Dom\HTMLElement\HTMLTrackElement;
 use Gt\Dom\HTMLElement\HTMLUListElement;
+use Gt\Dom\HTMLElement\HTMLUnknownElement;
 use Gt\Dom\HTMLElement\HTMLVideoElement;
 use Gt\Dom\Node;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
@@ -107,6 +109,8 @@ use ReflectionMethod;
 
 class DOMDocumentFacade extends DOMDocument {
 	const DEFAULT_CLASS = Element::class;
+	const DEFAULT_CLASS_HTML = HTMLUnknownElement::class;
+
 	const NODE_CLASS_LIST = [
 		"Gt\Dom\Facade\DOMDocumentFacade" => Document::class,
 		"Gt\Dom\Facade\NodeClass\DOMDocumentTypeFacade" => DocumentType::class,
@@ -265,7 +269,12 @@ class DOMDocumentFacade extends DOMDocument {
 				$gtNodeClass = self::NODE_CLASS_LIST[$key];
 			}
 			else {
+				$gtDocument = $this->getGtDomNode($this);
 				$gtNodeClass = self::DEFAULT_CLASS;
+
+				if($gtDocument instanceof HTMLDocument) {
+					$gtNodeClass = self::DEFAULT_CLASS_HTML;
+				}
 			}
 
 			$class = new ReflectionClass($gtNodeClass);

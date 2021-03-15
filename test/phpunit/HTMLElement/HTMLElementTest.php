@@ -175,4 +175,29 @@ class HTMLElementTest extends TestCase {
 		$sut->innerText = "Hello, PHPUnit!";
 		self::assertEquals("Hello, PHPUnit!", $sut->innerText);
 	}
+
+	public function testInnerTextRemovesAllChildren():void {
+		$sut = HTMLElementTestFactory::create();
+		$sut->append(
+			$sut->ownerDocument->createElement("child"),
+			$sut->ownerDocument->createElement("child"),
+			$sut->ownerDocument->createElement("child")
+		);
+		$sut->innerText = "Hello, PHPUnit!";
+		self::assertCount(1, $sut->childNodes);
+	}
+
+	public function testInnerTextDoesNotShowHidden():void {
+		$sut = HTMLElementTestFactory::create();
+		$child1 = $sut->ownerDocument->createElement("child");
+		$child1->textContent = "Child 1";
+		$child2 = $sut->ownerDocument->createElement("child");
+		$child2->textContent = "Child 2";
+		$child3 = $sut->ownerDocument->createElement("child");
+		$child3->textContent = "Child 3";
+		$sut->append($child1, $child2, $child3);
+
+		$child2->hidden = true;
+		self::assertEquals("Child 1Child 3", $sut->innerText);
+	}
 }

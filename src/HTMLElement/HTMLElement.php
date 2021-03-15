@@ -174,7 +174,30 @@ abstract class HTMLElement extends Element {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText */
 	protected function __prop_get_innerText():string {
-		return $this->textContent;
+		$treeWalker = $this->ownerDocument->createTreeWalker(
+			$this,
+			NodeFilter::SHOW_TEXT
+		);
+
+		$textArray = [];
+
+		foreach($treeWalker as $i => $node) {
+			if($i === 0) {
+				// Skip the root node.
+				continue;
+			}
+
+			$parentElement = $node->parentElement;
+			$closestHidden = $parentElement->closest("[hidden]");
+			if($parentElement
+			&& $closestHidden) {
+				continue;
+			}
+
+			array_push($textArray, $node->textContent);
+		}
+
+		return implode("", $textArray);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText */
