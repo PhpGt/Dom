@@ -132,4 +132,20 @@ class HTMLElementTest extends TestCase {
 		self::expectException(EnumeratedValueException::class);
 		$sut->enterKeyHint = "lalala";
 	}
+
+	public function testHiddenDefault():void {
+		$sut = HTMLElementTestFactory::create();
+		self::assertFalse($sut->hidden);
+	}
+
+	public function testHidden():void {
+		$sut = HTMLElementTestFactory::create();
+		$sut->hidden = true;
+		self::assertTrue($sut->hidden);
+		self::assertTrue($sut->hasAttribute("hidden"));
+		self::assertEquals("", $sut->getAttribute("hidden"));
+		$sut->hidden = false;
+		self::assertFalse($sut->hidden);
+		self::assertFalse($sut->hasAttribute("hidden"));
+	}
 }

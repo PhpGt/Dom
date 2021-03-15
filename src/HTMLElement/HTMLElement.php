@@ -141,12 +141,17 @@ abstract class HTMLElement extends Element {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/hidden */
 	protected function __prop_get_hidden():bool {
-
+		return $this->hasAttribute("hidden");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/hidden */
 	protected function __prop_set_hidden(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("hidden", "");
+		}
+		else {
+			$this->removeAttribute("hidden");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert */
