@@ -62,16 +62,16 @@
         },
         {
             "name": "phpgt/propfunc",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PhpGt/PropFunc.git",
-                "reference": "1253bb8531427e92412b2b411d14e9b11a6049cf"
+                "reference": "091213649e89ff22d1ef640b46fbee5215c65520"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PhpGt/PropFunc/zipball/1253bb8531427e92412b2b411d14e9b11a6049cf",
-                "reference": "1253bb8531427e92412b2b411d14e9b11a6049cf",
+                "url": "https://api.github.com/repos/PhpGt/PropFunc/zipball/091213649e89ff22d1ef640b46fbee5215c65520",
+                "reference": "091213649e89ff22d1ef640b46fbee5215c65520",
                 "shasum": ""
             },
             "require": {
@@ -102,7 +102,7 @@
             "description": "Property accessor and mutator functions.",
             "support": {
                 "issues": "https://github.com/PhpGt/PropFunc/issues",
-                "source": "https://github.com/PhpGt/PropFunc/tree/v1.0.0"
+                "source": "https://github.com/PhpGt/PropFunc/tree/v1.0.1"
             },
             "funding": [
                 {
@@ -110,7 +110,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-03-23T11:45:26+00:00"
+            "time": "2021-03-23T12:46:44+00:00"
         },
         {
             "name": "psr/http-message",
