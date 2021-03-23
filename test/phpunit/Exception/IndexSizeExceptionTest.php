@@ -14,6 +14,7 @@ class IndexSizeExceptionTest extends TestCase {
 	public function testNameReadOnly():void {
 		$sut = new IndexSizeException();
 		self::expectException(PropertyReadOnlyException::class);
-		$sut->name = "Can't change, but I'm trying to...";
+		$property = "name";
+		$sut->$property = "Can't change, but I'm trying to...";
 	}
 }
