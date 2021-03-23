@@ -14,13 +14,12 @@ use RuntimeException;
  * @property-read string $name Returns a DOMString that contains one of the strings associated with an error name.
  * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMException
  */
-class DOMException extends RuntimeException
-{
-    use MagicProp;
+class DOMException extends RuntimeException {
+	use MagicProp;
 
-    protected string $pName;
+	protected string $name;
 
-    public function __prop_get_name():string {
-    	return $this->pName;
-    }
+	public function __prop_get_name():string {
+		return $this->name;
+	}
 }

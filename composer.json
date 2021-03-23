@@ -9,8 +9,8 @@
 		"ext-libxml": "*",
 		"ext-mbstring": "*",
 		"phpgt/cssxpath": ">=1.1.2",
-		"phpgt/propfunc": "dev-master",
-		"psr/http-message": "1.*"
+		"phpgt/propfunc": "^1.0",
+		"psr/http-message": "^1.0"
 	},
 
 	"require-dev": {

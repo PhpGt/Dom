@@ -2,7 +2,9 @@
 
 namespace Gt\Dom\Exception;
 
-class IndexSizeException extends DOMException
-{
-    protected string $pName = 'IndexSizeError';
+/**
+ * @property-read string $name
+ */
+class IndexSizeException extends DOMException {
+	protected string $name = "IndexSizeError";
 }
