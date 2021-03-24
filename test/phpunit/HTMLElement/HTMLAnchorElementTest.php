@@ -274,4 +274,27 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		self::assertEquals("/changed", $sut->pathname);
 		self::assertEquals("https://example.com/changed?key=value#test", $sut->href);
 	}
+
+	public function testPortNone():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = "https://example.com/example?key=value#test";
+		self::assertEmpty($sut->port);
+	}
+
+	public function testPort():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = "https://example.com:8080/example?key=value#test";
+		self::assertEquals(8080, $sut->port);
+	}
+
+	public function testPortSet():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = "https://example.com:8080/example?key=value#test";
+		$sut->port = 1234;
+		self::assertEquals(1234, $sut->port);
+		self::assertEquals("https://example.com:1234/example?key=value#test", $sut->href);
+	}
 }
