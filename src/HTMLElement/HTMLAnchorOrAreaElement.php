@@ -79,52 +79,24 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/host */
 	protected function __prop_set_host(string $value):void {
-		$urlParts = parse_url($this->href);
-		$url = "";
-
-		if($existingScheme = $urlParts["scheme"] ?? null) {
-			$url .= "$existingScheme://";
-		}
-		if($existingUser = $urlParts["user"] ?? null) {
-			$url .= $existingUser;
-
-			if($existingPass = $urlParts["pass"] ?? null) {
-				$url .= ":$existingPass";
-			}
-
-			$url .= "@";
-		}
-
-		$url .= strtok($value, ":");
-
-		if($newPort = parse_url($value, PHP_URL_PORT)) {
-			$url .= ":$newPort";
-		}
-		elseif($existingPort = $urlParts["port"] ?? null) {
-			$url .= ":$existingPort";
-		}
-
-		if($existingPath = $urlParts["path"] ?? null) {
-			$url .= $existingPath;
-		}
-		if($existingQuery = $urlParts["query"] ?? null) {
-			$url .= "?$existingQuery";
-		}
-		if($existingHash = $urlParts["fragment"] ?? null) {
-			$url .= "#$existingHash";
-		}
-
-		$this->href = $url;
+		$newHost = strtok($value, ":");
+		$newPort = parse_url($value, PHP_URL_PORT);
+		$this->href = $this->buildUrl(
+			host: $newHost,
+			port: $newPort
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hostname */
 	protected function __prop_get_hostname():string {
-
+		return parse_url($this->href, PHP_URL_HOST);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hostname */
 	protected function __prop_set_hostname(string $value):void {
-
+		$this->href = $this->buildUrl(
+			host: $value
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/href */
@@ -235,5 +207,65 @@ trait HTMLAnchorOrAreaElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/username */
 	protected function __prop_set_username(string $value):void {
 
+	}
+
+	/**
+	 * Builds and returns a URL string from the existing href attribute
+	 * value with the newly supplied overrides.
+	 */
+	protected function buildUrl(
+		string $scheme = null,
+		string $user = null,
+		string $pass = null,
+		string $host = null,
+		int $port = null,
+		string $path = null,
+		string $query = null,
+		string $fragment = null,
+	):string {
+		$existing = parse_url($this->href);
+		$new = [
+			"scheme" => $scheme,
+			"user" => $user,
+			"pass" => $pass,
+			"host" => $host,
+			"port" => $port,
+			"path" => $path,
+			"query" => $query,
+			"fragment" => $fragment,
+		];
+		// Remove null new parts.
+		$new = array_filter($new);
+
+		$url = "";
+		if($addScheme = $new["scheme"] ?? $existing["scheme"] ?? null) {
+			$url .= "$addScheme://";
+		}
+		if($addUser = $new["user"] ?? $existing["user"] ?? null) {
+			$url .= $addUser;
+
+			if($addPass = $new["pass"] ?? $existing["pass"] ?? null) {
+				$url .= ":$addPass";
+			}
+
+			$url .= "@";
+		}
+		if($addHost = $new["host"] ?? $existing["host"] ?? null) {
+			$url .= $addHost;
+		}
+		if($addPort = $new["port"] ?? $existing["port"] ?? null) {
+			$url .= ":$addPort";
+		}
+		if($addPath = $new["path"] ?? $existing["path"] ?? null) {
+			$url .= $addPath;
+		}
+		if($addQuery = $new["query"] ?? $existing["query"] ?? null) {
+			$url .= "?$addQuery";
+		}
+		if($addFrag = $new["fragment"] ?? $existing["fragment"] ?? null) {
+			$url .= "#$addFrag";
+		}
+
+		return $url;
 	}
 }
