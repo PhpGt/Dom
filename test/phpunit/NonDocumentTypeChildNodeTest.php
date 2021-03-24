@@ -2,13 +2,11 @@
 
 namespace Gt\Dom\Test;
 
-use Gt\Dom\Element;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
-use Gt\Dom\Text;
 use PHPUnit\Framework\TestCase;
 
 
-class php extends TestCase
+class NonDocumentTypeChildNodeTest extends TestCase
 {
     public function testNextElementSibling(): void
     {
