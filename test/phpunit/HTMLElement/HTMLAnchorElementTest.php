@@ -320,4 +320,10 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		self::assertEquals("http:", $sut->protocol);
 		self::assertEquals("http://example.com/example?key=value#test", $sut->href);
 	}
+
+	public function testReferrerPolicy():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		self::assertPropertyAttributeCorrelate($sut, "referrerpolicy", "referrerPolicy");
+	}
 }
