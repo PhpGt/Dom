@@ -217,12 +217,18 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/search */
 	protected function __prop_get_search():string {
+		if($query = parse_url($this->href, PHP_URL_QUERY)) {
+			return "?$query";
+		}
 
+		return "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/search */
 	protected function __prop_set_search(string $value):void {
-
+		$this->href = $this->buildUrl(
+			query: $value
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/target */
@@ -272,6 +278,12 @@ trait HTMLAnchorOrAreaElement {
 		];
 		// Remove null new parts.
 		$new = array_filter($new);
+		if(isset($new["query"])) {
+			$new["query"] = ltrim($new["query"], "?");
+		}
+		if(isset($new["fragment"])) {
+			$new["fragment"] = ltrim($new["fragment"], "#");
+		}
 
 		$url = "";
 		if($addScheme = $new["scheme"] ?? $existing["scheme"] ?? null) {

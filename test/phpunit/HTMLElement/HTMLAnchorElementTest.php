@@ -347,4 +347,33 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		$relList->value = "three four";
 		self::assertEquals("three four", $sut->rel);
 	}
+
+	public function testSearchNone():void {
+		$url = "http://localhost:8080/example";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		self::assertEmpty($sut->search);
+	}
+
+	public function testSearch():void {
+		$url = "http://localhost:8080/example?key=value&another=something";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		self::assertEquals("?key=value&another=something", $sut->search);
+	}
+
+	public function testSearchSet():void {
+		$url = "http://localhost:8080/example?key=value&another=something";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		$sut->search = "one=two";
+		self::assertEquals("?one=two", $sut->search);
+		self::assertEquals("http://localhost:8080/example?one=two", $sut->href);
+		$sut->search = "?three=four";
+		self::assertEquals("?three=four", $sut->search);
+		self::assertEquals("http://localhost:8080/example?three=four", $sut->href);
+	}
 }
