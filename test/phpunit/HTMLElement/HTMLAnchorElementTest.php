@@ -6,6 +6,7 @@ use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
 class HTMLAnchorElementTest extends HTMLElementTestCase {
 	public function testHrefLang():void {
+		/** @var HTMLAnchorElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("a");
 		self::assertPropertyAttributeCorrelate($sut, "hreflang");
 	}
@@ -26,7 +27,23 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	}
 
 	public function testType():void {
+		/** @var HTMLAnchorElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("a");
 		self::assertPropertyAttributeCorrelate($sut, "type");
+	}
+
+	public function testToStringEmpty():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		self::assertEmpty((string)$sut);
+	}
+
+	public function testToString():void {
+		$url = "https://example.com";
+
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		self::assertEquals($url, (string)$sut);
 	}
 }
