@@ -297,4 +297,27 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		self::assertEquals(1234, $sut->port);
 		self::assertEquals("https://example.com:1234/example?key=value#test", $sut->href);
 	}
+
+	public function testProtocolNone():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = "/example?key=value#test";
+		self::assertEmpty($sut->protocol);
+	}
+
+	public function testProtocol():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = "https://example.com/example?key=value#test";
+		self::assertEquals("https:", $sut->protocol);
+	}
+
+	public function testProtocolSet():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = "https://example.com/example?key=value#test";
+		$sut->protocol = "http";
+		self::assertEquals("http:", $sut->protocol);
+		self::assertEquals("http://example.com/example?key=value#test", $sut->href);
+	}
 }

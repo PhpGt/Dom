@@ -172,12 +172,18 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/protocol */
 	protected function __prop_get_protocol():string {
+		if($scheme = parse_url($this->href, PHP_URL_SCHEME)) {
+			return "$scheme:";
+		}
 
+		return "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/protocol */
 	protected function __prop_set_protocol(string $value):void {
-
+		$this->href = $this->buildUrl(
+			scheme: $value
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/referrerPolicy */
