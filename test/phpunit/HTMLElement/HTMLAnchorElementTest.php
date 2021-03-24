@@ -97,4 +97,14 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		self::assertEquals("#test", $sut->hash);
 		self::assertEquals("https://php.gt#test", $sut->href);
 	}
+
+	public function testHashSetExistingHash():void {
+		$url = "https://php.gt#something";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		$sut->hash = "#test";
+		self::assertEquals("#test", $sut->hash);
+		self::assertEquals("https://php.gt#test", $sut->href);
+	}
 }
