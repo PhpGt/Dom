@@ -376,4 +376,10 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		self::assertEquals("?three=four", $sut->search);
 		self::assertEquals("http://localhost:8080/example?three=four", $sut->href);
 	}
+
+	public function testTarget():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		self::assertPropertyAttributeCorrelate($sut, "target");
+	}
 }
