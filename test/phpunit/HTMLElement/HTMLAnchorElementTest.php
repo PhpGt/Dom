@@ -107,4 +107,28 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		self::assertEquals("#test", $sut->hash);
 		self::assertEquals("https://php.gt#test", $sut->href);
 	}
+
+	public function testHost():void {
+		$url = "https://php.gt";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		self::assertEquals("php.gt", $sut->host);
+	}
+
+	public function testHostPort():void {
+		$url = "http://localhost:8080";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		self::assertEquals("localhost:8080", $sut->host);
+	}
+
+	public function testHostRelative():void {
+		$url = "/this-is-relative";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		self::assertEquals("", $sut->host);
+	}
 }

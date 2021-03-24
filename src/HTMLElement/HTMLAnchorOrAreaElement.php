@@ -65,7 +65,16 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/host */
 	protected function __prop_get_host():string {
+		if($host = parse_url($this->href, PHP_URL_HOST)) {
+			$port = parse_url($this->href, PHP_URL_PORT);
+			if($port) {
+				return "$host:$port";
+			}
 
+			return $host;
+		}
+
+		return "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/host */
