@@ -18,10 +18,12 @@ use Stringable;
 class HTMLAreaElement extends HTMLElement implements Stringable {
 	use HTMLAnchorOrAreaElement;
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/alt */
 	protected function __prop_get_alt():string {
 		return $this->getAttribute("alt") ?? "";
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/alt */
 	protected function __prop_set_alt(string $value):void {
 		$this->setAttribute("alt", $value);
 	}
