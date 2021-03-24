@@ -35,12 +35,12 @@ class HTMLAnchorElement extends HTMLElement implements Stringable {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/text */
 	protected function __prop_get_text():string {
-
+		return $this->textContent;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/text */
 	protected function __prop_set_text(string $value):void {
-
+		$this->textContent = $value;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/type */
