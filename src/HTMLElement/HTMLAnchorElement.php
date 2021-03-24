@@ -25,12 +25,12 @@ class HTMLAnchorElement extends HTMLElement implements Stringable {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hreflang */
 	protected function __prop_get_hreflang():string {
-
+		return $this->getAttribute("hreflang") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hreflang */
 	protected function __prop_set_hreflang(string $value):void {
-
+		$this->setAttribute("hreflang", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/text */
