@@ -148,12 +148,14 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/pathname */
 	protected function __prop_get_pathname():string {
-
+		return parse_url($this->href, PHP_URL_PATH);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/pathname */
 	protected function __prop_set_pathname(string $value):void {
-
+		$this->href = $this->buildUrl(
+			path: $value
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/port */

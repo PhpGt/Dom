@@ -258,4 +258,20 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		self::assertEquals("changeme77", $sut->password);
 		self::assertEquals("http://g105b:changeme77@localhost:8080/example", $sut->href);
 	}
+
+	public function testPathname():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = "http://g105b:cody123@localhost:8080/example";
+		self::assertEquals("/example", $sut->pathname);
+	}
+
+	public function testPathnameSet():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = "https://example.com/example?key=value#test";
+		$sut->pathname = "/changed";
+		self::assertEquals("/changed", $sut->pathname);
+		self::assertEquals("https://example.com/changed?key=value#test", $sut->href);
+	}
 }
