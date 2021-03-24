@@ -46,4 +46,13 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		$sut->href = $url;
 		self::assertEquals($url, (string)$sut);
 	}
+
+	public function testDownload():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		self::assertPropertyAttributeCorrelate(
+			$sut,
+			"download"
+		);
+	}
 }

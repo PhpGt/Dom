@@ -35,12 +35,12 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/download */
 	protected function __prop_get_download():string {
-
+		return $this->getAttribute("download") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/download */
 	protected function __prop_set_download(string $value):void {
-
+		$this->setAttribute("download", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hash */
