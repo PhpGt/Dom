@@ -16,4 +16,10 @@ class HTMLAreaElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("area");
 		self::assertPropertyAttributeCorrelate($sut, "coords");
 	}
+
+	public function testShape():void {
+		/** @var HTMLAreaElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("area");
+		self::assertPropertyAttributeCorrelate($sut, "shape");
+	}
 }

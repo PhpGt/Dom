@@ -38,11 +38,13 @@ class HTMLAreaElement extends HTMLElement implements Stringable {
 		$this->setAttribute("coords", $value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/shape */
 	protected function __prop_get_shape():string {
-
+		return $this->getAttribute("shape") ?? "";
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/shape */
 	protected function __prop_set_shape(string $value):void {
-
+		$this->setAttribute("shape", $value);
 	}
 }
