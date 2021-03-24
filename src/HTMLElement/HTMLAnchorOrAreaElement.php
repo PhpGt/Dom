@@ -136,12 +136,14 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/password */
 	protected function __prop_get_password():string {
-
+		return parse_url($this->href, PHP_URL_PASS) ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/password */
 	protected function __prop_set_password(string $value):void {
-
+		$this->href = $this->buildUrl(
+			pass: $value
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/pathname */
