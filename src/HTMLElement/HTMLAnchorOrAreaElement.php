@@ -198,12 +198,12 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/rel */
 	protected function __prop_get_rel():string {
-
+		return $this->getAttribute("rel") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/rel */
 	protected function __prop_set_rel(string $value):void {
-
+		$this->setAttribute("rel", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/relList */

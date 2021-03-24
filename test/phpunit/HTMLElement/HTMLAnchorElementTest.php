@@ -326,4 +326,10 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("a");
 		self::assertPropertyAttributeCorrelate($sut, "referrerpolicy", "referrerPolicy");
 	}
+
+	public function testRel():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		self::assertPropertyAttributeCorrelate($sut, "rel");
+	}
 }
