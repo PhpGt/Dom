@@ -2,6 +2,7 @@
 namespace Gt\Dom\HTMLElement;
 
 use Gt\Dom\DOMTokenList;
+use Gt\Dom\Facade\DOMTokenListFactory;
 
 /**
  * This is a non-standard trait that contains functions that are identical
@@ -208,7 +209,10 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/relList */
 	protected function __prop_get_relList():DOMTokenList {
-
+		return DOMTokenListFactory::create(
+			fn() => explode(" ", $this->rel),
+			fn(string...$tokens) => $this->rel = implode(" ", $tokens)
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/search */
