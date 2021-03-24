@@ -39,7 +39,7 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	}
 
 	public function testToString():void {
-		$url = "https://example.com";
+		$url = "https://php.gt";
 
 		/** @var HTMLAnchorElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("a");
@@ -54,5 +54,47 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 			$sut,
 			"download"
 		);
+	}
+
+	public function testHashEmpty():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		self::assertEmpty($sut->hash);
+	}
+
+	public function testHashNone():void {
+		$url = "https://php.gt";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		self::assertEmpty($sut->hash);
+	}
+
+	public function testHash():void {
+		$url = "https://php.gt#hash";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		self::assertEquals("#hash", $sut->hash);
+	}
+
+	public function testHashSet():void {
+		$url = "https://php.gt";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		$sut->hash = "test";
+		self::assertEquals("#test", $sut->hash);
+		self::assertEquals("https://php.gt#test", $sut->href);
+	}
+
+	public function testHashSetWithHash():void {
+		$url = "https://php.gt";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		$sut->hash = "#test";
+		self::assertEquals("#test", $sut->hash);
+		self::assertEquals("https://php.gt#test", $sut->href);
 	}
 }

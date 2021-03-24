@@ -45,12 +45,22 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hash */
 	protected function __prop_get_hash():string {
+		if($hash = parse_url($this->href, PHP_URL_FRAGMENT)) {
+			return "#$hash";
+		}
 
+		return "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hash */
 	protected function __prop_set_hash(string $value):void {
+		$hashPos = strpos($this->href, "#");
+		if($hashPos !== false) {
+			$this->href = substr($this->href, 0, $hashPos);
+		}
 
+		$value = ltrim($value, "#");
+		$this->href = $this->href .= "#$value";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/host */
