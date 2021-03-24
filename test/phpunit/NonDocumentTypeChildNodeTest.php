@@ -8,7 +8,7 @@ use Gt\Dom\Text;
 use PHPUnit\Framework\TestCase;
 
 
-class NonDocumentTypeChildNodeTest extends TestCase
+class php extends TestCase
 {
     public function testNextElementSibling(): void
     {
