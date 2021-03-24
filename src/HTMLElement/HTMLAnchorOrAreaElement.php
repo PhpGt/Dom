@@ -111,7 +111,27 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/origin */
 	protected function __prop_get_origin():string {
+		$origin = "";
+		if($scheme = parse_url($this->href, PHP_URL_SCHEME)) {
+			$origin .= "$scheme://";
+		}
+		if($user = parse_url($this->href, PHP_URL_USER)) {
+			$origin .= $user;
 
+			if($pass = parse_url($this->href, PHP_URL_PASS)) {
+				$origin .= ":$pass";
+			}
+
+			$origin .= "@";
+		}
+		if($host = parse_url($this->href, PHP_URL_HOST)) {
+			$origin .= $host;
+		}
+		if($port = parse_url($this->href, PHP_URL_PORT)) {
+			$origin .= ":$port";
+		}
+
+		return $origin;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/password */

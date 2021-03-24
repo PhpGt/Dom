@@ -226,4 +226,14 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		self::assertEquals("somewhere.else", $sut->hostname);
 		self::assertEquals("http://somewhere.else:8080/example", $sut->href);
 	}
+
+	public function testOrigin():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = "http://localhost:8080/example";
+		self::assertEquals("http://localhost:8080", $sut->origin);
+		$sut->href = "https://user:pass@example.com/example?key=value#nothing";
+		self::assertEquals("https://user:pass@example.com", $sut->origin);
+
+	}
 }
