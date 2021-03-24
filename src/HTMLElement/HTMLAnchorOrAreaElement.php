@@ -79,7 +79,42 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/host */
 	protected function __prop_set_host(string $value):void {
+		$urlParts = parse_url($this->href);
+		$url = "";
 
+		if($existingScheme = $urlParts["scheme"] ?? null) {
+			$url .= "$existingScheme://";
+		}
+		if($existingUser = $urlParts["user"] ?? null) {
+			$url .= $existingUser;
+
+			if($existingPass = $urlParts["pass"] ?? null) {
+				$url .= ":$existingPass";
+			}
+
+			$url .= "@";
+		}
+
+		$url .= strtok($value, ":");
+
+		if($newPort = parse_url($value, PHP_URL_PORT)) {
+			$url .= ":$newPort";
+		}
+		elseif($existingPort = $urlParts["port"] ?? null) {
+			$url .= ":$existingPort";
+		}
+
+		if($existingPath = $urlParts["path"] ?? null) {
+			$url .= $existingPath;
+		}
+		if($existingQuery = $urlParts["query"] ?? null) {
+			$url .= "?$existingQuery";
+		}
+		if($existingHash = $urlParts["fragment"] ?? null) {
+			$url .= "#$existingHash";
+		}
+
+		$this->href = $url;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hostname */

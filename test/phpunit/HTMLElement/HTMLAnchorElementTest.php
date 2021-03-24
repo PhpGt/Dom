@@ -131,4 +131,81 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		$sut->href = $url;
 		self::assertEquals("", $sut->host);
 	}
+
+	public function testHostSet():void {
+		$url = "https://php.gt/dom";
+		$host = "somewhere.else";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		$sut->host = $host;
+		self::assertEquals($host, $sut->host);
+		self::assertEquals("https://somewhere.else/dom", $sut->href);
+	}
+
+	public function testHostSetRetainUser():void {
+		$url = "https://g105b@php.gt/dom";
+		$host = "somewhere.else";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		$sut->host = $host;
+		self::assertEquals($host, $sut->host);
+		self::assertEquals("https://g105b@somewhere.else/dom", $sut->href);
+	}
+
+	public function testHostSetRetainUserPass():void {
+		$url = "https://g105b:cody123@php.gt/dom";
+		$host = "somewhere.else";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		$sut->host = $host;
+		self::assertEquals($host, $sut->host);
+		self::assertEquals("https://g105b:cody123@somewhere.else/dom", $sut->href);
+	}
+
+	public function testHostSetRetainPort():void {
+		$url = "http://localhost:8080/something";
+		$host = "somewhere.else";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		$sut->host = $host;
+		self::assertEquals("$host:8080", $sut->host);
+		self::assertEquals("http://somewhere.else:8080/something", $sut->href);
+	}
+
+	public function testHostSetNewPort():void {
+		$url = "http://localhost:8080/something";
+		$host = "somewhere.else:8081";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		$sut->host = $host;
+		self::assertEquals($host, $sut->host);
+		self::assertEquals("http://somewhere.else:8081/something", $sut->href);
+	}
+
+	public function testHostSetRetainQuery():void {
+		$url = "https://php.gt/dom?search=HTMLElement";
+		$host = "somewhere.else";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		$sut->host = $host;
+		self::assertEquals($host, $sut->host);
+		self::assertEquals("https://somewhere.else/dom?search=HTMLElement", $sut->href);
+	}
+
+	public function testHostSetRetainHash():void {
+		$url = "https://php.gt/dom#about";
+		$host = "somewhere.else";
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = $url;
+		$sut->host = $host;
+		self::assertEquals($host, $sut->host);
+		self::assertEquals("https://somewhere.else/dom#about", $sut->href);
+	}
 }
