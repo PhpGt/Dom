@@ -382,4 +382,27 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("a");
 		self::assertPropertyAttributeCorrelate($sut, "target");
 	}
+
+	public function testUsernameNone():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = "http://localhost:8080/example";
+		self::assertEmpty($sut->username);
+	}
+
+	public function testUsername():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = "http://g105b:cody123@localhost:8080/example";
+		self::assertEquals("g105b", $sut->username);
+	}
+
+	public function testUsernameSet():void {
+		/** @var HTMLAnchorElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("a");
+		$sut->href = "http://g105b:cody123@localhost:8080/example";
+		$sut->username = "nobody";
+		self::assertEquals("nobody", $sut->username);
+		self::assertEquals("http://nobody:cody123@localhost:8080/example", $sut->href);
+	}
 }

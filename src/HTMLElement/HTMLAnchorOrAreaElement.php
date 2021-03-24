@@ -243,12 +243,14 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/username */
 	protected function __prop_get_username():string {
-
+		return parse_url($this->href, PHP_URL_USER) ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/username */
 	protected function __prop_set_username(string $value):void {
-
+		$this->href = $this->buildUrl(
+			user: $value
+		);
 	}
 
 	/**
