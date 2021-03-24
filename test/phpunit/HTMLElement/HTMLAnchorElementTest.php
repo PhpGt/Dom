@@ -24,4 +24,9 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 			self::assertEquals($sut->textContent, $sut->text);
 		}
 	}
+
+	public function testType():void {
+		$sut = NodeTestFactory::createHTMLElement("a");
+		self::assertPropertyAttributeCorrelate($sut, "type");
+	}
 }
