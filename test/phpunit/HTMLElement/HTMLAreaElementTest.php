@@ -10,4 +10,10 @@ class HTMLAreaElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("area");
 		self::assertPropertyAttributeCorrelate($sut, "alt");
 	}
+
+	public function testCoords():void {
+		/** @var HTMLAreaElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("area");
+		self::assertPropertyAttributeCorrelate($sut, "coords");
+	}
 }

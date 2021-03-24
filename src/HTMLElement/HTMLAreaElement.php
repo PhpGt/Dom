@@ -28,12 +28,14 @@ class HTMLAreaElement extends HTMLElement implements Stringable {
 		$this->setAttribute("alt", $value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/coords */
 	protected function __prop_get_coords():string {
-
+		return $this->getAttribute("coords") ?? "";
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/coords */
 	protected function __prop_set_coords(string $value):void {
-
+		$this->setAttribute("coords", $value);
 	}
 
 	protected function __prop_get_shape():string {
