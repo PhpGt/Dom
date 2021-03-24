@@ -55,13 +55,9 @@ trait HTMLAnchorOrAreaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hash */
 	protected function __prop_set_hash(string $value):void {
-		$hashPos = strpos($this->href, "#");
-		if($hashPos !== false) {
-			$this->href = substr($this->href, 0, $hashPos);
-		}
-
-		$value = ltrim($value, "#");
-		$this->href = $this->href .= "#$value";
+		$this->href = $this->buildUrl(
+			fragment: $value
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/host */
