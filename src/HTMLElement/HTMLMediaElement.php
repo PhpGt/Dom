@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\ClientSide\AudioTrackList;
 use Gt\Dom\DOMTokenList;
 
 /**
@@ -50,7 +51,7 @@ use Gt\Dom\DOMTokenList;
 class HTMLMediaElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/audioTracks */
 	protected function __prop_get_audioTracks():AudioTrackList {
-
+		return new AudioTrackList();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/autoplay */
