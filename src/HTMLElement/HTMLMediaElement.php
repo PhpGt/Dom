@@ -313,11 +313,11 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/volume */
 	protected function __prop_get_volume():float {
-
+		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/volume */
 	protected function __prop_set_volume(float $value):void {
-
+		throw new ClientSideOnlyFunctionalityException();
 	}
 }
