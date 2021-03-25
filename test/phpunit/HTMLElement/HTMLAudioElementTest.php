@@ -132,4 +132,19 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		self::expectException(ClientSideOnlyFunctionalityException::class);
 		$sut->defaultPlaybackRate = 1.25;
 	}
+
+	public function testDisableRemotePlayback():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$b = $sut->disableRemotePlayback;
+	}
+
+	public function testDisableRemotePlaybackSet():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		$sut->disableRemotePlayback = true;
+	}
 }

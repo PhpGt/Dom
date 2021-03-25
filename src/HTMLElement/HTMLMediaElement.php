@@ -168,12 +168,12 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/disableRemotePlayback */
 	protected function __prop_get_disableRemotePlayback():bool {
-
+		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/disableRemotePlayback */
 	protected function __prop_set_disableRemotePlayback(bool $value):void {
-
+		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/duration */
