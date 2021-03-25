@@ -94,15 +94,10 @@ class DOMTokenList implements Countable, Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/add
 	 */
 	public function add(string...$tokens):void {
-		foreach($tokens as $token) {
-			if($this->contains($token)) {
-				continue;
-			}
-
-			$currentTokens = $this->callAccessor();
-			$allTokens = array_merge($currentTokens, [$token]);
-			$this->accessCallback = fn() => $allTokens;
-		}
+		$existing = $this->callAccessor();
+		$newTokens = array_merge($existing, $tokens);
+		$newTokens = array_unique($newTokens);
+		$this->callMutator(...$newTokens);
 	}
 
 	/**
@@ -265,7 +260,9 @@ class DOMTokenList implements Countable, Iterator {
 
 	/** @return string[] */
 	private function callAccessor():array {
-		return call_user_func($this->accessCallback);
+		$values = call_user_func($this->accessCallback);
+		$values = array_filter($values);
+		return $values;
 	}
 
 	private function callMutator(string...$values):void {

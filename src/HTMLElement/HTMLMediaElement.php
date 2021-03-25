@@ -9,6 +9,7 @@ use Gt\Dom\ClientSide\TextTrackList;
 use Gt\Dom\ClientSide\TimeRanges;
 use Gt\Dom\ClientSide\VideoTrackList;
 use Gt\Dom\DOMTokenList;
+use Gt\Dom\Facade\DOMTokenListFactory;
 
 /**
  * The HTMLMediaElement interface adds to HTMLElement the properties and methods
@@ -102,7 +103,16 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controlsList */
 	protected function __prop_get_controlsList():DOMTokenList {
-
+		return DOMTokenListFactory::create(
+			fn() => explode(
+				" ",
+				$this->getAttribute("controlsList")
+			),
+			fn(string...$tokens) => $this->setAttribute(
+				"controlsList",
+				implode(" ", $tokens)
+			)
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/crossOrigin */

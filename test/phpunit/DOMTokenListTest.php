@@ -64,7 +64,14 @@ class DOMTokenListTest extends TestCase {
 
 	public function testAdd():void {
 		$data = ["one", "two", "three"];
-		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+		$sut = DOMTokenListFactory::create(
+			function() use(&$data) {
+				return $data;
+			},
+			function(...$new)use(&$data) {
+				$data = $new;
+			}
+		);
 		$sut->add("four");
 		self::assertTrue($sut->contains("one"));
 		self::assertTrue($sut->contains("two"));
@@ -74,7 +81,14 @@ class DOMTokenListTest extends TestCase {
 
 	public function testAddAgain():void {
 		$data = ["one", "two", "three"];
-		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+		$sut = DOMTokenListFactory::create(
+			function() use(&$data) {
+				return $data;
+			},
+			function(...$new)use(&$data) {
+				$data = $new;
+			}
+		);
 		$sut->add("four");
 		$sut->add("four");
 		$sut->add("four");
@@ -83,7 +97,14 @@ class DOMTokenListTest extends TestCase {
 
 	public function testAddMultiple():void {
 		$data = ["one", "two", "three"];
-		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+		$sut = DOMTokenListFactory::create(
+			function() use(&$data) {
+				return $data;
+			},
+			function(...$new)use(&$data) {
+				$data = $new;
+			}
+		);
 		$sut->add("four", "five", "six");
 		self::assertTrue($sut->contains("one"));
 		self::assertTrue($sut->contains("two"));
@@ -131,7 +152,14 @@ class DOMTokenListTest extends TestCase {
 
 	public function testToggle():void {
 		$data = ["one", "two", "three"];
-		$sut = DOMTokenListFactory::create(fn() => $data, fn() => null);
+		$sut = DOMTokenListFactory::create(
+			function() use(&$data) {
+				return $data;
+			},
+			function(...$new)use(&$data) {
+				$data = $new;
+			}
+		);
 
 		self::assertTrue(
 			$sut->toggle("four")

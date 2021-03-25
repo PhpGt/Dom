@@ -61,4 +61,19 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("audio");
 		self::assertPropertyAttributeCorrelateBool($sut, "controls");
 	}
+
+	public function testControlsList():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		$controlsList = $sut->controlsList;
+		self::assertCount(0, $controlsList);
+		$sut->setAttribute("controlsList", "one two three");
+		self::assertCount(3, $controlsList);
+		self::assertEquals("one", $controlsList->item(0));
+		self::assertEquals("two", $controlsList->item(1));
+		self::assertEquals("three", $controlsList->item(2));
+
+		$sut->controlsList->add("four");
+		self::assertCount(4, $sut->controlsList);
+	}
 }
