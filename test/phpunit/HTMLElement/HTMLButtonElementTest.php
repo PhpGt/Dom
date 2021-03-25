@@ -94,4 +94,10 @@ class HTMLButtonElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("button");
 		self::assertFalse($sut->willValidate);
 	}
+
+	public function testValidationMessage():void {
+		/** @var HTMLButtonElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("button");
+		self::assertEquals("", $sut->validationMessage);
+	}
 }

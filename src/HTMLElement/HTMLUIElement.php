@@ -150,7 +150,7 @@ trait HTMLUIElement {
 	}
 
 	protected function __prop_get_validationMessage():string {
-
+		return "";
 	}
 
 	protected function __prop_get_validity():string {
