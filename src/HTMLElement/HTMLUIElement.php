@@ -82,11 +82,11 @@ trait HTMLUIElement {
 	}
 
 	protected function __prop_get_name():string {
-
+		return $this->getAttribute("name") ?? "";
 	}
 
 	protected function __prop_set_name(string $value):void {
-
+		$this->setAttribute("name", $value);
 	}
 
 	protected function __prop_get_readOnly():bool {

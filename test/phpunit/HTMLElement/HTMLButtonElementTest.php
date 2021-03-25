@@ -64,4 +64,10 @@ class HTMLButtonElementTest extends HTMLElementTestCase {
 		self::assertSame($label1, $labels->item(0));
 		self::assertSame($label2, $labels->item(1));
 	}
+
+	public function testName():void {
+		/** @var HTMLButtonElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("button");
+		self::assertPropertyAttributeCorrelate($sut, "name");
+	}
 }
