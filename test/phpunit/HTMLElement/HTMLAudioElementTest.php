@@ -227,4 +227,10 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$p = $sut->played;
 	}
+
+	public function testPreload():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertPropertyAttributeCorrelate($sut, "preload");
+	}
 }

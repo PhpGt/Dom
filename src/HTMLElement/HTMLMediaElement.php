@@ -253,12 +253,12 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/preload */
 	protected function __prop_get_preload():string {
-
+		return $this->getAttribute("preload") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/preload */
 	protected function __prop_set_preload(string $value):void {
-
+		$this->setAttribute("preload", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState */
