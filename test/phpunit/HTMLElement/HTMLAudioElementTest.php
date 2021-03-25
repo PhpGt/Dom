@@ -233,4 +233,10 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("audio");
 		self::assertPropertyAttributeCorrelate($sut, "preload");
 	}
+
+	public function testReadyState():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertEquals(0, $sut->readyState);
+	}
 }
