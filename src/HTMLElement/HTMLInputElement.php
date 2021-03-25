@@ -25,6 +25,13 @@ use Gt\Dom\NodeList;
  * @property string $accept Returns / Sets the element's accept attribute, containing comma-separated list of file types accepted by the server when type is file.
  * @property FileList $files Returns/accepts a FileList object, which contains a list of File objects representing the files selected for upload.
  *
+ * Properties that only apply to elements of type `submit` or `image`:
+ * @property string $formAction Is a DOMString reflecting the URI of a resource that processes information submitted by the HTMLUIElement. If specified, this attribute overrides the action attribute of the <form> element that owns this element.
+ * @property string $formEncType Is a DOMString reflecting the type of content that is used to submit the form to the server. If specified, this attribute overrides the enctype attribute of the <form> element that owns this element.
+ * @property string $formMethod Is a DOMString reflecting the HTTP method that the browser uses to submit the form. If specified, this attribute overrides the method attribute of the <form> element that owns this element.
+ * @property bool $formNoValidate Is a Boolean indicating that the form is not to be validated when it is submitted. If specified, this attribute overrides the novalidate attribute of the <form> element that owns this element.
+ * @property string $formTarget Is a DOMString reflecting a name or keyword indicating where to display the response that is received after submitting the form. If specified, this attribute overrides the target attribute of the <form> element that owns this element.
+ *
  * Properties that apply only to text/number-containing or elements:
  * @property string $max Returns / Sets the element's max attribute, containing the maximum (numeric or date-time) value for this item, which must not be less than its minimum (min attribute) value.
  * @property int $maxLength Returns / Sets the element's maxlength attribute, containing the maximum number of characters (in Unicode code points) that the value can have. (If you set this to a negative number, an exception will be thrown.)
@@ -115,6 +122,56 @@ class HTMLInputElement extends HTMLElement {
 	}
 
 	protected function __prop_set_files(FileList $value):void {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formaction */
+	protected function __prop_get_formAction():string {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/formAction */
+	protected function __prop_set_formAction(string $value):void {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formenctype */
+	protected function __prop_get_formEncType():string {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formenctype */
+	protected function __prop_set_formEncType(string $value):void {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formmethod */
+	protected function __prop_get_formMethod():string {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formmethod */
+	protected function __prop_set_formMethod(string $value):void {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formnovalidate */
+	protected function __prop_get_formNoValidate():bool {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formnovalidate */
+	protected function __prop_set_formNoValidate(bool $value):void {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formtarget */
+	protected function __prop_get_formTarget():string {
+
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formtarget */
+	protected function __prop_set_formTarget(string $value):void {
 
 	}
 
