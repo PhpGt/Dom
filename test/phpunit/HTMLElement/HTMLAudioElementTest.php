@@ -105,7 +105,6 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		/** @var HTMLAudioElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("audio");
 		self::expectException(ClientSideOnlyFunctionalityException::class);
-		/** @noinspection PhpUnusedLocalVariableInspection */
 		$sut->currentTime = 123;
 	}
 
@@ -117,5 +116,20 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 			"muted",
 			"defaultMuted"
 		);
+	}
+
+	public function testDefaultPlaybackRate():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$r = $sut->defaultPlaybackRate;
+	}
+
+	public function testDefaultPlaybackRateSet():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		$sut->defaultPlaybackRate = 1.25;
 	}
 }
