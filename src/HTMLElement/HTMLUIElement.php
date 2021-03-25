@@ -29,12 +29,17 @@ use Gt\Dom\NodeList;
 trait HTMLUIElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/autofocus */
 	protected function __prop_get_autofocus():bool {
-
+		return $this->hasAttribute("autofocus");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/autofocus */
 	protected function __prop_set_autofocus(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("autofocus", "");
+		}
+		else {
+			$this->removeAttribute("autofocus");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/disabled */
