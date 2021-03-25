@@ -70,7 +70,7 @@ class HTMLMediaElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/autplay */
 	protected function __prop_set_autoplay(bool $value):void {
 		if($value) {
-			$this->setAttribute("autoplay", true);
+			$this->setAttribute("autoplay", "");
 		}
 		else {
 			$this->removeAttribute("autoplay");
@@ -95,7 +95,7 @@ class HTMLMediaElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controls */
 	protected function __prop_set_controls(bool $value):void {
 		if($value) {
-			$this->setAttribute("controls", true);
+			$this->setAttribute("controls", "");
 		}
 		else {
 			$this->removeAttribute("controls");
@@ -149,7 +149,7 @@ class HTMLMediaElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultMuted */
 	protected function __prop_set_defaultMuted(bool $value):void {
 		if($value) {
-			$this->setAttribute("muted", true);
+			$this->setAttribute("muted", "");
 		}
 		else {
 			$this->removeAttribute("muted");
@@ -199,7 +199,7 @@ class HTMLMediaElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/loop */
 	protected function __prop_set_loop(bool $value):void {
 		if($value) {
-			$this->setAttribute("loop", true);
+			$this->setAttribute("loop", "");
 		}
 		else {
 			$this->removeAttribute("loop");
