@@ -143,12 +143,17 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultMuted */
 	protected function __prop_get_defaultMuted():bool {
-
+		return $this->hasAttribute("muted");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultMuted */
 	protected function __prop_set_defaultMuted(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("muted", true);
+		}
+		else {
+			$this->removeAttribute("muted");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultPlaybackRate */

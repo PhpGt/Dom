@@ -108,4 +108,14 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$sut->currentTime = 123;
 	}
+
+	public function testDefaultMuted():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertPropertyAttributeCorrelateBool(
+			$sut,
+			"muted",
+			"defaultMuted"
+		);
+	}
 }
