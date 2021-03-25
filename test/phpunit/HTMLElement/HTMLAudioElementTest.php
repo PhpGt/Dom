@@ -175,4 +175,19 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 			"mediaGroup"
 		);
 	}
+
+	public function testMuted():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$m = $sut->muted;
+	}
+
+	public function testMutedSet():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		$sut->muted = true;
+	}
 }

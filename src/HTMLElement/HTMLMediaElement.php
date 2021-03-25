@@ -218,12 +218,12 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/muted */
 	protected function __prop_get_muted():bool {
-
+		throw new ClientSideOnlyFunctionalityException("Use defaultMuted for server-side use");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/muted */
 	protected function __prop_set_muted(bool $value):void {
-
+		throw new ClientSideOnlyFunctionalityException("Use defaultMuted for server-side use");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/networkState */
