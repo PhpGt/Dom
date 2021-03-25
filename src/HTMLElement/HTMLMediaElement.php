@@ -18,9 +18,6 @@ use Gt\Dom\Facade\DOMTokenListFactory;
  * and video. The HTMLVideoElement and HTMLAudioElement elements both inherit
  * this interface.
  *
- * TODO: A lot of this class's properties are client-side only. Remove the ones
- * that do not fit the server model.
- *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
  *
  * @property-read AudioTrackList $audioTracks A AudioTrackList that lists the AudioTrack objects contained in the element.
