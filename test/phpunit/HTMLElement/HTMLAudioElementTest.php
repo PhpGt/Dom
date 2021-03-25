@@ -92,4 +92,20 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("audio");
 		self::assertEquals("", $sut->currentSrc);
 	}
+
+	public function testCurrentTime():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$t = $sut->currentTime;
+	}
+
+	public function testCurrentTimeSet():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$sut->currentTime = 123;
+	}
 }

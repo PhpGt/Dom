@@ -9,6 +9,7 @@ use Gt\Dom\ClientSide\TextTrackList;
 use Gt\Dom\ClientSide\TimeRanges;
 use Gt\Dom\ClientSide\VideoTrackList;
 use Gt\Dom\DOMTokenList;
+use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Facade\DOMTokenListFactory;
 
 /**
@@ -132,12 +133,12 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime */
 	protected function __prop_get_currentTime():float {
-
+		throw new ClientSideOnlyFunctionalityException("currentTime");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime */
 	protected function __prop_set_currentTime(float $value):void {
-
+		throw new ClientSideOnlyFunctionalityException("currentTime");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultMuted */
