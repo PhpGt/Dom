@@ -247,4 +247,10 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$p = $sut->seekable;
 	}
+
+	public function testSeeking():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertFalse($sut->seeking);
+	}
 }
