@@ -117,12 +117,12 @@ trait HTMLUIElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/type */
 	protected function __prop_get_type():string {
-
+		return $this->getAttribute("type") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/type */
 	protected function __prop_set_type(string $value):void {
-
+		$this->setAttribute("type", $value);
 	}
 
 	protected function __prop_get_willValidate():bool {
