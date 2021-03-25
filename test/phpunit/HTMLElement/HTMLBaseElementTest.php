@@ -10,4 +10,10 @@ class HTMLBaseElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("base");
 		self::assertPropertyAttributeCorrelate($sut, "href");
 	}
+
+	public function testTarget():void {
+		/** @var HTMLBaseElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("base");
+		self::assertPropertyAttributeCorrelate($sut, "target");
+	}
 }

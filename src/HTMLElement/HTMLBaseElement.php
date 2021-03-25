@@ -24,11 +24,11 @@ class HTMLBaseElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLBaseElement/target */
 	protected function __prop_get_target():string {
-
+		return $this->getAttribute("target") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLBaseElement/target */
 	protected function __prop_set_target(string $value):void {
-
+		$this->setAttribute("target", $value);
 	}
 }
