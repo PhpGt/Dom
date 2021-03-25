@@ -86,4 +86,10 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 			"crossOrigin"
 		);
 	}
+
+	public function testCurrentSrc():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertEquals("", $sut->currentSrc);
+	}
 }
