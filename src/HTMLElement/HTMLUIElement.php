@@ -126,7 +126,27 @@ trait HTMLUIElement {
 	}
 
 	protected function __prop_get_willValidate():bool {
+		if($this instanceof HTMLButtonElement) {
+			return false;
+		}
 
+		if($this->disabled) {
+			return false;
+		}
+
+		if(in_array($this->type, ["hidden", "reset", "button"])) {
+			return false;
+		}
+
+		$context = $this;
+		while($context->parentElement) {
+			$context = $context->parentElement;
+			if($context instanceof HTMLDataListElement) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	protected function __prop_get_validationMessage():string {

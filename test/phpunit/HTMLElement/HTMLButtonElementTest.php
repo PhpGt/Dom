@@ -88,4 +88,10 @@ class HTMLButtonElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("button");
 		self::assertPropertyAttributeCorrelate($sut, "type");
 	}
+
+	public function testWillValidate():void {
+		/** @var HTMLButtonElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("button");
+		self::assertFalse($sut->willValidate);
+	}
 }
