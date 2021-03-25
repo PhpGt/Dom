@@ -53,9 +53,12 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 	public function testAutoplay():void {
 		/** @var HTMLAudioElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("audio");
-		self::assertPropertyAttributeCorrelateBool(
-			$sut,
-			"autoplay"
-		);
+		self::assertPropertyAttributeCorrelateBool($sut, "autoplay");
+	}
+
+	public function testControls():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertPropertyAttributeCorrelateBool($sut, "controls");
 	}
 }

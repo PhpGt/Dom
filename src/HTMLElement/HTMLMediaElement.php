@@ -87,12 +87,17 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controls */
 	protected function __prop_get_controls():bool {
-
+		return $this->hasAttribute("controls");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controls */
 	protected function __prop_set_controls(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("controls", true);
+		}
+		else {
+			$this->removeAttribute("controls");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controlsList */
