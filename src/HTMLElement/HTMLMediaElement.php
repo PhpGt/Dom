@@ -7,6 +7,7 @@ use Gt\Dom\ClientSide\MediaError;
 use Gt\Dom\ClientSide\MediaStream;
 use Gt\Dom\ClientSide\TextTrackList;
 use Gt\Dom\ClientSide\TimeRanges;
+use Gt\Dom\ClientSide\VideoTrackList;
 use Gt\Dom\DOMTokenList;
 
 /**
@@ -276,7 +277,7 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/videoTracks */
 	protected function __prop_get_videoTracks():VideoTrackList {
-
+		return new VideoTrackList();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/volume */
