@@ -193,12 +193,17 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/loop */
 	protected function __prop_get_loop():bool {
-
+		return $this->hasAttribute("loop");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/loop */
 	protected function __prop_set_loop(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("loop", true);
+		}
+		else {
+			$this->removeAttribute("loop");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/mediaGroup */
