@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\ClientSide\ValidityState;
 use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\NodeList;
 
@@ -18,7 +19,7 @@ use Gt\Dom\NodeList;
  * @property string $type Is a DOMString indicating the behavior of the button.
  * @property-read bool $willValidate Is a Boolean indicating whether the button is a candidate for constraint validation. It is false if any conditions bar it from constraint validation, including: its type property is reset or button; it has a <datalist> ancestor; or the disabled property is set to true.
  * @property-read string $validationMessage Is a DOMString representing the localized message that describes the validation constraints that the control does not satisfy (if any). This attribute is the empty string if the control is not a candidate for constraint validation (willValidate is false), or it satisfies its constraints.
- * @property-read string $validity Is a ValidityState representing the validity states that this button is in.
+ * @property-read ValidityState $validity Is a ValidityState representing the validity states that this button is in.
  * @property string $value Is a DOMString representing the current form control value of the HTMLUIElement.
  */
 trait HTMLUIElement {
@@ -153,8 +154,8 @@ trait HTMLUIElement {
 		return "";
 	}
 
-	protected function __prop_get_validity():string {
-
+	protected function __prop_get_validity():ValidityState {
+		return new ValidityState();
 	}
 
 	protected function __prop_get_value():string {

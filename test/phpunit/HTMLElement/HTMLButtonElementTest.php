@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
+use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\HTMLElement\HTMLButtonElement;
 use Gt\Dom\HTMLElement\HTMLLabelElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
@@ -99,5 +100,13 @@ class HTMLButtonElementTest extends HTMLElementTestCase {
 		/** @var HTMLButtonElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("button");
 		self::assertEquals("", $sut->validationMessage);
+	}
+
+	public function testValidityState():void {
+		/** @var HTMLButtonElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("button");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$state = $sut->validity;
 	}
 }
