@@ -147,4 +147,10 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		self::expectException(ClientSideOnlyFunctionalityException::class);
 		$sut->disableRemotePlayback = true;
 	}
+
+	public function testDuration():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertNull($sut->duration);
+	}
 }

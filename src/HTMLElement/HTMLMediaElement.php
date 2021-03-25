@@ -35,7 +35,7 @@ use Gt\Dom\Facade\DOMTokenListFactory;
  * @property bool $defaultMuted A Boolean that reflects the muted HTML attribute, which indicates whether the media element's audio output should be muted by default.
  * @property float $defaultPlaybackRate A double indicating the default playback rate for the media.
  * @property bool $disableRemotePlayback A Boolean that sets or returns the remote playback state, indicating whether the media element is allowed to have a remote playback UI.
- * @property-read float $duration A read-only double-precision floating-point value indicating the total duration of the media in seconds. If no media data is available, the returned value is NaN. If the media is of indefinite length (such as streamed live media, a WebRTC call's media, or similar), the value is +Infinity.
+ * @property-read ?float $duration A read-only double-precision floating-point value indicating the total duration of the media in seconds. If no media data is available, the returned value is NaN. If the media is of indefinite length (such as streamed live media, a WebRTC call's media, or similar), the value is +Infinity.
  * @property-read bool $ended Returns a Boolean that indicates whether the media element has finished playing.
  * @property-read ?MediaError $error Returns a MediaError object for the most recent error, or null if there has not been an error.
  * @property bool $loop A Boolean that reflects the loop HTML attribute, which indicates whether the media element should start over when it reaches the end.
@@ -177,8 +177,8 @@ class HTMLMediaElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/duration */
-	protected function __prop_get_duration():float {
-
+	protected function __prop_get_duration():?float {
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/ended */
