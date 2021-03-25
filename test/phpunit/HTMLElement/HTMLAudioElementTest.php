@@ -21,4 +21,16 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$buffered = $sut->buffered;
 	}
+
+	public function testController():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertNull($sut->controller);
+	}
+
+	public function testError():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertNull($sut->error);
+	}
 }

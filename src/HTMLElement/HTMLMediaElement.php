@@ -2,6 +2,8 @@
 namespace Gt\Dom\HTMLElement;
 
 use Gt\Dom\ClientSide\AudioTrackList;
+use Gt\Dom\ClientSide\MediaController;
+use Gt\Dom\ClientSide\MediaError;
 use Gt\Dom\ClientSide\TimeRanges;
 use Gt\Dom\DOMTokenList;
 
@@ -19,7 +21,7 @@ use Gt\Dom\DOMTokenList;
  * @property-read AudioTrackList $audioTracks A AudioTrackList that lists the AudioTrack objects contained in the element.
  * @property bool $autoplay A Boolean that reflects the autoplay HTML attribute, indicating whether playback should automatically begin as soon as enough media is available to do so without interruption.
  * @property-read TimeRanges $buffered Returns a TimeRanges object that indicates the ranges of the media source that the browser has buffered (if any) at the moment the buffered property is accessed.
- * @property-read MediaController $controller Is a MediaController object that represents the media controller assigned to the element, or null if none is assigned.
+ * @property-read ?MediaController $controller Is a MediaController object that represents the media controller assigned to the element, or null if none is assigned.
  * @property bool $controls Is a Boolean that reflects the controls HTML attribute, indicating whether user interface items for controlling the resource should be displayed.
  * @property-read DOMTokenList $controlsList Returns a DOMTokenList that helps the user agent select what controls to show on the media element whenever the user agent shows its own set of controls. The DOMTokenList takes one or more of three possible values: nodownload, nofullscreen, and noremoteplayback.
  * @property string $crossOrigin A DOMString indicating the CORS setting for this media element.
@@ -30,7 +32,7 @@ use Gt\Dom\DOMTokenList;
  * @property bool $disableRemotePlayback A Boolean that sets or returns the remote playback state, indicating whether the media element is allowed to have a remote playback UI.
  * @property-read float $duration A read-only double-precision floating-point value indicating the total duration of the media in seconds. If no media data is available, the returned value is NaN. If the media is of indefinite length (such as streamed live media, a WebRTC call's media, or similar), the value is +Infinity.
  * @property-read bool $ended Returns a Boolean that indicates whether the media element has finished playing.
- * @property-read MediaError $error Returns a MediaError object for the most recent error, or null if there has not been an error.
+ * @property-read ?MediaError $error Returns a MediaError object for the most recent error, or null if there has not been an error.
  * @property bool $loop A Boolean that reflects the loop HTML attribute, which indicates whether the media element should start over when it reaches the end.
  * @property string $mediaGroup A DOMString that reflects the mediagroup HTML attribute, which indicates the name of the group of elements it belongs to. A group of media elements shares a common MediaController.
  * @property bool $muted Is a Boolean that determines whether audio is muted. true if the audio is muted and false otherwise.
@@ -71,8 +73,8 @@ class HTMLMediaElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controller */
-	protected function __prop_get_controller():MediaController {
-
+	protected function __prop_get_controller():?MediaController {
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controls */
@@ -156,8 +158,8 @@ class HTMLMediaElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/error */
-	protected function __prop_get_error():MediaError {
-
+	protected function __prop_get_error():?MediaError {
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/loop */
