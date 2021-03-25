@@ -321,4 +321,10 @@ class HTMLVideoElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("video");
 		self::assertEquals(0, $sut->videoWidth);
 	}
+
+	public function testWidth():void {
+		/** @var HTMLVideoElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("video");
+		self::assertPropertyAttributeCorrelate($sut, "width");
+	}
 }

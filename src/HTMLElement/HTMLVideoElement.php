@@ -52,11 +52,11 @@ class HTMLVideoElement extends HTMLMediaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/width */
 	protected function __prop_get_width():string {
-
+		return $this->getAttribute("width") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/width */
 	protected function __prop_set_width(string $value):void {
-
+		$this->setAttribute("width", $value);
 	}
 }
