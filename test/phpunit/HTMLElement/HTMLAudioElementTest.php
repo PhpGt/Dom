@@ -76,4 +76,14 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		$sut->controlsList->add("four");
 		self::assertCount(4, $sut->controlsList);
 	}
+
+	public function testCrossOrigin():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertPropertyAttributeCorrelate(
+			$sut,
+			"crossorigin",
+			"crossOrigin"
+		);
+	}
 }
