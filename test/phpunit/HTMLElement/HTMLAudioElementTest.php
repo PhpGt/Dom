@@ -13,4 +13,12 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$track = $sut->audioTracks;
 	}
+
+	public function testTimeRanges():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$buffered = $sut->buffered;
+	}
 }

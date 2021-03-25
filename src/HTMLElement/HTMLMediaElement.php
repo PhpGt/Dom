@@ -2,6 +2,7 @@
 namespace Gt\Dom\HTMLElement;
 
 use Gt\Dom\ClientSide\AudioTrackList;
+use Gt\Dom\ClientSide\TimeRanges;
 use Gt\Dom\DOMTokenList;
 
 /**
@@ -66,7 +67,7 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/buffered */
 	protected function __prop_get_buffered():TimeRanges {
-
+		return new TimeRanges();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controller */
