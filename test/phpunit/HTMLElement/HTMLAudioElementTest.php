@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
+use Gt\Dom\ClientSide\MediaStream;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\HTMLElement\HTMLAudioElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
@@ -264,5 +265,20 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		/** @var HTMLAudioElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("audio");
 		self::assertPropertyAttributeCorrelate($sut, "src");
+	}
+
+	public function testSrcObject():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$s = $sut->srcObject;
+	}
+
+	public function testSrcObjectSet():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		$sut->srcObject = new MediaStream();
 	}
 }
