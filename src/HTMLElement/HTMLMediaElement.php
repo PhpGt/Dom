@@ -208,12 +208,12 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/mediaGroup */
 	protected function __prop_get_mediaGroup():string {
-
+		return $this->getAttribute("mediagroup") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/mediaGroup */
 	protected function __prop_set_mediaGroup(string $value):void {
-
+		$this->setAttribute("mediagroup", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/muted */
