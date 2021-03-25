@@ -32,12 +32,12 @@ class HTMLVideoElement extends HTMLMediaElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/poster */
 	protected function __prop_get_poster():string {
-
+		return $this->getAttribute("poster") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/poster */
 	protected function __prop_set_poster(string $value):void {
-
+		$this->setAttribute("poster", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/videoHeight */
