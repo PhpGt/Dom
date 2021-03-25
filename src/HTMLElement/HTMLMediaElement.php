@@ -268,7 +268,7 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/seekable */
 	protected function __prop_get_seekable():TimeRanges {
-
+		return new TimeRanges();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/seeking */
