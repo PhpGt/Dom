@@ -298,4 +298,9 @@ class HTMLVideoElementTest extends HTMLElementTestCase {
 	}
 
 // Video-specific tests:
+	public function testHeight():void {
+		/** @var HTMLVideoElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("video");
+		self::assertPropertyAttributeCorrelate($sut, "height");
+	}
 }

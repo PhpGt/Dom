@@ -22,12 +22,12 @@ namespace Gt\Dom\HTMLElement;
 class HTMLVideoElement extends HTMLMediaElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/height */
 	protected function __prop_get_height():string {
-
+		return $this->getAttribute("height") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/height */
 	protected function __prop_set_height(string $value):void {
-
+		$this->setAttribute("height", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/poster */
