@@ -279,7 +279,7 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		/** @var HTMLAudioElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("audio");
 		self::expectException(ClientSideOnlyFunctionalityException::class);
-		$sut->srcObject = new MediaStream();
+		$sut->srcObject = self::createMock(MediaStream::class);
 	}
 
 	public function testVolume():void {
