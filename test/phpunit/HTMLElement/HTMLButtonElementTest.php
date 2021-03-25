@@ -76,4 +76,10 @@ class HTMLButtonElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("button");
 		self::assertPropertyAttributeCorrelateBool($sut, "readonly", "readOnly");
 	}
+
+	public function testRequired():void {
+		/** @var HTMLButtonElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("button");
+		self::assertPropertyAttributeCorrelateBool($sut, "required");
+	}
 }

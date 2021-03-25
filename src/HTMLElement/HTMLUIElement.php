@@ -103,11 +103,16 @@ trait HTMLUIElement {
 	}
 
 	protected function __prop_get_required():bool {
-
+		return $this->hasAttribute("required");
 	}
 
 	protected function __prop_set_required(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("required", "");
+		}
+		else {
+			$this->removeAttribute("required");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/type */
