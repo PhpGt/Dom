@@ -49,4 +49,13 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$tracks = $sut->videoTracks;
 	}
+
+	public function testAutoplay():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertPropertyAttributeCorrelateBool(
+			$sut,
+			"autoplay"
+		);
+	}
 }

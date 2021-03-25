@@ -62,12 +62,17 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/autoplay */
 	protected function __prop_get_autoplay():bool {
-
+		return $this->hasAttribute("autoplay");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/autplay */
 	protected function __prop_set_autoplay(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("autoplay", true);
+		}
+		else {
+			$this->removeAttribute("autoplay");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/buffered */
