@@ -86,6 +86,19 @@ class HTMLElementTest extends TestCase {
 		self::assertTrue($sut->isContentEditable);
 	}
 
+	public function testIsContentEditableInheritAncestor():void {
+		$sut = HTMLElementTestFactory::create();
+		$sut->contentEditable = "inherit";
+		$falseContentEditable = $sut->ownerDocument->createElement("div");
+		$falseContentEditable->contentEditable = "true";
+		$child1 = $sut->ownerDocument->createElement("div");
+		$child2 = $sut->ownerDocument->createElement("div");
+		$falseContentEditable->appendChild($child1);
+		$child1->appendChild($child2);
+		$child2->appendChild($sut);
+		self::assertTrue($sut->isContentEditable);
+	}
+
 	public function testDirNone():void {
 		$sut = HTMLElementTestFactory::create();
 		self::assertEquals("", $sut->dir);
