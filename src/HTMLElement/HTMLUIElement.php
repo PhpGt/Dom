@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\NodeList;
 
 /**
@@ -67,7 +68,17 @@ trait HTMLUIElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/labels */
 	protected function __prop_get_labels():NodeList {
+		return NodeListFactory::createLive(function():array {
+			$labelsArray = [];
+			foreach($this->ownerDocument->getElementsByTagName("label") as $label) {
+				/** @var HTMLLabelElement $label */
+				if($label->htmlFor === $this->id) {
+					array_push($labelsArray, $label);
+				}
+			}
 
+			return $labelsArray;
+		});
 	}
 
 	protected function __prop_get_name():string {

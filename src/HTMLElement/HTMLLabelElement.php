@@ -25,11 +25,11 @@ class HTMLLabelElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor */
 	protected function __prop_get_htmlFor():string {
-
+		return $this->getAttribute("for") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor */
 	protected function __prop_set_htmlFor(string $value):void {
-
+		$this->setAttribute("for", $value);
 	}
 }
