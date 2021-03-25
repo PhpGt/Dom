@@ -153,4 +153,10 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("audio");
 		self::assertNull($sut->duration);
 	}
+
+	public function testEnded():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertFalse($sut->ended);
+	}
 }
