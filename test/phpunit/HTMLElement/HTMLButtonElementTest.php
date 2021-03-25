@@ -109,4 +109,10 @@ class HTMLButtonElementTest extends HTMLElementTestCase {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$state = $sut->validity;
 	}
+
+	public function testValue():void {
+		/** @var HTMLButtonElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("button");
+		self::assertPropertyAttributeCorrelate($sut, "value");
+	}
 }

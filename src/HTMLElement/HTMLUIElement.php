@@ -159,10 +159,10 @@ trait HTMLUIElement {
 	}
 
 	protected function __prop_get_value():string {
-
+		return $this->getAttribute("value") ?? "";
 	}
 
 	protected function __prop_set_value(string $value):void {
-
+		$this->setAttribute("value", $value);
 	}
 }
