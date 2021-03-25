@@ -9,7 +9,7 @@ use Gt\Dom\NodeList;
  *
  * @property bool $autofocus Is a Boolean indicating whether or not the control should have input focus when the page loads, unless the user overrides it, for example by typing in a different control. Only one form-associated element in a document can have this attribute specified.
  * @property bool $disabled Is a Boolean indicating whether or not the control is disabled, meaning that it does not accept any clicks.
- * @property-read HTMLFormElement $form Is a HTMLFormElement reflecting the form that this element is associated with.
+ * @property-read ?HTMLFormElement $form Is a HTMLFormElement reflecting the form that this element is associated with.
  * @property string $formAction Is a DOMString reflecting the URI of a resource that processes information submitted by the HTMLUIElement. If specified, this attribute overrides the action attribute of the <form> element that owns this element.
  * @property string $formEncType Is a DOMString reflecting the type of content that is used to submit the form to the server. If specified, this attribute overrides the enctype attribute of the <form> element that owns this element.
  * @property string $formMethod Is a DOMString reflecting the HTTP method that the browser uses to submit the form. If specified, this attribute overrides the method attribute of the <form> element that owns this element.
@@ -58,8 +58,17 @@ trait HTMLUIElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/form */
-	protected function __prop_get_form():HTMLFormElement {
+	protected function __prop_get_form():?HTMLFormElement {
+		$context = $this;
+		while($context->parentElement) {
+			$context = $context->parentElement;
 
+			if($context instanceof HTMLFormElement) {
+				return $context;
+			}
+		}
+
+		return null;
 	}
 
 	protected function __prop_get_formAction():string {

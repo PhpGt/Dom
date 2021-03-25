@@ -16,4 +16,32 @@ class HTMLButtonElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("button");
 		self::assertPropertyAttributeCorrelateBool($sut, "disabled");
 	}
+
+	public function testFormNone():void {
+		/** @var HTMLButtonElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("button");
+		self::assertNull($sut->form);
+	}
+
+	public function testForm():void {
+		/** @var HTMLButtonElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("button");
+		$form = $sut->ownerDocument->createElement("form");
+		$form->appendChild($sut);
+		self::assertSame($form, $sut->form);
+	}
+
+	public function testFormNested():void {
+		/** @var HTMLButtonElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("button");
+		$form = $sut->ownerDocument->createElement("form");
+		$child1 = $sut->ownerDocument->createElement("div");
+		$child2 = $sut->ownerDocument->createElement("div");
+		$child3 = $sut->ownerDocument->createElement("div");
+		$form->appendChild($child1);
+		$child1->appendChild($child2);
+		$child2->appendChild($child3);
+		$child3->appendChild($sut);
+		self::assertSame($form, $sut->form);
+	}
 }
