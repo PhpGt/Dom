@@ -248,7 +248,7 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/played */
 	protected function __prop_get_played():TimeRanges {
-
+		return new TimeRanges();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/preload */

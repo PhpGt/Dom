@@ -219,4 +219,12 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		self::expectException(ClientSideOnlyFunctionalityException::class);
 		$sut->playbackRate = 1.25;
 	}
+
+	public function testPlayed():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$p = $sut->played;
+	}
 }
