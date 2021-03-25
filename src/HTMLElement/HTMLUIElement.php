@@ -90,11 +90,16 @@ trait HTMLUIElement {
 	}
 
 	protected function __prop_get_readOnly():bool {
-
+		return $this->hasAttribute("readonly");
 	}
 
 	protected function __prop_set_readOnly(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("readonly", "");
+		}
+		else {
+			$this->removeAttribute("readonly");
+		}
 	}
 
 	protected function __prop_get_required():bool {
