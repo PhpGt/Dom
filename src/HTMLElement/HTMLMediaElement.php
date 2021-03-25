@@ -228,7 +228,7 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/networkState */
 	protected function __prop_get_networkState():int {
-
+		return 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/paused */

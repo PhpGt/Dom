@@ -190,4 +190,10 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		self::expectException(ClientSideOnlyFunctionalityException::class);
 		$sut->muted = true;
 	}
+
+	public function testNetworkState():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::assertEquals(0, $sut->networkState);
+	}
 }
