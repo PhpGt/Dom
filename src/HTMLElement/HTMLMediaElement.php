@@ -4,6 +4,8 @@ namespace Gt\Dom\HTMLElement;
 use Gt\Dom\ClientSide\AudioTrackList;
 use Gt\Dom\ClientSide\MediaController;
 use Gt\Dom\ClientSide\MediaError;
+use Gt\Dom\ClientSide\MediaStream;
+use Gt\Dom\ClientSide\TextTrackList;
 use Gt\Dom\ClientSide\TimeRanges;
 use Gt\Dom\DOMTokenList;
 
@@ -46,7 +48,7 @@ use Gt\Dom\DOMTokenList;
  * @property-read bool $seeking Returns a Boolean that indicates whether the media is in the process of seeking to a new position.
  * @property-read string $sinkId Returns a DOMString that is the unique ID of the audio device delivering output, or an empty string if it is using the user agent default. This ID should be one of the MediaDeviceInfo.deviceid values returned from MediaDevices.enumerateDevices(), id-multimedia, or id-communications.
  * @property string $src Is a DOMString that reflects the src HTML attribute, which contains the URL of a media resource to use.
- * @property MediaStream $srcObject Is a MediaStream representing the media to play or that has played in the current HTMLMediaElement, or null if not assigned.
+ * @property ?MediaStream $srcObject Is a MediaStream representing the media to play or that has played in the current HTMLMediaElement, or null if not assigned.
  * @property-read TextTrackList $textTracks Returns the list of TextTrack objects contained in the element.
  * @property-read VideoTrackList $videoTracks Returns the list of VideoTrack objects contained in the element.
  * @property float $volume Is a double indicating the audio volume, from 0.0 (silent) to 1.0 (loudest).
@@ -269,7 +271,7 @@ class HTMLMediaElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/textTracks */
 	protected function __prop_get_textTracks():TextTrackList {
-
+		return new TextTrackList();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/videoTracks */

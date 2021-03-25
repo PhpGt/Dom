@@ -33,4 +33,12 @@ class HTMLAudioElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("audio");
 		self::assertNull($sut->error);
 	}
+
+	public function testTextTracks():void {
+		/** @var HTMLAudioElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("audio");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$tracks = $sut->textTracks;
+	}
 }
