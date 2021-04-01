@@ -18,6 +18,17 @@ class HTMLDocument extends Document {
 		}
 
 		$this->open();
+		$html = preg_replace_callback(
+			'/[\x{80}-\x{10FFFF}]/u',
+			function($match) {
+				return mb_convert_encoding(
+					$match[0],
+					"HTML-ENTITIES",
+					"UTF-8"
+				);
+			},
+			$html
+		);
 		$this->domDocument->loadHTML($html);
 
 		if(!$this->domDocument->documentElement) {
