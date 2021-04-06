@@ -1,5 +1,4 @@
 <?php
-
 namespace Gt\Dom\HTMLElement;
 
 use Gt\Dom\Exception\HierarchyRequestError;
@@ -8,9 +7,6 @@ use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\HTMLCollection;
 use Gt\Dom\Node;
-use Gt\Dom\Test\HTMLCollectionTest;
-use function in_array;
-
 
 /**
  * The HTMLTableElement interface provides special properties and methods
@@ -113,6 +109,7 @@ class HTMLTableElement extends HTMLElement
      */
     public function createTBody(): HTMLTableSectionElement
     {
+    	/** @var HTMLTableSectionElement $tbody */
         $tbody = $this->ownerDocument->createElement('tbody');
         $this->placeTBody($tbody);
 
@@ -174,6 +171,7 @@ class HTMLTableElement extends HTMLElement
     {
         $lastTBody = $this->hasChildLast('tbody');
         $numRow = $this->rows->length;
+        /** @var HTMLTableRowElement $row */
         $row = $this->ownerDocument->createElement('tr');
         if ($index === null) {
             $index = -1;
@@ -184,6 +182,7 @@ class HTMLTableElement extends HTMLElement
             throw new IndexSizeException('Row index is outside bounds.');
         } elseif ($numRow === 0 && $lastTBody === null) {
 // note: can't use HTMLTableElement::createTBody() because we need to append row before inserting
+		/** @var HTMLTableSectionElement $tbody */
             $tbody = $this->ownerDocument->createElement('tbody');
             $tbody->appendChild($row);
             $this->insertChildAfter($tbody, ['caption', 'colgroup']);
@@ -234,7 +233,9 @@ class HTMLTableElement extends HTMLElement
          * of the <table> element, if any, or null otherwise.
          * @see https://www.w3.org/TR/html52/tabular-data.html#dom-htmltableelement-caption
          */
-        return $this->hasChildFirst('caption');
+		/** @var ?HTMLTableCaptionElement $node */
+	    $node = $this->hasChildFirst('caption');
+	    return $node;
     }
 
     protected function __prop_set_caption(?HTMLTableCaptionElement $value): void
@@ -255,7 +256,9 @@ class HTMLTableElement extends HTMLElement
          * if any, or null otherwise.
          * @see https://www.w3.org/TR/html52/tabular-data.html#dom-htmltableelement-thead
          */
-        return $this->hasChildFirst('thead');
+        	/** @var ?HTMLTableSectionElement $node */
+	    $node = $this->hasChildFirst('thead');
+	    return $node;
     }
 
     protected function __prop_set_tHead(?HTMLTableSectionElement $value): void
@@ -284,7 +287,9 @@ class HTMLTableElement extends HTMLElement
          * if any, or null otherwise.
          * @see https://www.w3.org/TR/html52/tabular-data.html#dom-htmltableelement-tfoot
          */
-        return $this->hasChildFirst('tfoot');
+        	/** @var ?HTMLTableSectionElement $node */
+	    $node = $this->hasChildFirst('tfoot');
+	    return $node;
     }
 
     protected function __prop_set_tFoot(?HTMLTableSectionElement $value): void
@@ -367,10 +372,12 @@ class HTMLTableElement extends HTMLElement
     ): HTMLTableSectionElement|HTMLTableCaptionElement|null {
         $child = $this->hasChildFirst($name);
         if ($child === null) {
+        	/** @var HTMLTableCaptionElement|HTMLTableSectionElement $child */
             $child = $this->ownerDocument->createElement($name);
             $this->placeChild($name, $child);
         }
 
+        /** @var HTMLTableCaptionElement|HTMLTableSectionElement|null $child */
         return $child;
     }
 
@@ -426,7 +433,7 @@ class HTMLTableElement extends HTMLElement
     /**
      * Insert the section element after the specified nodes.
      * @param HTMLTableSectionElement $newNode
-     * @param array $refNames names of nodes to insert after
+     * @param string[] $refNames names of nodes to insert after
      */
     private function insertChildAfter(HTMLTableSectionElement $newNode, array $refNames): void
     {
@@ -440,9 +447,9 @@ class HTMLTableElement extends HTMLElement
     /**
      * Place the child at the correct location.
      * @param string $name
-     * @param $node
+     * @param HTMLTableCaptionElement|HTMLTableSectionElement|null $node
      */
-    private function placeChild(string $name, $node): void
+    private function placeChild(string $name, HTMLTableCaptionElement|HTMLTableSectionElement|null $node): void
     {
         switch ($name) {
             case 'caption':

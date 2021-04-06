@@ -1,5 +1,4 @@
 <?php
-
 namespace Gt\Dom\Test\HTMLElement;
 
 use Gt\Dom\Exception\HierarchyRequestError;
@@ -24,6 +23,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testCreateTHead(): void
     {
+    	/** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('thead');
         $table->createTHead();
@@ -34,6 +34,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testCreateTHeadPosition(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $table->createCaption();
         $colgroup = $table->ownerDocument->createElement('colgroup');
@@ -46,6 +47,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testDeleteTHead(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('thead');
         $table->createTHead();
@@ -55,6 +57,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testCreateTFoot(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('tfoot');
         $table->createTFoot();
@@ -65,6 +68,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testCreateTFootPosition(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $table->createCaption();
         $colgroup = $table->ownerDocument->createElement('colgroup');
@@ -77,6 +81,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testDeleteTFoot(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('tfoot');
         $table->createTFoot();
@@ -86,6 +91,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testCreateTBody(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('tbody');
         $tbody = $table->createTBody();
@@ -96,6 +102,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testCreateTBodyPosition(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $table->createCaption();
         $colgroup = $table->ownerDocument->createElement('colgroup');
@@ -109,6 +116,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testCreateCaption(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('caption');
         $table->createCaption();
@@ -120,6 +128,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testDeleteCaption(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('caption');
         $table->createCaption();
@@ -129,6 +138,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testInsertRow(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('tr');
         $tr = $table->insertRow();
@@ -139,6 +149,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testInsertRowRangeBelow(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $this->expectException(IndexSizeException::class);
         $table->insertRow();
@@ -147,6 +158,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testInsertRowRangeAbove(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $this->expectException(IndexSizeException::class);
         $table->insertRow();
@@ -155,6 +167,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testInsertRowLast(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('tr');
         $table->insertRow();
@@ -167,6 +180,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testInsertRowBetween(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('tr');
         $table->insertRow();
@@ -178,6 +192,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testInsertRowBodyLast(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $table->createTBody();
         $table->createTBody();
@@ -187,6 +202,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testDeleteRow(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('tr');
         $table->insertRow();
@@ -197,6 +213,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testDeleteRowRangeBelow(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $this->expectException(IndexSizeException::class);
         $table->deleteRow(-3);
@@ -204,6 +221,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testDeleteRowRangeAbove(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $this->expectException(IndexSizeException::class);
         $table->insertRow();
@@ -214,6 +232,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testDeleteRowLast(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('tr');
         $table->insertRow();
@@ -225,6 +244,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testGetCaption(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         self::assertNull($table->caption);
         $table->createCaption();
@@ -235,10 +255,13 @@ class HTMLTableElementTest extends TestCase
 
     public function testSetCaption(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('caption');
         $document = $table->ownerDocument;
-        $table->caption = $document->createElement('caption');
+        /** @var HTMLTableCaptionElement $caption */
+	    $caption = $document->createElement('caption');
+	    $table->caption = $caption;
         self::assertSame($table->firstElementChild, $table->caption);
         self::assertCount(1, $col);
         $table->caption = null;
@@ -247,13 +270,16 @@ class HTMLTableElementTest extends TestCase
 
     public function testSetCaptionWrongType(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $this->expectException(TypeError::class);
+        /** @phpstan-ignore-next-line the type error is intended in this test */
         $table->caption = $table->ownerDocument->createElement('div');
     }
 
     public function testGetTHead(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         self::assertNull($table->tHead);
         $table->createTHead();
@@ -264,10 +290,13 @@ class HTMLTableElementTest extends TestCase
 
     public function testSetTHead(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $document = $table->ownerDocument;
         $col = $table->getElementsByTagName('thead');
-        $table->tHead = $document->createElement('thead');
+        /** @var HTMLTableSectionElement $thead */
+	    $thead = $document->createElement('thead');
+	    $table->tHead = $thead;
         self::assertSame($table->firstElementChild, $table->tHead);
         $table->tHead = null;
         self::assertCount(0, $col);
@@ -275,6 +304,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testSetTHeadPosition(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $document = $table->ownerDocument;
         $col = $table->getElementsByTagName('thead');
@@ -282,7 +312,9 @@ class HTMLTableElementTest extends TestCase
         $table->appendChild($document->createElement('colgroup'));
         $table->createTBody();
         $table->createTFoot();
-        $table->tHead = $document->createElement('thead');
+        /** @var HTMLTableSectionElement $thead */
+	    $thead = $document->createElement('thead');
+	    $table->tHead = $thead;
         self::assertSame($table->childNodes[2], $table->tHead);
         $table->tHead = null;
         self::assertCount(0, $col);
@@ -290,14 +322,17 @@ class HTMLTableElementTest extends TestCase
 
     public function testSetTHeadWrongType(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $this->expectException(TypeError::class);
         $this->expectException(HierarchyRequestError::class);
+        /** @phpstan-ignore-next-line the type error is intended here */
         $table->tHead = $table->ownerDocument->createElement('tbody');
     }
 
     public function testGetTFoot(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         self::assertNull($table->tFoot);
         $table->createTFoot();
@@ -308,9 +343,12 @@ class HTMLTableElementTest extends TestCase
 
     public function testSetTfoot(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $col = $table->getElementsByTagName('tfoot');
-        $table->tFoot = $table->ownerDocument->createElement('tfoot');
+        /** @var HTMLTableSectionElement $tfoot */
+	    $tfoot = $table->ownerDocument->createElement('tfoot');
+	    $table->tFoot = $tfoot;
         self::assertSame($table->lastElementChild, $table->tFoot);
         $table->tFoot = null;
         self::assertCount(0, $col);
@@ -318,6 +356,7 @@ class HTMLTableElementTest extends TestCase
 
     public function testSetTfootPosition(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $document = $table->ownerDocument;
         $table->createCaption();
@@ -325,19 +364,24 @@ class HTMLTableElementTest extends TestCase
         $table->appendChild($colgroup);
         $table->createTHead();
         $table->createTBody();
-        $table->tFoot = $document->createElement('tfoot');
+        /** @var HTMLTableSectionElement $tfoot */
+	    $tfoot = $document->createElement('tfoot');
+	    $table->tFoot = $tfoot;
         self::assertSame($table->lastElementChild, $table->tFoot);
     }
 
     public function testSetTFootWrongType(): void
     {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         $this->expectException(TypeError::class);
         $this->expectException(HierarchyRequestError::class);
+	    /** @phpstan-ignore-next-line the type error is intended here */
         $table->tFoot = $table->ownerDocument->createElement('thead');
     }
 
-    public function testGetRowsOrder() {
+    public function testGetRowsOrder(): void {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         self::assertInstanceOf(HTMLCollection::class, $table->rows);
         $table->createTBody();
@@ -366,9 +410,11 @@ class HTMLTableElementTest extends TestCase
             $i++;
         }
     }
-    public function testGetRowsDirectChildrenOnly()
+    public function testGetRowsDirectChildrenOnly(): void
     {
+	    /** @var HTMLTableElement $table1 */
         $table1 = NodeTestFactory::createHTMLElement('table');
+	    /** @var HTMLTableElement $table2 */
         $table2 = $table1->ownerDocument->createElement('table');
         $table1->createTBody();
         $tr1 = $table1->insertRow();
@@ -382,7 +428,8 @@ class HTMLTableElementTest extends TestCase
         self::assertCount(2, $table1->rows);
     }
 
-    public function testGetTBodies() {
+    public function testGetTBodies(): void {
+	    /** @var HTMLTableElement $table */
         $table = NodeTestFactory::createHTMLElement('table');
         self::assertInstanceOf(HTMLCollection::class, $table->tBodies);
         $table->createTHead();
