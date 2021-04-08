@@ -103,22 +103,22 @@ class HTMLFormElement extends HTMLElement implements ArrayAccess, Countable {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/encoding */
 	protected function __prop_get_encoding():string {
-
+		return $this->getAttribute("enctype") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/encoding */
 	protected function __prop_set_encoding(string $value):void {
-
+		$this->setAttribute("enctype", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/enctype */
 	protected function __prop_get_enctype():string {
-
+		return $this->getAttribute("enctype") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/enctype */
 	protected function __prop_set_enctype(string $value):void {
-
+		$this->setAttribute("enctype", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/acceptCharset */
