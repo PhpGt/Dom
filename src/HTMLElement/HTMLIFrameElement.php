@@ -75,12 +75,12 @@ class HTMLIFrameElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/srcdoc */
 	protected function __prop_get_srcdoc():string {
-
+		return $this->getAttribute("srcdoc") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/srcdoc */
 	protected function __prop_set_srcdoc(string $value):void {
-
+		$this->setAttribute("srcdoc", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/width */

@@ -45,4 +45,10 @@ class HTMLIFrameElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("iframe");
 		self::assertPropertyAttributeCorrelate($sut, "src");
 	}
+
+	public function testSrcdoc():void {
+		/** @var HTMLIFrameElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("iframe");
+		self::assertPropertyAttributeCorrelate($sut, "srcdoc");
+	}
 }
