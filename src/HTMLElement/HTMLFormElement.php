@@ -123,12 +123,12 @@ class HTMLFormElement extends HTMLElement implements ArrayAccess, Countable {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/acceptCharset */
 	protected function __prop_get_acceptCharset():string {
-
+		return $this->getAttribute("accept-charset") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/acceptCharset */
 	protected function __prop_set_acceptCharset(string $value):void {
-
+		$this->setAttribute("accept-charset", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/autocomplete */

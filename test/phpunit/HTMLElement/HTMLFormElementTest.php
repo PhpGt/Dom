@@ -71,4 +71,10 @@ class HTMLFormElementTest extends HTMLElementTestCase {
 		$sut->setAttribute("enctype", "test-encoding");
 		self::assertEquals("test-encoding", $sut->encoding);
 	}
+
+	public function testAcceptCharset():void {
+		/** @var HTMLFormElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("form");
+		self::assertPropertyAttributeCorrelate($sut, "accept-charset", "acceptCharset");
+	}
 }
