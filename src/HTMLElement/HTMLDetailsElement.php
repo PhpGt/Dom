@@ -13,11 +13,16 @@ namespace Gt\Dom\HTMLElement;
 class HTMLDetailsElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement/open */
 	protected function __prop_get_open():bool {
-
+		return $this->hasAttribute("open");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement/open */
 	protected function __prop_set_open(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("open","");
+		}
+		else {
+			$this->removeAttribute("open");
+		}
 	}
 }
