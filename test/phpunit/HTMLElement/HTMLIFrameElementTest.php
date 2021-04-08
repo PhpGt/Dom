@@ -39,4 +39,10 @@ class HTMLIFrameElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("iframe");
 		self::assertPropertyAttributeCorrelate($sut, "referrerpolicy", "referrerPolicy");
 	}
+
+	public function testSrc():void {
+		/** @var HTMLIFrameElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("iframe");
+		self::assertPropertyAttributeCorrelate($sut, "src");
+	}
 }
