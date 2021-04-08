@@ -83,4 +83,10 @@ class HTMLFormElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("form");
 		self::assertPropertyAttributeCorrelate($sut, "autocomplete");
 	}
+
+	public function testNoValidate():void {
+		/** @var HTMLFormElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("form");
+		self::assertPropertyAttributeCorrelateBool($sut, "novalidate", "noValidate");
+	}
 }

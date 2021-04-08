@@ -143,12 +143,17 @@ class HTMLFormElement extends HTMLElement implements ArrayAccess, Countable {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/noValidate */
 	protected function __prop_get_noValidate():bool {
-
+		return $this->hasAttribute("novalidate");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/noValidate */
 	protected function __prop_set_noValidate(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("novalidate", "");
+		}
+		else {
+			$this->removeAttribute("novalidate");
+		}
 	}
 
 	public function count():int {
