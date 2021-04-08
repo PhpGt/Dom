@@ -5,7 +5,6 @@ use ArrayAccess;
 use Countable;
 use Gt\Dom\Exception\ArrayAccessReadOnlyException;
 use Gt\Dom\Facade\HTMLCollectionFactory;
-use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLFormControlsCollection;
 
 /**
