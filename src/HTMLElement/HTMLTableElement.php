@@ -303,7 +303,6 @@ class HTMLTableElement extends HTMLElement {
 			$rowsHead = [];
 			$rowsBody = [];
 			$rowsFoot = [];
-			$rowsFloating = [];
 			$rows = [];
 			$col = $this->getElementsByTagName('tr');
 			foreach($col as $row) {
@@ -328,12 +327,9 @@ class HTMLTableElement extends HTMLElement {
 				case 'tfoot':
 					$rowsFoot[] = $row;
 					break;
-				default:
-					$rowsFloating[] = $row;
 				}
 			}
 
-			array_push($rows, ...$rowsFloating);
 			array_push($rows, ...$rowsHead);
 			array_push($rows, ...$rowsBody);
 			array_push($rows, ...$rowsFoot);
