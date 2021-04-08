@@ -133,12 +133,12 @@ class HTMLFormElement extends HTMLElement implements ArrayAccess, Countable {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/autocomplete */
 	protected function __prop_get_autocomplete():string {
-
+		return $this->getAttribute("autocomplete") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/autocomplete */
 	protected function __prop_set_autocomplete(string $value):void {
-
+		$this->setAttribute("autocomplete", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/noValidate */

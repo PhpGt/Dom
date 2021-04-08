@@ -77,4 +77,10 @@ class HTMLFormElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("form");
 		self::assertPropertyAttributeCorrelate($sut, "accept-charset", "acceptCharset");
 	}
+
+	public function testAutocomplete():void {
+		/** @var HTMLFormElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("form");
+		self::assertPropertyAttributeCorrelate($sut, "autocomplete");
+	}
 }
