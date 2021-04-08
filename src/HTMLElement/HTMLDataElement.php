@@ -13,11 +13,11 @@ namespace Gt\Dom\HTMLElement;
 class HTMLDataElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataElement/value */
 	protected function __prop_get_value():string {
-
+		return $this->getAttribute("value") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataElement/value */
 	protected function __prop_set_value(string $value):void {
-
+		$this->setAttribute("value", $value);
 	}
 }
