@@ -93,12 +93,12 @@ class HTMLFormElement extends HTMLElement implements ArrayAccess, Countable {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/action */
 	protected function __prop_get_action():string {
-
+		return $this->getAttribute("action") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/action */
 	protected function __prop_set_action(string $value):void {
-
+		$this->setAttribute("action", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/encoding */
