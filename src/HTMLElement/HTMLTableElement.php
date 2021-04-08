@@ -445,9 +445,6 @@ class HTMLTableElement extends HTMLElement {
 		case 'thead':
 			$this->placeThead($node);
 			break;
-		case 'tbody':
-			$this->placeTBody($node);
-			break;
 		case 'tfoot':
 			$this->placeTFoot($node);
 			break;
