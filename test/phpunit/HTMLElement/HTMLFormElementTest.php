@@ -44,4 +44,10 @@ class HTMLFormElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("form");
 		self::assertPropertyAttributeCorrelate($sut, "method");
 	}
+
+	public function testTarget():void {
+		/** @var HTMLFormElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("form");
+		self::assertPropertyAttributeCorrelate($sut, "target");
+	}
 }
