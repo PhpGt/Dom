@@ -308,9 +308,6 @@ class HTMLTableElement extends HTMLElement {
 			$col = $this->getElementsByTagName('tr');
 			foreach($col as $row) {
 				$name = strtolower($row->parentNode->nodeName);
-				if($name === 'table' && $row->parentNode !== $this) {
-					continue;
-				}
 
 				$closestTable = $row->parentNode;
 				while(!$closestTable instanceof HTMLTableElement) {
