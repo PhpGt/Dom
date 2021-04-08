@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
 use Gt\Dom\Node;
 use Gt\Dom\Document;
 
@@ -24,12 +25,12 @@ use Gt\Dom\Document;
 class HTMLIFrameElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/contentDocument */
 	protected function __prop_get_contentDocument():Document {
-		// TODO: This is client-side only... throw exception.
+		throw new FunctionalityNotAvailableOnServerException("contentDocument");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/contentWindow */
 	protected function __prop_get_contentWindow():Node {
-		// TODO: This is client-side only... throw exception.
+		throw new FunctionalityNotAvailableOnServerException("contentWindow");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/height */
