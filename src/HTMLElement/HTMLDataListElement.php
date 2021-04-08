@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\Facade\HTMLCollectionFactory;
+use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\HTMLCollection;
 
 /**
@@ -15,6 +17,6 @@ use Gt\Dom\HTMLCollection;
 class HTMLDataListElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataListElement/options */
 	protected function __prop_get_options():HTMLCollection {
-
+		return $this->getElementsByTagName("option");
 	}
 }

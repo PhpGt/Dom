@@ -48,6 +48,7 @@ use Gt\Dom\HTMLElement\HTMLBRElement;
 use Gt\Dom\HTMLElement\HTMLButtonElement;
 use Gt\Dom\HTMLElement\HTMLCanvasElement;
 use Gt\Dom\HTMLElement\HTMLDataElement;
+use Gt\Dom\HTMLElement\HTMLDataListElement;
 use Gt\Dom\HTMLElement\HTMLDetailsElement;
 use Gt\Dom\HTMLElement\HTMLDialogElement;
 use Gt\Dom\HTMLElement\HTMLDivElement;
@@ -133,6 +134,7 @@ class DOMDocumentFacade extends DOMDocument {
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::col" => HTMLTableColElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::colgroup" => HTMLTableColElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::data" => HTMLDataElement::class,
+		"Gt\Dom\Facade\NodeClass\DOMElementFacade::datalist" => HTMLDataListElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::del" => HTMLModElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::details" => HTMLDetailsElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::dialog" => HTMLDialogElement::class,
