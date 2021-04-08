@@ -8,20 +8,20 @@ namespace Gt\Dom\HTMLElement;
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement
  *
- * @property int $height Is a DOMString reflecting the height HTML attribute, containing the displayed height of the resource.
+ * @property string $height Is a DOMString reflecting the height HTML attribute, containing the displayed height of the resource.
  * @property string $src Is a DOMString that reflects the src HTML attribute, containing the address of the resource.
  * @property string $type Is a DOMString that reflects the type HTML attribute, containing the type of the resource.
- * @property int $width Is a DOMString that reflects the width HTML attribute, containing the displayed width of the resource.
+ * @property string $width Is a DOMString that reflects the width HTML attribute, containing the displayed width of the resource.
  */
 class HTMLEmbedElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/height */
-	protected function __prop_get_height():int {
-
+	protected function __prop_get_height():string {
+		return $this->getAttribute("height") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/height */
-	protected function __prop_set_height(int $value):void {
-
+	protected function __prop_set_height(string $value):void {
+		$this->setAttribute("height", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/src */
