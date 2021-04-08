@@ -11,7 +11,7 @@ use Gt\Dom\HTMLCollection;
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement
  *
- * @property-read HTMLFormControlsCollection $elements The elements belonging to this field set. The type of this property depends on the version of the spec that is implemented by the browser.
+ * @property-read HTMLCollection $elements The elements belonging to this field set.
  * @property-read string $type The DOMString "fieldset".
  */
 class HTMLFieldSetElement extends HTMLElement {
