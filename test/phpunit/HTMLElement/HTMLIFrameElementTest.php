@@ -20,5 +20,17 @@ class HTMLIFrameElementTest extends HTMLElementTestCase {
 		self::expectException(FunctionalityNotAvailableOnServerException::class);
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$value = $sut->contentWindow;
+	}
 
+	public function testHeight():void {
+		/** @var HTMLIFrameElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("iframe");
+		self::assertPropertyAttributeCorrelate($sut, "height");
+	}
+
+	public function testName():void {
+		/** @var HTMLIFrameElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("iframe");
+		self::assertPropertyAttributeCorrelate($sut, "name");
+	}
 }
