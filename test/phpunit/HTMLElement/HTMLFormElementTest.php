@@ -25,4 +25,11 @@ class HTMLFormElementTest extends HTMLElementTestCase {
 		$sut->append($button, $input, $div, $select);
 		self::assertCount(3, $elements);
 	}
+
+	public function testLengthEmpty():void {
+		/** @var HTMLFormElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("form");
+		self::assertEquals(0, $sut->length);
+		self::assertCount(0, $sut);
+	}
 }

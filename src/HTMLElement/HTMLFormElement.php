@@ -2,6 +2,7 @@
 namespace Gt\Dom\HTMLElement;
 
 use ArrayAccess;
+use Countable;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLFormControlsCollection;
@@ -29,7 +30,7 @@ use Gt\Dom\HTMLFormControlsCollection;
  * @property string $autocomplete A DOMString reflecting the value of the form's autocomplete HTML attribute, indicating whether the controls in this form can have their values automatically populated by the browser.
  * @property bool $noValidate A Boolean reflecting the value of the form's novalidate HTML attribute, indicating whether the form should not be validated.
  */
-class HTMLFormElement extends HTMLElement implements ArrayAccess {
+class HTMLFormElement extends HTMLElement implements ArrayAccess, Countable {
 	public function offsetExists($offset):bool  {
 	}
 
@@ -57,7 +58,7 @@ class HTMLFormElement extends HTMLElement implements ArrayAccess {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/length */
 	protected function __prop_get_length():int {
-
+		return count($this->elements);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/name */
@@ -148,5 +149,9 @@ class HTMLFormElement extends HTMLElement implements ArrayAccess {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/noValidate */
 	protected function __prop_set_noValidate(bool $value):void {
 
+	}
+
+	public function count():int {
+		return $this->length;
 	}
 }
