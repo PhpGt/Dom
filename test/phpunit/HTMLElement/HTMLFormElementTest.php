@@ -32,4 +32,10 @@ class HTMLFormElementTest extends HTMLElementTestCase {
 		self::assertEquals(0, $sut->length);
 		self::assertCount(0, $sut);
 	}
+
+	public function testName():void {
+		/** @var HTMLFormElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("form");
+		self::assertPropertyAttributeCorrelate($sut, "name");
+	}
 }
