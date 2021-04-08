@@ -83,14 +83,14 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	 * undefined when name does not exist). This is mostly useful for
 	 * non-JavaScript DOM implementations.
 	 *
-	 * @param string $name
+	 * @param string $nameOrId
 	 * @return ?Element
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/namedItem
 	 */
-	public function namedItem(string $name):?Element {
+	public function namedItem(string $nameOrId):?Element {
 		foreach(["id", "name"] as $attribute) {
 			foreach($this as $element) {
-				if($element->getAttribute($attribute) === $name) {
+				if($element->getAttribute($attribute) === $nameOrId) {
 					return $element;
 				}
 			}

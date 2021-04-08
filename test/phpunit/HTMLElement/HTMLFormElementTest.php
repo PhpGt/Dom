@@ -1,7 +1,10 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
+use Gt\Dom\Exception\ArrayAccessReadOnlyException;
 use Gt\Dom\HTMLElement\HTMLFormElement;
+use Gt\Dom\HTMLElement\HTMLInputElement;
+use Gt\Dom\HTMLElement\HTMLTextAreaElement;
 use Gt\Dom\HTMLFormControlsCollection;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
@@ -88,5 +91,34 @@ class HTMLFormElementTest extends HTMLElementTestCase {
 		/** @var HTMLFormElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("form");
 		self::assertPropertyAttributeCorrelateBool($sut, "novalidate", "noValidate");
+	}
+
+	public function testArrayAccess():void {
+		/** @var HTMLFormElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("form");
+		self::assertFalse(isset($sut["nothing"]));
+
+		/** @var HTMLInputElement $input */
+		$input = $sut->ownerDocument->createElement("input");
+		$input->name = "example";
+		/** @var HTMLTextAreaElement $textarea */
+		$textarea = $sut->ownerDocument->createElement("textarea");
+		$textarea->name = "another-example";
+		$sut->append($input, $textarea);
+		self::assertSame($textarea, $sut["another-example"]);
+	}
+
+	public function testArrayAccessSet():void {
+		/** @var HTMLFormElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("form");
+		self::expectException(ArrayAccessReadOnlyException::class);
+		$sut["nothing"] = "something";
+	}
+
+	public function testArrayAccessUnset():void {
+		/** @var HTMLFormElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("form");
+		self::expectException(ArrayAccessReadOnlyException::class);
+		unset($sut["nothing"]);
 	}
 }

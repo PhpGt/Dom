@@ -3,6 +3,7 @@ namespace Gt\Dom\HTMLElement;
 
 use ArrayAccess;
 use Countable;
+use Gt\Dom\Exception\ArrayAccessReadOnlyException;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLFormControlsCollection;
@@ -31,21 +32,23 @@ use Gt\Dom\HTMLFormControlsCollection;
  * @property bool $noValidate A Boolean reflecting the value of the form's novalidate HTML attribute, indicating whether the form should not be validated.
  */
 class HTMLFormElement extends HTMLElement implements ArrayAccess, Countable {
-	public function offsetExists($offset):bool  {
+	public function offsetExists(mixed $offset):bool {
+		$match = $this->elements->namedItem($offset);
+		return !is_null($match);
 	}
 
-	public function offsetGet($offset):?HTMLUIElement {
-		// TODO: Implement offsetGet() method.
+	public function offsetGet(mixed $offset):?HTMLElement {
+		/** @var HTMLElement|null $element */
+		$element = $this->elements->namedItem($offset);
+		return $element;
 	}
 
-	public function offsetSet($offset, $value) {
-		// TODO: Implement offsetSet() method.
-		// This must throw an exception.
+	public function offsetSet(mixed $offset, mixed $value):void {
+		throw new ArrayAccessReadOnlyException();
 	}
 
-	public function offsetUnset($offset) {
-		// TODO: Implement offsetUnset() method.
-		// This must throw an exception
+	public function offsetUnset(mixed $offset):void {
+		throw new ArrayAccessReadOnlyException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/elements */
