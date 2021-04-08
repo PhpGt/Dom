@@ -303,6 +303,7 @@ class HTMLTableElement extends HTMLElement {
 			$rowsHead = [];
 			$rowsBody = [];
 			$rowsFoot = [];
+			$rowsFloating = [];
 			$rows = [];
 			$col = $this->getElementsByTagName('tr');
 			foreach($col as $row) {
@@ -310,9 +311,15 @@ class HTMLTableElement extends HTMLElement {
 				if($name === 'table' && $row->parentNode !== $this) {
 					continue;
 				}
-				if($row->parentNode->parentNode !== $this) {
+
+				$closestTable = $row->parentNode;
+				while(!$closestTable instanceof HTMLTableElement) {
+					$closestTable = $closestTable->parentNode;
+				}
+				if($closestTable !== $this) {
 					continue;
 				}
+
 				switch($name) {
 				case 'thead':
 					$rowsHead[] = $row;
@@ -324,8 +331,12 @@ class HTMLTableElement extends HTMLElement {
 				case 'tfoot':
 					$rowsFoot[] = $row;
 					break;
+				default:
+					$rowsFloating[] = $row;
 				}
 			}
+
+			array_push($rows, ...$rowsFloating);
 			array_push($rows, ...$rowsHead);
 			array_push($rows, ...$rowsBody);
 			array_push($rows, ...$rowsFoot);
