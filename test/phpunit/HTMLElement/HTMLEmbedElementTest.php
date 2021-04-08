@@ -10,4 +10,10 @@ class HTMLEmbedElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("embed");
 		self::assertPropertyAttributeCorrelate($sut, "height");
 	}
+
+	public function testSrc():void {
+		/** @var HTMLEmbedElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("embed");
+		self::assertPropertyAttributeCorrelate($sut, "src");
+	}
 }
