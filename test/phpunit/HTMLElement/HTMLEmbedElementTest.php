@@ -22,4 +22,10 @@ class HTMLEmbedElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("embed");
 		self::assertPropertyAttributeCorrelate($sut, "type");
 	}
+
+	public function testWidth():void {
+		/** @var HTMLEmbedElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("embed");
+		self::assertPropertyAttributeCorrelate($sut, "width");
+	}
 }

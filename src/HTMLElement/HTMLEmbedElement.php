@@ -45,12 +45,12 @@ class HTMLEmbedElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/width */
-	protected function __prop_get_width():int {
-
+	protected function __prop_get_width():string {
+		return $this->getAttribute("width") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/width */
-	protected function __prop_set_width(int $value):void {
-
+	protected function __prop_set_width(string $value):void {
+		$this->setAttribute("width", $value);
 	}
 }
