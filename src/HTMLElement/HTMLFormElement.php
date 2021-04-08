@@ -2,6 +2,9 @@
 namespace Gt\Dom\HTMLElement;
 
 use ArrayAccess;
+use Gt\Dom\Facade\HTMLCollectionFactory;
+use Gt\Dom\HTMLCollection;
+use Gt\Dom\HTMLFormControlsCollection;
 
 /**
  * The HTMLFormElement interface represents a <form> element in the DOM. It
@@ -46,7 +49,10 @@ class HTMLFormElement extends HTMLElement implements ArrayAccess {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/elements */
 	protected function __prop_get_elements():HTMLFormControlsCollection {
-
+		return HTMLCollectionFactory::createHTMLFormControlsCollection(
+// List of elements taken from: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/elements#value
+			fn() => $this->querySelectorAll("button, fieldset, input, object, output, select, textarea")
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/length */
