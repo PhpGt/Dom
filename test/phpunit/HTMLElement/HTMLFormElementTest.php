@@ -68,7 +68,7 @@ class HTMLFormElementTest extends HTMLElementTestCase {
 	public function testEncodingEnctypeCorrelate():void {
 		/** @var HTMLFormElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("form");
-		$sut->setAttribute("encoding", "test-encoding");
-		self::assertEquals("test-encoding", $sut->enctype);
+		$sut->setAttribute("enctype", "test-encoding");
+		self::assertEquals("test-encoding", $sut->encoding);
 	}
 }
