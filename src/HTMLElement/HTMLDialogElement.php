@@ -12,11 +12,16 @@ namespace Gt\Dom\HTMLElement;
  */
 class HTMLDialogElement extends HTMLElement {
 	protected function __prop_get_open():bool {
-
+		return $this->hasAttribute("open");
 	}
 
 	protected function __prop_set_open(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("open","");
+		}
+		else {
+			$this->removeAttribute("open");
+		}
 	}
 
 	protected function __prop_get_returnValue():string {
