@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
+use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLElement\HTMLFieldSetElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
@@ -9,5 +10,34 @@ class HTMLFieldSetElementTest extends HTMLElementTestCase {
 		/** @var HTMLFieldSetElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("fieldset");
 		self::assertPropertyAttributeCorrelateBool($sut, "disabled");
+	}
+
+	public function testElementsEmpty():void {
+		/** @var HTMLFieldSetElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("fieldset");
+		$elements = $sut->elements;
+		self::assertInstanceOf(HTMLCollection::class, $elements);
+		self::assertCount(0, $elements);
+	}
+
+	public function testElements():void {
+		/** @var HTMLFieldSetElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("fieldset");
+		$elements = $sut->elements;
+		$button = $sut->ownerDocument->createElement("button");
+		$input = $sut->ownerDocument->createElement("input");
+		$select = $sut->ownerDocument->createElement("select");
+		$textArea = $sut->ownerDocument->createElement("textarea");
+		$custom = $sut->ownerDocument->createElement("custom-element");
+		$custom->setAttribute("name", "example");
+
+		$div = $sut->ownerDocument->createElement("div");
+		$sut->append($button, $input, $div);
+		$div->append($select, $textArea, $custom);
+
+		self::assertCount(5, $elements);
+		foreach($elements as $element) {
+			self::assertContains($element, [$button, $input, $select, $textArea, $custom]);
+		}
 	}
 }

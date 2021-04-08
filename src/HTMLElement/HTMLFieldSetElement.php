@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\HTMLCollection;
 
 /**
@@ -18,8 +19,11 @@ class HTMLFieldSetElement extends HTMLElement {
 	use HTMLUIElement;
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/elements */
-	protected function __prop_get_elements():HTMLFormControlsCollection {
-
+	protected function __prop_get_elements():HTMLCollection {
+		return HTMLCollectionFactory::create(
+			// List of elements from: https://html.spec.whatwg.org/multipage/forms.html#category-listed
+			fn() => $this->querySelectorAll("button, fieldset, input, object, output, select, textarea, [name], [disabled]")
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/type */
