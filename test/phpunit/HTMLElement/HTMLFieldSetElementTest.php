@@ -40,4 +40,10 @@ class HTMLFieldSetElementTest extends HTMLElementTestCase {
 			self::assertContains($element, [$button, $input, $select, $textArea, $custom]);
 		}
 	}
+
+	public function testType():void {
+		/** @var HTMLFieldSetElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("fieldset");
+		self::assertEquals("fieldset", $sut->type);
+	}
 }
