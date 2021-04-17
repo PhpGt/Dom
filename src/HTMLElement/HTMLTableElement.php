@@ -306,8 +306,6 @@ class HTMLTableElement extends HTMLElement {
 			$rows = [];
 			$col = $this->getElementsByTagName('tr');
 			foreach($col as $row) {
-				$name = strtolower($row->parentNode->nodeName);
-
 				$closestTable = $row->parentNode;
 				while(!$closestTable instanceof HTMLTableElement) {
 					$closestTable = $closestTable->parentNode;
@@ -316,7 +314,7 @@ class HTMLTableElement extends HTMLElement {
 					continue;
 				}
 
-				switch($name) {
+				switch(strtolower($row->parentNode->nodeName)) {
 				case 'thead':
 					$rowsHead[] = $row;
 					break;
