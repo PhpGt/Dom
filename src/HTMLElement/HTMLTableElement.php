@@ -316,14 +316,14 @@ class HTMLTableElement extends HTMLElement {
 
 				switch(strtolower($row->parentNode->nodeName)) {
 				case 'thead':
-					$rowsHead[] = $row;
+					array_push($rowsHead, $row);
 					break;
 				case 'table':
 				case 'tbody':
-					$rowsBody[] = $row;
+					array_push($rowsBody, $row);
 					break;
 				case 'tfoot':
-					$rowsFoot[] = $row;
+					array_push($rowsFoot, $row);
 					break;
 				}
 			}
@@ -342,7 +342,7 @@ class HTMLTableElement extends HTMLElement {
 			for($i = 0, $len = $this->childNodes->length; $i < $len; $i++) {
 				$child = $this->childNodes->item($i);
 				if($child !== null && strtolower($child->nodeName) === 'tbody') {
-					$tbodies[] = $child;
+					array_push($tbodies, $child);
 				}
 			}
 
