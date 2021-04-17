@@ -306,26 +306,28 @@ class HTMLTableElement extends HTMLElement {
 			$rows = [];
 			$col = $this->getElementsByTagName('tr');
 			foreach($col as $row) {
-				$name = strtolower($row->parentNode->nodeName);
-				if($name === 'table' && $row->parentNode !== $this) {
+				$closestTable = $row->parentNode;
+				while(!$closestTable instanceof HTMLTableElement) {
+					$closestTable = $closestTable->parentNode;
+				}
+				if($closestTable !== $this) {
 					continue;
 				}
-				if($row->parentNode->parentNode !== $this) {
-					continue;
-				}
-				switch($name) {
+
+				switch(strtolower($row->parentNode->nodeName)) {
 				case 'thead':
-					$rowsHead[] = $row;
+					array_push($rowsHead, $row);
 					break;
 				case 'table':
 				case 'tbody':
-					$rowsBody[] = $row;
+					array_push($rowsBody, $row);
 					break;
 				case 'tfoot':
-					$rowsFoot[] = $row;
+					array_push($rowsFoot, $row);
 					break;
 				}
 			}
+
 			array_push($rows, ...$rowsHead);
 			array_push($rows, ...$rowsBody);
 			array_push($rows, ...$rowsFoot);
@@ -340,7 +342,7 @@ class HTMLTableElement extends HTMLElement {
 			for($i = 0, $len = $this->childNodes->length; $i < $len; $i++) {
 				$child = $this->childNodes->item($i);
 				if($child !== null && strtolower($child->nodeName) === 'tbody') {
-					$tbodies[] = $child;
+					array_push($tbodies, $child);
 				}
 			}
 
@@ -440,9 +442,6 @@ class HTMLTableElement extends HTMLElement {
 			break;
 		case 'thead':
 			$this->placeThead($node);
-			break;
-		case 'tbody':
-			$this->placeTBody($node);
 			break;
 		case 'tfoot':
 			$this->placeTFoot($node);

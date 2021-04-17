@@ -395,6 +395,16 @@ class HTMLTableElementTest extends TestCase {
 		self::assertCount(2, $table1->rows);
 	}
 
+	public function testGetRowsWithNoBody():void {
+		/** @var HTMLTableElement $table */
+		$table = NodeTestFactory::createHTMLElement("table");
+		$row1 = $table->ownerDocument->createElement("tr");
+		$row2 = $table->ownerDocument->createElement("tr");
+		$table->append($row1, $row2);
+
+		self::assertCount(2, $table->rows);
+	}
+
 	public function testGetTBodies():void {
 		/** @var HTMLTableElement $table */
 		$table = NodeTestFactory::createHTMLElement('table');
