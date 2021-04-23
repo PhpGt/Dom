@@ -58,11 +58,16 @@ class HTMLInputElement extends HTMLElement {
 	use HTMLUIElement;
 
 	protected function __prop_get_checked():bool {
-
+		return $this->hasAttribute("checked");
 	}
 
 	protected function __prop_set_checked(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("checked", "");
+		}
+		else {
+			$this->removeAttribute("checked");
+		}
 	}
 
 	protected function __prop_get_defaultChecked():bool {
