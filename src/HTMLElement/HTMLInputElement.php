@@ -141,12 +141,14 @@ class HTMLInputElement extends HTMLElement {
 		$this->setAttribute("width", (string)$value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#accept */
 	protected function __prop_get_accept():string {
-
+		return $this->getAttribute("accept") ?? "";
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#accept */
 	protected function __prop_set_accept(string $value):void {
-
+		$this->setAttribute("accept", $value);
 	}
 
 	protected function __prop_get_files():FileList {
