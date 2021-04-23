@@ -161,12 +161,12 @@ class HTMLImageElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/useMap */
 	protected function __prop_get_useMap():string {
-
+		return $this->getAttribute("usemap") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/useMap */
 	protected function __prop_set_useMap(string $value):void {
-
+		$this->setAttribute("usemap", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/width */
