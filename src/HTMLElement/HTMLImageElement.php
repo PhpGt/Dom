@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
+
 /**
  * The HTMLImageElement interface represents an HTML <img> element, providing
  * the properties and methods used to manipulate image elements.
@@ -54,7 +56,7 @@ class HTMLImageElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/currentSrc */
 	protected function __prop_get_currentSrc():string {
-
+		throw new FunctionalityNotAvailableOnServerException("currentSrc");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/decoding */
