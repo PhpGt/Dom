@@ -165,12 +165,26 @@ class HTMLInputElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formaction */
 	protected function __prop_get_formAction():string {
+		if($this->hasAttribute("formaction")) {
+			return $this->getAttribute("formaction");
+		}
 
+		while($parent = $this->parentElement) {
+			if($parent instanceof HTMLFormElement) {
+				break;
+			}
+		}
+
+		if(!$parent) {
+			return "";
+		}
+
+		return $parent->getAttribute("action") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/formAction */
 	protected function __prop_set_formAction(string $value):void {
-
+		$this->setAttribute("formaction", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formenctype */

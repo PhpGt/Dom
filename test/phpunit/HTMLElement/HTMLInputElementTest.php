@@ -4,6 +4,7 @@ namespace Gt\Dom\Test\HTMLElement;
 use Gt\Dom\ClientSide\FileList;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
+use Gt\Dom\HTMLElement\HTMLFormElement;
 use Gt\Dom\HTMLElement\HTMLInputElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
@@ -79,5 +80,21 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		self::expectException(ClientSideOnlyFunctionalityException::class);
 		$files = self::createMock(FileList::class);
 		$sut->files = $files;
+	}
+
+	public function testFormActionDefault():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelate($sut, "formaction", "formAction");
+	}
+
+	public function testFormActionWithinForm():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		/** @var HTMLFormElement $form */
+		$form = $sut->ownerDocument->createElement("form");
+		$form->action = "/example";
+		$form->appendChild($sut);
+		self::assertEquals("/example", $sut->formAction);
 	}
 }
