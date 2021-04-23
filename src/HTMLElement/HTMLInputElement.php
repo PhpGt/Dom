@@ -57,10 +57,12 @@ use Gt\Dom\NodeList;
 class HTMLInputElement extends HTMLElement {
 	use HTMLUIElement;
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#checked */
 	protected function __prop_get_checked():bool {
 		return $this->hasAttribute("checked");
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#checked */
 	protected function __prop_set_checked(bool $value):void {
 		if($value) {
 			$this->setAttribute("checked", "");
@@ -70,12 +72,14 @@ class HTMLInputElement extends HTMLElement {
 		}
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#defaultChecked */
 	protected function __prop_get_defaultChecked():bool {
-
+		return $this->checked;
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#defaultChecked */
 	protected function __prop_set_defaultChecked(bool $value):void {
-
+		$this->checked = $value;
 	}
 
 	protected function __prop_get_indeterminate():bool {

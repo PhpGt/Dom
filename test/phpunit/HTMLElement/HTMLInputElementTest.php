@@ -10,4 +10,10 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("input");
 		self::assertPropertyAttributeCorrelateBool($sut, "checked");
 	}
+
+	public function testDefaultChecked():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelateBool($sut, "checked", "defaultChecked");
+	}
 }
