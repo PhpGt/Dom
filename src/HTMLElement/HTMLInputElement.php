@@ -117,12 +117,14 @@ class HTMLInputElement extends HTMLElement {
 		$this->setAttribute("height", (string)$value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#src */
 	protected function __prop_get_src():string {
-
+		return $this->getAttribute("src") ?? "";
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#src */
 	protected function __prop_set_src(string $value):void {
-
+		$this->setAttribute("src", $value);
 	}
 
 	protected function __prop_get_width():int {
