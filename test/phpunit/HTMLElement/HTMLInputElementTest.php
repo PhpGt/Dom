@@ -151,4 +151,10 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$form->appendChild($sut);
 		self::assertEquals("/example", $sut->formTarget);
 	}
+
+	public function testMax():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelate($sut, "max");
+	}
 }

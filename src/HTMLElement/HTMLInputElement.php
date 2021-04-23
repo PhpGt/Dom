@@ -274,12 +274,14 @@ class HTMLInputElement extends HTMLElement {
 		$this->setAttribute("formtarget", $value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-max */
 	protected function __prop_get_max():string {
-
+		return $this->getAttribute("max") ?? "";
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-max */
 	protected function __prop_set_max(string $value):void {
-
+		$this->setAttribute("max", $value);
 	}
 
 	protected function __prop_get_maxLength():int {
