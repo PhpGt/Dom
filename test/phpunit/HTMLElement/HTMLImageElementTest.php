@@ -61,4 +61,10 @@ class HTMLImageElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("img");
 		self::assertEquals(0, $sut->naturalHeight);
 	}
+
+	public function testNaturalWidth():void {
+		/** @var HTMLImageElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("img");
+		self::assertEquals(0, $sut->naturalHeight);
+	}
 }
