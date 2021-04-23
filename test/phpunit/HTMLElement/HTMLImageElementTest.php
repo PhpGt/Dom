@@ -109,4 +109,10 @@ class HTMLImageElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("img");
 		self::assertSame(0, $sut->x);
 	}
+
+	public function testY():void {
+		/** @var HTMLImageElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("img");
+		self::assertSame(0, $sut->y);
+	}
 }
