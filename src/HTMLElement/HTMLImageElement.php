@@ -44,12 +44,12 @@ class HTMLImageElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/crossOrigin */
 	protected function __prop_get_crossOrigin():string {
-
+		return $this->getAttribute("crossorigin") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/crossOrigin */
 	protected function __prop_set_crossOrigin(string $value):void {
-
+		$this->setAttribute("crossorigin", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/currentSrc */
