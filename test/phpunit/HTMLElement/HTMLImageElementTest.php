@@ -97,4 +97,16 @@ class HTMLImageElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("img");
 		self::assertPropertyAttributeCorrelate($sut, "usemap", "useMap");
 	}
+
+	public function testWidth():void {
+		/** @var HTMLImageElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("img");
+		self::assertPropertyAttributeCorrelateNullableInt($sut, "width");
+	}
+
+	public function testX():void {
+		/** @var HTMLImageElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("img");
+		self::assertSame(0, $sut->x);
+	}
 }

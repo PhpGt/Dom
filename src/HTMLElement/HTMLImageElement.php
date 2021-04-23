@@ -24,7 +24,7 @@ use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
  * @property string $src A USVString that reflects the src HTML attribute, which contains the full URL of the image including base URI. You can load a different image into the element by changing the URL in the src attribute.
  * @property string $srcset A USVString reflecting the srcset HTML attribute. This specifies a list of candidate images, separated by commas (',', U+002C COMMA). Each candidate image is a URL followed by a space, followed by a specially-formatted string indicating the size of the image. The size may be specified either the width or a size multiple. Read the srcset page for specifics on the format of the size substring.
  * @property string $useMap A DOMString reflecting the usemap HTML attribute, containing the page-local URL of the <map> element describing the image map to use. The page-local URL is a pound (hash) symbol (#) followed by the ID of the <map> element, such as #my-map-element. The <map> in turn contains <area> elements indicating the clickable areas in the image.
- * @property int $width An integer value that reflects the width HTML attribute, indicating the rendered width of the image in CSS pixels.
+ * @property ?int $width An integer value that reflects the width HTML attribute, indicating the rendered width of the image in CSS pixels.
  * @property-read int $x An integer indicating the horizontal offset of the left border edge of the image's CSS layout box relative to the origin of the <html> element's containing block.
  * @property-read int $y The integer vertical offset of the top border edge of the image's CSS layout box relative to the origin of the <html> element's containing block.
  */
@@ -170,22 +170,27 @@ class HTMLImageElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/width */
-	protected function __prop_get_width():int {
+	protected function __prop_get_width():?int {
+		$width = $this->getAttribute("width");
+		if(is_null($width)) {
+			return null;
+		}
 
+		return (int)$width;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/width */
 	protected function __prop_set_width(int $value):void {
-
+		$this->setAttribute("width", (string)$value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/x */
 	protected function __prop_get_x():int {
-
+		return 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/y */
 	protected function __prop_get_y():int {
-
+		return 0;
 	}
 }
