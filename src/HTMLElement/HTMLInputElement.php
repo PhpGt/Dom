@@ -94,11 +94,11 @@ class HTMLInputElement extends HTMLElement {
 	}
 
 	protected function __prop_get_alt():string {
-
+		return $this->getAttribute("alt") ?? "";
 	}
 
 	protected function __prop_set_alt(string $value):void {
-
+		$this->setAttribute("alt", $value);
 	}
 
 	protected function __prop_get_height():int {

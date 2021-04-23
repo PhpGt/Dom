@@ -32,4 +32,10 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		self::expectException(FunctionalityNotAvailableOnServerException::class);
 		$sut->indeterminate = true;
 	}
+
+	public function testAlt():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelate($sut, "alt");
+	}
 }
