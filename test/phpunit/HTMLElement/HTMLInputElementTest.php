@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
+use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
 use Gt\Dom\HTMLElement\HTMLInputElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
@@ -15,5 +16,20 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
 		self::assertPropertyAttributeCorrelateBool($sut, "checked", "defaultChecked");
+	}
+
+	public function testIndeterminateGet():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::expectException(FunctionalityNotAvailableOnServerException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$value = $sut->indeterminate;
+	}
+
+	public function testIndeterminateSet():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::expectException(FunctionalityNotAvailableOnServerException::class);
+		$sut->indeterminate = true;
 	}
 }

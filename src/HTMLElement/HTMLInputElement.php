@@ -2,6 +2,7 @@
 namespace Gt\Dom\HTMLElement;
 
 use DateTimeInterface;
+use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
 use Gt\Dom\NodeList;
 
 /**
@@ -13,7 +14,7 @@ use Gt\Dom\NodeList;
  * Properties that apply only to elements of type `checkbox` or `radio`:
  * @property bool $checked Returns / Sets the current state of the element when type is checkbox or radio.
  * @property bool $defaultChecked Returns / Sets the default state of a radio button or checkbox as originally specified in HTML that created this object.
- * @property-read bool $indeterminate Returns whether the checkbox or radio button is in indeterminate state. For checkboxes, the effect is that the appearance of the checkbox is obscured/greyed in some way as to indicate its state is indeterminate (not checked but not unchecked). Does not affect the value of the checked attribute, and clicking the checkbox will set the value to false.
+ * @property bool $indeterminate Returns whether the checkbox or radio button is in indeterminate state. For checkboxes, the effect is that the appearance of the checkbox is obscured/greyed in some way as to indicate its state is indeterminate (not checked but not unchecked). Does not affect the value of the checked attribute, and clicking the checkbox will set the value to false.
  *
  * Properties that apply only to elements of type `image`:
  * @property string $alt Returns / Sets the element's alt attribute, containing alternative text to use when type is image.
@@ -82,8 +83,14 @@ class HTMLInputElement extends HTMLElement {
 		$this->checked = $value;
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#indeterminate */
 	protected function __prop_get_indeterminate():bool {
+		throw new FunctionalityNotAvailableOnServerException("indeterminate");
+	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#indeterminate */
+	protected function __prop_set_indeterminate(bool $value):void {
+		throw new FunctionalityNotAvailableOnServerException("indeterminate");
 	}
 
 	protected function __prop_get_alt():string {
