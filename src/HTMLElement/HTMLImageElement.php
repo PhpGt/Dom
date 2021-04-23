@@ -141,12 +141,12 @@ class HTMLImageElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/src */
 	protected function __prop_get_src():string {
-
+		return $this->getAttribute("src") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/src */
 	protected function __prop_set_src(string $value):void {
-
+		$this->setAttribute("src", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset */
