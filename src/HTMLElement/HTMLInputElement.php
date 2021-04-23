@@ -2,6 +2,8 @@
 namespace Gt\Dom\HTMLElement;
 
 use DateTimeInterface;
+use Gt\Dom\ClientSide\FileList;
+use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
 use Gt\Dom\NodeList;
 
@@ -151,12 +153,14 @@ class HTMLInputElement extends HTMLElement {
 		$this->setAttribute("accept", $value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#files */
 	protected function __prop_get_files():FileList {
-
+		return new FileList();
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#files */
 	protected function __prop_set_files(FileList $value):void {
-
+		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formaction */
