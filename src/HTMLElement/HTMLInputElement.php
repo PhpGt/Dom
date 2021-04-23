@@ -213,12 +213,26 @@ class HTMLInputElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formmethod */
 	protected function __prop_get_formMethod():string {
+		if($this->hasAttribute("formmethod")) {
+			return $this->getAttribute("formmethod");
+		}
 
+		while($parent = $this->parentElement) {
+			if($parent instanceof HTMLFormElement) {
+				break;
+			}
+		}
+
+		if(!$parent) {
+			return "";
+		}
+
+		return $parent->getAttribute("method") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formmethod */
 	protected function __prop_set_formMethod(string $value):void {
-
+		$this->setAttribute("formmethod", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formnovalidate */

@@ -113,4 +113,20 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$form->appendChild($sut);
 		self::assertEquals("test/example", $sut->formEncType);
 	}
+
+	public function testFormMethodDefault():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelate($sut, "formmethod");
+	}
+
+	public function testFormMethodWithinForm():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		/** @var HTMLFormElement $form */
+		$form = $sut->ownerDocument->createElement("form");
+		$form->method = "EXAMPLE";
+		$form->appendChild($sut);
+		self::assertEquals("EXAMPLE", $sut->formMethod);
+	}
 }
