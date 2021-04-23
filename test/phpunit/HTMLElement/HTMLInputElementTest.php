@@ -129,4 +129,10 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$form->appendChild($sut);
 		self::assertEquals("EXAMPLE", $sut->formMethod);
 	}
+
+	public function testFormNoValidate():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelateBool($sut, "formnovalidate", "formNoValidate");
+	}
 }

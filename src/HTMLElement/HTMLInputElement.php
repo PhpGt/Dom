@@ -237,12 +237,17 @@ class HTMLInputElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formnovalidate */
 	protected function __prop_get_formNoValidate():bool {
-
+		return $this->hasAttribute("formnovalidate");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formnovalidate */
 	protected function __prop_set_formNoValidate(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("formnovalidate", "");
+		}
+		else {
+			$this->removeAttribute("formnovalidate");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formtarget */
