@@ -86,12 +86,17 @@ class HTMLImageElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/isMap */
 	protected function __prop_get_isMap():bool {
-
+		return $this->hasAttribute("ismap");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/isMap */
 	protected function __prop_set_isMap(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("ismap", "");
+		}
+		else {
+			$this->removeAttribute("ismap");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/loading */

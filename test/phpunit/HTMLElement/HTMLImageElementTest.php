@@ -43,4 +43,10 @@ class HTMLImageElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("img");
 		self::assertPropertyAttributeCorrelateNullableInt($sut, "height");
 	}
+
+	public function testIsMap():void {
+		/** @var HTMLImageElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("img");
+		self::assertPropertyAttributeCorrelateBool($sut, "ismap", "isMap");
+	}
 }
