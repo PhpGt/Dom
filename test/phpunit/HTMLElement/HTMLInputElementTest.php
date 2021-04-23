@@ -38,4 +38,10 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("input");
 		self::assertPropertyAttributeCorrelate($sut, "alt");
 	}
+
+	public function testHeight():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelateNullableInt($sut, "height");
+	}
 }

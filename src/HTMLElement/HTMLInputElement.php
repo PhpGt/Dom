@@ -18,7 +18,7 @@ use Gt\Dom\NodeList;
  *
  * Properties that apply only to elements of type `image`:
  * @property string $alt Returns / Sets the element's alt attribute, containing alternative text to use when type is image.
- * @property int $height Returns / Sets the element's height attribute, which defines the height of the image displayed for the button, if the value of type is image.
+ * @property ?int $height Returns / Sets the element's height attribute, which defines the height of the image displayed for the button, if the value of type is image.
  * @property string $src Returns / Sets the element's src attribute, which specifies a URI for the location of an image to display on the graphical submit button, if the value of type is image; otherwise it is ignored.
  * @property int $width Returns / Sets the document's width attribute, which defines the width of the image displayed for the button, if the value of type is image.
  *
@@ -93,20 +93,28 @@ class HTMLInputElement extends HTMLElement {
 		throw new FunctionalityNotAvailableOnServerException("indeterminate");
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#alt */
 	protected function __prop_get_alt():string {
 		return $this->getAttribute("alt") ?? "";
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#alt */
 	protected function __prop_set_alt(string $value):void {
 		$this->setAttribute("alt", $value);
 	}
 
-	protected function __prop_get_height():int {
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#height */
+	protected function __prop_get_height():?int {
+		if($this->hasAttribute("height")) {
+			return (int)$this->getAttribute("height");
+		}
 
+		return null;
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#height */
 	protected function __prop_set_height(int $value):void {
-
+		$this->setAttribute("height", (string)$value);
 	}
 
 	protected function __prop_get_src():string {
