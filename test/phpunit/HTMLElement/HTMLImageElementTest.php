@@ -85,4 +85,10 @@ class HTMLImageElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("img");
 		self::assertPropertyAttributeCorrelate($sut, "src");
 	}
+
+	public function testSrcset():void {
+		/** @var HTMLImageElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("img");
+		self::assertPropertyAttributeCorrelate($sut, "srcset");
+	}
 }
