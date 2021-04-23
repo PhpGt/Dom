@@ -65,7 +65,7 @@ class HTMLImageElementTest extends HTMLElementTestCase {
 	public function testNaturalWidth():void {
 		/** @var HTMLImageElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("img");
-		self::assertEquals(0, $sut->naturalHeight);
+		self::assertEquals(0, $sut->naturalWidth);
 	}
 
 	public function testReferrerPolicy():void {
