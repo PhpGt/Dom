@@ -29,12 +29,12 @@ namespace Gt\Dom\HTMLElement;
 class HTMLImageElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/alt */
 	protected function __prop_get_alt():string {
-
+		return $this->getAttribute("alt") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/alt */
 	protected function __prop_set_alt(string $value):void {
-
+		$this->setAttribute("alt", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/complete */
