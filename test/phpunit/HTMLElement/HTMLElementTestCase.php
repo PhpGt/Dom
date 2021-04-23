@@ -2,6 +2,7 @@
 namespace Gt\Dom\Test\HTMLElement;
 
 use Gt\Dom\HTMLElement\HTMLElement;
+use Gt\Dom\HTMLElement\HTMLImageElement;
 use PHPUnit\Framework\TestCase;
 
 class HTMLElementTestCase extends TestCase {
@@ -76,6 +77,31 @@ class HTMLElementTestCase extends TestCase {
 		}
 		else {
 			self::assertFalse($sut->hasAttribute($attribute));
+		}
+	}
+
+	protected static function assertPropertyAttributeCorrelateNullableInt(
+		HTMLElement $sut,
+		string $attribute,
+		string $property = null
+	):void {
+		if(is_null($property)) {
+			$property = $attribute;
+		}
+
+		$current = $sut->$property;
+		self::assertEquals($current, $sut->getAttribute("attribute"));
+
+		for($i = 0; $i < 10; $i++) {
+			$value = rand(1, 999999);
+			$sut->setAttribute($attribute, (string)$value);
+			self::assertEquals($sut->$property, $sut->getAttribute($attribute));
+		}
+
+		for($i = 0; $i < 10; $i++) {
+			$value = rand(1, 999999);
+			$sut->$property = $value;
+			self::assertEquals($sut->getAttribute($attribute), $sut->$property);
 		}
 	}
 }

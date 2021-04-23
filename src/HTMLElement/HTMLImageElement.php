@@ -14,7 +14,7 @@ use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
  * @property string $crossOrigin A DOMString specifying the CORS setting for this image element. See CORS settings attributes for further details. This may be null if CORS is not used.
  * @property-read string $currentSrc Returns a USVString representing the URL from which the currently displayed image was loaded. This may change as the image is adjusted due to changing conditions, as directed by any media queries which are in place.
  * @property string $decoding An optional DOMString representing a hint given to the browser on how it should decode the image. If this value is provided, it must be one of the possible permitted values: sync to decode the image synchronously, async to decode it asynchronously, or auto to indicate no preference (which is the default). Read the decoding page for details on the implications of this property's values.
- * @property int $height An integer value that reflects the height HTML attribute, indicating the rendered height of the image in CSS pixels.
+ * @property ?int $height An integer value that reflects the height HTML attribute, indicating the rendered height of the image in CSS pixels.
  * @property bool $isMap A Boolean that reflects the ismap HTML attribute, indicating that the image is part of a server-side image map. This is different from a client-side image map, specified using an <img> element and a corresponding <map> which contains <area> elements indicating the clickable areas in the image. The image must be contained within an <a> element; see the ismap page for details.
  * @property string $loading A DOMString providing a hint to the browser used to optimize loading the document by determining whether to load the image immediately (eager) or on an as-needed basis (lazy).
  * @property-read int $naturalHeight Returns an integer value representing the intrinsic height of the image in CSS pixels, if it is available; else, it shows 0. This is the height the image would be if it were rendered at its natural full size.
@@ -70,13 +70,18 @@ class HTMLImageElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/height */
-	protected function __prop_get_height():int {
+	protected function __prop_get_height():?int {
+		$height = $this->getAttribute("height");
+		if(is_null($height)) {
+			return null;
+		}
 
+		return (int)$height;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/height */
 	protected function __prop_set_height(int $value):void {
-
+		$this->setAttribute("height", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/isMap */
