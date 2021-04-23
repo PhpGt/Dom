@@ -20,7 +20,7 @@ use Gt\Dom\NodeList;
  * @property string $alt Returns / Sets the element's alt attribute, containing alternative text to use when type is image.
  * @property ?int $height Returns / Sets the element's height attribute, which defines the height of the image displayed for the button, if the value of type is image.
  * @property string $src Returns / Sets the element's src attribute, which specifies a URI for the location of an image to display on the graphical submit button, if the value of type is image; otherwise it is ignored.
- * @property int $width Returns / Sets the document's width attribute, which defines the width of the image displayed for the button, if the value of type is image.
+ * @property ?int $width Returns / Sets the document's width attribute, which defines the width of the image displayed for the button, if the value of type is image.
  *
  * Properties that apply only to elements of type `file`:
  * @property string $accept Returns / Sets the element's accept attribute, containing comma-separated list of file types accepted by the server when type is file.
@@ -127,12 +127,18 @@ class HTMLInputElement extends HTMLElement {
 		$this->setAttribute("src", $value);
 	}
 
-	protected function __prop_get_width():int {
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#width */
+	protected function __prop_get_width():?int {
+		if($this->hasAttribute("width")) {
+			return (int)$this->getAttribute("width");
+		}
 
+		return null;
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#width */
 	protected function __prop_set_width(int $value):void {
-
+		$this->setAttribute("width", (string)$value);
 	}
 
 	protected function __prop_get_accept():string {

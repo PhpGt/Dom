@@ -50,4 +50,10 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("input");
 		self::assertPropertyAttributeCorrelate($sut, "src");
 	}
+
+	public function testWidth():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelateNullableInt($sut, "width");
+	}
 }
