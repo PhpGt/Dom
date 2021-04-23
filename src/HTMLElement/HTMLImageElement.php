@@ -61,12 +61,12 @@ class HTMLImageElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/decoding */
 	protected function __prop_get_decoding():string {
-
+		return $this->getAttribute("decoding") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/decoding */
 	protected function __prop_set_decoding(string $value):void {
-
+		$this->setAttribute("decoding", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/height */

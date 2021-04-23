@@ -31,4 +31,10 @@ class HTMLImageElementTest extends HTMLElementTestCase {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$test = $sut->currentSrc;
 	}
+
+	public function testDecoding():void {
+		/** @var HTMLImageElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("img");
+		self::assertPropertyAttributeCorrelate($sut, "decoding");
+	}
 }
