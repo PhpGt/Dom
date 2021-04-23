@@ -121,12 +121,12 @@ class HTMLImageElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy */
 	protected function __prop_get_referrerPolicy():string {
-
+		return $this->getAttribute("referrerpolicy") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy */
 	protected function __prop_set_referrerPolicy(string $value):void {
-
+		$this->setAttribute("referrerpolicy", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes */

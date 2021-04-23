@@ -67,4 +67,10 @@ class HTMLImageElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("img");
 		self::assertEquals(0, $sut->naturalHeight);
 	}
+
+	public function testReferrerPolicy():void {
+		/** @var HTMLImageElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("img");
+		self::assertPropertyAttributeCorrelate($sut, "referrerpolicy", "referrerPolicy");
+	}
 }
