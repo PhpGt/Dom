@@ -189,12 +189,26 @@ class HTMLInputElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formenctype */
 	protected function __prop_get_formEncType():string {
+		if($this->hasAttribute("formenctype")) {
+			return $this->getAttribute("formenctype");
+		}
 
+		while($parent = $this->parentElement) {
+			if($parent instanceof HTMLFormElement) {
+				break;
+			}
+		}
+
+		if(!$parent) {
+			return "";
+		}
+
+		return $parent->getAttribute("enctype") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formenctype */
 	protected function __prop_set_formEncType(string $value):void {
-
+		$this->setAttribute("formenctype", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formmethod */
