@@ -135,4 +135,20 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("input");
 		self::assertPropertyAttributeCorrelateBool($sut, "formnovalidate", "formNoValidate");
 	}
+
+	public function testFormTargetDefault():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelate($sut, "formtarget", "formTarget");
+	}
+
+	public function testFormTargetWithinForm():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		/** @var HTMLFormElement $form */
+		$form = $sut->ownerDocument->createElement("form");
+		$form->target = "/example";
+		$form->appendChild($sut);
+		self::assertEquals("/example", $sut->formTarget);
+	}
 }

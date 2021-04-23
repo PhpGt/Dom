@@ -252,12 +252,26 @@ class HTMLInputElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formtarget */
 	protected function __prop_get_formTarget():string {
+		if($this->hasAttribute("formtarget")) {
+			return $this->getAttribute("formtarget");
+		}
 
+		while($parent = $this->parentElement) {
+			if($parent instanceof HTMLFormElement) {
+				break;
+			}
+		}
+
+		if(!$parent) {
+			return "";
+		}
+
+		return $parent->getAttribute("target") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formtarget */
 	protected function __prop_set_formTarget(string $value):void {
-
+		$this->setAttribute("formtarget", $value);
 	}
 
 	protected function __prop_get_max():string {
