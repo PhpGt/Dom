@@ -101,12 +101,12 @@ class HTMLImageElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/loading */
 	protected function __prop_get_loading():string {
-
+		return $this->getAttribute("loading") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/loading */
 	protected function __prop_set_loading(string $value):void {
-
+		$this->setAttribute("loading", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/naturalHeight */
