@@ -5,6 +5,7 @@ use DateTimeInterface;
 use Gt\Dom\ClientSide\FileList;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
+use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\NodeList;
 
 /**
@@ -363,14 +364,17 @@ class HTMLInputElement extends HTMLElement {
 		return null;
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-size */
 	protected function __prop_set_size(int $value):void {
 		$this->setAttribute("size", (string)$value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-multiple */
 	protected function __prop_get_multiple():bool {
 		return $this->hasAttribute("multiple");
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-multiple */
 	protected function __prop_set_multiple(bool $value):void {
 		if($value) {
 			$this->setAttribute("multiple", "");
@@ -380,8 +384,28 @@ class HTMLInputElement extends HTMLElement {
 		}
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-labels */
 	protected function __prop_get_labels():NodeList {
+		$input = $this;
+		return NodeListFactory::createLive(function() use($input) {
+			$labelsArray = [];
 
+			$context = $input;
+			while($context = $context->parentElement) {
+				if($context instanceof HTMLLabelElement) {
+					array_push($labelsArray, $context);
+					break;
+				}
+			}
+
+			if($id = $input->id) {
+				foreach($input->ownerDocument->querySelectorAll("label[for='$id']") as $label) {
+					array_push($labelsArray, $label);
+				}
+			}
+
+			return $labelsArray;
+		});
 	}
 
 	protected function __prop_get_step():string {

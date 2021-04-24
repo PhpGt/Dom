@@ -5,6 +5,7 @@ use ArrayAccess;
 use Countable;
 use Gt\Dom\Exception\NamedNodeMapImmutableException;
 use Gt\Dom\Exception\NodeListImmutableException;
+use Gt\Dom\Facade\NodeListFactory;
 use Gt\PropFunc\MagicProp;
 use Iterator;
 use Traversable;
@@ -178,8 +179,13 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 			return $this->nodeList[$this->iteratorKey];
 		}
 
-		/** @var NodeList $nodeList */
+		/** @var NodeList|array<int, Node> $nodeList */
 		$nodeList = call_user_func($this->callback);
+
+		if(is_array($nodeList)) {
+			$nodeList = NodeListFactory::create(...$nodeList);
+		}
+
 		while($nodeList->key() < $this->iteratorKey) {
 			$nodeList->next();
 		}
@@ -200,8 +206,13 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 			return isset($this->nodeList[$this->iteratorKey]);
 		}
 
-		/** @var NodeList $nodeList */
+		/** @var NodeList|array<int, Node> $nodeList */
 		$nodeList = call_user_func($this->callback);
+
+		if(is_array($nodeList)) {
+			$nodeList = NodeListFactory::create(...$nodeList);
+		}
+
 		while($nodeList->key() < $this->iteratorKey) {
 			$nodeList->next();
 		}

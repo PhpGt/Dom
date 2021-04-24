@@ -6,6 +6,7 @@ use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
 use Gt\Dom\HTMLElement\HTMLFormElement;
 use Gt\Dom\HTMLElement\HTMLInputElement;
+use Gt\Dom\HTMLElement\HTMLLabelElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
 class HTMLInputElementTest extends HTMLElementTestCase {
@@ -204,5 +205,50 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
 		self::assertPropertyAttributeCorrelateBool($sut, "multiple");
+	}
+
+	public function testLabelsNested():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$label = $sut->ownerDocument->createElement("label");
+		$label->appendChild($sut);
+		self::assertSame($label, $sut->labels[0]);
+	}
+
+	public function testLabelsFor():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$sut->id = "test-input";
+		/** @var HTMLLabelElement $label */
+		$label = $sut->ownerDocument->createElement("label");
+		$label->htmlFor = "test-input";
+
+		$sut->ownerDocument->body->append($sut);
+		$sut->ownerDocument->body->append($label);
+
+		self::assertSame($label, $sut->labels[0]);
+	}
+
+	public function testLabelsMixedNestedFor():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$sut->id = "test-input";
+		/** @var HTMLLabelElement $label1 */
+		$label1 = $sut->ownerDocument->createElement("label");
+		$label1->htmlFor = "test-input";
+		$label2 = $sut->ownerDocument->createElement("label");
+		$label2->htmlFor = "test-input";
+		$labelParent = $sut->ownerDocument->createElement("label");
+
+		$sut->ownerDocument->body->append($labelParent);
+		$labelParent->appendChild($sut);
+		$sut->ownerDocument->body->append($label1);
+		$sut->ownerDocument->body->append($label2);
+
+		$labelsArray = iterator_to_array($sut->labels->entries());
+		self::assertCount(3, $labelsArray);
+		foreach([$label1, $label2, $labelParent] as $l) {
+			self::assertContains($l, $labelsArray);
+		}
 	}
 }
