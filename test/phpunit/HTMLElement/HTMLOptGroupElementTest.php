@@ -10,4 +10,10 @@ class HTMLOptGroupElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("optgroup");
 		self::assertPropertyAttributeCorrelateBool($sut, "disabled");
 	}
+
+	public function testLabel():void {
+		/** @var HTMLOptGroupElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("optgroup");
+		self::assertPropertyAttributeCorrelate($sut, "label");
+	}
 }

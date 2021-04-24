@@ -30,11 +30,11 @@ class HTMLOptGroupElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/label */
 	protected function __prop_get_label():string {
-
+		return $this->getAttribute("label") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/label */
 	protected function __prop_set_label(string $value):void {
-
+		$this->setAttribute("label", $value);
 	}
 }
