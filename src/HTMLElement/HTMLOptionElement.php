@@ -28,7 +28,16 @@ class HTMLOptionElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/index */
 	protected function __prop_get_index():int {
+		$parent = $this->parentElement;
+		if(!$parent || !$parent instanceof HTMLSelectElement) {
+			return 0;
+		}
 
+		foreach($parent->children as $i => $childElement) {
+			if($childElement === $this) {
+				return $i;
+			}
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/label */

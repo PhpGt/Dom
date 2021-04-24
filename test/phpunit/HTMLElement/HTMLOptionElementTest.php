@@ -30,4 +30,18 @@ class HTMLOptionElementTest extends HTMLElementTestCase {
 		$form->appendChild($sut);
 		self::assertSame($form, $sut->form);
 	}
+
+	public function testIndex():void {
+		/** @var HTMLOptionElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("option");
+		self::assertSame(0, $sut->index);
+		$select = $sut->ownerDocument->createElement("select");
+		$select->appendChild($sut);
+		self::assertSame(0, $sut->index);
+
+		for($i = 0; $i < 10; $i++) {
+			$select->insertBefore($sut->cloneNode(), $sut);
+			self::assertSame($i + 1, $sut->index);
+		}
+	}
 }
