@@ -335,4 +335,10 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$sut->valueAsNumber = $dateTime->getTimestamp();
 		self::assertEquals($dateTime, $sut->valueAsDate);
 	}
+
+	public function testAutoCapitalize():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelate($sut, "autocapitalize");
+	}
 }

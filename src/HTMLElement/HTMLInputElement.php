@@ -478,12 +478,14 @@ class HTMLInputElement extends HTMLElement {
 		}
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#attr-autocapitalize */
 	protected function __prop_get_autocapitalize():string {
-
+		return $this->getAttribute("autocapitalize") ?? "";
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#attr-autocapitalize */
 	protected function __prop_set_autocapitalize(string $value):void {
-
+		$this->setAttribute("autocapitalize", $value);
 	}
 
 	protected function __prop_get_inputMode():string {
