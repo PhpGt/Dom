@@ -22,4 +22,18 @@ class HTMLObjectElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("object");
 		self::assertPropertyAttributeCorrelate($sut, "data");
 	}
+
+	public function testFormNone():void {
+		/** @var HTMLObjectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("object");
+		self::assertNull($sut->form);
+	}
+
+	public function testForm():void {
+		/** @var HTMLObjectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("object");
+		$form = $sut->ownerDocument->createElement("form");
+		$form->appendChild($sut);
+		self::assertSame($form, $sut->form);
+	}
 }

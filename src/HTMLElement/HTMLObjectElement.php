@@ -49,7 +49,15 @@ class HTMLObjectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/form */
 	protected function __prop_get_form():?HTMLFormElement {
+		$context = $this;
 
+		while($context = $context->parentElement) {
+			if($context instanceof HTMLFormElement) {
+				return $context;
+			}
+		}
+
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/height */
