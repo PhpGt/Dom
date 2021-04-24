@@ -81,6 +81,11 @@ class HTMLElementTestCase extends TestCase {
 		}
 	}
 
+	/**
+	 * @param string $type "int" or "float", prefixed with "?" to indicate
+	 * nullable, suffixed with ":" and then a default value if the non-set
+	 * value is not null-ish.
+	 */
 	protected static function assertPropertyAttributeCorrelateNumber(
 		HTMLElement $sut,
 		string $type,
@@ -94,7 +99,14 @@ class HTMLElementTestCase extends TestCase {
 		$current = $sut->$property;
 
 		$attributeValue = $sut->getAttribute("attribute");
-		self::assertEquals($current, $attributeValue);
+
+		if(strstr($type, ":")) {
+			$default = substr($type, strpos($type, ":") + 1);
+			self::assertEquals($current, $default);
+		}
+		else {
+			self::assertEquals($current, $attributeValue);
+		}
 
 		if($type[0] !== "?") {
 			self::assertNotNull($current);

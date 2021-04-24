@@ -30,12 +30,16 @@ class HTMLOListElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/start */
 	protected function __prop_get_start():int {
+		if($this->hasAttribute("start")) {
+			return (int)$this->getAttribute("start");
+		}
 
+		return 1;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/start */
 	protected function __prop_set_start(int $value):void {
-
+		$this->setAttribute("start", (string)$value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/type */

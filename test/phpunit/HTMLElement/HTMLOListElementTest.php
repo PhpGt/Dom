@@ -10,4 +10,11 @@ class HTMLOListElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("ol");
 		self::assertPropertyAttributeCorrelateBool($sut, "reversed");
 	}
+
+	public function testStart():void {
+		/** @var HTMLOListElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("ol");
+		self::assertSame(1, $sut->start);
+		self::assertPropertyAttributeCorrelateNumber($sut, "int:1",  "start");
+	}
 }
