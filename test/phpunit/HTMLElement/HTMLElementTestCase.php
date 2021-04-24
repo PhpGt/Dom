@@ -3,6 +3,7 @@ namespace Gt\Dom\Test\HTMLElement;
 
 use Gt\Dom\HTMLElement\HTMLElement;
 use Gt\Dom\HTMLElement\HTMLImageElement;
+use Gt\Dom\HTMLElement\HTMLInputElement;
 use PHPUnit\Framework\TestCase;
 
 class HTMLElementTestCase extends TestCase {
@@ -80,8 +81,9 @@ class HTMLElementTestCase extends TestCase {
 		}
 	}
 
-	protected static function assertPropertyAttributeCorrelateNullableInt(
+	protected static function assertPropertyAttributeCorrelateInt(
 		HTMLElement $sut,
+		bool $nullable,
 		string $attribute,
 		string $property = null
 	):void {
@@ -90,18 +92,34 @@ class HTMLElementTestCase extends TestCase {
 		}
 
 		$current = $sut->$property;
-		self::assertEquals($current, $sut->getAttribute("attribute"));
+
+		$attributeValue = $sut->getAttribute("attribute");
+		self::assertEquals($current, $attributeValue);
+
+		if(!$nullable) {
+			self::assertNotNull($current);
+		}
 
 		for($i = 0; $i < 10; $i++) {
 			$value = rand(1, 999999);
 			$sut->setAttribute($attribute, (string)$value);
-			self::assertEquals($sut->$property, $sut->getAttribute($attribute));
+			$attributeValue = $sut->getAttribute($attribute);
+			self::assertEquals($sut->$property, $attributeValue);
+
+			if(!$nullable) {
+				self::assertNotNull($attributeValue);
+			}
 		}
 
 		for($i = 0; $i < 10; $i++) {
 			$value = rand(1, 999999);
 			$sut->$property = $value;
-			self::assertEquals($sut->getAttribute($attribute), $sut->$property);
+			$propertyValue = $sut->$property;
+			self::assertEquals($sut->getAttribute($attribute), $propertyValue);
+
+			if(!$nullable) {
+				self::assertNotNull($propertyValue);
+			}
 		}
 	}
 }

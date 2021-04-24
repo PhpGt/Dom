@@ -284,12 +284,18 @@ class HTMLInputElement extends HTMLElement {
 		$this->setAttribute("max", $value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-maxlength */
 	protected function __prop_get_maxLength():int {
+		if($this->hasAttribute("maxlength")) {
+			return (int)$this->getAttribute("maxlength");
+		}
 
+		return 0;
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-maxlength */
 	protected function __prop_set_maxLength(int $value):void {
-
+		$this->setAttribute("maxlength", (string)$value);
 	}
 
 	protected function __prop_get_min():string {

@@ -45,7 +45,7 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 	public function testHeight():void {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
-		self::assertPropertyAttributeCorrelateNullableInt($sut, "height");
+		self::assertPropertyAttributeCorrelateInt($sut, true, "height");
 	}
 
 	public function testSrc():void {
@@ -57,7 +57,7 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 	public function testWidth():void {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
-		self::assertPropertyAttributeCorrelateNullableInt($sut, "width");
+		self::assertPropertyAttributeCorrelateInt($sut, true, "width");
 	}
 
 	public function testAccept():void {
@@ -156,5 +156,11 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
 		self::assertPropertyAttributeCorrelate($sut, "max");
+	}
+
+	public function testMaxLength():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelateInt($sut, false, "maxlength", "maxLength");
 	}
 }
