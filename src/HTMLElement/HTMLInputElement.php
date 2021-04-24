@@ -438,7 +438,9 @@ class HTMLInputElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#property-valueAsDate */
 	protected function __prop_set_valueAsDate(DateTimeInterface $value):void {
-
+// See here for why we're using this format:
+// https://developer.mozilla.org/en-US/docs/Web/HTML/Date_and_time_formats#local_date_and_time_strings
+		$this->value = $value->format("Y-m-d\TH:i:s");
 	}
 
 	protected function __prop_get_valueAsNumber():int|float {

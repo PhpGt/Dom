@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
+use DateTime;
 use Gt\Dom\ClientSide\FileList;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
@@ -276,10 +277,19 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 	public function testValueAsDate():void {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
-		$dateString = "1988-05-04 17:21:05";
+		$dateString = "1988-05-04T17:21:05";
 		$sut->value = $dateString;
 		$dateTime = $sut->valueAsDate;
 		self::assertNotNull($dateTime);
-		self::assertEquals($dateString, $dateTime->format("Y-m-d H:i:s"));
+		self::assertEquals($dateString, $dateTime->format("Y-m-d\TH:i:s"));
+	}
+
+	public function testValueAsDateSet():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$dateString = "1988-05-04T17:21:05";
+		$dateTime = new DateTime($dateString);
+		$sut->valueAsDate = $dateTime;
+		self::assertEquals($dateString, $sut->value);
 	}
 }
