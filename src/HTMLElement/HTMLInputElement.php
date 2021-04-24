@@ -317,16 +317,19 @@ class HTMLInputElement extends HTMLElement {
 		return 0;
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-minlength */
 	protected function __prop_set_minLength(int $value):void {
 		$this->setAttribute("minlength", (string)$value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-pattern */
 	protected function __prop_get_pattern():string {
-
+		return $this->getAttribute("pattern") ?? "";
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-pattern */
 	protected function __prop_set_pattern(string $value):void {
-
+		$this->setAttribute("pattern", $value);
 	}
 
 	protected function __prop_get_placeholder():string {
