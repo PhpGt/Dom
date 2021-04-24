@@ -15,12 +15,17 @@ namespace Gt\Dom\HTMLElement;
 class HTMLOListElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/reversed */
 	protected function __prop_get_reversed():bool {
-
+		return $this->hasAttribute("reversed");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/reversed */
 	protected function __prop_set_reversed(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("reversed", "");
+		}
+		else {
+			$this->removeAttribute("reversed");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/start */
