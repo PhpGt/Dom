@@ -92,12 +92,17 @@ class HTMLObjectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/typeMustMatch */
 	protected function __prop_get_typeMustMatch():bool {
-
+		return $this->hasAttribute("typemustmatch");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/typeMustMatch */
 	protected function __prop_set_typeMustMatch(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("typemustmatch", "");
+		}
+		else {
+			$this->removeAttribute("typemustmatch");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/useMap */
