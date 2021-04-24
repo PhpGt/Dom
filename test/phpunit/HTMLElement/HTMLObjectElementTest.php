@@ -81,4 +81,10 @@ class HTMLObjectElementTest extends HTMLElementTestCase {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$value = $sut->validity;
 	}
+
+	public function testWidth():void {
+		/** @var HTMLObjectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("object");
+		self::assertPropertyAttributeCorrelate($sut, "width");
+	}
 }

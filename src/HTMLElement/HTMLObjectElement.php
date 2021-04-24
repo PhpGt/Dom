@@ -129,12 +129,12 @@ class HTMLObjectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/width */
 	protected function __prop_get_width():string {
-
+		return $this->getAttribute("width") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/width */
 	protected function __prop_set_width(string $value):void {
-
+		$this->setAttribute("width", $value);
 	}
 
 	protected function __prop_get_willValidate():bool {
