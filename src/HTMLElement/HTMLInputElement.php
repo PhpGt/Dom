@@ -409,11 +409,11 @@ class HTMLInputElement extends HTMLElement {
 	}
 
 	protected function __prop_get_step():string {
-
+		return $this->getAttribute("step") ?? "";
 	}
 
 	protected function __prop_set_step(string $value):void {
-
+		$this->setAttribute("step", $value);
 	}
 
 	protected function __prop_get_valueAsDate():DateTimeInterface {

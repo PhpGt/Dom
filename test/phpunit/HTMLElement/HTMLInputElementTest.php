@@ -251,4 +251,10 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 			self::assertContains($l, $labelsArray);
 		}
 	}
+
+	public function testStep():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelate($sut, "step");
+	}
 }
