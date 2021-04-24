@@ -28,7 +28,7 @@ use Gt\Dom\Document;
 class HTMLObjectElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/contentDocument */
 	protected function __prop_get_contentDocument():?Document {
-
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/contentWindow */
