@@ -49,13 +49,17 @@ class HTMLMeterElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/max */
-	protected function __prop_get_max():float {
+	protected function __prop_get_max():?float {
+		if($this->hasAttribute("max")) {
+			return (float)$this->getAttribute("max");
+		}
 
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/max */
 	protected function __prop_set_max(float $value):void {
-
+		$this->setAttribute("max", (string)$value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/min */
