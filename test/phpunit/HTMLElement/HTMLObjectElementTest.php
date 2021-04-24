@@ -36,4 +36,10 @@ class HTMLObjectElementTest extends HTMLElementTestCase {
 		$form->appendChild($sut);
 		self::assertSame($form, $sut->form);
 	}
+
+	public function testHeight():void {
+		/** @var HTMLObjectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("object");
+		self::assertPropertyAttributeCorrelate($sut, "height");
+	}
 }

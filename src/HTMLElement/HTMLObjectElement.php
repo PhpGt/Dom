@@ -62,12 +62,12 @@ class HTMLObjectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/height */
 	protected function __prop_get_height():string {
-
+		return $this->getAttribute("height") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/height */
 	protected function __prop_set_height(string $value):void {
-
+		$this->setAttribute("height", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/name */
