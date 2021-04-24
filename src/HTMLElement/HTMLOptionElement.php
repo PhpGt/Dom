@@ -19,12 +19,12 @@ namespace Gt\Dom\HTMLElement;
 class HTMLOptionElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/defaultSelected */
 	protected function __prop_get_defaultSelected():bool {
-
+		return $this->selected;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/defaultSelected */
 	protected function __prop_set_defaultSelected(bool $value):void {
-
+		$this->selected = $value;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/disabled */
@@ -54,12 +54,17 @@ class HTMLOptionElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/selected */
 	protected function __prop_get_selected():bool {
-
+		return $this->hasAttribute("selected");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/selected */
 	protected function __prop_set_selected(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("selected", "");
+		}
+		else {
+			$this->removeAttribute("selected");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/text */
