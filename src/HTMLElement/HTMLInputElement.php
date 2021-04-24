@@ -342,12 +342,19 @@ class HTMLInputElement extends HTMLElement {
 		$this->setAttribute("placeholder", $value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-readonly */
 	protected function __prop_get_readOnly():bool {
-
+		return $this->hasAttribute("readonly");
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-readonly */
 	protected function __prop_set_readOnly(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("readonly", "");
+		}
+		else {
+			$this->removeAttribute("readonly");
+		}
 	}
 
 	protected function __prop_get_selectionStart():int {
