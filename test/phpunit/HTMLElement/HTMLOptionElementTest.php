@@ -10,4 +10,10 @@ class HTMLOptionElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("option");
 		self::assertPropertyAttributeCorrelateBool($sut, "selected", "defaultSelected");
 	}
+
+	public function testDisabled():void {
+		/** @var HTMLOptionElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("option");
+		self::assertPropertyAttributeCorrelateBool($sut, "disabled");
+	}
 }
