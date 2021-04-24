@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\ClientSide\WindowProxy;
 use Gt\Dom\Document;
 
 /**
@@ -33,17 +34,17 @@ class HTMLObjectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/contentWindow */
 	protected function __prop_get_contentWindow():?WindowProxy {
-
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/data */
 	protected function __prop_get_data():string {
-
+		return $this->getAttribute("data") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/data */
 	protected function __prop_set_data(string $value):void {
-
+		$this->setAttribute("data", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/form */

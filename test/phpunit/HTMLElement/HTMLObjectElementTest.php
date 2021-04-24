@@ -10,4 +10,16 @@ class HTMLObjectElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("object");
 		self::assertNull($sut->contentDocument);
 	}
+
+	public function testContentWindow():void {
+		/** @var HTMLObjectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("object");
+		self::assertNull($sut->contentWindow);
+	}
+
+	public function testData():void {
+		/** @var HTMLObjectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("object");
+		self::assertPropertyAttributeCorrelate($sut, "data");
+	}
 }
