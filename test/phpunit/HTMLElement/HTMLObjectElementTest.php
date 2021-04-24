@@ -42,4 +42,10 @@ class HTMLObjectElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("object");
 		self::assertPropertyAttributeCorrelate($sut, "height");
 	}
+
+	public function testName():void {
+		/** @var HTMLObjectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("object");
+		self::assertPropertyAttributeCorrelate($sut, "name");
+	}
 }
