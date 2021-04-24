@@ -66,4 +66,10 @@ class HTMLObjectElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("object");
 		self::assertPropertyAttributeCorrelate($sut, "usemap", "useMap");
 	}
+
+	public function testValidationMessage():void {
+		/** @var HTMLObjectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("object");
+		self::assertSame("", $sut->validationMessage);
+	}
 }
