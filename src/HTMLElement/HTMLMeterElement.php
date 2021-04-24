@@ -91,13 +91,17 @@ class HTMLMeterElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/value */
-	protected function __prop_get_value():float {
+	protected function __prop_get_value():?float {
+		if($this->hasAttribute("value")) {
+			return (float)$this->getAttribute("value");
+		}
 
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/value */
 	protected function __prop_set_value(float $value):void {
-
+		$this->setAttribute("value", (string)$value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/labels */
