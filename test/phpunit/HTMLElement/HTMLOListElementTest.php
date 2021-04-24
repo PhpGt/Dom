@@ -17,4 +17,10 @@ class HTMLOListElementTest extends HTMLElementTestCase {
 		self::assertSame(1, $sut->start);
 		self::assertPropertyAttributeCorrelateNumber($sut, "int:1",  "start");
 	}
+
+	public function testType():void {
+		/** @var HTMLOListElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("ol");
+		self::assertPropertyAttributeCorrelate($sut, "type");
+	}
 }
