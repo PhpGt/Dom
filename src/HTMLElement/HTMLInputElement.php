@@ -308,12 +308,17 @@ class HTMLInputElement extends HTMLElement {
 		$this->setAttribute("min", $value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-minlength */
 	protected function __prop_get_minLength():int {
+		if($this->hasAttribute("minlength")) {
+			return (int)$this->getAttribute("minlength");
+		}
 
+		return 0;
 	}
 
 	protected function __prop_set_minLength(int $value):void {
-
+		$this->setAttribute("minlength", (string)$value);
 	}
 
 	protected function __prop_get_pattern():string {

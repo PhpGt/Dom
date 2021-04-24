@@ -169,4 +169,11 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("input");
 		self::assertPropertyAttributeCorrelate($sut, "min");
 	}
+
+	public function testMinLength():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelateInt($sut, false, "minlength", "minLength");
+	}
+
 }
