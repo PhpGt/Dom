@@ -16,4 +16,18 @@ class HTMLOptionElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("option");
 		self::assertPropertyAttributeCorrelateBool($sut, "disabled");
 	}
+
+	public function testFormNone():void {
+		/** @var HTMLOptionElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("option");
+		self::assertNull($sut->form);
+	}
+
+	public function testFormParent():void {
+		/** @var HTMLOptionElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("option");
+		$form = $sut->ownerDocument->createElement("form");
+		$form->appendChild($sut);
+		self::assertSame($form, $sut->form);
+	}
 }
