@@ -57,4 +57,10 @@ class HTMLLabelElementTest extends HTMLElementTestCase {
 
 		self::assertSame($form, $sut->form);
 	}
+
+	public function testFor():void {
+		/** @var HTMLLabelElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("label");
+		self::assertPropertyAttributeCorrelate($sut, "for", "htmlFor");
+	}
 }
