@@ -12,10 +12,10 @@ namespace Gt\Dom\HTMLElement;
  */
 class HTMLLiElement extends HTMLElement {
 	protected function __prop_get_value():int {
-
+		return $this->getAttribute("value") ?? 0;
 	}
 
 	protected function __prop_set_value(int $value):void {
-
+		$this->setAttribute("value", (string)$value);
 	}
 }
