@@ -268,7 +268,7 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 	public function testValueAsDateInvalid():void {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
-		$sut->value = "123";
+		$sut->value = "abc";
 		self::assertNull($sut->valueAsDate);
 		$sut->value = "completely invalid date format";
 		self::assertNull($sut->valueAsDate);
@@ -291,5 +291,48 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$dateTime = new DateTime($dateString);
 		$sut->valueAsDate = $dateTime;
 		self::assertEquals($dateString, $sut->value);
+	}
+
+	public function testValueAsNumberEmpty():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertNull($sut->valueAsNumber);
+	}
+
+	public function testValueAsNumberText():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$sut->value = "not a number";
+		self::assertNull($sut->valueAsNumber);
+	}
+
+	public function testValueAsNumberTextWithNumber():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$sut->value = "     10.5 ";
+		self::assertSame(10.5, $sut->valueAsNumber);
+	}
+
+	public function testValueAsNumberTimestamp():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$dateString = "1988-05-04T17:21:05";
+		$sut->type = "datetime-local";
+		$sut->value = $dateString;
+		$number = $sut->valueAsNumber;
+		self::assertEquals(
+			(new DateTime($dateString))->getTimestamp(),
+			$number
+		);
+	}
+
+	public function testValueAsNumberSetTimestamp():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$sut->type = "datetime-local";
+		$dateString = "1988-05-04T17:21:05";
+		$dateTime = new DateTime($dateString);
+		$sut->valueAsNumber = $dateTime->getTimestamp();
+		self::assertEquals($dateTime, $sut->valueAsDate);
 	}
 }

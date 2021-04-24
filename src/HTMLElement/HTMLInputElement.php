@@ -53,7 +53,7 @@ use Gt\Dom\NodeList;
  * @property-read NodeList $labels Returns a list of <label> elements that are labels for this element.
  * @property string $step Returns / Sets the element's step attribute, which works with min and max to limit the increments at which a numeric or date-time value can be set. It can be the string any or a positive floating point number. If this is not set to any, the control accepts only values at multiples of the step value greater than the minimum.
  * @property ?DateTimeInterface $valueAsDate Returns / Sets the value of the element, interpreted as a date, or null if conversion is not possible.
- * @property int|float $valueAsNumber Returns the value of the element, interpreted as one of the following, in order: A time value, A number, NaN if conversion is impossible.
+ * @property int|float|null $valueAsNumber Returns the value of the element, interpreted as one of the following, in order: A time value, A number, NaN if conversion is impossible.
  * @property string $autocapitalize Defines the capitalization behavior for user input. Valid values are none, off, characters, words, or sentences.
  * @property string $inputMode Provides a hint to browsers as to the type of virtual keyboard configuration to use when editing this element or its contents.
  */
@@ -426,6 +426,12 @@ class HTMLInputElement extends HTMLElement {
 			return null;
 		}
 
+		if(is_numeric($this->value)) {
+			$dateTime = new DateTimeImmutable();
+			$dateTime->setTimestamp($this->value);
+			return $dateTime;
+		}
+
 		try {
 			$dateTime = new DateTimeImmutable($this->value);
 		}
@@ -443,12 +449,33 @@ class HTMLInputElement extends HTMLElement {
 		$this->value = $value->format("Y-m-d\TH:i:s");
 	}
 
-	protected function __prop_get_valueAsNumber():int|float {
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#property-valueAsNumber */
+	protected function __prop_get_valueAsNumber():int|float|null {
+		if(str_starts_with($this->type, "date")) {
+			$dateTime = $this->valueAsDate;
+			if($dateTime) {
+				return $dateTime->getTimestamp();
+			}
 
+			return null;
+		}
+
+		if(is_numeric($this->value)) {
+			return (float)$this->value;
+		}
+
+		return null;
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#property-valueAsNumber */
 	protected function __prop_set_valueAsNumber(int|float $value):void {
-
+		if(str_starts_with($this->type, "date")) {
+			$dateTime = new DateTimeImmutable();
+			$this->valueAsDate = $dateTime->setTimestamp($value);
+		}
+		else {
+			$this->value = (string)$value;
+		}
 	}
 
 	protected function __prop_get_autocapitalize():string {
