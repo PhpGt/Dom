@@ -58,4 +58,27 @@ class HTMLOptionElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("option");
 		self::assertPropertyAttributeCorrelate($sut, "label");
 	}
+
+	public function testSelected():void {
+		/** @var HTMLOptionElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("option");
+		self::assertPropertyAttributeCorrelateBool($sut, "selected");
+	}
+
+	public function testText():void {
+		/** @var HTMLOptionElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("option");
+		self::assertSame("", $sut->text);
+		for($i = 0; $i < 10; $i++) {
+			$text = uniqid();
+			$sut->text = $text;
+			self::assertEquals($text, $sut->textContent);
+		}
+
+		for($i = 0; $i < 10; $i++) {
+			$text = uniqid();
+			$sut->textContent = $text;
+			self::assertEquals($text, $sut->text);
+		}
+	}
 }

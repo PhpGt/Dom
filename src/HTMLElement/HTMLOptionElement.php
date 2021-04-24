@@ -9,7 +9,7 @@ namespace Gt\Dom\HTMLElement;
  *
  * @property bool $defaultSelected Is a Boolean that contains the initial value of the selected HTML attribute, indicating whether the option is selected by default or not.
  * @property-read int $index Is a long representing the position of the option within the list of options it belongs to, in tree-order. If the option is not part of a list of options, like when it is part of the <datalist> element, the value is 0.
- * @property-read string $label Is a DOMString that reflects the value of the label HTML attribute, which provides a label for the option. If this attribute isn't specifically set, reading it returns the element's text content.
+ * @property string $label Is a DOMString that reflects the value of the label HTML attribute, which provides a label for the option. If this attribute isn't specifically set, reading it returns the element's text content.
  * @property bool $selected Is a Boolean that indicates whether the option is currently selected.
  * @property string $text Is a DOMString that contains the text content of the element.
  */
@@ -49,6 +49,10 @@ class HTMLOptionElement extends HTMLElement {
 		return $this->textContent;
 	}
 
+	protected function __prop_set_label(string $value):void {
+		$this->setAttribute("label", $value);
+	}
+
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/selected */
 	protected function __prop_get_selected():bool {
 		return $this->hasAttribute("selected");
@@ -66,12 +70,12 @@ class HTMLOptionElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/text */
 	protected function __prop_get_text():string {
-
+		return $this->textContent;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/text */
 	protected function __prop_set_text(string $value):void {
-
+		$this->textContent = $value;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/value */
