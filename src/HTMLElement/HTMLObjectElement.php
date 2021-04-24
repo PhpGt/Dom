@@ -138,6 +138,6 @@ class HTMLObjectElement extends HTMLElement {
 	}
 
 	protected function __prop_get_willValidate():bool {
-
+		return false;
 	}
 }
