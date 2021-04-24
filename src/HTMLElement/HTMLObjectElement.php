@@ -1,8 +1,10 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\ClientSide\ValidityState;
 use Gt\Dom\ClientSide\WindowProxy;
 use Gt\Dom\Document;
+use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
 
 /**
  * The HTMLObjectElement interface provides special properties and methods
@@ -122,7 +124,7 @@ class HTMLObjectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/validity */
 	protected function __prop_get_validity():ValidityState {
-
+		return new ValidityState();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/width */
@@ -138,5 +140,4 @@ class HTMLObjectElement extends HTMLElement {
 	protected function __prop_get_willValidate():bool {
 
 	}
-
 }

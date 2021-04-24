@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
+use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\HTMLElement\HTMLObjectElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
@@ -71,5 +72,13 @@ class HTMLObjectElementTest extends HTMLElementTestCase {
 		/** @var HTMLObjectElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("object");
 		self::assertSame("", $sut->validationMessage);
+	}
+
+	public function testValidity():void {
+		/** @var HTMLObjectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("object");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$value = $sut->validity;
 	}
 }
