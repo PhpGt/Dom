@@ -35,13 +35,17 @@ class HTMLMeterElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/low */
-	protected function __prop_get_low():float {
+	protected function __prop_get_low():?float {
+		if($this->hasAttribute("low")) {
+			return (float)$this->getAttribute("low");
+		}
 
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/low */
 	protected function __prop_set_low(float $value):void {
-
+		$this->setAttribute("low", (string)$value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/max */
