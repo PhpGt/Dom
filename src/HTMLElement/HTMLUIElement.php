@@ -67,20 +67,20 @@ trait HTMLUIElement {
 		return null;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/labels */
-	protected function __prop_get_labels():NodeList {
-		return NodeListFactory::createLive(function():array {
-			$labelsArray = [];
-			foreach($this->ownerDocument->getElementsByTagName("label") as $label) {
-				/** @var HTMLLabelElement $label */
-				if($label->htmlFor === $this->id) {
-					array_push($labelsArray, $label);
-				}
-			}
-
-			return $labelsArray;
-		});
-	}
+//	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/labels */
+//	protected function __prop_get_labels():NodeList {
+//		return NodeListFactory::createLive(function():array {
+//			$labelsArray = [];
+//			foreach($this->ownerDocument->getElementsByTagName("label") as $label) {
+//				/** @var HTMLLabelElement $label */
+//				if($label->htmlFor === $this->id) {
+//					array_push($labelsArray, $label);
+//				}
+//			}
+//
+//			return $labelsArray;
+//		});
+//	}
 
 	protected function __prop_get_name():string {
 		return $this->getAttribute("name") ?? "";
@@ -164,5 +164,29 @@ trait HTMLUIElement {
 
 	protected function __prop_set_value(string $value):void {
 		$this->setAttribute("value", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-labels */
+	protected function __prop_get_labels():NodeList {
+		$input = $this;
+		return NodeListFactory::createLive(function() use($input) {
+			$labelsArray = [];
+
+			$context = $input;
+			while($context = $context->parentElement) {
+				if($context instanceof HTMLLabelElement) {
+					array_push($labelsArray, $context);
+					break;
+				}
+			}
+
+			if($id = $input->id) {
+				foreach($input->ownerDocument->querySelectorAll("label[for='$id']") as $label) {
+					array_push($labelsArray, $label);
+				}
+			}
+
+			return $labelsArray;
+		});
 	}
 }

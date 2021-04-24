@@ -399,30 +399,6 @@ class HTMLInputElement extends HTMLElement {
 		}
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-labels */
-	protected function __prop_get_labels():NodeList {
-		$input = $this;
-		return NodeListFactory::createLive(function() use($input) {
-			$labelsArray = [];
-
-			$context = $input;
-			while($context = $context->parentElement) {
-				if($context instanceof HTMLLabelElement) {
-					array_push($labelsArray, $context);
-					break;
-				}
-			}
-
-			if($id = $input->id) {
-				foreach($input->ownerDocument->querySelectorAll("label[for='$id']") as $label) {
-					array_push($labelsArray, $label);
-				}
-			}
-
-			return $labelsArray;
-		});
-	}
-
 	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-step */
 	protected function __prop_get_step():string {
 		return $this->getAttribute("step") ?? "";
