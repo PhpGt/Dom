@@ -257,4 +257,29 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("input");
 		self::assertPropertyAttributeCorrelate($sut, "step");
 	}
+
+	public function testValueAsDateEmpty():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertNull($sut->valueAsDate);
+	}
+
+	public function testValueAsDateInvalid():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$sut->value = "123";
+		self::assertNull($sut->valueAsDate);
+		$sut->value = "completely invalid date format";
+		self::assertNull($sut->valueAsDate);
+	}
+
+	public function testValueAsDate():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$dateString = "1988-05-04 17:21:05";
+		$sut->value = $dateString;
+		$dateTime = $sut->valueAsDate;
+		self::assertNotNull($dateTime);
+		self::assertEquals($dateString, $dateTime->format("Y-m-d H:i:s"));
+	}
 }
