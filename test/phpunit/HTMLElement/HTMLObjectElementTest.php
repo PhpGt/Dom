@@ -60,4 +60,10 @@ class HTMLObjectElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("object");
 		self::assertPropertyAttributeCorrelateBool($sut, "typemustmatch", "typeMustMatch");
 	}
+
+	public function testUseMap():void {
+		/** @var HTMLObjectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("object");
+		self::assertPropertyAttributeCorrelate($sut, "usemap", "useMap");
+	}
 }
