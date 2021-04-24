@@ -43,10 +43,7 @@ use Gt\Dom\NodeList;
  * @property string $pattern Returns / Sets the element's pattern attribute, containing a regular expression that the control's value is checked against. Use the title attribute to describe the pattern to help the user. This attribute applies when the value of the type attribute is text, search, tel, url or email; otherwise it is ignored.
  * @property string $placeholder Returns / Sets the element's placeholder attribute, containing a hint to the user of what can be entered in the control. The placeholder text must not contain carriage returns or line-feeds. This attribute applies when the value of the type attribute is text, search, tel, url or email; otherwise it is ignored.
  * @property bool $readOnly Returns / Sets the element's readonly attribute, indicating that the user cannot modify the value of the control. This is ignored if the value of the type attribute is hidden, range, color, checkbox, radio, file, or a button type.
- * @property int $selectionStart Returns / Sets the beginning index of the selected text. When nothing is selected, this returns the position of the text input cursor (caret) inside of the <input> element.
- * @property int $selectionEnd Returns / Sets the end index of the selected text. When there's no selection, this returns the offset of the character immediately following the current text input cursor position.
- * @property string $selectionDirection Returns / Sets the direction in which selection occurred.
- * @property int $size Returns / Sets the element's size attribute, containing visual size of the control. This value is in pixels unless the value of type is text or password, in which case, it is an integer number of characters. Applies only when type is set to text, search, tel, url, email, or password; otherwise it is ignored.
+ * @property ?int $size Returns / Sets the element's size attribute, containing visual size of the control. This value is in pixels unless the value of type is text or password, in which case, it is an integer number of characters. Applies only when type is set to text, search, tel, url, email, or password; otherwise it is ignored.
  *
  * Properties not yet categorized:
  * @property bool $multiple Returns / Sets the element's multiple attribute, indicating whether more than one value is possible (e.g., multiple files).
@@ -357,36 +354,17 @@ class HTMLInputElement extends HTMLElement {
 		}
 	}
 
-	protected function __prop_get_selectionStart():int {
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-size */
+	protected function __prop_get_size():?int {
+		if($this->hasAttribute("size")) {
+			return (int)$this->getAttribute("size");
+		}
 
-	}
-
-	protected function __prop_set_selectionStart(int $value):void {
-
-	}
-
-	protected function __prop_get_selectionEnd():int {
-
-	}
-
-	protected function __prop_set_selectionEnd(int $value):void {
-
-	}
-
-	protected function __prop_get_selectionDirection():string {
-
-	}
-
-	protected function __prop_set_selectionDirection(string $value):void {
-
-	}
-
-	protected function __prop_get_size():int {
-
+		return null;
 	}
 
 	protected function __prop_set_size(int $value):void {
-
+		$this->setAttribute("size", (string)$value);
 	}
 
 	protected function __prop_get_multiple():bool {

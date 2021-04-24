@@ -193,4 +193,10 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("input");
 		self::assertPropertyAttributeCorrelateBool($sut, "readonly", "readOnly");
 	}
+
+	public function testSize():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelateInt($sut, true,"size");
+	}
 }
