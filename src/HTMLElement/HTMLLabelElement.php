@@ -1,10 +1,6 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
-use Gt\Dom\Facade\TreeWalkerFactory;
-use Gt\Dom\Node;
-use Gt\Dom\NodeFilter;
-
 /**
  * The HTMLLabelElement interface gives access to properties specific to <label>
  * elements. It inherits methods and properties from the base HTMLElement
@@ -33,7 +29,19 @@ class HTMLLabelElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/form */
 	protected function __prop_get_form():?HTMLFormElement {
+		$context = $this;
+		while($context = $context->parentElement) {
+			if($context instanceof HTMLFormElement) {
+				return $context;
+			}
+		}
 
+		if($input = $this->control) {
+			/** @var HTMLInputElement $input */
+			return $input->form;
+		}
+
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor */

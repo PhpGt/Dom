@@ -5,6 +5,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use Gt\Dom\ClientSide\FileList;
+use Gt\Dom\ClientSide\ValidityState;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
 use Gt\Dom\Facade\NodeListFactory;
@@ -45,17 +46,29 @@ use Gt\Dom\NodeList;
  * @property int $minLength Returns / Sets the element's minlength attribute, containing the minimum number of characters (in Unicode code points) that the value can have. (If you set this to a negative number, an exception will be thrown.)
  * @property string $pattern Returns / Sets the element's pattern attribute, containing a regular expression that the control's value is checked against. Use the title attribute to describe the pattern to help the user. This attribute applies when the value of the type attribute is text, search, tel, url or email; otherwise it is ignored.
  * @property string $placeholder Returns / Sets the element's placeholder attribute, containing a hint to the user of what can be entered in the control. The placeholder text must not contain carriage returns or line-feeds. This attribute applies when the value of the type attribute is text, search, tel, url or email; otherwise it is ignored.
- * @property bool $readOnly Returns / Sets the element's readonly attribute, indicating that the user cannot modify the value of the control. This is ignored if the value of the type attribute is hidden, range, color, checkbox, radio, file, or a button type.
  * @property ?int $size Returns / Sets the element's size attribute, containing visual size of the control. This value is in pixels unless the value of type is text or password, in which case, it is an integer number of characters. Applies only when type is set to text, search, tel, url, email, or password; otherwise it is ignored.
  *
  * Properties not yet categorized:
  * @property bool $multiple Returns / Sets the element's multiple attribute, indicating whether more than one value is possible (e.g., multiple files).
- * @property-read NodeList $labels Returns a list of <label> elements that are labels for this element.
  * @property string $step Returns / Sets the element's step attribute, which works with min and max to limit the increments at which a numeric or date-time value can be set. It can be the string any or a positive floating point number. If this is not set to any, the control accepts only values at multiples of the step value greater than the minimum.
  * @property ?DateTimeInterface $valueAsDate Returns / Sets the value of the element, interpreted as a date, or null if conversion is not possible.
  * @property int|float|null $valueAsNumber Returns the value of the element, interpreted as one of the following, in order: A time value, A number, NaN if conversion is impossible.
  * @property string $autocapitalize Defines the capitalization behavior for user input. Valid values are none, off, characters, words, or sentences.
  * @property string $inputMode Provides a hint to browsers as to the type of virtual keyboard configuration to use when editing this element or its contents.
+ *
+ * Imported from HTMLUIElement:
+ * @property bool $autofocus Is a Boolean indicating whether or not the control should have input focus when the page loads, unless the user overrides it, for example by typing in a different control. Only one form-associated element in a document can have this attribute specified.
+ * @property bool $disabled Is a Boolean indicating whether or not the control is disabled, meaning that it does not accept any clicks.
+ * @property-read ?HTMLFormElement $form Is a HTMLFormElement reflecting the form that this element is associated with.
+ * @property-read NodeList $labels Is a NodeList that represents a list of <label> elements that are labels for this HTMLUIElement.
+ * @property string $name Is a DOMString representing the name of the object when submitted with a form. If specified, it must not be the empty string.
+ * @property bool $readOnly Returns / Sets the element's readonly attribute, indicating that the user cannot modify the value of the control.
+ * @property bool $required Returns / Sets the element's required attribute, indicating that the user must fill in a value before submitting a form.
+ * @property string $type Is a DOMString indicating the behavior of the button.
+ * @property-read bool $willValidate Is a Boolean indicating whether the button is a candidate for constraint validation. It is false if any conditions bar it from constraint validation, including: its type property is reset or button; it has a <datalist> ancestor; or the disabled property is set to true.
+ * @property-read string $validationMessage Is a DOMString representing the localized message that describes the validation constraints that the control does not satisfy (if any). This attribute is the empty string if the control is not a candidate for constraint validation (willValidate is false), or it satisfies its constraints.
+ * @property-read ValidityState $validity Is a ValidityState representing the validity states that this button is in.
+ * @property string $value Is a DOMString representing the current form control value of the HTMLUIElement.
  */
 class HTMLInputElement extends HTMLElement {
 	use HTMLUIElement;

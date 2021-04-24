@@ -30,4 +30,31 @@ class HTMLLabelElementTest extends HTMLElementTestCase {
 		$sut->ownerDocument->body->append($sut, $input);
 		self::assertSame($input, $sut->control);
 	}
+
+	public function testFormNone():void {
+		/** @var HTMLLabelElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("label");
+		self::assertNull($sut->form);
+	}
+
+	public function testFormParent():void {
+		/** @var HTMLLabelElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("label");
+		$form = $sut->ownerDocument->createElement("form");
+		$form->appendChild($sut);
+		self::assertSame($form, $sut->form);
+	}
+
+	public function testFormForInput():void {
+		/** @var HTMLLabelElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("label");
+		$sut->htmlFor = "example";
+		$input = $sut->ownerDocument->createElement("input");
+		$input->id = "example";
+		$form = $sut->ownerDocument->createElement("form");
+		$form->appendChild($input);
+		$sut->ownerDocument->body->append($sut, $form);
+
+		self::assertSame($form, $sut->form);
+	}
 }
