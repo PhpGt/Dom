@@ -28,4 +28,10 @@ class HTMLMeterElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("meter");
 		self::assertPropertyAttributeCorrelateNumber($sut, "?float", "min");
 	}
+
+	public function testOptimum():void {
+		/** @var HTMLMeterElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("meter");
+		self::assertPropertyAttributeCorrelateNumber($sut, "?float", "optimum");
+	}
 }

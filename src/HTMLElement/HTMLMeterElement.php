@@ -77,13 +77,17 @@ class HTMLMeterElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/optimum */
-	protected function __prop_get_optimum():float {
+	protected function __prop_get_optimum():?float {
+		if($this->hasAttribute("optimum")) {
+			return (float)$this->getAttribute("optimum");
+		}
 
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/optimum */
 	protected function __prop_set_optimum(float $value):void {
-
+		$this->setAttribute("optimum", (string)$value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/value */
