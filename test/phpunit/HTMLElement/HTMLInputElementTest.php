@@ -284,6 +284,15 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		self::assertEquals($dateString, $dateTime->format("Y-m-d\TH:i:s"));
 	}
 
+	public function testValueAsDateNumeric():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$dateString = "1988-05-04T17:21:05";
+		$dateTime = new DateTime($dateString);
+		$sut->value = $dateTime->getTimestamp();
+		self::assertEquals($dateTime, $sut->valueAsDate);
+	}
+
 	public function testValueAsDateSet():void {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
@@ -334,6 +343,21 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$dateTime = new DateTime($dateString);
 		$sut->valueAsNumber = $dateTime->getTimestamp();
 		self::assertEquals($dateTime, $sut->valueAsDate);
+	}
+
+	public function testValueAsNumberDateInvalid():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$sut->type = "datetime-local";
+		$sut->value = "invalid datetime";
+		self::assertNull($sut->valueAsNumber);
+	}
+
+	public function testValueAsNumberSet():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		$sut->valueAsNumber = 12.34;
+		self::assertSame("12.34", $sut->value);
 	}
 
 	public function testAutoCapitalize():void {
