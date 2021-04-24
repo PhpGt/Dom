@@ -477,16 +477,18 @@ class Document extends Node implements StreamInterface {
 	 * created by combining the constant properties of NodeFilter. It is a
 	 * convenient way of filtering for certain types of node. It defaults
 	 * to 0xFFFFFFFF representing the SHOW_ALL constant.
-	 * @param ?NodeFilter $filter A NodeFilter, that is an object with a
-	 * method acceptNode, which is called by the TreeWalker to determine
-	 * whether or not to accept a node that has passed the whatToShow check.
+	 * @param NodeFilter|callable|null $filter A NodeFilter, that is an
+	 * object with a method acceptNode, which is called by the TreeWalker
+	 * to determine whether or not to accept a node that has passed the
+	 * whatToShow check. Alternatively pass the callable that represents
+	 * `acceptNode` function.
 	 * @return TreeWalker A new TreeWalker object.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/createTreeWalker
 	 */
 	public function createTreeWalker(
 		Node $root,
 		int $whatToShow = NodeFilter::SHOW_ALL,
-		NodeFilter $filter = null
+		NodeFilter|callable $filter = null
 	):TreeWalker {
 		return TreeWalkerFactory::create($root, $whatToShow, $filter);
 	}
