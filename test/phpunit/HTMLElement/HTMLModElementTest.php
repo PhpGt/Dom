@@ -21,4 +21,10 @@ class HTMLModElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("del");
 		self::assertPropertyAttributeCorrelate($sut, "cite");
 	}
+
+	public function testDateTime():void {
+		/** @var HTMLModElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("del");
+		self::assertPropertyAttributeCorrelate($sut, "datetime", "dateTime");
+	}
 }

@@ -25,11 +25,11 @@ class HTMLModElement extends HTMLElement {
 
 	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/dateTime */
 	public function __prop_get_dateTime():string {
-
+		return $this->getAttribute("datetime") ?? "";
 	}
 
 	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/dateTime */
 	public function __prop_set_dateTime(string $value):void {
-
+		$this->setAttribute("datetime", $value);
 	}
 }
