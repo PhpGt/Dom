@@ -47,7 +47,7 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 	public function testHeight():void {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
-		self::assertPropertyAttributeCorrelateInt($sut, true, "height");
+		self::assertPropertyAttributeCorrelateNumber($sut, "?int", "height");
 	}
 
 	public function testSrc():void {
@@ -59,7 +59,7 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 	public function testWidth():void {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
-		self::assertPropertyAttributeCorrelateInt($sut, true, "width");
+		self::assertPropertyAttributeCorrelateNumber($sut, "?int", "width");
 	}
 
 	public function testAccept():void {
@@ -163,7 +163,7 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 	public function testMaxLength():void {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
-		self::assertPropertyAttributeCorrelateInt($sut, false, "maxlength", "maxLength");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int", "maxlength", "maxLength");
 	}
 
 	public function testMin():void {
@@ -175,7 +175,7 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 	public function testMinLength():void {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
-		self::assertPropertyAttributeCorrelateInt($sut, false, "minlength", "minLength");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int", "minlength", "minLength");
 	}
 
 	public function testPattern():void {
@@ -199,7 +199,7 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 	public function testSize():void {
 		/** @var HTMLInputElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("input");
-		self::assertPropertyAttributeCorrelateInt($sut, true,"size");
+		self::assertPropertyAttributeCorrelateNumber($sut, "?int","size");
 	}
 
 	public function testMultiple():void {

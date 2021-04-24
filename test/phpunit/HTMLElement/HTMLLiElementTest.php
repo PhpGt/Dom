@@ -8,6 +8,6 @@ class HTMLLiElementTest extends HTMLElementTestCase {
 	public function testValue():void {
 		/** @var HTMLLiElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("li");
-		self::assertPropertyAttributeCorrelateInt($sut, false, "value");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int", "value");
 	}
 }

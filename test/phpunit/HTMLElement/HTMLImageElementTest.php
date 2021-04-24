@@ -41,7 +41,7 @@ class HTMLImageElementTest extends HTMLElementTestCase {
 	public function testHeight():void {
 		/** @var HTMLImageElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("img");
-		self::assertPropertyAttributeCorrelateInt($sut, true, "height");
+		self::assertPropertyAttributeCorrelateNumber($sut, "?int", "height");
 	}
 
 	public function testIsMap():void {
@@ -101,7 +101,7 @@ class HTMLImageElementTest extends HTMLElementTestCase {
 	public function testWidth():void {
 		/** @var HTMLImageElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("img");
-		self::assertPropertyAttributeCorrelateInt($sut, true, "width");
+		self::assertPropertyAttributeCorrelateNumber($sut, "?int", "width");
 	}
 
 	public function testX():void {

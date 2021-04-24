@@ -81,9 +81,9 @@ class HTMLElementTestCase extends TestCase {
 		}
 	}
 
-	protected static function assertPropertyAttributeCorrelateInt(
+	protected static function assertPropertyAttributeCorrelateNumber(
 		HTMLElement $sut,
-		bool $nullable,
+		string $type,
 		string $attribute,
 		string $property = null
 	):void {
@@ -96,28 +96,36 @@ class HTMLElementTestCase extends TestCase {
 		$attributeValue = $sut->getAttribute("attribute");
 		self::assertEquals($current, $attributeValue);
 
-		if(!$nullable) {
+		if($type[0] !== "?") {
 			self::assertNotNull($current);
 		}
 
 		for($i = 0; $i < 10; $i++) {
 			$value = rand(1, 999999);
+			if(strstr($type, "float")) {
+				$value /= (rand(9, 99) / 10);
+			}
+
 			$sut->setAttribute($attribute, (string)$value);
 			$attributeValue = $sut->getAttribute($attribute);
 			self::assertEquals($sut->$property, $attributeValue);
 
-			if(!$nullable) {
+			if(!$type[0] != "?") {
 				self::assertNotNull($attributeValue);
 			}
 		}
 
 		for($i = 0; $i < 10; $i++) {
 			$value = rand(1, 999999);
+			if(strstr($type, "float")) {
+				$value /= (rand(9, 99) / 10);
+			}
+
 			$sut->$property = $value;
 			$propertyValue = $sut->$property;
 			self::assertEquals($sut->getAttribute($attribute), $propertyValue);
 
-			if(!$nullable) {
+			if(!$type[0] != "?") {
 				self::assertNotNull($propertyValue);
 			}
 		}
