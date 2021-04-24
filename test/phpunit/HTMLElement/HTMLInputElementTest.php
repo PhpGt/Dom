@@ -199,4 +199,10 @@ class HTMLInputElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("input");
 		self::assertPropertyAttributeCorrelateInt($sut, true,"size");
 	}
+
+	public function testMultiple():void {
+		/** @var HTMLInputElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("input");
+		self::assertPropertyAttributeCorrelateBool($sut, "multiple");
+	}
 }

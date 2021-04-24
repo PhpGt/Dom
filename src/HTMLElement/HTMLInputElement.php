@@ -368,11 +368,16 @@ class HTMLInputElement extends HTMLElement {
 	}
 
 	protected function __prop_get_multiple():bool {
-
+		return $this->hasAttribute("multiple");
 	}
 
 	protected function __prop_set_multiple(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("multiple", "");
+		}
+		else {
+			$this->removeAttribute("multiple");
+		}
 	}
 
 	protected function __prop_get_labels():NodeList {
