@@ -15,4 +15,10 @@ class HTMLModElementTest extends HTMLElementTestCase {
 			NodeTestFactory::createHTMLElement("ins")
 		);
 	}
+
+	public function testCite():void {
+		/** @var HTMLModElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("del");
+		self::assertPropertyAttributeCorrelate($sut, "cite");
+	}
 }

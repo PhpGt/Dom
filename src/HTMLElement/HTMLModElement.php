@@ -15,12 +15,12 @@ namespace Gt\Dom\HTMLElement;
 class HTMLModElement extends HTMLElement {
 	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/cite */
 	public function __prop_get_cite():string {
-
+		return $this->getAttribute("cite") ?? "";
 	}
 
 	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/cite */
 	public function __prop_set_cite(string $value):void {
-
+		$this->setAttribute("cite", $value);
 	}
 
 	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/dateTime */
