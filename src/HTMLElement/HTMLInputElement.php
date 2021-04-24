@@ -332,12 +332,14 @@ class HTMLInputElement extends HTMLElement {
 		$this->setAttribute("pattern", $value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-placeholder */
 	protected function __prop_get_placeholder():string {
-
+		return $this->getAttribute("placeholder") ?? "";
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-placeholder */
 	protected function __prop_set_placeholder(string $value):void {
-
+		$this->setAttribute("placeholder", $value);
 	}
 
 	protected function __prop_get_readOnly():bool {
