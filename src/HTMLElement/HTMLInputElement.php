@@ -488,11 +488,13 @@ class HTMLInputElement extends HTMLElement {
 		$this->setAttribute("autocapitalize", $value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#attr-inputmode */
 	protected function __prop_get_inputMode():string {
-
+		return $this->getAttribute("inputmode") ?? "";
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#attr-inputmode */
 	protected function __prop_set_inputMode(string $value):void {
-
+		$this->setAttribute("inputmode", $value);
 	}
 }
