@@ -63,13 +63,17 @@ class HTMLMeterElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/min */
-	protected function __prop_get_min():float {
+	protected function __prop_get_min():?float {
+		if($this->hasAttribute("min")) {
+			return (float)$this->getAttribute("min");
+		}
 
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/min */
 	protected function __prop_set_min(float $value):void {
-
+		$this->setAttribute("min", (string)$value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/optimum */
