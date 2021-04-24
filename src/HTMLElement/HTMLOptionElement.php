@@ -42,7 +42,11 @@ class HTMLOptionElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/label */
 	protected function __prop_get_label():string {
+		if($label = $this->getAttribute("label")) {
+			return $label;
+		}
 
+		return $this->textContent;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/selected */

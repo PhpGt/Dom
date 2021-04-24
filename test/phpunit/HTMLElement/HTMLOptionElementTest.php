@@ -44,4 +44,18 @@ class HTMLOptionElementTest extends HTMLElementTestCase {
 			self::assertSame($i + 1, $sut->index);
 		}
 	}
+
+	public function testLabelNone():void {
+		/** @var HTMLOptionElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("option");
+		self::assertSame("", $sut->label);
+		$sut->textContent = "test";
+		self::assertSame("test", $sut->label);
+	}
+
+	public function testLabel():void {
+		/** @var HTMLOptionElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("option");
+		self::assertPropertyAttributeCorrelate($sut, "label");
+	}
 }
