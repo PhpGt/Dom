@@ -48,4 +48,10 @@ class HTMLObjectElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("object");
 		self::assertPropertyAttributeCorrelate($sut, "name");
 	}
+
+	public function testType():void {
+		/** @var HTMLObjectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("object");
+		self::assertPropertyAttributeCorrelate($sut, "type");
+	}
 }
