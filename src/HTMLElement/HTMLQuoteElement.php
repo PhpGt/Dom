@@ -14,11 +14,11 @@ namespace Gt\Dom\HTMLElement;
 class HTMLQuoteElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLQuoteElement/cite */
 	protected function __prop_get_cite():string {
-
+		return $this->getAttribute("cite") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLQuoteElement/cite */
 	protected function __prop_set_cite(string $value):void {
-
+		$this->setAttribute("cite", $value);
 	}
 }
