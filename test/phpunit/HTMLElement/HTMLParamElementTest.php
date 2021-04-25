@@ -10,4 +10,10 @@ class HTMLParamElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("param");
 		self::assertPropertyAttributeCorrelate($sut, "name");
 	}
+
+	public function testValue():void {
+		/** @var HTMLParamElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("param");
+		self::assertPropertyAttributeCorrelate($sut, "value");
+	}
 }
