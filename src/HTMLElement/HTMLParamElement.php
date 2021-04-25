@@ -15,12 +15,12 @@ namespace Gt\Dom\HTMLElement;
 class HTMLParamElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLParamElement/name */
 	protected function __prop_get_name():string {
-
+		return $this->getAttribute("name") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLParamElement/name */
 	protected function __prop_set_name(string $value):void {
-
+		$this->setAttribute("name", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLParamElement/value */
