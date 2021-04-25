@@ -113,7 +113,6 @@ class DOMDocumentFacade extends DOMDocument {
 	const DEFAULT_CLASS_HTML = HTMLUnknownElement::class;
 
 	const NODE_CLASS_LIST = [
-		"Gt\Dom\Facade\DOMDocumentFacade" => Document::class,
 		"Gt\Dom\Facade\NodeClass\DOMDocumentTypeFacade" => DocumentType::class,
 		"Gt\Dom\Facade\NodeClass\DOMTextFacade" => Text::class,
 		"Gt\Dom\Facade\NodeClass\DOMAttrFacade" => Attr::class,
@@ -216,7 +215,11 @@ class DOMDocumentFacade extends DOMDocument {
 		$this->registerNodeClasses();
 	}
 
-	public function getGtDomNode(DOMNode $node):Node {
+	public function getGtDomNode(DOMNode $node = null):Node {
+		if(!$node) {
+			$node = $this;
+		}
+
 		do {
 			$key = array_search(
 				$node,

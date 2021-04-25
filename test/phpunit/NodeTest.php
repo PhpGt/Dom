@@ -5,6 +5,7 @@ use Error;
 use Gt\Dom\Element;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\NotFoundErrorException;
+use Gt\Dom\Facade\DOMDocumentFacade;
 use Gt\Dom\Node;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use Gt\Dom\Text;
@@ -426,9 +427,10 @@ class NodeTest extends TestCase {
 		self::assertTrue($sut->isEqualNode($inserted));
 	}
 
+	/** @runInSeparateProcess TODO: Why is this necessary??? */
 	public function testIsEqualNodeDifferent():void {
 		$sut = NodeTestFactory::createNode("example");
-		$other = NodeTestFactory::createNode("example", $sut->ownerDocument);
+		$other = $sut->ownerDocument->createElement("example");
 		$other->innerHTML = "different";
 		self::assertFalse($sut->isEqualNode($other));
 	}
