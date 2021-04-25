@@ -34,12 +34,12 @@ class HTMLOutputElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOutputElement/defaultValue */
 	protected function __prop_get_defaultValue():string {
-
+		return $this->value;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOutputElement/defaultValue */
 	protected function __prop_set_defaultValue(string $value):void {
-
+		$this->value = $value;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOutputElement/htmlFor */

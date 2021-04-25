@@ -427,7 +427,6 @@ class NodeTest extends TestCase {
 		self::assertTrue($sut->isEqualNode($inserted));
 	}
 
-	/** @runInSeparateProcess TODO: Why is this necessary??? */
 	public function testIsEqualNodeDifferent():void {
 		$sut = NodeTestFactory::createNode("example");
 		$other = $sut->ownerDocument->createElement("example");

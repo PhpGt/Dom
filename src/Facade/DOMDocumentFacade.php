@@ -25,6 +25,7 @@ use Gt\Dom\Document;
 use Gt\Dom\DocumentFragment;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
+use Gt\Dom\Exception\DOMException;
 use Gt\Dom\Exception\XPathQueryException;
 use Gt\Dom\Facade\NodeClass\DOMAttrFacade;
 use Gt\Dom\Facade\NodeClass\DOMCdataSectionFacade;
@@ -199,18 +200,16 @@ class DOMDocumentFacade extends DOMDocument {
 	private array $domNodeList = [];
 	/** @var Node[] */
 	private array $gtNodeList = [];
-	private Document $gtDocument;
 
 	/**
 	 * @param string $version
 	 * @param string $encoding
 	 */
 	public function __construct(
-		Document $gtDocument,
+		private Document $gtDocument,
 		$version = "",
 		$encoding = ""
 	) {
-		$this->gtDocument = $gtDocument;
 		parent::__construct($version, $encoding);
 		$this->registerNodeClasses();
 	}
@@ -320,10 +319,12 @@ class DOMDocumentFacade extends DOMDocument {
 		];
 
 		foreach($classList as $baseClass => $extendedClass) {
-			$this->registerNodeClass(
+			if(!$this->registerNodeClass(
 				$baseClass,
 				$extendedClass
-			);
+			)) {
+				throw new DOMException("Error registering $extendedClass");
+			}
 		}
 	}
 }
