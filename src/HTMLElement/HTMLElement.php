@@ -215,16 +215,6 @@ abstract class HTMLElement extends Element {
 		$this->setAttribute("lang", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/tabIndex */
-	protected function __prop_get_tabIndex():int {
-		return $this->getAttribute("tabindex") ?? -1;
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/tabIndex */
-	protected function __prop_set_tabIndex(int $value):void {
-		$this->setAttribute("tabindex", $value);
-	}
-
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/title */
 	protected function __prop_get_title():string {
 		return $this->getAttribute("title") ?? "";

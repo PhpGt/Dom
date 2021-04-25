@@ -16,4 +16,9 @@ class HTMLOrForeignElementTest extends HTMLElementTestCase {
 		$sut->dataset->example = "something";
 		self::assertEquals("something", $sut->getAttribute("data-example"));
 	}
+
+	public function testTabIndex():void {
+		$sut = NodeTestFactory::createHTMLElement("div");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int:-1", "tabindex", "tabIndex");
+	}
 }

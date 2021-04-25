@@ -17,11 +17,15 @@ trait HTMLOrForeignElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/tabIndex */
 	protected function __prop_get_tabIndex():int {
+		if($this->hasAttribute("tabindex")) {
+			return (int)$this->getAttribute("tabindex");
+		}
 
+		return -1;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/tabIndex */
 	protected function __prop_set_tabIndex(int $tabIndex):void {
-
+		$this->setAttribute("tabindex", (string)$tabIndex);
 	}
 }
