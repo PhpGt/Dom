@@ -30,7 +30,7 @@ class HTMLProgressElementTest extends HTMLElementTestCase {
 		/** @var HTMLProgressElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("progress");
 		for($i = 0; $i < 10; $i++) {
-			$sut->value = rand(-999, 999);
+			$sut->value = (string)rand(-999, 999);
 			$sut->max = rand(-999, 999);
 			$calc = $sut->value / $sut->max;
 			if($calc > 1) {
