@@ -13,7 +13,7 @@ use Gt\Dom\NodeList;
  *
  * @property ?float $max Is a double value reflecting the content attribute of the same name, limited to numbers greater than zero. Its default value is 1.0.
  * @property-read float $position Returns a double value returning the result of dividing the current value (value) by the maximum value (max); if the progress bar is an indeterminate progress bar, it returns -1.
- * @property float $value Is a double value that reflects the current value; if the progress bar is an indeterminate progress bar, it returns 0.
+ * @property ?float $value Is a double value that reflects the current value; if the progress bar is an indeterminate progress bar, it returns 0.
  * @property-read NodeList $labels Returns NodeList containing the list of <label> elements that are labels for this element.
  */
 class HTMLProgressElement extends HTMLElement {
@@ -33,17 +33,25 @@ class HTMLProgressElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLProgressElement/position */
 	protected function __prop_get_position():float {
+		if(!$this->max) {
+			return -1;
+		}
 
+		return $this->value / $this->max;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLProgressElement/value */
-	protected function __prop_get_value():float {
+	protected function __prop_get_value():?float {
+		if($this->hasAttribute("value")) {
+			return (float)$this->getAttribute("value");
+		}
 
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLProgressElement/value */
 	protected function __prop_set_value(float $value):void {
-
+		$this->setAttribute("value", (string)$value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLProgressElement/labels */
