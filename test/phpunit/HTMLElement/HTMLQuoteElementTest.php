@@ -10,4 +10,18 @@ class HTMLQuoteElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("blockquote");
 		self::assertPropertyAttributeCorrelate($sut, "cite");
 	}
+
+	public function testBlockquote():void {
+		self::assertInstanceOf(
+			HTMLQuoteElement::class,
+			NodeTestFactory::createHTMLElement("blockquote")
+		);
+	}
+
+	public function testQ():void {
+		self::assertInstanceOf(
+			HTMLQuoteElement::class,
+			NodeTestFactory::createHTMLElement("q")
+		);
+	}
 }
