@@ -3,6 +3,7 @@ namespace Gt\Dom\HTMLElement;
 
 use Gt\Dom\ClientSide\ValidityState;
 use Gt\Dom\DOMTokenList;
+use Gt\Dom\Facade\DOMTokenListFactory;
 use Gt\Dom\NodeList;
 
 /**
@@ -44,6 +45,9 @@ class HTMLOutputElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOutputElement/htmlFor */
 	protected function __prop_get_htmlFor():DOMTokenList {
-
+		return DOMTokenListFactory::create(
+			fn() => explode(" ", $this->getAttribute("for")),
+			fn(string...$tokens) => $this->setAttribute("for", implode(" ", $tokens))
+		);
 	}
 }
