@@ -300,6 +300,7 @@ class DOMDocumentFacade extends DOMDocument {
 
 	private function registerNodeClasses():void {
 		$classList = [
+			DOMDocument::class => DOMDocumentFacade::class,
 			DOMAttr::class => DOMAttrFacade::class,
 			DOMCdataSection::class => DOMCdataSectionFacade::class,
 			DOMCharacterData::class => DOMCharacterDataFacade::class,

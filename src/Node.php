@@ -581,6 +581,9 @@ abstract class Node {
 		}
 		/** @var DOMDocumentFacade $nativeDocument */
 		/** @var Document $gtDocument */
+		if(!method_exists($nativeDocument, "getGtDomNode")) {
+			var_dump($nativeDocument);die();
+		}
 		$gtDocument = $nativeDocument->getGtDomNode($nativeDocument);
 		return $gtDocument;
 	}

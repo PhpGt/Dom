@@ -2,6 +2,7 @@
 namespace Gt\Dom\HTMLElement;
 
 use Gt\Dom\DOMStringMap;
+use Gt\Dom\Facade\DOMStringMapFactory;
 
 /**
  * @property-read DOMStringMap $dataset The dataset read-only property of the HTMLOrForeignElement mixin provides read/write access to custom data attributes (data-*) on elements.
@@ -10,7 +11,8 @@ use Gt\Dom\DOMStringMap;
 trait HTMLOrForeignElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/dataset */
 	protected function __prop_get_dataset():DOMStringMap {
-
+		/** @var HTMLElement $this */
+		return DOMStringMapFactory::createDataset($this);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/tabIndex */
