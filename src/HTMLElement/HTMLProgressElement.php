@@ -37,7 +37,7 @@ class HTMLProgressElement extends HTMLElement {
 			return -1;
 		}
 
-		return $this->value / $this->max;
+		return min($this->value / $this->max, 1);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLProgressElement/value */

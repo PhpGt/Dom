@@ -11,10 +11,33 @@ class HTMLProgressElementTest extends HTMLElementTestCase {
 		self::assertPropertyAttributeCorrelateNumber($sut, "?float", "max");
 	}
 
-	public function testPosition():void {
+	public function testPositionNoValueOrMax():void {
 		/** @var HTMLProgressElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("progress");
 		self::assertSame(-1.0, $sut->position);
+	}
+
+	public function testPositionNoMax():void {
+		/** @var HTMLProgressElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("progress");
+		for($i = 0; $i < 10; $i++) {
+			$sut->value = rand(-999, 999);
+			self::assertSame(-1.0, $sut->position);
+		}
+	}
+
+	public function testPosition():void {
+		/** @var HTMLProgressElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("progress");
+		for($i = 0; $i < 10; $i++) {
+			$sut->value = rand(-999, 999);
+			$sut->max = rand(-999, 999);
+			$calc = $sut->value / $sut->max;
+			if($calc > 1) {
+				$calc = 1;
+			}
+			self::assertEquals($calc, $sut->position);
+		}
 	}
 
 	public function testValue():void {
