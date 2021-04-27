@@ -51,11 +51,16 @@ class HTMLTrackElement extends HTMLElement {
 	}
 
 	protected function __prop_get_default():bool {
-
+		return $this->hasAttribute("default");
 	}
 
 	protected function __prop_set_default(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("default", "");
+		}
+		else {
+			$this->removeAttribute("default");
+		}
 	}
 
 	protected function __prop_get_readyState():int {

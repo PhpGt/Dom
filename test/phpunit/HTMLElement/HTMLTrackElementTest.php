@@ -28,4 +28,10 @@ class HTMLTrackElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("track");
 		self::assertPropertyAttributeCorrelate($sut, "label");
 	}
+
+	public function testDefault():void {
+		/** @var HTMLTrackElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("track");
+		self::assertPropertyAttributeCorrelateBool($sut, "default");
+	}
 }
