@@ -52,4 +52,10 @@ class HTMLTableCellElementTest extends HTMLElementTestCase {
 
 		self::assertSame(10, $sut->cellIndex);
 	}
+
+	public function testColSpan():void {
+		/** @var HTMLTableCellElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("td");
+		self::assertPropertyAttributeCorrelateNumber($sut, "?int", "colspan", "colSpan");
+	}
 }
