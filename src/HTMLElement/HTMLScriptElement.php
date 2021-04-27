@@ -80,22 +80,20 @@ class HTMLScriptElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/text */
 	protected function __prop_get_text():string {
-
+		return $this->textContent;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/text */
 	protected function __prop_set_text(string $value):void {
-
+		$this->textContent = $value;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/noModule */
 	protected function __prop_get_noModule():bool {
-
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/noModule */
 	protected function __prop_set_noModule(bool $value):void {
-
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/referrerPolicy */

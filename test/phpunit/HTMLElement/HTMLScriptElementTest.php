@@ -34,4 +34,10 @@ class HTMLScriptElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("script");
 		self::assertPropertyAttributeCorrelate($sut, "crossorigin", "crossOrigin");
 	}
+
+	public function testTextEmpty():void {
+		/** @var HTMLScriptElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("script");
+		self::assertSame("", $sut->text);
+	}
 }
