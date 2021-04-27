@@ -64,7 +64,7 @@ class HTMLTrackElement extends HTMLElement {
 	}
 
 	protected function __prop_get_readyState():int {
-
+		return 0;
 	}
 
 	protected function __prop_get_track():TextTrack {
