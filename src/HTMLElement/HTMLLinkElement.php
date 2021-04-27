@@ -21,7 +21,7 @@ use Gt\Dom\Facade\DOMTokenListFactory;
  * @property string $referrerPolicy Is a DOMString that reflects the referrerpolicy HTML attribute indicating which referrer to use.
  * @property string $rel Is a DOMString representing the forward relationship of the linked resource from the document to the resource.
  * @property-read DOMTokenList $relList Is a DOMTokenList that reflects the rel HTML attribute, as a list of tokens.
- * @property-read DOMSettableTokenList $sizes Is a DOMSettableTokenList that reflects the sizes HTML attribute, as a list of tokens.
+ * @property string $sizes Is a DOMSettableTokenList that reflects the sizes HTML attribute, as a list of tokens.
  * @property-read StyleSheet $sheet Returns the StyleSheet object associated with the given element, or null if there is none.
  * @property string $type Is a DOMString representing the MIME type of the linked resource.
  */
@@ -110,8 +110,14 @@ class HTMLLinkElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/sizes */
-	protected function __prop_get_sizes():DOMSettableTokenList {
+	protected function __prop_get_sizes():string {
+// Note that even though the documentation states DOMSettableTokenList, this
+// function does indeed return a standard string, in all modern browsers.
+		return $this->getAttribute("sizes") ?? "";
+	}
 
+	protected function __prop_set_sizes(string $value):void {
+		$this->setAttribute("sizes", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/sheet */

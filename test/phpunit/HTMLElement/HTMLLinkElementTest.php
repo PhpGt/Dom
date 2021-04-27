@@ -61,4 +61,10 @@ class HTMLLinkElementTest extends HTMLElementTestCase {
 		$relList->value = "three four";
 		self::assertEquals("three four", $sut->rel);
 	}
+
+	public function testSizes():void {
+		/** @var HTMLLinkElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("link");
+		self::assertPropertyAttributeCorrelate($sut, "sizes");
+	}
 }
