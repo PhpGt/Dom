@@ -46,6 +46,7 @@ class HTMLTrackElementTest extends HTMLElementTestCase {
 		/** @var HTMLTrackElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("track");
 		self::expectException(ClientSideOnlyFunctionalityException::class);
+
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$value = $sut->track;
 	}
