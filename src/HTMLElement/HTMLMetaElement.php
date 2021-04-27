@@ -14,11 +14,11 @@ namespace Gt\Dom\HTMLElement;
  */
 class HTMLMetaElement extends HTMLElement {
 	protected function __prop_get_content():string {
-
+		return $this->getAttribute("content") ?? "";
 	}
 
 	protected function __prop_set_content(string $value):void {
-
+		$this->setAttribute("content", $value);
 	}
 
 	protected function __prop_get_httpEquiv():string {
