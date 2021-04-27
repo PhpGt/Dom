@@ -40,4 +40,10 @@ class HTMLTextAreaElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("textarea");
 		self::assertPropertyAttributeCorrelateNumber($sut, "int:2", "rows");
 	}
+
+	public function testWrap():void {
+		/** @var HTMLTextAreaElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("textarea");
+		self::assertPropertyAttributeCorrelate($sut, "wrap");
+	}
 }

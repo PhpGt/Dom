@@ -96,10 +96,10 @@ class HTMLTextAreaElement extends HTMLElement {
 	}
 
 	protected function __prop_get_wrap():string {
-
+		return $this->getAttribute("wrap") ?? "";
 	}
 
 	protected function __prop_set_wrap(string $value):void {
-
+		$this->setAttribute("wrap", $value);
 	}
 }
