@@ -22,4 +22,10 @@ class HTMLSourceElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("source");
 		self::assertPropertyAttributeCorrelate($sut, "src");
 	}
+
+	public function testSrcset():void {
+		/** @var HTMLSourceElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("source");
+		self::assertPropertyAttributeCorrelate($sut, "srcset");
+	}
 }

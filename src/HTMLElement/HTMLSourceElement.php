@@ -47,12 +47,12 @@ class HTMLSourceElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/srcset */
 	protected function __prop_get_srcset():string {
-
+		return $this->getAttribute("srcset") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/srcset */
 	protected function __prop_set_srcset(string $value):void {
-
+		$this->setAttribute("srcset", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/type */
