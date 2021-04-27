@@ -2,6 +2,7 @@
 namespace Gt\Dom\HTMLElement;
 
 use Gt\Dom\DOMTokenList;
+use Gt\Dom\Facade\DOMTokenListFactory;
 
 /**
  * The HTMLLinkElement interface represents reference information for external
@@ -102,7 +103,10 @@ class HTMLLinkElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/relList */
 	protected function __prop_get_relList():DOMTokenList {
-
+		return DOMTokenListFactory::create(
+			fn() => explode(" ", $this->rel),
+			fn(string...$tokens) => $this->rel = implode(" ", $tokens)
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/sizes */
