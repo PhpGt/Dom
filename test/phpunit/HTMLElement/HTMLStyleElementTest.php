@@ -22,4 +22,10 @@ class HTMLStyleElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("style");
 		self::assertPropertyAttributeCorrelateBool($sut, "disabled");
 	}
+
+	public function testSheet():void {
+		/** @var HTMLStyleElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("style");
+		self::assertNull($sut->sheet);
+	}
 }

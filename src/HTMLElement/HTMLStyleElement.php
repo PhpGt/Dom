@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\ClientSide\StyleSheet;
+
 /**
  * The HTMLStyleElement interface represents a <style> element. It inherits
  * properties and methods from its parent, HTMLElement, and from LinkStyle.
@@ -10,7 +12,7 @@ namespace Gt\Dom\HTMLElement;
  * @property string $media Is a DOMString representing the intended destination medium for style information.
  * @property string $type Is a DOMString representing the type of style being applied by this statement.
  * @property bool $disabled Is a Boolean value representing whether or not the stylesheet is disabled (true) or not (false).
- * @property-read StyleSheet $sheet Returns the StyleSheet object associated with the given element, or null if there is none
+ * @property-read ?StyleSheet $sheet Returns the StyleSheet object associated with the given element, or null if there is none
  *
  */
 class HTMLStyleElement extends HTMLElement {
@@ -50,8 +52,8 @@ class HTMLStyleElement extends HTMLElement {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLStyleElement/sheet */
-	protected function __prop_get_sheet():StyleSheet {
-
+	protected function __prop_get_sheet():?StyleSheet {
+		return null;
 	}
 
 }
