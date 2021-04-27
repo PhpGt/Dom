@@ -22,4 +22,10 @@ class HTMLTextAreaElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("textarea");
 		self::assertPropertyAttributeCorrelate($sut, "value", "defaultValue");
 	}
+
+	public function testMaxLength():void {
+		/** @var HTMLTextAreaElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("textarea");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int:-1", "maxlength", "maxLength");
+	}
 }

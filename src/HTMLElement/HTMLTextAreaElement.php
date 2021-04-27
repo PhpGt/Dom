@@ -63,11 +63,14 @@ class HTMLTextAreaElement extends HTMLElement {
 	}
 
 	protected function __prop_get_maxLength():int {
-
+		if($this->hasAttribute("maxlength")) {
+			return (int)$this->getAttribute("maxlength");
+		}
+		return -1;
 	}
 
 	protected function __prop_set_maxLength(int $value):void {
-
+		$this->setAttribute("maxlength", (string)$value);
 	}
 
 	protected function __prop_get_minLength():int {
