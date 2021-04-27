@@ -61,6 +61,17 @@ class HTMLOptionElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/selected */
 	protected function __prop_set_selected(bool $value):void {
 		if($value) {
+			$context = $this;
+			while($context = $context->parentElement) {
+				if($context instanceof HTMLSelectElement
+				&& !$context->multiple) {
+					foreach($context->options as $option) {
+						/** @var HTMLOptionElement $option */
+						$option->removeAttribute("selected");
+					}
+				}
+			}
+
 			$this->setAttribute("selected", "");
 		}
 		else {

@@ -67,12 +67,28 @@ class HTMLSelectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/selectedIndex */
 	protected function __prop_get_selectedIndex():int {
+		foreach($this->options as $i => $option) {
+			/** @var HTMLOptionElement $option */
+			if(!$option->selected) {
+				continue;
+			}
 
+			return $i;
+		}
+
+		return -1;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/selectedIndex */
 	protected function __prop_set_selectedIndex(int $value):void {
+		foreach($this->options as $i => $option) {
+			/** @var HTMLOptionElement $option */
+			$option->selected = false;
 
+			if($i === $value) {
+				$option->selected = true;
+			}
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/selectedOptions */
