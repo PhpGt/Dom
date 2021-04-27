@@ -85,11 +85,14 @@ class HTMLTextAreaElement extends HTMLElement {
 	}
 
 	protected function __prop_get_rows():int {
-
+		if($this->hasAttribute("rows")) {
+			return (int)$this->getAttribute("rows");
+		}
+		return 2;
 	}
 
 	protected function __prop_set_rows(int $value):void {
-
+		$this->setAttribute("rows", (string)$value);
 	}
 
 	protected function __prop_get_wrap():string {
