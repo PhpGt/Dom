@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\Exception\IndexIsNegativeOrGreaterThanAllowedAmountException;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\HTMLCollection;
 
@@ -25,7 +26,12 @@ class HTMLTableSectionElement extends HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableSectionElement/deleteRow
 	 */
 	public function deleteRow(int $index):void {
+		if($index < 0 || $index >= $this->children->length) {
+			throw new IndexIsNegativeOrGreaterThanAllowedAmountException((string)$index);
+		}
 
+		$tr = $this->getElementsByTagName("tr")->item($index);
+		$tr->remove();
 	}
 
 	/**
