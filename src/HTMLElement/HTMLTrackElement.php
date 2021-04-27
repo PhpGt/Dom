@@ -27,11 +27,11 @@ class HTMLTrackElement extends HTMLElement {
 	}
 
 	protected function __prop_get_src():string {
-
+		return $this->getAttribute("src") ?? "";
 	}
 
 	protected function __prop_set_src(string $value):void {
-
+		$this->setAttribute("src", $value);
 	}
 
 	protected function __prop_get_srclang():string {
