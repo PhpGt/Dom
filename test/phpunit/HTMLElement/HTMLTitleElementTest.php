@@ -8,7 +8,7 @@ class HTMLTitleElementTest extends HTMLElementTestCase {
 	public function testText():void {
 		/** @var HTMLTitleElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("title");
-		self::assertSame("", $sut->title);
+		self::assertSame("", $sut->text);
 
 		for($i = 0; $i < 10; $i++) {
 			$t = uniqid();
