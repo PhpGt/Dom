@@ -6,7 +6,7 @@ use Gt\Dom\HTMLElement\HTMLImageElement;
 use Gt\Dom\HTMLElement\HTMLInputElement;
 use PHPUnit\Framework\TestCase;
 
-class HTMLElementTestCase extends TestCase {
+abstract class HTMLElementTestCase extends TestCase {
 	protected function assertPropertyAttributeCorrelate(
 		HTMLElement $element,
 		string $attribute,

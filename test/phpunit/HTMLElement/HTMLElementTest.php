@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
+use Gt\Dom\ClientSide\CSSStyleDeclaration;
+use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\EnumeratedValueException;
 use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
 use Gt\Dom\Test\TestFactory\HTMLElementTestFactory;
@@ -251,5 +253,19 @@ class HTMLElementTest extends TestCase {
 		$sut->title = "Example";
 		self::assertEquals("Example", $sut->title);
 		self::assertEquals("Example", $sut->getAttribute("title"));
+	}
+
+	public function testStyleGet():void {
+		$sut = HTMLElementTestFactory::create();
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$style = $sut->style;
+	}
+
+	public function testStyleSet():void {
+		$sut = HTMLElementTestFactory::create();
+		$style = self::createMock(CSSStyleDeclaration::class);
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		$sut->style = $style;
 	}
 }
