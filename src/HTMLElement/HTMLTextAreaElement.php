@@ -74,11 +74,14 @@ class HTMLTextAreaElement extends HTMLElement {
 	}
 
 	protected function __prop_get_minLength():int {
-
+		if($this->hasAttribute("minlength")) {
+			return (int)$this->getAttribute("minlength");
+		}
+		return -1;
 	}
 
 	protected function __prop_set_minLength(int $value):void {
-
+		$this->setAttribute("minlength", (string)$value);
 	}
 
 	protected function __prop_get_rows():int {
