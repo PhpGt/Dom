@@ -93,7 +93,18 @@ class HTMLSelectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/selectedOptions */
 	protected function __prop_get_selectedOptions():HTMLCollection {
-
+		if($this->multiple) {
+			return HTMLCollectionFactory::create(
+				fn() => $this->querySelectorAll("option[selected]")
+			);
+		}
+		else {
+			return HTMLCollectionFactory::create(
+				fn() => ($this->selectedIndex === -1)
+					? []
+					: [$this->options[$this->selectedIndex]]
+			);
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/size */
@@ -103,6 +114,6 @@ class HTMLSelectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/size */
 	protected function __prop_set_size(int $value):void {
-
+		$this->setAttribute("size", (string)$value);
 	}
 }

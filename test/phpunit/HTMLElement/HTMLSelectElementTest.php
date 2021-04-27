@@ -86,4 +86,25 @@ class HTMLSelectElementTest extends HTMLElementTestCase {
 			self::assertSame($optionToSelect, $optionArray[$randomOptionIndex]);
 		}
 	}
+
+	public function testSelectedOptionsNone():void {
+		/** @var HTMLSelectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("select");
+		self::assertEmpty($sut->selectedOptions);
+		self::assertCount(0, $sut->selectedOptions);
+	}
+
+	public function testSelectedOptionsSingular():void {
+		/** @var HTMLSelectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("select");
+
+		for($i = 0; $i < 10; $i++) {
+			/** @var HTMLOptionElement $option */
+			$option = $sut->ownerDocument->createElement("option");
+			$sut->appendChild($option);
+			$option->selected = true;
+		}
+
+		self::assertCount(1, $sut->selectedOptions);
+	}
 }
