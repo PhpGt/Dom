@@ -55,11 +55,11 @@ class HTMLTextAreaElement extends HTMLElement {
 	}
 
 	protected function __prop_get_defaultValue():string {
-
+		return $this->value;
 	}
 
 	protected function __prop_set_defaultValue(string $value):void {
-
+		$this->value = $value;
 	}
 
 	protected function __prop_get_maxLength():int {

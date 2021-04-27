@@ -16,4 +16,10 @@ class HTMLTextAreaElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("textarea");
 		self::assertPropertyAttributeCorrelateNumber($sut, "int:20", "cols");
 	}
+
+	public function testDefaultValue():void {
+		/** @var HTMLTextAreaElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("textarea");
+		self::assertPropertyAttributeCorrelate($sut, "value", "defaultValue");
+	}
 }
