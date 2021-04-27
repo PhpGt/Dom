@@ -38,7 +38,7 @@ class HTMLSelectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/length */
 	protected function __prop_get_length():int {
-
+		return $this->getElementsByTagName("option")->length;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/multiple */
