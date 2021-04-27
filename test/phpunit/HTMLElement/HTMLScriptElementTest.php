@@ -10,4 +10,10 @@ class HTMLScriptElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("script");
 		self::assertPropertyAttributeCorrelate($sut, "type");
 	}
+
+	public function testSrc():void {
+		/** @var HTMLScriptElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("script");
+		self::assertPropertyAttributeCorrelate($sut, "src");
+	}
 }
