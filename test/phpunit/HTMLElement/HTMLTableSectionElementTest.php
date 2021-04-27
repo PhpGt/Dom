@@ -38,4 +38,16 @@ class HTMLTableSectionElementTest extends HTMLElementTestCase {
 		self::assertCount(3, $sut->rows);
 		self::assertSame($inBetween, $sut->rows[1]);
 	}
+
+	public function testRows():void {
+		/** @var HTMLTableSectionElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tbody");
+		$rows = $sut->rows;
+
+		self::assertCount(0, $rows);
+		$sut->insertRow();
+		self::assertCount(1, $rows);
+		$sut->deleteRow(0);
+		self::assertCount(0, $rows);
+	}
 }
