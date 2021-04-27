@@ -112,6 +112,15 @@ class HTMLTableRowElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/sectionRowIndex */
 	protected function __prop_get_sectionRowIndex():int {
+		$parent = $this->parentElement;
+		if(!$parent) {
+			return -1;
+		}
 
+		foreach($parent->children as $i => $child) {
+			if($child === $this) {
+				return $i;
+			}
+		}
 	}
 }

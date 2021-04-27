@@ -203,4 +203,35 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 		$table->append($thead, $tbody, $tfoot);
 		self::assertSame(0, $sut->rowIndex);
 	}
+
+	public function testSectionRowIndexEmpty():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		self::assertSame(-1, $sut->sectionRowIndex);
+	}
+
+	public function testSectionRowIndexFirst():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		$tbody = $sut->ownerDocument->createElement("tbody");
+		$tbody->appendChild($sut);
+		self::assertSame(0, $sut->sectionRowIndex);
+		$tbody->appendChild($sut->cloneNode());
+		$tbody->appendChild($sut->cloneNode());
+		$tbody->appendChild($sut->cloneNode());
+		$tbody->appendChild($sut->cloneNode());
+		self::assertSame(0, $sut->sectionRowIndex);
+	}
+
+	public function testSectionRowIndex():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		$tbody = $sut->ownerDocument->createElement("tbody");
+		$tbody->appendChild($sut->cloneNode());
+		$tbody->appendChild($sut->cloneNode());
+		$tbody->appendChild($sut->cloneNode());
+		$tbody->appendChild($sut->cloneNode());
+		$tbody->appendChild($sut);
+		self::assertSame(4, $sut->sectionRowIndex);
+	}
 }
