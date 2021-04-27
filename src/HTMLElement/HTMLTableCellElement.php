@@ -17,10 +17,12 @@ namespace Gt\Dom\HTMLElement;
  * @property string $scope A DOMString indicating the scope of a <th> cell. Header cells can be configured, using the scope property, the apply to a specified row or column, or to the not-yet-scoped cells within the current row group (that is, the same ancestor <thead>, <tbody>, or <tfoot> element). If no value is specified for scope, the header is not associated directly with cells in this way.
  */
 class HTMLTableCellElement extends HTMLElement {
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement/abbr */
 	protected function __prop_get_abbr():string {
 
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement/abbr */
 	protected function __prop_set_abbr(string $value):void {
 
 	}
