@@ -47,4 +47,10 @@ class HTMLScriptElementTest extends HTMLElementTestCase {
 		$sut->text = "alert('test')";
 		self::assertEquals("alert('test')", $sut->textContent);
 	}
+
+	public function testNoModule():void {
+		/** @var HTMLScriptElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("script");
+		self::assertPropertyAttributeCorrelateBool($sut, "nomodule", "noModule");
+	}
 }

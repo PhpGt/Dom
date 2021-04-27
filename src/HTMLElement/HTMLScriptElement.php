@@ -90,10 +90,17 @@ class HTMLScriptElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/noModule */
 	protected function __prop_get_noModule():bool {
+		return $this->hasAttribute("nomodule");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/noModule */
 	protected function __prop_set_noModule(bool $value):void {
+		if($value) {
+			$this->setAttribute("nomodule", $value);
+		}
+		else {
+			$this->removeAttribute("nomodule");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/referrerPolicy */
