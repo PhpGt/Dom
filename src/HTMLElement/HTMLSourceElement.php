@@ -27,12 +27,12 @@ class HTMLSourceElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/sizes */
 	protected function __prop_get_sizes():string {
-
+		return $this->getAttribute("sizes") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/sizes */
 	protected function __prop_set_sizes(string $value):void {
-
+		$this->setAttribute("sizes", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/src */
