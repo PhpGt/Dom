@@ -11,11 +11,11 @@ namespace Gt\Dom\HTMLElement;
 class HTMLTimeElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTimeElement/dateTime */
 	protected function __prop_get_dateTime():string {
-
+		return $this->getAttribute("datetime") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTimeElement/dateTime */
 	protected function __prop_set_dateTime(string $value):void {
-
+		$this->setAttribute("datetime", $value);
 	}
 }
