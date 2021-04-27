@@ -76,4 +76,10 @@ class HTMLLinkElementTest extends HTMLElementTestCase {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$value = $sut->sheet;
 	}
+
+	public function testType():void {
+		/** @var HTMLLinkElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("link");
+		self::assertPropertyAttributeCorrelate($sut, "type");
+	}
 }
