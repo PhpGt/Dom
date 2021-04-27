@@ -71,4 +71,16 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 		self::assertSame($td2, $sut->getElementsByTagName("td")->item(2));
 		self::assertSame($td3, $sut->getElementsByTagName("td")->item(3));
 	}
+
+	public function testCells():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		$cells = $sut->cells;
+
+		self::assertCount(0, $cells);
+		$sut->insertCell();
+		self::assertCount(1, $cells);
+		$sut->deleteCell(0);
+		self::assertCount(0, $cells);
+	}
 }
