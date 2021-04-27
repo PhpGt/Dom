@@ -28,4 +28,10 @@ class HTMLLinkElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("link");
 		self::assertPropertyAttributeCorrelate($sut, "hreflang");
 	}
+
+	public function testMedia():void {
+		/** @var HTMLLinkElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("link");
+		self::assertPropertyAttributeCorrelate($sut, "media");
+	}
 }

@@ -72,12 +72,12 @@ class HTMLLinkElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/media */
 	protected function __prop_get_media():string {
-
+		return $this->getAttribute("media") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/media */
 	protected function __prop_set_media(string $value):void {
-
+		$this->setAttribute("media", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/referrerPolicy */
