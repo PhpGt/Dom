@@ -105,11 +105,11 @@ class HTMLScriptElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/referrerPolicy */
 	protected function __prop_get_referrerPolicy():string {
-
+		return $this->getAttribute("referrerpolicy") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/referrerPolicy */
 	protected function __prop_set_referrerPolicy(string $value):void {
-
+		$this->setAttribute("referrerpolicy", $value);
 	}
 }

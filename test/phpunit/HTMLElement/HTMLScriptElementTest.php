@@ -53,4 +53,10 @@ class HTMLScriptElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("script");
 		self::assertPropertyAttributeCorrelateBool($sut, "nomodule", "noModule");
 	}
+
+	public function testReferrerPolicy():void {
+		/** @var HTMLScriptElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("script");
+		self::assertPropertyAttributeCorrelate($sut, "referrerpolicy", "referrerPolicy");
+	}
 }
