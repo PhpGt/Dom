@@ -2,6 +2,7 @@
 namespace Gt\Dom\HTMLElement;
 
 use Gt\Dom\Exception\IndexIsNegativeOrGreaterThanAllowedAmountException;
+use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\HTMLCollection;
 
 /**
@@ -48,15 +49,26 @@ class HTMLTableRowElement extends HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/insertCell
 	 */
 	public function insertCell(int $index = null):HTMLTableCellElement {
+		if(is_null($index)) {
+			$index = $this->cells->length;
+		}
 
+		$insertAfter = $this->cells[$index - 1] ?? null;
+		/** @var HTMLTableCellElement $td */
+		$td = $this->ownerDocument->createElement("td");
+		$this->insertBefore($td, $insertAfter?->nextSibling);
+
+		return $td;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/rowIndex */
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/cells */
 	protected function __prop_get_cells():HTMLCollection {
-
+		return HTMLCollectionFactory::create(
+			fn() => $this->getElementsByTagName("td")
+		);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/rowIndex */
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/cells */
 	protected function __prop_get_rowIndex():int {
 
 	}

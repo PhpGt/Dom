@@ -38,4 +38,37 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 			self::assertSame($td, $sut->getElementsByTagName("td")->item($actualIndex));
 		}
 	}
+
+	public function testInsertCell():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+
+		$td1 = $sut->insertCell();
+		$td2 = $sut->insertCell();
+		$td3 = $sut->insertCell();
+
+		self::assertSame($td1, $sut->getElementsByTagName("td")->item(0));
+		self::assertSame($td2, $sut->getElementsByTagName("td")->item(1));
+		self::assertSame($td3, $sut->getElementsByTagName("td")->item(2));
+	}
+
+	public function testInsertCellIndex():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+
+		$td1 = $sut->insertCell();
+		$td1->id = "td1";
+		$td2 = $sut->insertCell();
+		$td2->id = "td2";
+		$td3 = $sut->insertCell();
+		$td3->id = "td3";
+
+		$tdNew = $sut->insertCell(1);
+		$tdNew->id = "tdNew";
+
+		self::assertSame($tdNew, $sut->getElementsByTagName("td")->item(1));
+		self::assertSame($td1, $sut->getElementsByTagName("td")->item(0));
+		self::assertSame($td2, $sut->getElementsByTagName("td")->item(2));
+		self::assertSame($td3, $sut->getElementsByTagName("td")->item(3));
+	}
 }
