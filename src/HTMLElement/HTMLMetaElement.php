@@ -22,11 +22,11 @@ class HTMLMetaElement extends HTMLElement {
 	}
 
 	protected function __prop_get_httpEquiv():string {
-
+		return $this->getAttribute("http-equiv") ?? "";
 	}
 
 	protected function __prop_set_httpEquiv(string $value):void {
-
+		$this->setAttribute("http-equiv", $value);
 	}
 
 	protected function __prop_get_name():string {
