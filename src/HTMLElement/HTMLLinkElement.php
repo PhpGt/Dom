@@ -52,12 +52,12 @@ class HTMLLinkElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/href */
 	protected function __prop_get_href():string {
-
+		return $this->getAttribute("href") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/href */
 	protected function __prop_set_href(string $value):void {
-
+		$this->setAttribute("href", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/hreflang */

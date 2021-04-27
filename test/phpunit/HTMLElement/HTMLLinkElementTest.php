@@ -16,4 +16,10 @@ class HTMLLinkElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("link");
 		self::assertPropertyAttributeCorrelateBool($sut, "disabled");
 	}
+
+	public function testHref():void {
+		/** @var HTMLLinkElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("link");
+		self::assertPropertyAttributeCorrelate($sut, "href");
+	}
 }
