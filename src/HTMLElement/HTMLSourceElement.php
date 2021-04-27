@@ -17,12 +17,12 @@ namespace Gt\Dom\HTMLElement;
 class HTMLSourceElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/media */
 	protected function __prop_get_media():string {
-
+		return $this->getAttribute("media") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/media */
 	protected function __prop_set_media(string $value):void {
-
+		$this->setAttribute("media", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/sizes */
