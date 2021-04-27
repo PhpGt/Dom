@@ -55,12 +55,17 @@ class HTMLScriptElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/defer */
 	protected function __prop_get_defer():bool {
-
+		return $this->hasAttribute("defer");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/defer */
 	protected function __prop_set_defer(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("defer", "");
+		}
+		else {
+			$this->removeAttribute("defer");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/crossOrigin */
