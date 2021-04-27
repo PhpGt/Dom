@@ -43,11 +43,11 @@ class HTMLTrackElement extends HTMLElement {
 	}
 
 	protected function __prop_get_label():string {
-
+		return $this->getAttribute("label") ?? "";
 	}
 
 	protected function __prop_set_label(string $value):void {
-
+		$this->setAttribute("label", $value);
 	}
 
 	protected function __prop_get_default():bool {

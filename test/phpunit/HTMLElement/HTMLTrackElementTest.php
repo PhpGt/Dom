@@ -22,4 +22,10 @@ class HTMLTrackElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("track");
 		self::assertPropertyAttributeCorrelate($sut, "srclang");
 	}
+
+	public function testLabel():void {
+		/** @var HTMLTrackElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("track");
+		self::assertPropertyAttributeCorrelate($sut, "label");
+	}
 }
