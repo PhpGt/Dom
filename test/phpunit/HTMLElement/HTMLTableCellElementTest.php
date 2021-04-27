@@ -56,12 +56,18 @@ class HTMLTableCellElementTest extends HTMLElementTestCase {
 	public function testColSpan():void {
 		/** @var HTMLTableCellElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("td");
-		self::assertPropertyAttributeCorrelateNumber($sut, "?int", "colspan", "colSpan");
+		self::assertPropertyAttributeCorrelateNumber($sut, "?int:1", "colspan", "colSpan");
 	}
 
 	public function testHeaders():void {
 		/** @var HTMLTableCellElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("td");
 		self::assertPropertyAttributeCorrelate($sut, "headers");
+	}
+
+	public function testRowSpan():void {
+		/** @var HTMLTableCellElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("td");
+		self::assertPropertyAttributeCorrelateNumber($sut, "?int:1", "rowspan", "rowSpan");
 	}
 }
