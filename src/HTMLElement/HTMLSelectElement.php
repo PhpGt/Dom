@@ -2,7 +2,9 @@
 namespace Gt\Dom\HTMLElement;
 
 use Gt\Dom\ClientSide\ValidityState;
+use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\HTMLCollection;
+use Gt\Dom\HTMLOptionsCollection;
 use Gt\Dom\NodeList;
 
 /**
@@ -58,7 +60,9 @@ class HTMLSelectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/options */
 	protected function __prop_get_options():HTMLOptionsCollection {
-
+		return HTMLCollectionFactory::createHTMLOptionsCollection(
+			fn() => $this->querySelectorAll("option")
+		);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/selectedIndex */

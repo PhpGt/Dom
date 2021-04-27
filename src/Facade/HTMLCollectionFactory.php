@@ -3,6 +3,7 @@ namespace Gt\Dom\Facade;
 
 use Gt\Dom\HTMLCollection;
 use Gt\Dom\HTMLFormControlsCollection;
+use Gt\Dom\HTMLOptionsCollection;
 
 /**
  * The callback passed to HTMLCollection's constructor must return a NodeList,
@@ -17,5 +18,11 @@ class HTMLCollectionFactory extends HTMLCollection {
 		callable $callback
 	):HTMLFormControlsCollection {
 		return new HTMLFormControlsCollection($callback);
+	}
+
+	public static function createHTMLOptionsCollection(
+		callable $callback
+	):HTMLOptionsCollection {
+		return new HTMLOptionsCollection($callback);
 	}
 }

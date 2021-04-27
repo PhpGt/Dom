@@ -30,8 +30,8 @@ use Iterator;
 class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
 
-	/** @var callable():NodeList Returns a NodeList, called multiple times,
-	 * allowing the HTMLCollection to be "live" */
+	/** @var callable():NodeList $callback Returns a NodeList, called
+	 * multiple times, allowing the HTMLCollection to be "live" */
 	private $callback;
 	private int $iteratorIndex;
 

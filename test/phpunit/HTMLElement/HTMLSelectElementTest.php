@@ -27,4 +27,22 @@ class HTMLSelectElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("select");
 		self::assertPropertyAttributeCorrelateBool($sut, "multiple");
 	}
+
+	public function testOptionsEmpty():void {
+		/** @var HTMLSelectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("select");
+		self::assertEmpty($sut->options);
+		self::assertCount(0, $sut->options);
+	}
+
+	public function testOptions():void {
+		/** @var HTMLSelectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("select");
+
+		for($i = 0; $i < 10; $i++) {
+			$option = $sut->ownerDocument->createElement("option");
+			$sut->appendChild($option);
+			self::assertCount($i + 1, $sut->options);
+		}
+	}
 }
