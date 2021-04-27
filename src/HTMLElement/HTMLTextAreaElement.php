@@ -44,11 +44,14 @@ class HTMLTextAreaElement extends HTMLElement {
 	}
 
 	protected function __prop_get_cols():int {
-
+		if($this->hasAttribute("cols")) {
+			return (int)$this->getAttribute("cols");
+		}
+		return 20;
 	}
 
 	protected function __prop_set_cols(int $value):void {
-
+		$this->setAttribute("cols", (string)$value);
 	}
 
 	protected function __prop_get_defaultValue():string {

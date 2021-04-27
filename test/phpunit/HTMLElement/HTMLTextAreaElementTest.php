@@ -10,4 +10,10 @@ class HTMLTextAreaElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("textarea");
 		self::assertPropertyAttributeCorrelate($sut, "autocapitalize");
 	}
+
+	public function testCols():void {
+		/** @var HTMLTextAreaElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("textarea");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int:20", "cols");
+	}
 }
