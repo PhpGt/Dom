@@ -27,12 +27,12 @@ use Gt\Dom\DOMTokenList;
 class HTMLLinkElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/as */
 	protected function __prop_get_as():string {
-
+		return $this->getAttribute("as") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/as */
 	protected function __prop_set_as(string $value):void {
-
+		$this->setAttribute("as", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/disabled */
