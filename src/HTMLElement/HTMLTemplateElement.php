@@ -12,7 +12,13 @@ use Gt\Dom\DocumentFragment;
  * @property-read DocumentFragment $content
  */
 class HTMLTemplateElement extends HTMLElement {
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTemplateElement/content */
 	protected function __prop_get_content():DocumentFragment {
+		$fragment = $this->ownerDocument->createDocumentFragment();
+		foreach($this->childNodes as $childNode) {
+			$fragment->appendChild($childNode->cloneNode(true));
+		}
 
+		return $fragment;
 	}
 }

@@ -123,7 +123,10 @@ abstract class Node {
 
 		$nativeDomChild = $aChild->domNode;
 		try {
-			$this->domNode->appendChild($nativeDomChild);
+			$nativeAppended = $this->domNode->appendChild(
+				$nativeDomChild
+			);
+			$aChild = $this->ownerDocument->getGtDomNode($nativeAppended);
 		}
 		/** @noinspection PhpRedundantCatchClauseInspection */
 		catch(NativeDOMException $exception) {
