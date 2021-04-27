@@ -16,4 +16,10 @@ class HTMLSourceElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("source");
 		self::assertPropertyAttributeCorrelate($sut, "sizes");
 	}
+
+	public function testSrc():void {
+		/** @var HTMLSourceElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("source");
+		self::assertPropertyAttributeCorrelate($sut, "src");
+	}
 }
