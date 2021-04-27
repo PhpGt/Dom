@@ -19,12 +19,12 @@ namespace Gt\Dom\HTMLElement;
 class HTMLTableCellElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement/abbr */
 	protected function __prop_get_abbr():string {
-
+		return $this->getAttribute("abbr") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement/abbr */
 	protected function __prop_set_abbr(string $value):void {
-
+		$this->setAttribute("abbr", $value);
 	}
 
 	protected function __prop_get_cellIndex():int {

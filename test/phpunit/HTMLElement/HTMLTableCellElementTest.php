@@ -14,4 +14,10 @@ class HTMLTableCellElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("th");
 		self::assertInstanceOf(HTMLTableCellElement::class, $sut);
 	}
+
+	public function testAbbr():void {
+		/** @var HTMLTableCellElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("th");
+		self::assertPropertyAttributeCorrelate($sut, "abbr");
+	}
 }
