@@ -80,10 +80,10 @@ class HTMLTableCellElement extends HTMLElement {
 	}
 
 	protected function __prop_get_scope():string {
-
+		return $this->getAttribute("scope") ?? "";
 	}
 
 	protected function __prop_set_scope(string $value):void {
-
+		$this->setAttribute("scope", $value);
 	}
 }

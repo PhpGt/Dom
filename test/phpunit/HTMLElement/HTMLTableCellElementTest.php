@@ -70,4 +70,10 @@ class HTMLTableCellElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("td");
 		self::assertPropertyAttributeCorrelateNumber($sut, "?int:1", "rowspan", "rowSpan");
 	}
+
+	public function testScope():void {
+		/** @var HTMLTableCellElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("td");
+		self::assertPropertyAttributeCorrelate($sut, "scope");
+	}
 }
