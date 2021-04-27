@@ -37,12 +37,17 @@ class HTMLLinkElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/disabled */
 	protected function __prop_get_disabled():bool {
-
+		return $this->hasAttribute("disabled");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/disabled */
 	protected function __prop_set_disabled(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("disabled", "");
+		}
+		else {
+			$this->removeAttribute("disabled");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/href */
