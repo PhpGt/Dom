@@ -10,4 +10,10 @@ class HTMLStyleElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("style");
 		self::assertPropertyAttributeCorrelate($sut, "media");
 	}
+
+	public function testType():void {
+		/** @var HTMLStyleElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("style");
+		self::assertPropertyAttributeCorrelate($sut, "type");
+	}
 }
