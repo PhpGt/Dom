@@ -35,11 +35,11 @@ class HTMLTrackElement extends HTMLElement {
 	}
 
 	protected function __prop_get_srclang():string {
-
+		return $this->getAttribute("srclang") ?? "";
 	}
 
 	protected function __prop_set_srclang(string $value):void {
-
+		$this->setAttribute("srclang", $value);
 	}
 
 	protected function __prop_get_label():string {
