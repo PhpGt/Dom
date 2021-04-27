@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\ClientSide\TextTrack;
+
 /**
  * The HTMLTrackElement interface represents an HTML <track> element within the
  * DOM. This element can be used as a child of either <audio> or <video> to
@@ -68,6 +70,6 @@ class HTMLTrackElement extends HTMLElement {
 	}
 
 	protected function __prop_get_track():TextTrack {
-
+		return new TextTrack();
 	}
 }

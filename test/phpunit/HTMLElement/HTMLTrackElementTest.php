@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
+use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\HTMLElement\HTMLTrackElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
@@ -39,5 +40,13 @@ class HTMLTrackElementTest extends HTMLElementTestCase {
 		/** @var HTMLTrackElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("track");
 		self::assertSame(0, $sut->readyState);
+	}
+
+	public function testTrack():void {
+		/** @var HTMLTrackElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("track");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$value = $sut->track;
 	}
 }
