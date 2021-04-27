@@ -36,11 +36,11 @@ class HTMLTextAreaElement extends HTMLElement {
 	use HTMLUIElement;
 
 	protected function __prop_get_autocapitalize():string {
-
+		return $this->getAttribute("autocapitalize") ?? "";
 	}
 
 	protected function __prop_set_autocapitalize(string $value):void {
-
+		$this->setAttribute("autocapitalize", $value);
 	}
 
 	protected function __prop_get_cols():int {
