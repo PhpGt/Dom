@@ -12,10 +12,14 @@ namespace Gt\Dom\HTMLElement;
  */
 class HTMLTableColElement extends HTMLElement {
 	protected function __prop_get_span():int {
+		if($this->hasAttribute("span")) {
+			return (int)$this->getAttribute("span");
+		}
 
+		return 1;
 	}
 
 	protected function __prop_set_span(int $value):void {
-
+		$this->setAttribute("span", (string)$value);
 	}
 }
