@@ -40,4 +40,11 @@ class HTMLScriptElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("script");
 		self::assertSame("", $sut->text);
 	}
+
+	public function testText():void {
+		/** @var HTMLScriptElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("script");
+		$sut->text = "alert('test')";
+		self::assertEquals("alert('test')", $sut->textContent);
+	}
 }
