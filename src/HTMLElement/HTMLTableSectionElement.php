@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\HTMLCollection;
 
 /**
@@ -39,10 +40,21 @@ class HTMLTableSectionElement extends HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableSectionElement/insertRow
 	 */
 	public function insertRow(int $index = null):HTMLTableRowElement {
+		if(is_null($index)) {
+			$index = $this->rows->length;
+		}
 
+		$insertAfter = $this->rows[$index - 1] ?? null;
+		/** @var HTMLTableRowElement $tr */
+		$tr = $this->ownerDocument->createElement("tr");
+		$this->insertBefore($tr, $insertAfter?->nextSibling);
+
+		return $tr;
 	}
 
 	protected function __prop_get_rows():HTMLCollection {
-
+		return HTMLCollectionFactory::create(
+			fn() => $this->getElementsByTagName("tr")
+		);
 	}
 }

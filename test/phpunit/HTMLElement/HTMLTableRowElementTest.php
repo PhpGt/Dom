@@ -2,6 +2,7 @@
 namespace Gt\Dom\Test\HTMLElement;
 
 use Gt\Dom\Exception\IndexIsNegativeOrGreaterThanAllowedAmountException;
+use Gt\Dom\HTMLElement\HTMLTableElement;
 use Gt\Dom\HTMLElement\HTMLTableRowElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
@@ -82,5 +83,124 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 		self::assertCount(1, $cells);
 		$sut->deleteCell(0);
 		self::assertCount(0, $cells);
+	}
+
+	public function testRowIndexNotInTable():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		self::assertSame(-1, $sut->rowIndex);
+	}
+
+	public function testRowIndex():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		$table = $sut->ownerDocument->createElement("table");
+		$table->appendChild($sut);
+		self::assertSame(0, $sut->rowIndex);
+
+		$table->prepend($sut->ownerDocument->createElement("td"));
+		$table->prepend($sut->ownerDocument->createElement("td"));
+		$table->prepend($sut->ownerDocument->createElement("td"));
+
+		self::assertSame(3, $sut->rowIndex);
+	}
+
+	public function testRowIndexSectionsBody():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		/** @var HTMLTableElement $table */
+		$table = $sut->ownerDocument->createElement("table");
+		$thead = $table->createTHead();
+		$thead->insertRow();
+		$thead->insertRow();
+		$thead->insertRow();
+		$tbody = $table->createTBody();
+		$tbody->insertRow();
+		$tbody->appendChild($sut);
+		$tfoot = $table->createTFoot();
+		$tfoot->insertRow();
+		$tfoot->insertRow();
+		$tfoot->insertRow();
+// Head, body and foot are out of order! This should not affect the row index.
+		$table->append($tfoot, $thead, $tbody);
+		self::assertSame(4, $sut->rowIndex);
+	}
+
+	public function testRowIndexSectionsHead():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		/** @var HTMLTableElement $table */
+		$table = $sut->ownerDocument->createElement("table");
+		$thead = $table->createTHead();
+		$thead->insertRow();
+		$thead->appendChild($sut);
+		$tbody = $table->createTBody();
+		$tbody->insertRow();
+		$tbody->insertRow();
+		$tbody->insertRow();
+		$tbody->insertRow();
+		$tbody->insertRow();
+		$tfoot = $table->createTFoot();
+		$tfoot->insertRow();
+		$tfoot->insertRow();
+		$tfoot->insertRow();
+		$tfoot->insertRow();
+// Head, body and foot are out of order! This should not affect the row index.
+		$table->append($tbody, $tfoot, $thead);
+		self::assertSame(1, $sut->rowIndex);
+	}
+
+	public function testRowIndexSectionsFoot():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		/** @var HTMLTableElement $table */
+		$table = $sut->ownerDocument->createElement("table");
+		$thead = $table->createTHead();
+		$thead->insertRow();
+		$thead->insertRow();
+		$tbody = $table->createTBody();
+		$tbody->insertRow();
+		$tbody->insertRow();
+		$tbody->insertRow();
+		$tbody->insertRow();
+		$tbody->insertRow();
+		$tfoot = $table->createTFoot();
+		$tfoot->insertRow();
+		$tfoot->insertRow();
+		$tfoot->insertRow();
+		$tfoot->insertRow();
+		$tfoot->appendChild($sut);
+// Head, body and foot are out of order! This should not affect the row index.
+		$table->append($tbody, $tfoot, $thead);
+		self::assertSame(11, $sut->rowIndex);
+	}
+
+	public function testRowIndexSectionsFootWithSectionsInOrder():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		/** @var HTMLTableElement $table */
+		$table = $sut->ownerDocument->createElement("table");
+		$thead = $table->createTHead();
+		$thead->insertRow();
+		$tbody = $table->createTBody();
+		$tbody->insertRow();
+		$tfoot = $table->createTFoot();
+		$tfoot->insertRow();
+		$tfoot->appendChild($sut);
+		$table->append($thead, $tbody, $tfoot);
+		self::assertSame(3, $sut->rowIndex);
+	}
+
+	public function testRowIndexSectionsFootWithEmptySections():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		/** @var HTMLTableElement $table */
+		$table = $sut->ownerDocument->createElement("table");
+		$thead = $table->createTHead();
+		$tbody = $table->createTBody();
+		$tfoot = $table->createTFoot();
+		$tfoot->appendChild($sut);
+		$table->append($thead, $tbody, $tfoot);
+		self::assertSame(0, $sut->rowIndex);
 	}
 }

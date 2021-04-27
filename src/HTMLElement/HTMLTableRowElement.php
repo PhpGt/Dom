@@ -68,12 +68,49 @@ class HTMLTableRowElement extends HTMLElement {
 		);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/cells */
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/rowIndex */
 	protected function __prop_get_rowIndex():int {
+		$table = $this;
+		while($table = $table->parentElement) {
+			if($table instanceof HTMLTableElement) {
+				break;
+			}
+		}
 
+		if($this->parentElement === $table) {
+			foreach($table?->children ?? [] as $i => $child) {
+				if($child === $this) {
+					return $i;
+				}
+			}
+		}
+
+		$headCount = 0;
+		foreach($table?->querySelectorAll("thead>tr") ?? [] as $headIndex => $headChild) {
+			$headCount ++;
+			if($headChild === $this) {
+				return $headIndex;
+			}
+		}
+
+		$bodyCount = 0;
+		foreach($table?->querySelectorAll("tbody>tr") ?? [] as $bodyIndex => $headChild) {
+			$bodyCount ++;
+			if($headChild === $this) {
+				return $headCount + $bodyIndex;
+			}
+		}
+
+		foreach($table?->querySelectorAll("tfoot>tr") ?? [] as $footIndex => $headChild) {
+			if($headChild === $this) {
+				return $headCount + $bodyCount + $footIndex;
+			}
+		}
+
+		return -1;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/rowIndex */
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/sectionRowIndex */
 	protected function __prop_get_sectionRowIndex():int {
 
 	}
