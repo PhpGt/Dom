@@ -21,4 +21,10 @@ class HTMLSelectElementTest extends HTMLElementTestCase {
 			self::assertEquals($i + 1, $sut->length);
 		}
 	}
+
+	public function testMultiple():void {
+		/** @var HTMLSelectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("select");
+		self::assertPropertyAttributeCorrelateBool($sut, "multiple");
+	}
 }

@@ -43,12 +43,17 @@ class HTMLSelectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/multiple */
 	protected function __prop_get_multiple():bool {
-
+		return $this->hasAttribute("multiple");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/multiple */
 	protected function __prop_set_multiple(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("multiple", "");
+		}
+		else {
+			$this->removeAttribute("multiple");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/options */
