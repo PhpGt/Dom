@@ -10,7 +10,6 @@ namespace Gt\Dom\HTMLElement;
  *
  * @property string $type Is a DOMString representing the MIME type of the script. It reflects the type attribute.
  * @property string $src Is a DOMString representing the URL of an external script. It reflects the src attribute.
- * @property string $charset Is a DOMString representing the character encoding of an external script. It reflects the charset attribute.
  * @property bool $async The async and defer attributes are Boolean attributes that control how the script should be executed. The defer and async attributes must not be specified if the src attribute is absent.
  * @property bool $defer The async and defer attributes are Boolean attributes that control how the script should be executed. The defer and async attributes must not be specified if the src attribute is absent.
  * @property string $crossOrigin Is a DOMString reflecting the CORS setting for the script element. For scripts from other origins, this controls if error information will be exposed.
@@ -39,24 +38,19 @@ class HTMLScriptElement extends HTMLElement {
 		$this->setAttribute("src", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/charset */
-	protected function __prop_get_charset():string {
-
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/charset */
-	protected function __prop_set_charset(string $value):void {
-
-	}
-
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/async */
 	protected function __prop_get_async():bool {
-
+		return $this->hasAttribute("async");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/async */
 	protected function __prop_set_async(bool $value):void {
-
+		if($value) {
+			$this->setAttribute("async", "");
+		}
+		else {
+			$this->removeAttribute("async");
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/defer */
