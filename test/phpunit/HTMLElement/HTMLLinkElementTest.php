@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
+use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\HTMLElement\HTMLLinkElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
@@ -66,5 +67,13 @@ class HTMLLinkElementTest extends HTMLElementTestCase {
 		/** @var HTMLLinkElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("link");
 		self::assertPropertyAttributeCorrelate($sut, "sizes");
+	}
+
+	public function testSheet():void {
+		/** @var HTMLLinkElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("link");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$value = $sut->sheet;
 	}
 }

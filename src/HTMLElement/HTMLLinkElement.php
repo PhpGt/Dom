@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\ClientSide\StyleSheet;
 use Gt\Dom\DOMTokenList;
 use Gt\Dom\Facade\DOMTokenListFactory;
 
@@ -122,7 +123,7 @@ class HTMLLinkElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/sheet */
 	protected function __prop_get_sheet():StyleSheet {
-
+		return new StyleSheet();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/type */
