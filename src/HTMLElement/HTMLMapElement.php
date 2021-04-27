@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
+use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\HTMLCollection;
 
 /**
@@ -26,6 +27,8 @@ class HTMLMapElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/areas */
 	protected function __prop_get_areas():HTMLCollection {
-
+		return HTMLCollectionFactory::create(
+			fn() => $this->getElementsByTagName("area")
+		);
 	}
 }
