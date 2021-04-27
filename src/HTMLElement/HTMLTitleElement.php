@@ -13,11 +13,11 @@ namespace Gt\Dom\HTMLElement;
 class HTMLTitleElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTitleElement/text */
 	protected function __prop_get_text():string {
-
+		return $this->innerText;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTitleElement/text */
 	protected function __prop_set_text(string $value):void {
-
+		$this->innerText = $value;
 	}
 }
