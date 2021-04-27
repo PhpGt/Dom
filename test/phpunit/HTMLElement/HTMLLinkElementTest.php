@@ -40,4 +40,10 @@ class HTMLLinkElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("link");
 		self::assertPropertyAttributeCorrelate($sut, "referrerpolicy", "referrerPolicy");
 	}
+
+	public function testRel():void {
+		/** @var HTMLLinkElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("link");
+		self::assertPropertyAttributeCorrelate($sut, "rel");
+	}
 }
