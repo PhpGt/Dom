@@ -107,4 +107,28 @@ class HTMLSelectElementTest extends HTMLElementTestCase {
 
 		self::assertCount(1, $sut->selectedOptions);
 	}
+
+	public function testSelectedOptionsMultiple():void {
+		/** @var HTMLSelectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("select");
+		$sut->multiple = true;
+
+		for($i = 0; $i < 10; $i++) {
+			/** @var HTMLOptionElement $option */
+			$option = $sut->ownerDocument->createElement("option");
+			$sut->appendChild($option);
+			$option->selected = true;
+		}
+
+		self::assertCount($i, $sut->selectedOptions);
+	}
+
+	public function testSize():void {
+		/** @var HTMLSelectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("select");
+		self::assertPropertyAttributeCorrelateNumber($sut, "?int:1", "size");
+		$sut->multiple = true;
+		$sut->removeAttribute("size");
+		self::assertPropertyAttributeCorrelateNumber($sut, "?int:4", "size");
+	}
 }

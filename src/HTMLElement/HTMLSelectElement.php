@@ -109,7 +109,11 @@ class HTMLSelectElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/size */
 	protected function __prop_get_size():int {
+		if($this->hasAttribute("size")) {
+			return (int)$this->getAttribute("size");
+		}
 
+		return $this->multiple ? 4 : 1;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/size */
