@@ -16,4 +16,10 @@ class HTMLMetaElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("meta");
 		self::assertPropertyAttributeCorrelate($sut, "http-equiv", "httpEquiv");
 	}
+
+	public function testName():void {
+		/** @var HTMLMetaElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("meta");
+		self::assertPropertyAttributeCorrelate($sut, "name");
+	}
 }
