@@ -20,4 +20,36 @@ class HTMLTableCellElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("th");
 		self::assertPropertyAttributeCorrelate($sut, "abbr");
 	}
+
+	public function testGetCellIndexNoTr():void {
+		/** @var HTMLTableCellElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("th");
+		self::assertSame(-1, $sut->cellIndex);
+	}
+
+	public function testGetCellIndexFirst():void {
+		/** @var HTMLTableCellElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("th");
+		$tr = $sut->ownerDocument->createElement("tr");
+		$tr->appendChild($sut);
+		self::assertSame(0, $sut->cellIndex);
+	}
+
+	public function testGetCellIndex():void {
+		/** @var HTMLTableCellElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("td");
+		$tr = $sut->ownerDocument->createElement("tr");
+
+		for($i = 0; $i < 10; $i++) {
+			$tr->appendChild($sut->ownerDocument->createElement("td"));
+		}
+
+		$tr->appendChild($sut);
+
+		for($i = 0; $i < 10; $i++) {
+			$tr->appendChild($sut->ownerDocument->createElement("td"));
+		}
+
+		self::assertSame(10, $sut->cellIndex);
+	}
 }

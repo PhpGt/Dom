@@ -27,12 +27,19 @@ class HTMLTableCellElement extends HTMLElement {
 		$this->setAttribute("abbr", $value);
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement/cellIndex */
 	protected function __prop_get_cellIndex():int {
+		if(!$this->parentElement instanceof HTMLTableRowElement) {
+			return -1;
+		}
 
-	}
+		foreach($this->parentElement->children as $i => $child) {
+			if($child === $this) {
+				break;
+			}
+		}
 
-	protected function __prop_set_cellIndex(int $value):void {
-
+		return $i;
 	}
 
 	protected function __prop_get_colSpan():int {
