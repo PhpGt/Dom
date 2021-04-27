@@ -19,11 +19,11 @@ namespace Gt\Dom\HTMLElement;
  */
 class HTMLTrackElement extends HTMLElement {
 	protected function __prop_get_kind():string {
-
+		return $this->getAttribute("kind") ?? "";
 	}
 
 	protected function __prop_set_kind(string $value):void {
-
+		$this->setAttribute("kind", $value);
 	}
 
 	protected function __prop_get_src():string {
