@@ -12,6 +12,13 @@ namespace Gt\Dom\HTMLElement;
  */
 class HTMLLegendElement extends HTMLElement {
 	protected function __prop_get_form():?HTMLFormElement {
+		$fieldset = $this;
+		while($fieldset = $fieldset->parentElement) {
+			if($fieldset instanceof HTMLFieldSetElement) {
+				return $fieldset->form;
+			}
+		}
 
+		return null;
 	}
 }
