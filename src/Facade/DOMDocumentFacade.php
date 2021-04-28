@@ -323,7 +323,9 @@ class DOMDocumentFacade extends DOMDocument {
 				$baseClass,
 				$extendedClass
 			)) {
+				// @codeCoverageIgnoreStart
 				throw new DOMException("Error registering $extendedClass");
+				// @codeCoverageIgnoreEnd
 			}
 		}
 	}
