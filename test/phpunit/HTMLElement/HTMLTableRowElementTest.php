@@ -74,6 +74,13 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 		self::assertSame($td3, $sut->getElementsByTagName("td")->item(3));
 	}
 
+	public function testInsertCellOutOfBounds():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		self::expectException(IndexSizeException::class);
+		$sut->insertCell(-1);
+	}
+
 	public function testCells():void {
 		/** @var HTMLTableRowElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("tr");

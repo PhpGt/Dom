@@ -51,6 +51,10 @@ class HTMLTableSectionElement extends HTMLElement {
 			$index = $this->rows->length;
 		}
 
+		if($index < 0) {
+			throw new IndexSizeException("Index or size is negative or greater than the allowed amount");
+		}
+
 		$insertAfter = $this->rows[$index - 1] ?? null;
 		/** @var HTMLTableRowElement $tr */
 		$tr = $this->ownerDocument->createElement("tr");

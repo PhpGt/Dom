@@ -1,7 +1,6 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\Exception\IndexIsNegativeOrGreaterThanAllowedAmountException;
 use Gt\Dom\Exception\IndexSizeException;
 use Gt\Dom\HTMLElement\HTMLTableSectionElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
@@ -38,6 +37,13 @@ class HTMLTableSectionElementTest extends HTMLElementTestCase {
 		$inBetween = $sut->insertRow(1);
 		self::assertCount(3, $sut->rows);
 		self::assertSame($inBetween, $sut->rows[1]);
+	}
+
+	public function testInsertRowOutOfBounds():void {
+		/** @var HTMLTableSectionElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tbody");
+		self::expectException(IndexSizeException::class);
+		$sut->insertRow(-1);
 	}
 
 	public function testRows():void {
