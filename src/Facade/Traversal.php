@@ -42,49 +42,35 @@ trait Traversal {
 					return NodeFilter::FILTER_ACCEPT;
 				}
 
-				$return = NodeFilter::FILTER_ACCEPT;
+				$matches = 0;
 				if($show & NodeFilter::SHOW_ELEMENT) {
-					if(!$node instanceof Element) {
-						$return = NodeFilter::FILTER_REJECT;
-					}
+					$matches += $node instanceof Element;
 				}
 				if($show & NodeFilter::SHOW_ATTRIBUTE) {
-					if(!$node instanceof Attr) {
-						$return = NodeFilter::FILTER_REJECT;
-					}
+					$matches += $node instanceof Attr;
 				}
 				if($show & NodeFilter::SHOW_TEXT) {
-					if(!$node instanceof Text) {
-						$return = NodeFilter::FILTER_REJECT;
-					}
+					$matches += $node instanceof Text;
 				}
 				if($show & NodeFilter::SHOW_PROCESSING_INSTRUCTION) {
-					if(!$node instanceof ProcessingInstruction) {
-						$return = NodeFilter::FILTER_REJECT;
-					}
+					$matches += $node instanceof ProcessingInstruction;
 				}
 				if($show & NodeFilter::SHOW_COMMENT) {
-					if(!$node instanceof Comment) {
-						$return = NodeFilter::FILTER_REJECT;
-					}
+					$matches += $node instanceof Comment;
 				}
 				if($show & NodeFilter::SHOW_DOCUMENT) {
-					if(!$node instanceof Document) {
-						$return = NodeFilter::FILTER_REJECT;
-					}
+					$matches += $node instanceof Document;
 				}
 				if($show & NodeFilter::SHOW_DOCUMENT_TYPE) {
-					if(!$node instanceof DocumentType) {
-						$return = NodeFilter::FILTER_REJECT;
-					}
+					$matches += $node instanceof DocumentType;
 				}
 				if($show & NodeFilter::SHOW_DOCUMENT_FRAGMENT) {
-					if(!$node instanceof DocumentFragment) {
-						$return = NodeFilter::FILTER_REJECT;
-					}
+					$matches += $node instanceof DocumentFragment;
 				}
 
-				return $return;
+				return $matches > 0
+					? NodeFilter::FILTER_ACCEPT
+					: NodeFilter::FILTER_REJECT;
 			};
 		}
 
