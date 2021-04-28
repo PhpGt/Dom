@@ -2,6 +2,7 @@
 namespace Gt\Dom\HTMLElement;
 
 use Gt\Dom\Exception\IndexIsNegativeOrGreaterThanAllowedAmountException;
+use Gt\Dom\Exception\IndexSizeException;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\HTMLCollection;
 
@@ -28,7 +29,7 @@ class HTMLTableRowElement extends HTMLElement {
 	 */
 	public function deleteCell(int $index):void {
 		if($index < 0 || $index >= $this->children->length) {
-			throw new IndexIsNegativeOrGreaterThanAllowedAmountException((string)$index);
+			throw new IndexSizeException("Index or size is negative or greater than the allowed amount");
 		}
 
 		$td = $this->getElementsByTagName("td")->item($index);

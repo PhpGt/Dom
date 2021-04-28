@@ -2,6 +2,7 @@
 namespace Gt\Dom\Test\HTMLElement;
 
 use Gt\Dom\Exception\IndexIsNegativeOrGreaterThanAllowedAmountException;
+use Gt\Dom\Exception\IndexSizeException;
 use Gt\Dom\HTMLElement\HTMLTableSectionElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
@@ -9,7 +10,7 @@ class HTMLTableSectionElementTest extends HTMLElementTestCase {
 	public function testDeleteRowNone():void {
 		/** @var HTMLTableSectionElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("tbody");
-		self::expectException(IndexIsNegativeOrGreaterThanAllowedAmountException::class);
+		self::expectException(IndexSizeException::class);
 		$sut->deleteRow(0);
 	}
 
