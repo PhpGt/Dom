@@ -38,9 +38,10 @@ class DOMImplementation {
 	):XMLDocument {
 		/** @var DOMDocumentFacade $nativeDocument */
 		$nativeDocument = $this->document->getNativeDomNode($this->document);
-		/** @var DOMDocumentType $nativeType */
+
 		$nativeType = null;
 		if($documentType) {
+			/** @var DOMDocumentType $nativeType */
 			$nativeType = $this->document->getNativeDomNode($documentType);
 		}
 		/** @var DOMDocumentFacade $nativeNewDocument */
