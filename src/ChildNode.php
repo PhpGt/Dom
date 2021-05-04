@@ -58,7 +58,18 @@ trait ChildNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/after
 	 */
 	public function after(string|Node...$nodes) {
+		/** @var Node $child */
+		$child = $this;
 
+		if($parentNode = $this->parentNode) {
+			/** @var Node $parentNode */
+			foreach($nodes as $node) {
+				if(is_string($node)) {
+					$node = $this->ownerDocument->createTextNode($node);
+				}
+				$parentNode->insertBefore($node, $child->nextSibling);
+			}
+		}
 	}
 
 	/**

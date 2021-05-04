@@ -46,4 +46,24 @@ class ChildNodeTest extends TestCase {
 		$sut->before("example");
 		self::assertInstanceOf(Text::class, $sut->previousSibling);
 	}
+
+	public function testAfterNoParent():void {
+		$sut = NodeTestFactory::createHTMLElement("div");
+		$exception = null;
+		try {
+			$sut->after("something");
+		}
+		catch(Throwable $exception) {}
+		self::assertNull($exception);
+	}
+
+	public function testAfter():void {
+		$sut = NodeTestFactory::createHTMLElement("div");
+		$parent = $sut->ownerDocument->createElement("example-parent");
+		$parent->appendChild($sut);
+
+		self::assertNull($sut->previousSibling);
+		$sut->after("example");
+		self::assertInstanceOf(Text::class, $sut->nextSibling);
+	}
 }
