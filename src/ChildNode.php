@@ -82,6 +82,17 @@ trait ChildNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/replaceWith
 	 */
 	public function replaceWith(string|Node...$nodes) {
+		/** @var Element $parent */
+		if($parent = $this->parentElement) {
+			$nextSibling = $this->nextSibling;
+			$this->remove();
 
+			foreach($nodes as $node) {
+				if(is_string($node)) {
+					$node = $this->ownerDocument->createTextNode($node);
+				}
+				$parent->insertBefore($node, $nextSibling);
+			}
+		}
 	}
 }

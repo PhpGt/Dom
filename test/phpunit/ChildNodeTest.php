@@ -2,6 +2,7 @@
 namespace Gt\Dom\Test;
 
 use Exception;
+use Gt\Dom\HTMLElement\HTMLDivElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use Gt\Dom\Text;
 use PHPUnit\Framework\TestCase;
@@ -65,5 +66,28 @@ class ChildNodeTest extends TestCase {
 		self::assertNull($sut->previousSibling);
 		$sut->after("example");
 		self::assertInstanceOf(Text::class, $sut->nextSibling);
+	}
+
+	public function testReplaceWithNoParent():void {
+		$sut = NodeTestFactory::createHTMLElement("div");
+		$exception = null;
+
+		try {
+			$sut->replaceWith("nothing");
+		}
+		catch(Throwable $exception) {}
+
+		self::assertNull($exception);
+	}
+
+	public function testReplaceWith():void {
+		$sut = NodeTestFactory::createHTMLElement("div");
+		$sut->innerHTML = "one";
+		$parent = $sut->ownerDocument->createElement("example-parent");
+		$parent->appendChild($sut);
+
+		self::assertSame("one", $parent->firstChild->textContent);
+		$sut->replaceWith("two");
+		self::assertSame("two", $parent->firstChild->textContent);
 	}
 }
