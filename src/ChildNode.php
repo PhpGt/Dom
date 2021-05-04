@@ -17,8 +17,8 @@ trait ChildNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
 	 */
 	public function remove():void {
-		if($parentNode = $this->domNode->parentNode) {
-			$parentNode->removeChild($this->domNode);
+		if($parentNode = $this->parentNode) {
+			$parentNode->removeChild($this);
 		}
 	}
 
@@ -33,7 +33,18 @@ trait ChildNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/before
 	 */
 	public function before(string|Node...$nodes) {
+		/** @var Node $child */
+		$child = $this;
 
+		if($parentNode = $this->parentNode) {
+			/** @var Node $parentNode */
+			foreach($nodes as $node) {
+				if(is_string($node)) {
+					$node = $this->ownerDocument->createTextNode($node);
+				}
+				$parentNode->insertBefore($node, $child);
+			}
+		}
 	}
 
 	/**
