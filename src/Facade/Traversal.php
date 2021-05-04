@@ -277,7 +277,7 @@ trait Traversal {
 	}
 
 	public function current():Node {
-		return $this->currentNode;
+		return $this->pCurrentNode;
 	}
 
 	public function next():void {
