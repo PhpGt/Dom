@@ -39,7 +39,10 @@ class DOMImplementation {
 		/** @var DOMDocumentFacade $nativeDocument */
 		$nativeDocument = $this->document->getNativeDomNode($this->document);
 		/** @var DOMDocumentType $nativeType */
-		$nativeType = $this->document->getNativeDomNode($documentType);
+		$nativeType = null;
+		if($documentType) {
+			$nativeType = $this->document->getNativeDomNode($documentType);
+		}
 		/** @var DOMDocumentFacade $nativeNewDocument */
 		$nativeNewDocument = $nativeDocument->implementation->createDocument(
 			$namespaceURI,
