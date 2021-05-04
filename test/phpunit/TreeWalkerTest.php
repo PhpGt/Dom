@@ -46,7 +46,7 @@ class TreeWalkerTest extends TestCase {
 		$root = self::createMock(Node::class);
 		$sut = TreeWalkerFactory::create(
 			$root,
-			0,
+			NodeFilter::SHOW_ALL,
 			$callable
 		);
 		$nodeFilter = $sut->filter;
@@ -391,5 +391,38 @@ class TreeWalkerTest extends TestCase {
 		self::assertEquals(NodeFilter::FILTER_ACCEPT, $sut->filter->acceptNode($comment));
 		self::assertEquals(NodeFilter::FILTER_REJECT, $sut->filter->acceptNode($element));
 		self::assertEquals(NodeFilter::FILTER_ACCEPT, $sut->filter->acceptNode($attribute));
+	}
+
+	public function testFirstChildFilter():void {
+		$document = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_COMMENT);
+		$sut = TreeWalkerFactory::create(
+			$document->body,
+			NodeFilter::SHOW_COMMENT
+		);
+		$firstChild = $sut->firstChild();
+		self::assertInstanceOf(Comment::class, $firstChild);
+	}
+
+	public function testFirstChildSkip():void {
+		$document = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_COMMENT);
+		$sut = TreeWalkerFactory::create(
+			$document->body,
+			NodeFilter::SHOW_ELEMENT,
+// Skip heading elements (of which there are two, surrounding the comment).
+			new class extends NodeFilter {
+				public function acceptNode(Node $node):int {
+					if($node instanceof HTMLHeadingElement) {
+						return NodeFilter::FILTER_SKIP;
+					}
+					if($node instanceof Comment) {
+						return NodeFilter::FILTER_ACCEPT;
+					}
+
+					return NodeFilter::FILTER_REJECT;
+				}
+			}
+		);
+		$firstChild = $sut->firstChild();
+		self::assertInstanceOf(Comment::class, $firstChild);
 	}
 }

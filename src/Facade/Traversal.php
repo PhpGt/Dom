@@ -36,58 +36,38 @@ trait Traversal {
 		$this->validity = null;
 
 		if(!$filter) {
-			$filter = function(Node $node):int {
-				$show = $this->pWhatToShow;
-				if($show === NodeFilter::SHOW_ALL) {
-					return NodeFilter::FILTER_ACCEPT;
-				}
-
-				$matches = 0;
-				if($show & NodeFilter::SHOW_ELEMENT) {
-					$matches += $node instanceof Element;
-				}
-				if($show & NodeFilter::SHOW_ATTRIBUTE) {
-					$matches += $node instanceof Attr;
-				}
-				if($show & NodeFilter::SHOW_TEXT) {
-					$matches += $node instanceof Text;
-				}
-				if($show & NodeFilter::SHOW_PROCESSING_INSTRUCTION) {
-					$matches += $node instanceof ProcessingInstruction;
-				}
-				if($show & NodeFilter::SHOW_COMMENT) {
-					$matches += $node instanceof Comment;
-				}
-				if($show & NodeFilter::SHOW_DOCUMENT) {
-					$matches += $node instanceof Document;
-				}
-				if($show & NodeFilter::SHOW_DOCUMENT_TYPE) {
-					$matches += $node instanceof DocumentType;
-				}
-				if($show & NodeFilter::SHOW_DOCUMENT_FRAGMENT) {
-					$matches += $node instanceof DocumentFragment;
-				}
-
-				return $matches > 0
-					? NodeFilter::FILTER_ACCEPT
-					: NodeFilter::FILTER_REJECT;
-			};
+			$filter = fn(Node $node) => $this->filterFunction($node);
 		}
 
 		if(is_callable($filter)) {
-			$filter = new class($filter) extends NodeFilter {
+			$filter = new class($filter, fn(Node $node) => $this->filterFunction($node)) extends NodeFilter {
 				/** @var callable */
 				private $callback;
+				/** @var callable */
+				private $defaultCallback;
 
-				public function __construct(callable $callback) {
+				public function __construct(
+					callable $callback,
+					callable $defaultFilterFunction
+				) {
 					$this->callback = $callback;
+					$this->defaultCallback = $defaultFilterFunction;
 				}
 
 				public function acceptNode(Node $node):int {
-					return call_user_func(
-						$this->callback,
+					$showFilter = call_user_func(
+						$this->defaultCallback,
 						$node
 					);
+					if($showFilter === NodeFilter::FILTER_ACCEPT) {
+						return call_user_func(
+							$this->callback,
+							$node
+						);
+					}
+					else {
+						return $showFilter;
+					}
 				}
 			};
 		}
@@ -322,6 +302,17 @@ trait Traversal {
 
 	private function traverseChildren(string $direction):?Node {
 		$node = $this->matchChild($this->pCurrentNode, $direction);
+		if(!$node) {
+			return null;
+		}
+		return $this->recurseTraverseChildren($node, $direction);
+	}
+
+	private function recurseTraverseChildren(
+		Node $node,
+		string $direction
+	):?Node {
+		$overrideNode = null;
 
 		while($node) {
 			$result = $this->filter->acceptNode($node);
@@ -330,33 +321,19 @@ trait Traversal {
 				return $node;
 			}
 			if($result === NodeFilter::FILTER_SKIP) {
+// Skip this element, but not its children.
+				$overrideNode = $node->nextSibling;
 				$child = $this->matchChild($node, $direction);
-				if($child) {
-					$node = $child;
-					continue;
+				while($child) {
+					$child = $this->recurseTraverseChildren($child, $direction);
 				}
 			}
 
-			while($node) {
-				$sibling = $this->matchChild($node, $direction);
-				if($sibling) {
-					$node = $sibling;
-					break;
-				}
-
-				$parent = $node->parentNode;
-				if(is_null($parent)
-					|| $parent === $this->pRoot
-					|| $parent === $this->pCurrentNode) {
-					return null;
-				}
-				else {
-					$node = $parent;
-				}
-			}
+			$node = $overrideNode ?? $node->nextSibling;
+			$overrideNode = null;
 		}
 
-		return null;
+		return $node;
 	}
 
 	private function traverseSiblings(string $direction):?Node {
@@ -365,41 +342,21 @@ trait Traversal {
 		if($node === $this->pRoot) {
 			return null;
 		}
-		while(true) {
-			$sibling = $this->matchSibling(
-				$node,
-				$direction
-			);
-			while($sibling) {
-				$node = $sibling;
-				$result = $this->filter->acceptNode($node);
-				if($result === NodeFilter::FILTER_ACCEPT) {
-					$this->pCurrentNode = $node;
-					return $node;
-				}
 
-				$sibling = $this->matchChild(
-					$node,
-					$direction
-				);
-				if($result === NodeFilter::FILTER_REJECT) {
-					$sibling = $this->matchSibling(
-						$node,
-						$direction
-					);
-				}
-			}
-
-			$node = $node->parentNode;
-			if(is_null($node)
-				|| $node === $this->pRoot) {
-				return null;
-			}
-
-			if($this->filter->acceptNode($node) === NodeFilter::FILTER_ACCEPT) {
-				return null;
+		$sibling = $this->matchSibling(
+			$node,
+			$direction
+		);
+		while($sibling) {
+			$node = $sibling;
+			$result = $this->filter->acceptNode($node);
+			if($result === NodeFilter::FILTER_ACCEPT) {
+				$this->pCurrentNode = $node;
+				break;
 			}
 		}
+
+		return $node;
 	}
 
 	private function matchChild(Node $node, string $direction):?Node {
@@ -440,5 +397,42 @@ trait Traversal {
 		}
 
 		return null;
+	}
+
+	private function filterFunction(Node $node):int {
+		$show = $this->pWhatToShow;
+		if($show === NodeFilter::SHOW_ALL) {
+			return NodeFilter::FILTER_ACCEPT;
+		}
+
+		$matches = 0;
+		if($show & NodeFilter::SHOW_ELEMENT) {
+			$matches += $node instanceof Element;
+		}
+		if($show & NodeFilter::SHOW_ATTRIBUTE) {
+			$matches += $node instanceof Attr;
+		}
+		if($show & NodeFilter::SHOW_TEXT) {
+			$matches += $node instanceof Text;
+		}
+		if($show & NodeFilter::SHOW_PROCESSING_INSTRUCTION) {
+			$matches += $node instanceof ProcessingInstruction;
+		}
+		if($show & NodeFilter::SHOW_COMMENT) {
+			$matches += $node instanceof Comment;
+		}
+		if($show & NodeFilter::SHOW_DOCUMENT) {
+			$matches += $node instanceof Document;
+		}
+		if($show & NodeFilter::SHOW_DOCUMENT_TYPE) {
+			$matches += $node instanceof DocumentType;
+		}
+		if($show & NodeFilter::SHOW_DOCUMENT_FRAGMENT) {
+			$matches += $node instanceof DocumentFragment;
+		}
+
+		return $matches > 0
+			? NodeFilter::FILTER_ACCEPT
+			: NodeFilter::FILTER_REJECT;
 	}
 }
