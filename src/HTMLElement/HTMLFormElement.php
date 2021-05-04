@@ -29,6 +29,8 @@ use Gt\Dom\HTMLFormControlsCollection;
  * @property string $acceptCharset A DOMString reflecting the value of the form's accept-charset HTML attribute, representing the character encoding that the server accepts.
  * @property string $autocomplete A DOMString reflecting the value of the form's autocomplete HTML attribute, indicating whether the controls in this form can have their values automatically populated by the browser.
  * @property bool $noValidate A Boolean reflecting the value of the form's novalidate HTML attribute, indicating whether the form should not be validated.
+ *
+ * @implements ArrayAccess<string, HTMLElement>
  */
 class HTMLFormElement extends HTMLElement implements ArrayAccess, Countable {
 	public function offsetExists(mixed $offset):bool {
