@@ -22,7 +22,7 @@ namespace Gt\Dom;
 class Text extends CharacterData {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Text/isElementContentWhitespace */
 	protected function __prop_get_isElementContentWhitespace():bool {
-
+		return strlen(trim($this->textContent)) === 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Text/wholeText */

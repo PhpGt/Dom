@@ -40,4 +40,15 @@ class NodeTestFactory {
 
 		return $document->createDocumentFragment();
 	}
+
+	public static function createTextNode(
+		string $content = "",
+		HTMLDocument $document = null
+	) {
+		if(!$document) {
+			$document = HTMLDocumentFactory::create("");
+		}
+
+		return $document->createTextNode($content);
+	}
 }
