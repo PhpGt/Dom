@@ -84,12 +84,12 @@ trait DocumentStream {
 	 */
 	public function seek($offset, $whence = SEEK_SET):void {
 		$this->fillStream();
-		$result = null;
+
 		try {
 			$result = fseek($this->stream, $offset, $whence);
 		}
 		finally {
-			if($result === -1 || $result === null) {
+			if($result === -1) {
 				throw new DocumentStreamSeekFailureException("Error seeking Document Stream");
 			}
 		}
