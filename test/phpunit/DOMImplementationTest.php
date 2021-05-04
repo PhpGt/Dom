@@ -21,4 +21,16 @@ class DOMImplementationTest extends TestCase {
 		);
 		self::assertInstanceOf(XMLDocument::class, $document);
 	}
+
+	public function testCreateDocumentType():void {
+		$sut = DocumentTestFactory::createDOMImplementation();
+		$documentType = $sut->createDocumentType(
+			"test",
+			"public",
+			"system"
+		);
+		self::assertSame("test", $documentType->nodeName);
+		self::assertSame("public", $documentType->publicId);
+		self::assertSame("system", $documentType->systemId);
+	}
 }

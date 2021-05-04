@@ -77,11 +77,17 @@ class DOMImplementation {
 		string $publicId,
 		string $systemId
 	):DocumentType {
-		$nativeType = $this->document->implementation->createDocumentType(
+		/** @var DOMDocumentFacade $nativeDocument */
+		$nativeDocument = $this->document->getNativeDomNode($this->document);
+		$nativeType = $nativeDocument->implementation->createDocumentType(
 			$qualifiedNameStr,
 			$publicId,
 			$systemId
 		);
+		/** @var DocumentType $gtType */
+		/** @noinspection PhpUnnecessaryLocalVariableInspection */
+		$gtType = $this->document->getGtDomNode($nativeType);
+		return $gtType;
 	}
 
 	/**

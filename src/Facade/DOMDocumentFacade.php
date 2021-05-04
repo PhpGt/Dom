@@ -121,6 +121,7 @@ class DOMDocumentFacade extends DOMDocument {
 		"Gt\Dom\Facade\NodeClass\DOMCommentFacade" => Comment::class,
 		"Gt\Dom\Facade\NodeClass\DOMDocumentFragmentFacade" => DocumentFragment::class,
 		"Gt\Dom\Facade\NodeClass\DOMProcessingInstructionFacade" => ProcessingInstruction::class,
+		"DOMDocumentType" => DocumentType::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::a" => HTMLAnchorElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::area" => HTMLAreaElement::class,
 		"Gt\Dom\Facade\NodeClass\DOMElementFacade::audio" => HTMLAudioElement::class,
