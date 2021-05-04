@@ -16,8 +16,10 @@ trait ChildNode {
 	 *
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
 	 */
-	public function remove() {
-
+	public function remove():void {
+		if($parentNode = $this->domNode->parentNode) {
+			$parentNode->removeChild($this->domNode);
+		}
 	}
 
 	/**

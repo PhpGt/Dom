@@ -576,16 +576,6 @@ class Element extends Node {
 	}
 
 	/**
-	 * The ChildNode.remove() method removes the object from the tree it
-	 * belongs to.
-	 *
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
-	 */
-	public function remove():void {
-		$this->domNode->parentNode->removeChild($this->domNode);
-	}
-
-	/**
 	 * The Element method removeAttribute() removes the attribute with the
 	 * specified name from the element.
 	 *
