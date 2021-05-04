@@ -163,7 +163,7 @@ trait HTMLAnchorOrAreaElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/port */
 	protected function __prop_set_port(string $value):void {
 		$this->href = $this->buildUrl(
-			port: $value
+			port: (int)$value
 		);
 	}
 
