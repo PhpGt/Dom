@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\Exception\IndexSizeException;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -50,5 +51,22 @@ class TextTest extends TestCase {
 		$parent = $sut->ownerDocument->createElement("test-parent");
 		$parent->append($test1, $test2, $sut, $test3, $test4);
 		self::assertSame("twotestthree", $sut->wholeText);
+	}
+
+	public function testSplitTextZero():void {
+		$sut = NodeTestFactory::createTextNode("test");
+		self::assertSame("test", $sut->splitText(0)->textContent);
+	}
+
+	public function testSplitTextIndex():void {
+		$sut = NodeTestFactory::createTextNode("test");
+		self::assertSame("st", $sut->splitText(2)->textContent);
+	}
+
+	public function testSplitTextOutOfBounds():void {
+		$sut = NodeTestFactory::createTextNode("test");
+		self::expectException(IndexSizeException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$value = $sut->splitText(200);
 	}
 }

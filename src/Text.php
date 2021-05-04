@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\Dom\Exception\IndexSizeException;
+
 /**
  * The Text interface represents the textual content of Element or Attr.
  *
@@ -70,6 +72,11 @@ class Text extends CharacterData {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Text/splitText
 	 */
 	public function splitText(int $offset):Text {
-
+		if($offset > strlen($this->textContent)
+		|| $offset < 0) {
+			throw new IndexSizeException("Index or size is negative or greater than the allowed amount");
+		}
+		$text = substr($this->textContent, $offset);
+		return $this->ownerDocument->createTextNode($text);
 	}
 }
