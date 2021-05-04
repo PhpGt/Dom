@@ -17,31 +17,25 @@ namespace Gt\Dom;
 trait NonDocumentTypeChildNode {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NonDocumentTypeChildNode/nextElementSibling */
 	protected function __prop_get_nextElementSibling():?Element {
-		$sibling = $this->nextSibling;
-		while($sibling) {
-			if($sibling instanceof Element) {
-				continue;
+		$context = $this;
+		while($context = $context->nextSibling) {
+			if($context instanceof Element) {
+				return $context;
 			}
-
-			$sibling = $sibling->nextSibling;
 		}
 
-		/** @var Element|null $sibling */
-		return $sibling;
+		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NonDocumentTypeChildNode/previousElementSibling */
 	protected function __prop_get_previousElementSibling():?Element {
-		$sibling = $this->previousSibling;
-		while($sibling) {
-			if(!$sibling instanceof Element) {
-				continue;
+		$context = $this;
+		while($context = $context->previousSibling) {
+			if($context instanceof Element) {
+				return $context;
 			}
-
-			$sibling = $sibling->previousSibling;
 		}
 
-		/** @var Element|null $sibling */
-		return $sibling;
+		return null;
 	}
 }
