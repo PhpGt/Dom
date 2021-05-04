@@ -2,6 +2,7 @@
 namespace Gt\Dom\Test\TestFactory;
 
 use Gt\Dom\Document;
+use Gt\Dom\DocumentFragment;
 use Gt\Dom\Element;
 use Gt\Dom\Facade\HTMLDocumentFactory;
 use Gt\Dom\HTMLDocument;
@@ -28,5 +29,15 @@ class NodeTestFactory {
 		}
 
 		return $document->createElement($tagName);
+	}
+
+	public static function createFragment(
+		HTMLDocument $document = null
+	):DocumentFragment {
+		if(!$document) {
+			$document = HTMLDocumentFactory::create("");
+		}
+
+		return $document->createDocumentFragment();
 	}
 }
