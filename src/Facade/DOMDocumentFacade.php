@@ -245,6 +245,7 @@ class DOMDocumentFacade extends DOMDocument {
 		return $this->domNodeList[$key];
 	}
 
+	/** @return DOMNodeList<DOMNode> */
 	public function query(
 		string $expression,
 		DOMNode $contextNode = null
