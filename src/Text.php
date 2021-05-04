@@ -27,7 +27,25 @@ class Text extends CharacterData {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Text/wholeText */
 	protected function __prop_get_wholeText():string {
+		$text = $this->textContent;
 
+		$context = $this;
+		while($context = $context->previousSibling) {
+			if(!$context instanceof Text) {
+				break;
+			}
+			$text = $context->textContent . $text;
+		}
+
+		$context = $this;
+		while($context = $context->nextSibling) {
+			if(!$context instanceof Text) {
+				break;
+			}
+			$text = $text . $context->textContent;
+		}
+
+		return $text;
 	}
 
 	/**
