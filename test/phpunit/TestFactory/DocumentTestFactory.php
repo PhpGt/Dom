@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test\TestFactory;
 
+use Gt\Dom\DOMImplementation;
 use Gt\Dom\DOMParser;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\XMLDocument;
@@ -275,5 +276,10 @@ XML;
 	):XMLDocument {
 		$parser = new DOMParser();
 		return $parser->parseFromString($xml, "text/xml");
+	}
+
+	public static function createDOMImplementation():DOMImplementation {
+		$document = self::createHTMLDocument();
+		return $document->implementation;
 	}
 }

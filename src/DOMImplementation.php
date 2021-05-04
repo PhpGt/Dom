@@ -9,6 +9,8 @@ namespace Gt\Dom;
  * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation
  */
 class DOMImplementation {
+	protected function __construct(private DocumentType $type) {}
+
 	/**
 	 * The DOMImplementation.createDocument() method creates and returns an
 	 * XMLDocument.
@@ -24,7 +26,11 @@ class DOMImplementation {
 	 * @return XMLDocument
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/createDocument
 	 */
-	public function createDocument(string $namespaceURI, string $qualifiedNameStr, DocumentType $documentType = null):XMLDocument {
+	public function createDocument(
+		string $namespaceURI,
+		string $qualifiedNameStr,
+		DocumentType $documentType = null
+	):XMLDocument {
 
 	}
 
@@ -44,7 +50,11 @@ class DOMImplementation {
 	 * @return DocumentType
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/createDocumentType
 	 */
-	public function createDocumentType(string $qualifiedNameStr, string $publicId, string $systemId):DocumentType {
+	public function createDocumentType(
+		string $qualifiedNameStr,
+		string $publicId,
+		string $systemId
+	):DocumentType {
 
 	}
 
@@ -57,7 +67,24 @@ class DOMImplementation {
 	 * @return HTMLDocument
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/createHTMLDocument
 	 */
-	public function createHTMLDocument(string $title = ""):HTMLDocument {
+	public function createHTMLDocument(
+		string $title = ""
+	):HTMLDocument {
 
+	}
+
+	/**
+	 * Returns a Boolean indicating if a given feature is supported or not.
+	 * This function is unreliable and kept for compatibility purpose alone:
+	 * except for SVG-related queries, it always returns true.
+	 * Old browsers are very inconsistent in their behavior.
+	 *
+	 * @param string $feature
+	 * @param string $version
+	 * @return bool
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/hasFeature
+	 */
+	public function hasFeature(string $feature, string $version):bool {
+		return true;
 	}
 }

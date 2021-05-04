@@ -7,6 +7,7 @@ use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Exception\NotSupportedException;
 use Gt\Dom\Facade\DOMDocumentFacade;
+use Gt\Dom\Facade\DOMImplementationFactory;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
 use Gt\Dom\Facade\NodeIteratorFactory;
@@ -34,6 +35,7 @@ use Psr\Http\Message\StreamInterface;
  * @property-read HTMLCollection $forms Returns a list of the <form> elements within the current document.
  * @property-read ?HTMLHeadElement $head Returns the <head> element of the current document.
  * @property-read HTMLCollection $images Returns a list of the images in the current document.
+ * @property-read DOMImplementation $implementation Returns the DOM implementation associated with the current document.
  * @property-read HTMLCollection $links Returns a list of all the hyperlinks in the document.
  * @property-read HTMLCollection $scripts Returns all the script elements on the document.
  */
@@ -156,6 +158,10 @@ class Document extends Node implements StreamInterface {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/images */
 	protected function __prop_get_images():HTMLCollection {
 		return $this->getElementsByTagName("img");
+	}
+
+	protected function __prop_get_implementation():DOMImplementation {
+		return DOMImplementationFactory::create($this->doctype);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/links */
