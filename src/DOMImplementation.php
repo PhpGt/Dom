@@ -102,6 +102,9 @@ class DOMImplementation {
 	public function createHTMLDocument(
 		string $title = ""
 	):HTMLDocument {
+		$document = HTMLDocumentFactory::create(HTMLDocumentFactory::EMPTY_DOCUMENT_STRING);
+		$document->title = $title;
+		return $document;
 	}
 
 	/**

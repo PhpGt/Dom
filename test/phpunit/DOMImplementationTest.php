@@ -33,4 +33,10 @@ class DOMImplementationTest extends TestCase {
 		self::assertSame("public", $documentType->publicId);
 		self::assertSame("system", $documentType->systemId);
 	}
+
+	public function testCreateHTMLDocument():void {
+		$sut = DocumentTestFactory::createDOMImplementation();
+		$document = $sut->createHTMLDocument("example");
+		self::assertSame("example", $document->title);
+	}
 }
