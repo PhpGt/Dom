@@ -1,6 +1,12 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\Attr;
+use Gt\Dom\Comment;
+use Gt\Dom\Document;
+use Gt\Dom\DocumentFragment;
+use Gt\Dom\DocumentType;
+use Gt\Dom\Element;
 use Gt\Dom\Facade\TreeWalkerFactory;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadingElement;
@@ -9,6 +15,7 @@ use Gt\Dom\HTMLElement\HTMLLiElement;
 use Gt\Dom\HTMLElement\HTMLUListElement;
 use Gt\Dom\Node;
 use Gt\Dom\NodeFilter;
+use Gt\Dom\ProcessingInstruction;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use Gt\Dom\Text;
@@ -298,5 +305,91 @@ class TreeWalkerTest extends TestCase {
 				self::assertInstanceOf(Text::class, $node);
 			}
 		}
+	}
+
+	public function testAttribute():void {
+		$document = DocumentTestFactory::createHTMLDocument();
+		$sut = TreeWalkerFactory::create(
+			$document->documentElement,
+			NodeFilter::SHOW_ATTRIBUTE
+		);
+		$attr = self::createMock(Attr::class);
+		$element = self::createMock(Element::class);
+		self::assertEquals(NodeFilter::FILTER_ACCEPT, $sut->filter->acceptNode($attr));
+		self::assertEquals(NodeFilter::FILTER_REJECT, $sut->filter->acceptNode($element));
+	}
+
+	public function testProcessingInstruction():void {
+		$document = DocumentTestFactory::createHTMLDocument();
+		$sut = TreeWalkerFactory::create(
+			$document->documentElement,
+			NodeFilter::SHOW_PROCESSING_INSTRUCTION
+		);
+		$pin = self::createMock(ProcessingInstruction::class);
+		$element = self::createMock(Element::class);
+		self::assertEquals(NodeFilter::FILTER_ACCEPT, $sut->filter->acceptNode($pin));
+		self::assertEquals(NodeFilter::FILTER_REJECT, $sut->filter->acceptNode($element));
+	}
+
+	public function testComment():void {
+		$document = DocumentTestFactory::createHTMLDocument();
+		$sut = TreeWalkerFactory::create(
+			$document->documentElement,
+			NodeFilter::SHOW_COMMENT
+		);
+		$comment = self::createMock(Comment::class);
+		$element = self::createMock(Element::class);
+		self::assertEquals(NodeFilter::FILTER_ACCEPT, $sut->filter->acceptNode($comment));
+		self::assertEquals(NodeFilter::FILTER_REJECT, $sut->filter->acceptNode($element));
+	}
+
+	public function testDocument():void {
+		$document = DocumentTestFactory::createHTMLDocument();
+		$sut = TreeWalkerFactory::create(
+			$document->documentElement,
+			NodeFilter::SHOW_DOCUMENT
+		);
+		$doc = self::createMock(Document::class);
+		$element = self::createMock(Element::class);
+		self::assertEquals(NodeFilter::FILTER_ACCEPT, $sut->filter->acceptNode($doc));
+		self::assertEquals(NodeFilter::FILTER_REJECT, $sut->filter->acceptNode($element));
+	}
+
+	public function testDocType():void {
+		$document = DocumentTestFactory::createHTMLDocument();
+		$sut = TreeWalkerFactory::create(
+			$document->documentElement,
+			NodeFilter::SHOW_DOCUMENT_TYPE
+		);
+		$docType = self::createMock(DocumentType::class);
+		$element = self::createMock(Element::class);
+		self::assertEquals(NodeFilter::FILTER_ACCEPT, $sut->filter->acceptNode($docType));
+		self::assertEquals(NodeFilter::FILTER_REJECT, $sut->filter->acceptNode($element));
+	}
+
+	public function testDocFragment():void {
+		$document = DocumentTestFactory::createHTMLDocument();
+		$sut = TreeWalkerFactory::create(
+			$document->documentElement,
+			NodeFilter::SHOW_DOCUMENT_FRAGMENT
+		);
+		$fragment = self::createMock(DocumentFragment::class);
+		$element = self::createMock(Element::class);
+		self::assertEquals(NodeFilter::FILTER_ACCEPT, $sut->filter->acceptNode($fragment));
+		self::assertEquals(NodeFilter::FILTER_REJECT, $sut->filter->acceptNode($element));
+	}
+
+	public function testCommentOrAttribute():void {
+		$document = DocumentTestFactory::createHTMLDocument();
+		$sut = TreeWalkerFactory::create(
+			$document->documentElement,
+			NodeFilter::SHOW_COMMENT | NodeFilter::SHOW_ATTRIBUTE
+		);
+		$comment = self::createMock(Comment::class);
+		$attribute = self::createMock(Attr::class);
+		$element = self::createMock(Element::class);
+		self::assertEquals(NodeFilter::FILTER_ACCEPT, $sut->filter->acceptNode($comment));
+		self::assertEquals(NodeFilter::FILTER_REJECT, $sut->filter->acceptNode($element));
+		self::assertEquals(NodeFilter::FILTER_ACCEPT, $sut->filter->acceptNode($attribute));
 	}
 }

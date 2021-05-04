@@ -259,7 +259,7 @@ class HTMLElementTest extends TestCase {
 		$sut = HTMLElementTestFactory::create();
 		self::expectException(ClientSideOnlyFunctionalityException::class);
 		/** @noinspection PhpUnusedLocalVariableInspection */
-		$style = $sut->style;
+		$value = $sut->style;
 	}
 
 	public function testStyleSet():void {
