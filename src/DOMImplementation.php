@@ -1,6 +1,10 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\Dom\Facade\DOMDocumentFacade;
+use Gt\Dom\Facade\HTMLDocumentFactory;
+use Gt\Dom\Facade\XMLDocumentFactory;
+
 /**
  * The DOMImplementation interface represents an object providing methods which
  * are not dependent on any particular document. Such an object is returned by
@@ -9,7 +13,7 @@ namespace Gt\Dom;
  * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation
  */
 class DOMImplementation {
-	protected function __construct(private DocumentType $type) {}
+	protected function __construct(private Document $document) {}
 
 	/**
 	 * The DOMImplementation.createDocument() method creates and returns an
@@ -31,7 +35,25 @@ class DOMImplementation {
 		string $qualifiedNameStr,
 		DocumentType $documentType = null
 	):XMLDocument {
+		/** @var DOMDocumentFacade $nativeDocument */
+		$nativeDocument = $this->document->getNativeDomNode($this->document);
+		/** @var DOMDocumentFacade $nativeNewDocument */
+		$nativeNewDocument = $nativeDocument->implementation->createDocument(
+			$namespaceURI,
+			$qualifiedNameStr,
+			$documentType
+		);
 
+		$refXMLDocument = new \ReflectionClass(XMLDocument::class);
+		/** @var XMLDocument $document */
+		$document = $refXMLDocument->newInstanceWithoutConstructor();
+		$refConstructor = new \ReflectionMethod($document, "__construct");
+		$refConstructor->setAccessible(true);
+		call_user_func($refConstructor->getClosure($document), "");
+		$refProperty = new \ReflectionProperty($document, "domNode");
+		$refProperty->setAccessible(true);
+		$refProperty->setValue($document, $nativeNewDocument);
+		return $document;
 	}
 
 	/**
@@ -55,7 +77,11 @@ class DOMImplementation {
 		string $publicId,
 		string $systemId
 	):DocumentType {
-
+		$nativeType = $this->document->implementation->createDocumentType(
+			$qualifiedNameStr,
+			$publicId,
+			$systemId
+		);
 	}
 
 	/**
@@ -70,7 +96,6 @@ class DOMImplementation {
 	public function createHTMLDocument(
 		string $title = ""
 	):HTMLDocument {
-
 	}
 
 	/**
@@ -83,6 +108,7 @@ class DOMImplementation {
 	 * @param string $version
 	 * @return bool
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/hasFeature
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function hasFeature(string $feature, string $version):bool {
 		return true;

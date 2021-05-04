@@ -16,6 +16,7 @@ use Gt\Dom\Facade\TreeWalkerFactory;
 use Gt\Dom\Facade\XPathResultFactory;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
+use Gt\Dom\HTMLElement\HTMLTitleElement;
 use Gt\PropFunc\MagicProp;
 use Psr\Http\Message\StreamInterface;
 
@@ -38,6 +39,7 @@ use Psr\Http\Message\StreamInterface;
  * @property-read DOMImplementation $implementation Returns the DOM implementation associated with the current document.
  * @property-read HTMLCollection $links Returns a list of all the hyperlinks in the document.
  * @property-read HTMLCollection $scripts Returns all the script elements on the document.
+ * @property string $title Sets or gets the title of the current document.
  */
 class Document extends Node implements StreamInterface {
 	use MagicProp;
@@ -161,7 +163,7 @@ class Document extends Node implements StreamInterface {
 	}
 
 	protected function __prop_get_implementation():DOMImplementation {
-		return DOMImplementationFactory::create($this->doctype);
+		return DOMImplementationFactory::create($this);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/links */
@@ -199,6 +201,22 @@ class Document extends Node implements StreamInterface {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/scripts */
 	protected function __prop_get_scripts():HTMLCollection {
 		return $this->getElementsByTagName("script");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/title */
+	protected function __prop_get_title():string {
+		return $this->head?->getElementsByTagName("title")?->item(0)?->text ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/title */
+	protected function __prop_set_title(string $value):void {
+		if(!$titleElement = $this->head?->getElementsByTagName("title")?->item(0)) {
+			$titleElement = $this->createElement("title");
+			$this->head->appendChild($titleElement);
+		}
+
+		/** @var HTMLTitleElement $titleElement */
+		$titleElement->text = $value;
 	}
 
 	/**
