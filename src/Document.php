@@ -205,7 +205,9 @@ class Document extends Node implements StreamInterface {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/title */
 	protected function __prop_get_title():string {
-		return $this->head?->getElementsByTagName("title")?->item(0)?->text ?? "";
+		/** @var HTMLTitleElement|null $titleElement */
+		$titleElement = $this->head?->getElementsByTagName("title")?->item(0);
+		return $titleElement?->text ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/title */
@@ -370,10 +372,14 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
 	 */
 	public function createElement(string $tagName):Element {
+		$element = null;
+
 		try {
 			$domElement = $this->domDocument->createElement(
 				$tagName
 			);
+			/** @var Element $element */
+			$element = $this->domDocument->getGtDomNode($domElement);
 		}
 		/** @noinspection PhpRedundantCatchClauseInspection */
 		catch(DOMException $exception) {
@@ -382,8 +388,6 @@ class Document extends Node implements StreamInterface {
 			}
 		}
 
-		/** @var Element $element */
-		$element = $this->domDocument->getGtDomNode($domElement);
 		return $element;
 	}
 
