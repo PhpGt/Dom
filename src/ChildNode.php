@@ -32,16 +32,16 @@ trait ChildNode {
 	 * insert.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/before
 	 */
-	public function before(string|Node...$nodes) {
+	public function before(string|Node...$nodes):void {
 		/** @var Node $child */
 		$child = $this;
 
 		if($parentNode = $this->parentNode) {
-			/** @var Node $parentNode */
 			foreach($nodes as $node) {
 				if(is_string($node)) {
 					$node = $this->ownerDocument->createTextNode($node);
 				}
+				/** @var Node $parentNode */
 				$parentNode->insertBefore($node, $child);
 			}
 		}
@@ -57,16 +57,17 @@ trait ChildNode {
 	 * insert.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/after
 	 */
-	public function after(string|Node...$nodes) {
+	public function after(string|Node...$nodes):void {
 		/** @var Node $child */
 		$child = $this;
 
 		if($parentNode = $this->parentNode) {
-			/** @var Node $parentNode */
 			foreach($nodes as $node) {
+
 				if(is_string($node)) {
 					$node = $this->ownerDocument->createTextNode($node);
 				}
+				/** @var Node $parentNode */
 				$parentNode->insertBefore($node, $child->nextSibling);
 			}
 		}
@@ -81,8 +82,7 @@ trait ChildNode {
 	 * replace.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/replaceWith
 	 */
-	public function replaceWith(string|Node...$nodes) {
-		/** @var Element $parent */
+	public function replaceWith(string|Node...$nodes):void {
 		if($parent = $this->parentElement) {
 			$nextSibling = $this->nextSibling;
 			$this->remove();
@@ -91,6 +91,7 @@ trait ChildNode {
 				if(is_string($node)) {
 					$node = $this->ownerDocument->createTextNode($node);
 				}
+				/** @var Element $parent */
 				$parent->insertBefore($node, $nextSibling);
 			}
 		}
