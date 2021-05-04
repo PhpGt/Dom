@@ -33,6 +33,7 @@ class HTMLTableCellElement extends HTMLElement {
 			return -1;
 		}
 
+		$i = 0;
 		foreach($this->parentElement->children as $i => $child) {
 			if($child === $this) {
 				break;
