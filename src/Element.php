@@ -663,7 +663,7 @@ class Element extends Node {
 	 * @param bool $force A boolean value to determine whether the attribute
 	 * should be added or removed, no matter whether the attribute is
 	 * present or not at the moment.
-	 * @return true if attribute name is eventually present, and false
+	 * @return bool true if attribute name is eventually present, and false
 	 * otherwise.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/toggleAttribute
 	 */
@@ -682,7 +682,7 @@ class Element extends Node {
 		}
 
 		if($add) {
-			$this->setAttribute($name, true);
+			$this->setAttribute($name, "");
 			return true;
 		}
 		else {
