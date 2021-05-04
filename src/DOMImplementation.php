@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DOMDocumentType;
 use Gt\Dom\Facade\DOMDocumentFacade;
 use Gt\Dom\Facade\HTMLDocumentFactory;
 use Gt\Dom\Facade\XMLDocumentFactory;
@@ -37,11 +38,13 @@ class DOMImplementation {
 	):XMLDocument {
 		/** @var DOMDocumentFacade $nativeDocument */
 		$nativeDocument = $this->document->getNativeDomNode($this->document);
+		/** @var DOMDocumentType $nativeType */
+		$nativeType = $this->document->getNativeDomNode($documentType);
 		/** @var DOMDocumentFacade $nativeNewDocument */
 		$nativeNewDocument = $nativeDocument->implementation->createDocument(
 			$namespaceURI,
 			$qualifiedNameStr,
-			$documentType
+			$nativeType
 		);
 
 		$refXMLDocument = new \ReflectionClass(XMLDocument::class);
