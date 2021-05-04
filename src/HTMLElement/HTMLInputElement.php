@@ -417,7 +417,7 @@ class HTMLInputElement extends HTMLElement {
 
 		if(is_numeric($this->value)) {
 			$dateTime = new DateTimeImmutable();
-			return $dateTime->setTimestamp($this->value);
+			return $dateTime->setTimestamp((int)$this->value);
 		}
 
 		try {
