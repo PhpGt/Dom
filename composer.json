@@ -73,5 +73,12 @@
 		"psr-4": {
 		      "Gt\\Dom\\Test\\": "./test/phpunit"
 		}
-	}
+	},
+
+	"funding": [
+		{
+			"type": "github",
+			"url": "https://github.com/sponsors/PhpGt"
+		}
+	]
 }
