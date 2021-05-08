@@ -230,4 +230,74 @@ class DOMTokenListTest extends TestCase {
 		}
 		self::assertSame($data, $received);
 	}
+
+	public function testAdd_shouldCallMutator():void {
+		$mutatorCalls = 0;
+		$data = ["one", "two", "three"];
+		$accessor = function() use($data) {
+			return $data;
+		};
+		$mutator = function(string...$tokens) use(&$data, &$mutatorCalls) {
+			$data = $tokens;
+			$mutatorCalls++;
+		};
+
+		$sut = DOMTokenListFactory::create($accessor, $mutator);
+		$sut->add("four");
+		$sut->add("five");
+		$sut->add("six");
+		self::assertSame(3, $mutatorCalls);
+	}
+
+	public function testRemove_shouldCallMutator():void {
+		$mutatorCalls = 0;
+		$data = ["one", "two", "three"];
+		$accessor = function() use($data) {
+			return $data;
+		};
+		$mutator = function(string...$tokens) use(&$data, &$mutatorCalls) {
+			$data = $tokens;
+			$mutatorCalls++;
+		};
+
+		$sut = DOMTokenListFactory::create($accessor, $mutator);
+		$sut->remove("three");
+		$sut->add("two");
+		self::assertSame(2, $mutatorCalls);
+	}
+
+	public function testReplace_shouldCallMutator():void {
+		$mutatorCalls = 0;
+		$data = ["one", "two", "three"];
+		$accessor = function() use($data) {
+			return $data;
+		};
+		$mutator = function(string...$tokens) use(&$data, &$mutatorCalls) {
+			$data = $tokens;
+			$mutatorCalls++;
+		};
+
+		$sut = DOMTokenListFactory::create($accessor, $mutator);
+		$sut->replace("three", "THREE");
+		$sut->replace("one", "ONE");
+		self::assertSame(2, $mutatorCalls);
+	}
+
+	public function testToggle_shouldCallMutator():void {
+		$mutatorCalls = 0;
+		$data = ["one", "two", "three"];
+		$accessor = function() use($data) {
+			return $data;
+		};
+		$mutator = function(string...$tokens) use(&$data, &$mutatorCalls) {
+			$data = $tokens;
+			$mutatorCalls++;
+		};
+
+		$sut = DOMTokenListFactory::create($accessor, $mutator);
+		$sut->toggle("three");
+		$sut->toggle("one");
+		$sut->toggle("three");
+		self::assertSame(3, $mutatorCalls);
+	}
 }

@@ -122,6 +122,7 @@ class DOMTokenList implements Countable, Iterator {
 
 		$currentTokens = array_values($currentTokens);
 		$this->accessCallback = fn() => $currentTokens;
+		$this->callMutator(...$currentTokens);
 	}
 
 	/**
@@ -147,6 +148,7 @@ class DOMTokenList implements Countable, Iterator {
 
 		$currentTokens = array_values($currentTokens);
 		$this->accessCallback = fn() => $currentTokens;
+		$this->callMutator(...$currentTokens);
 		return true;
 	}
 
