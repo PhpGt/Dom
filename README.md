@@ -50,14 +50,15 @@ This is a simple example of how source HTML files can be treated as templates. T
 
 ```php
 <?php
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\HTMLElement\HTMLSpanElement;
 require "vendor/autoload.php";
 
 $html = file_get_contents("name.html");
-/** @var \Gt\Dom\HTMLDocument $document */
-$document = \Gt\Dom\Facade\HTMLDocumentFactory::create($html);
+$document = new HTMLDocument($html);
 
 if(isset($_GET["name"])) {
-	/** @var \Gt\Dom\HTMLElement\HTMLSpanElement $span */
+	/** @var HTMLSpanElement $span */
 	$span = $document->querySelector(".name-output");
 	$span->innerText = $_GET["name"];
 }
