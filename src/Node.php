@@ -406,8 +406,6 @@ abstract class Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/normalize
 	 */
 	public function normalize():void {
-		$previousChild = null;
-
 		for($i = $this->childNodes->length - 2; $i >= 0; $i--) {
 			$child = $this->childNodes->item($i);
 			if(!$child instanceof Text) {
@@ -584,6 +582,7 @@ abstract class Node {
 		}
 		/** @var DOMDocumentFacade $nativeDocument */
 		/** @var Document $gtDocument */
+		/** @noinspection PhpUnnecessaryLocalVariableInspection */
 		$gtDocument = $nativeDocument->getGtDomNode();
 		return $gtDocument;
 	}
