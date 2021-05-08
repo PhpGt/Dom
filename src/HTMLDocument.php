@@ -10,7 +10,7 @@ class HTMLDocument extends Document {
 	const EMPTY_DOCUMENT_STRING = "<!doctype html><html></html>";
 	const W3_NAMESPACE = "http://www.w3.org/1999/xhtml";
 
-	protected function __construct(string $html = "") {
+	public function __construct(string $html = "") {
 		parent::__construct();
 
 		if(strlen($html) === 0) {

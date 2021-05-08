@@ -4,7 +4,7 @@ namespace Gt\Dom;
 class XMLDocument extends Document {
 	const EMPTY_DOCUMENT_STRING = "<?xml ?>";
 
-	protected function __construct(string $xml = "") {
+	public function __construct(string $xml = "") {
 		parent::__construct();
 
 		if(strlen($xml) === 0) {

@@ -5,14 +5,18 @@ use Error;
 use Gt\Dom\Facade\HTMLDocumentFactory;
 use PHPUnit\Framework\TestCase;
 use Gt\Dom\HTMLDocument;
+use Throwable;
 
 class HTMLDocumentTest extends TestCase {
-	public function testCanNotConstruct():void {
-		self::expectException(Error::class);
-		self::expectExceptionMessage("Call to protected Gt\Dom\HTMLDocument::__construct()");
-		$className = HTMLDocument::class;
-		/** @phpstan-ignore-next-line */
-		new $className();
+	public function testCanConstruct():void {
+		$exception = null;
+
+		try {
+			new HTMLDocument();
+		}
+		catch(Throwable $exception) {}
+
+		self::assertNull($exception);
 	}
 
 	public function testCreatesRootNode():void {
