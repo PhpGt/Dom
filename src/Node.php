@@ -639,7 +639,12 @@ abstract class Node {
 
 		$text = "";
 		for($i = 0; $i < $len; $i++) {
-			$text .= $this->childNodes->item($i)->textContent;
+			$node = $this->childNodes->item($i);
+			if($node instanceof Comment
+			|| $node instanceof ProcessingInstruction) {
+				continue;
+			}
+			$text .= $node->textContent;
 		}
 		return $text;
 	}
