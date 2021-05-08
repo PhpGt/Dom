@@ -14,7 +14,7 @@ use Gt\Dom\Facade\DOMDocumentFacade;
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/XPathResult
  *
- * @implements Iterator<Node>
+ * @implements Iterator<Element>
  */
 class XPathResult implements Iterator {
 	/** @var DOMNodeList<DOMNode> */
@@ -22,9 +22,9 @@ class XPathResult implements Iterator {
 	private int $iteratorKey;
 
 	public function __construct(
-		private string $query,
-		private DOMDocumentFacade $document,
-		private DOMNode $context
+		string $query,
+		DOMDocumentFacade $document,
+		DOMNode $context
 	) {
 		$this->domNodeList = $document->query(
 			$query,
@@ -47,7 +47,7 @@ class XPathResult implements Iterator {
 		return $current;
 	}
 
-	public function current():?Node {
+	public function current():?Element {
 		$nativeNode = $this->domNodeList->item($this->iteratorKey);
 		if(!$nativeNode) {
 			return null;
@@ -55,7 +55,10 @@ class XPathResult implements Iterator {
 
 		/** @var DOMDocumentFacade $document */
 		$document = $nativeNode->ownerDocument;
-		return $document->getGtDomNode($nativeNode);
+		/** @var Element $element */
+		/** @noinspection PhpUnnecessaryLocalVariableInspection */
+		$element = $document->getGtDomNode($nativeNode);
+		return $element;
 	}
 
 	public function next():void {

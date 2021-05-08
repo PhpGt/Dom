@@ -96,7 +96,7 @@ class HTMLScriptElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/noModule */
 	protected function __prop_set_noModule(bool $value):void {
 		if($value) {
-			$this->setAttribute("nomodule", $value);
+			$this->setAttribute("nomodule", "");
 		}
 		else {
 			$this->removeAttribute("nomodule");

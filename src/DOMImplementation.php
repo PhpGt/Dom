@@ -1,6 +1,11 @@
 <?php
 namespace Gt\Dom;
 
+use DOMDocumentType;
+use Gt\Dom\Facade\DOMDocumentFacade;
+use Gt\Dom\Facade\HTMLDocumentFactory;
+use Gt\Dom\Facade\XMLDocumentFactory;
+
 /**
  * The DOMImplementation interface represents an object providing methods which
  * are not dependent on any particular document. Such an object is returned by
@@ -9,6 +14,8 @@ namespace Gt\Dom;
  * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation
  */
 class DOMImplementation {
+	protected function __construct(private Document $document) {}
+
 	/**
 	 * The DOMImplementation.createDocument() method creates and returns an
 	 * XMLDocument.
@@ -24,8 +31,36 @@ class DOMImplementation {
 	 * @return XMLDocument
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/createDocument
 	 */
-	public function createDocument(string $namespaceURI, string $qualifiedNameStr, DocumentType $documentType = null):XMLDocument {
+	public function createDocument(
+		string $namespaceURI,
+		string $qualifiedNameStr,
+		DocumentType $documentType = null
+	):XMLDocument {
+		/** @var DOMDocumentFacade $nativeDocument */
+		$nativeDocument = $this->document->getNativeDomNode($this->document);
 
+		$nativeType = null;
+		if($documentType) {
+			/** @var DOMDocumentType $nativeType */
+			$nativeType = $this->document->getNativeDomNode($documentType);
+		}
+		/** @var DOMDocumentFacade $nativeNewDocument */
+		$nativeNewDocument = $nativeDocument->implementation->createDocument(
+			$namespaceURI,
+			$qualifiedNameStr,
+			$nativeType
+		);
+
+		$refXMLDocument = new \ReflectionClass(XMLDocument::class);
+		/** @var XMLDocument $document */
+		$document = $refXMLDocument->newInstanceWithoutConstructor();
+		$refConstructor = new \ReflectionMethod($document, "__construct");
+		$refConstructor->setAccessible(true);
+		call_user_func($refConstructor->getClosure($document), "");
+		$refProperty = new \ReflectionProperty($document, "domNode");
+		$refProperty->setAccessible(true);
+		$refProperty->setValue($document, $nativeNewDocument);
+		return $document;
 	}
 
 	/**
@@ -44,8 +79,22 @@ class DOMImplementation {
 	 * @return DocumentType
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/createDocumentType
 	 */
-	public function createDocumentType(string $qualifiedNameStr, string $publicId, string $systemId):DocumentType {
-
+	public function createDocumentType(
+		string $qualifiedNameStr,
+		string $publicId,
+		string $systemId
+	):DocumentType {
+		/** @var DOMDocumentFacade $nativeDocument */
+		$nativeDocument = $this->document->getNativeDomNode($this->document);
+		$nativeType = $nativeDocument->implementation->createDocumentType(
+			$qualifiedNameStr,
+			$publicId,
+			$systemId
+		);
+		/** @var DocumentType $gtType */
+		/** @noinspection PhpUnnecessaryLocalVariableInspection */
+		$gtType = $this->document->getGtDomNode($nativeType);
+		return $gtType;
 	}
 
 	/**
@@ -57,7 +106,27 @@ class DOMImplementation {
 	 * @return HTMLDocument
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/createHTMLDocument
 	 */
-	public function createHTMLDocument(string $title = ""):HTMLDocument {
+	public function createHTMLDocument(
+		string $title = ""
+	):HTMLDocument {
+		$document = HTMLDocumentFactory::create(HTMLDocumentFactory::EMPTY_DOCUMENT_STRING);
+		$document->title = $title;
+		return $document;
+	}
 
+	/**
+	 * Returns a Boolean indicating if a given feature is supported or not.
+	 * This function is unreliable and kept for compatibility purpose alone:
+	 * except for SVG-related queries, it always returns true.
+	 * Old browsers are very inconsistent in their behavior.
+	 *
+	 * @param string $feature
+	 * @param string $version
+	 * @return bool
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/hasFeature
+	 * @noinspection PhpUnusedParameterInspection
+	 */
+	public function hasFeature(string $feature, string $version):bool {
+		return true;
 	}
 }

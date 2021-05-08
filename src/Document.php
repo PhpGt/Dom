@@ -7,6 +7,7 @@ use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Exception\NotSupportedException;
 use Gt\Dom\Facade\DOMDocumentFacade;
+use Gt\Dom\Facade\DOMImplementationFactory;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NodeClass\DOMNodeFacade;
 use Gt\Dom\Facade\NodeIteratorFactory;
@@ -15,6 +16,7 @@ use Gt\Dom\Facade\TreeWalkerFactory;
 use Gt\Dom\Facade\XPathResultFactory;
 use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
+use Gt\Dom\HTMLElement\HTMLTitleElement;
 use Gt\PropFunc\MagicProp;
 use Psr\Http\Message\StreamInterface;
 
@@ -34,8 +36,10 @@ use Psr\Http\Message\StreamInterface;
  * @property-read HTMLCollection $forms Returns a list of the <form> elements within the current document.
  * @property-read ?HTMLHeadElement $head Returns the <head> element of the current document.
  * @property-read HTMLCollection $images Returns a list of the images in the current document.
+ * @property-read DOMImplementation $implementation Returns the DOM implementation associated with the current document.
  * @property-read HTMLCollection $links Returns a list of all the hyperlinks in the document.
  * @property-read HTMLCollection $scripts Returns all the script elements on the document.
+ * @property string $title Sets or gets the title of the current document.
  */
 class Document extends Node implements StreamInterface {
 	use MagicProp;
@@ -158,6 +162,10 @@ class Document extends Node implements StreamInterface {
 		return $this->getElementsByTagName("img");
 	}
 
+	protected function __prop_get_implementation():DOMImplementation {
+		return DOMImplementationFactory::create($this);
+	}
+
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/links */
 	protected function __prop_get_links():HTMLCollection {
 		return HTMLCollectionFactory::create(function() {
@@ -193,6 +201,24 @@ class Document extends Node implements StreamInterface {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/scripts */
 	protected function __prop_get_scripts():HTMLCollection {
 		return $this->getElementsByTagName("script");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/title */
+	protected function __prop_get_title():string {
+		/** @var HTMLTitleElement|null $titleElement */
+		$titleElement = $this->head?->getElementsByTagName("title")?->item(0);
+		return $titleElement?->text ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/title */
+	protected function __prop_set_title(string $value):void {
+		if(!$titleElement = $this->head?->getElementsByTagName("title")?->item(0)) {
+			$titleElement = $this->createElement("title");
+			$this->head->appendChild($titleElement);
+		}
+
+		/** @var HTMLTitleElement $titleElement */
+		$titleElement->text = $value;
 	}
 
 	/**
@@ -346,10 +372,14 @@ class Document extends Node implements StreamInterface {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
 	 */
 	public function createElement(string $tagName):Element {
+		$element = null;
+
 		try {
 			$domElement = $this->domDocument->createElement(
 				$tagName
 			);
+			/** @var Element $element */
+			$element = $this->domDocument->getGtDomNode($domElement);
 		}
 		/** @noinspection PhpRedundantCatchClauseInspection */
 		catch(DOMException $exception) {
@@ -358,8 +388,6 @@ class Document extends Node implements StreamInterface {
 			}
 		}
 
-		/** @var Element $element */
-		$element = $this->domDocument->getGtDomNode($domElement);
 		return $element;
 	}
 

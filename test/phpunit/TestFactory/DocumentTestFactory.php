@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test\TestFactory;
 
+use Gt\Dom\DOMImplementation;
 use Gt\Dom\DOMParser;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\XMLDocument;
@@ -23,6 +24,21 @@ HTML;
        src="/media/cc0-videos/flower.mp4"
        width="250"
        height="200" />
+HTML;
+
+	const HTML_COMMENT = <<<HTML
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Comment test</title>
+</head>
+<body>
+	<h1>Hello, PHP.Gt!</h1>
+	<!-- this is a comment -->
+	<h2>There is a comment in this document</h2>
+</body>
+</html>
 HTML;
 
 
@@ -260,5 +276,10 @@ XML;
 	):XMLDocument {
 		$parser = new DOMParser();
 		return $parser->parseFromString($xml, "text/xml");
+	}
+
+	public static function createDOMImplementation():DOMImplementation {
+		$document = self::createHTMLDocument();
+		return $document->implementation;
 	}
 }

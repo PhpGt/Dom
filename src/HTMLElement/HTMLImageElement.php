@@ -81,7 +81,7 @@ class HTMLImageElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/height */
 	protected function __prop_set_height(int $value):void {
-		$this->setAttribute("height", $value);
+		$this->setAttribute("height", (string)$value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/isMap */

@@ -1,7 +1,6 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\ClientSide\ClientSideOnly;
 use Gt\Dom\ClientSide\CSSStyleDeclaration;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\EnumeratedValueException;

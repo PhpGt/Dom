@@ -1,6 +1,9 @@
 <?php
 namespace Gt\Dom;
 
+use DOMXPath;
+use Gt\Dom\Facade\DOMDocumentFacade;
+
 /**
  * The DocumentFragment interface represents a minimal document object that has
  * no parent. It is used as a lightweight version of Document that stores a
@@ -23,6 +26,18 @@ class DocumentFragment extends Node {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment/getElementById
 	 */
 	public function getElementById(string $id):?Element {
+		$nativeNode = $this->domNode;
+		/** @var DOMDocumentFacade $nativeDocument */
+		$nativeDocument = $this->ownerDocument->getNativeDomNode($this->ownerDocument);
+		$xpath = new DOMXPath($nativeDocument);
+		$result = $xpath->evaluate("*[@id='$id']", $nativeNode);
+		if($result->length === 0) {
+			return null;
+		}
 
+		/** @var Element $element */
+		/** @noinspection PhpUnnecessaryLocalVariableInspection */
+		$element = $this->ownerDocument->getGtDomNode($result->item(0));
+		return $element;
 	}
 }

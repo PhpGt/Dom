@@ -2,6 +2,7 @@
 namespace Gt\Dom\Test;
 
 use Gt\Dom\Element;
+use Gt\Dom\HTMLElement\HTMLDivElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use Gt\Dom\Text;
 use PHPUnit\Framework\TestCase;
@@ -273,5 +274,16 @@ class ParentNodeTest extends TestCase {
 		self::assertCount(3, $sut->querySelectorAll("child"));
 		self::assertCount(4, $sut->querySelectorAll("child, inner"));
 		self::assertCount(4, $sut->querySelectorAll("child, inner, inner>child, child>inner"));
+	}
+
+	public function testQuerySelectorAttributeWithoutValue():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<div data-test></div>";
+		$sut->ownerDocument->appendChild($sut);
+
+		$div = $sut->querySelector("div");
+		self::assertInstanceOf(HTMLDivElement::class, $div);
+
+		self::assertSame($div, $sut->ownerDocument->querySelector("[data-test='']"));
 	}
 }

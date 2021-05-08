@@ -30,7 +30,7 @@ Performing DOM manipulation in your server-side code enhances the way dynamic pa
 
 Consider a page with a form, with an input element to enter your name. When the form is submitted, the page should greet you by your name.
 
-This is a simple example of how source HTML files can be treated as templates. This can easily be applied to more advanced template pages to provide dynamic content, without requiring non-standard techniques such as `{{curly braces}}` for placeholders, or `echo '<div class='easy-mistake'>' . $content['opa'] . '</div>'` horrible HTML construction from within PHP.
+This is a simple example of how source HTML files can be treated as templates. This can easily be applied to more advanced template pages to provide dynamic content, without requiring non-standard techniques such as `{{curly braces}}` for placeholders, or `echo '<div class='easy-mistake'>' . $content['opa'] . '</div>'` error-prone HTML construction from within PHP.
 
 ### Source HTML (`name.html`)
 
@@ -53,33 +53,30 @@ This is a simple example of how source HTML files can be treated as templates. T
 require "vendor/autoload.php";
 
 $html = file_get_contents("name.html");
-$document = new \Gt\Dom\HTMLDocument($html);
+/** @var \Gt\Dom\HTMLDocument $document */
+$document = \Gt\Dom\Facade\HTMLDocumentFactory::create($html);
 
 if(isset($_GET["name"])) {
-	$document->querySelector(".name-output")->innerText = $_GET["name"];
+	/** @var \Gt\Dom\HTMLElement\HTMLSpanElement $span */
+	$span = $document->querySelector(".name-output");
+	$span->innerText = $_GET["name"];
 }
 
-echo $document->saveHTML();
+echo $document;
 ```
 
 ## Features at a glance
 
-+ DOM level 4 classes:
-	+ [`HTMLDocument`][mdn-HTMLDocument]
-	+ [`Element`][mdn-Element]
-	+ [`HTMLCollection`][mdn-HTMLCollection]
-	+ and more [extended DOM][mdn-DOM-levels] classes
-+ Standardised traits to add functionality in accordance with W3C
-+ Reference elements using CSS selectors via [`querySelector`][mdn-qs]([`All`][mdn-qsa])
-+ Add/remove/toggle elements' classes using [`ClassList`][mdn-classList]
-+ `Element` Nodes within the document traversable with W3C properties:
-	+ [`previousElementSibling`][mdn-pes] and [`nextElementSibling`][mdn-nes]
-	+ [`children`][mdn-children]
-	+ [`lastElementChild`][mdn-lec] and [`firstElementChild`][mdn-fec]
-+ [`Element::remove()`][mdn-remove] to detach it from the document
-+ Add elements around another using [`Element::before()`][mdn-before] and [`Element::after()`][mdn-after]
-+ Replace an element in place using [`Element::replaceWith()`][mdn-replaceWith]
-+ Standard collection properties on the `HTMLDocument`:
++ Compatible with W3C's DOM Living Standard:
+	+ Classes for all types of `HTMLElement`, such as `HTMLAnchorElement` (`<a>`), `HTMLButtonElement` (`<button>`), `HTMLInputElement` (`<input>`), `HTMLTableSectionElement` (`<thead>`, `<tbody>`, `<tfoot>`), etc.
+	+ `DOMException` extensions for catching different types of exception, such as `EnumeratedValueException`, `HierarchyRequestError`, `IndexSizeException`, etc.
+	+ Client-side functionality stubbed including classes for `FileList`, `StyleSheet`, `VideoTrackList`, `WindowProxy`, etc.
++ DOM level 4+ functionality:
+	+ Reference elements using CSS selectors via [`Element::querySelector()`][mdn-qs] and ([`Element::querySelectorAll()`][mdn-qsa])
+	+ Add/remove/toggle elements' classes using [`ClassList`][mdn-classList]
+	+ Traverse Element-only Nodes with [`Element::previousElementSibling`][mdn-pes], [`Element::nextElementSibling`][mdn-nes], [`Element::children`][mdn-children] and [`Element::lastElementChild`][mdn-lec] and [`firstElementChild`][mdn-fec], etc.
+	+ Insert and remove child Nodes with [`ChildNode::remove()`][mdn-remove], [`ChildNode::before`][mdn-before], [`ChildNode::after`][mdn-after], [`ChildNode::replaceWith()`][mdn-replaceWith]
++ Standard properties on the `HTMLDocument`:
 	+ [`anchors`][mdn-anchors]
 	+ [`forms`][mdn-forms]
 	+ [`image`][mdn-images]
@@ -87,9 +84,10 @@ echo $document->saveHTML();
 	+ [`scripts`][mdn-scripts]
 	+ [`title`][mdn-title]
 
-### Page template features
 
-This repository is intended to be as accurate to the DOM specification as possible. An extension to the repository is available at https://php.gt/domtemplate which adds page templating through custom elements and template attributes, introducing serverside functionality similar to that of WebComponents.
+### Data binding and page template features
+
+This repository is intended to be as accurate to the DOM specification as possible. An extension to the repository is available at https://php.gt/domtemplate which adds page templating and data binding through custom elements and template attributes, introducing serverside functionality similar to that of WebComponents.
 
 [mdn-HTMLDocument]: https://developer.mozilla.org/docs/Web/API/HTMLDocument
 [mdn-Element]: https://developer.mozilla.org/docs/Web/API/Element

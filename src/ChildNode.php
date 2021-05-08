@@ -16,8 +16,10 @@ trait ChildNode {
 	 *
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
 	 */
-	public function remove() {
-
+	public function remove():void {
+		if($parentNode = $this->parentNode) {
+			$parentNode->removeChild($this);
+		}
 	}
 
 	/**
@@ -30,8 +32,19 @@ trait ChildNode {
 	 * insert.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/before
 	 */
-	public function before(string|Node...$nodes) {
+	public function before(string|Node...$nodes):void {
+		/** @var Node $child */
+		$child = $this;
 
+		if($parentNode = $this->parentNode) {
+			foreach($nodes as $node) {
+				if(is_string($node)) {
+					$node = $this->ownerDocument->createTextNode($node);
+				}
+				/** @var Node $parentNode */
+				$parentNode->insertBefore($node, $child);
+			}
+		}
 	}
 
 	/**
@@ -44,8 +57,20 @@ trait ChildNode {
 	 * insert.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/after
 	 */
-	public function after(string|Node...$nodes) {
+	public function after(string|Node...$nodes):void {
+		/** @var Node $child */
+		$child = $this;
 
+		if($parentNode = $this->parentNode) {
+			foreach($nodes as $node) {
+
+				if(is_string($node)) {
+					$node = $this->ownerDocument->createTextNode($node);
+				}
+				/** @var Node $parentNode */
+				$parentNode->insertBefore($node, $child->nextSibling);
+			}
+		}
 	}
 
 	/**
@@ -57,7 +82,18 @@ trait ChildNode {
 	 * replace.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/replaceWith
 	 */
-	public function replaceWith(string|Node...$nodes) {
+	public function replaceWith(string|Node...$nodes):void {
+		if($parent = $this->parentElement) {
+			$nextSibling = $this->nextSibling;
+			$this->remove();
 
+			foreach($nodes as $node) {
+				if(is_string($node)) {
+					$node = $this->ownerDocument->createTextNode($node);
+				}
+				/** @var Element $parent */
+				$parent->insertBefore($node, $nextSibling);
+			}
+		}
 	}
 }

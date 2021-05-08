@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\Dom\Exception\IndexSizeException;
+
 /**
  * The Text interface represents the textual content of Element or Attr.
  *
@@ -22,12 +24,30 @@ namespace Gt\Dom;
 class Text extends CharacterData {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Text/isElementContentWhitespace */
 	protected function __prop_get_isElementContentWhitespace():bool {
-
+		return strlen(trim($this->textContent)) === 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Text/wholeText */
 	protected function __prop_get_wholeText():string {
+		$text = $this->textContent;
 
+		$context = $this;
+		while($context = $context->previousSibling) {
+			if(!$context instanceof Text) {
+				break;
+			}
+			$text = $context->textContent . $text;
+		}
+
+		$context = $this;
+		while($context = $context->nextSibling) {
+			if(!$context instanceof Text) {
+				break;
+			}
+			$text = $text . $context->textContent;
+		}
+
+		return $text;
 	}
 
 	/**
@@ -52,6 +72,11 @@ class Text extends CharacterData {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Text/splitText
 	 */
 	public function splitText(int $offset):Text {
-
+		if($offset > strlen($this->textContent)
+		|| $offset < 0) {
+			throw new IndexSizeException("Index or size is negative or greater than the allowed amount");
+		}
+		$text = substr($this->textContent, $offset);
+		return $this->ownerDocument->createTextNode($text);
 	}
 }
