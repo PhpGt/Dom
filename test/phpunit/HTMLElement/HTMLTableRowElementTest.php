@@ -1,7 +1,6 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\Exception\IndexIsNegativeOrGreaterThanAllowedAmountException;
 use Gt\Dom\Exception\IndexSizeException;
 use Gt\Dom\HTMLElement\HTMLTableElement;
 use Gt\Dom\HTMLElement\HTMLTableRowElement;
@@ -91,6 +90,18 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 		self::assertCount(1, $cells);
 		$sut->deleteCell(0);
 		self::assertCount(0, $cells);
+	}
+
+	public function testCells_returnsTdAndTh():void {
+		/** @var HTMLTableRowElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("tr");
+		$cells = $sut->cells;
+		$sut->innerHTML = "<td>One</td><td>Two</td><td>Three</td>";
+		self::assertCount(3, $cells);
+		$sut->innerHTML = "";
+		self::assertCount(0, $cells);
+		$sut->innerHTML = "<th>One</th><th>Two</th><th>Three</th>";
+		self::assertCount(3, $cells);
 	}
 
 	public function testRowIndexNotInTable():void {

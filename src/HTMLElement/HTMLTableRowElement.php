@@ -1,7 +1,6 @@
 <?php
 namespace Gt\Dom\HTMLElement;
 
-use Gt\Dom\Exception\IndexIsNegativeOrGreaterThanAllowedAmountException;
 use Gt\Dom\Exception\IndexSizeException;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\HTMLCollection;
@@ -69,7 +68,7 @@ class HTMLTableRowElement extends HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/cells */
 	protected function __prop_get_cells():HTMLCollection {
 		return HTMLCollectionFactory::create(
-			fn() => $this->getElementsByTagName("td")
+			fn() => $this->querySelectorAll("td, th")
 		);
 	}
 
