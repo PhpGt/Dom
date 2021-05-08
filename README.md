@@ -85,6 +85,27 @@ echo $document;
 	+ [`scripts`][mdn-scripts]
 	+ [`title`][mdn-title]
 
+### Known limitations / W3C spec compliance
+
+This repository aims to be as accurate as possible to the DOM specification at https://dom.spec.whatwg.org/ - as of v3.0.0 there are no known inconsistencies.
+
+The DOM specification does however define functionality that is only possible to implement on the client-side. For example, `HTMLInputElement::files` returns a `FileList` that enumerates all files that are selected by the user through the browser's interface. This kind of functionality is impossible to implement server-side, but has been stubbed out for consistency with the specification. Attempting to use client-side functionality within this library throws a `ClientSideOnlyFunctionalityException`. 
+
+The following classes extend the `ClientSideOnly` base class:
+
++ `AudioTrackList`
++ `CSSStyleDeclaration`
++ `FileList`
++ `MediaController`
++ `MediaError`
++ `MediaStream`
++ `StyleSheet`
++ `TextTrack`
++ `TextTrackList`
++ `TimeRanges`
++ `ValidityState`
++ `VideoTrackList`
++ `WindowProxy`
 
 ### Data binding and page template features
 
