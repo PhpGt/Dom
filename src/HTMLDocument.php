@@ -7,7 +7,8 @@ use Gt\Dom\HTMLElement\HTMLElement;
  * @method HTMLElement createElement(string $tagName)
  */
 class HTMLDocument extends Document {
-	const EMPTY_DOCUMENT_STRING = "<!doctype html><html><head></head><body></body></html>";
+	const DEFAULT_DOCTYPE = "<!doctype html>";
+	const EMPTY_DOCUMENT_STRING = self::DEFAULT_DOCTYPE . "<html><head></head><body></body></html>";
 	const W3_NAMESPACE = "http://www.w3.org/1999/xhtml";
 
 	public function __construct(string $html = "") {
@@ -15,6 +16,14 @@ class HTMLDocument extends Document {
 
 		if(strlen($html) === 0) {
 			$html = self::EMPTY_DOCUMENT_STRING;
+		}
+
+// Default the doctype to HTML5's doctype.
+		$posDoctype = stripos($html, "<!doctype");
+		$posFirstAngleBracket = strpos($html, "<");
+		if(false === $posDoctype
+		|| $posDoctype > $posFirstAngleBracket) {
+			$html = self::DEFAULT_DOCTYPE . $html;
 		}
 
 		$this->open();

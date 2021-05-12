@@ -7,6 +7,7 @@ use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\NotFoundErrorException;
 use Gt\Dom\Facade\DOMDocumentFacade;
 use Gt\Dom\Node;
+use Gt\Dom\ProcessingInstruction;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use Gt\Dom\Text;
 use PHPUnit\Framework\TestCase;
@@ -170,6 +171,16 @@ class NodeTest extends TestCase {
 		$textNode = $sut->childNodes[0];
 		self::assertInstanceOf(Text::class, $textNode);
 		self::assertEquals($message, $textNode->nodeValue);
+	}
+
+	public function testNode_textContent_ignoreProcessingInstruction():void {
+		$message1 = "123";
+		$message2 = "321";
+		$sut = NodeTestFactory::createNode("example");
+		$processingInstruction = $sut->ownerDocument->createProcessingInstruction("example-target", "example-data");
+		$sut->append($message1, $processingInstruction, $message2);
+
+		self::assertEquals("123321", $sut->textContent);
 	}
 
 	public function testNodeValueSetNoEffectOnElement():void {

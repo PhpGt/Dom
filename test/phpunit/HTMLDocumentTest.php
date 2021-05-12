@@ -36,4 +36,9 @@ class HTMLDocumentTest extends TestCase {
 			$sut->body->innerHTML
 		);
 	}
+
+//	public function testCreatedWithNoDocType():void {
+//		$sut = HTMLDocumentFactory::create("<html><body><h1>Hello!</h1></body></html>");
+//		echo $sut;
+//	}
 }
