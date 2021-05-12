@@ -1,10 +1,12 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\DocumentType;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\Dom\XMLDocument;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class DOMImplementationTest extends TestCase {
 	public function testHasFeature():void {
@@ -38,5 +40,22 @@ class DOMImplementationTest extends TestCase {
 		$sut = DocumentTestFactory::createDOMImplementation();
 		$document = $sut->createHTMLDocument("example");
 		self::assertSame("example", $document->title);
+	}
+
+	public function testCreateDocument_withExistingDocumentType():void {
+		$document = DocumentTestFactory::createHTMLDocument();
+		$sut = DocumentTestFactory::createDOMImplementation();
+		$newDocument = $sut->createDocument(
+			"example-ns",
+			"example-qn",
+			$document->doctype
+		);
+
+		/** @var DocumentType $newType */
+		$newType = $newDocument->doctype;
+		self::assertNotSame($document->doctype, $newType);
+		self::assertEquals($document->doctype->name, $newType->name);
+		self::assertEquals($document->doctype->systemId, $newType->systemId);
+		self::assertEquals($document->doctype->publicId, $newType->publicId);
 	}
 }

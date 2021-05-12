@@ -107,7 +107,7 @@ class Document extends Node implements StreamInterface {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/doctype */
 	protected function __prop_get_doctype():?DocumentType {
-		$domDoctype = $this->domDocument->doctype;
+		$domDoctype = $this->domDocument->getNativeDomNode($this)->doctype;
 		if(!$domDoctype) {
 			return null;
 		}

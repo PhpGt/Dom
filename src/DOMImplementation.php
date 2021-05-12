@@ -41,8 +41,11 @@ class DOMImplementation {
 
 		$nativeType = null;
 		if($documentType) {
-			/** @var DOMDocumentType $nativeType */
-			$nativeType = $this->document->getNativeDomNode($documentType);
+			$nativeType = $nativeDocument->implementation->createDocumentType(
+				$documentType->name,
+				$documentType->publicId,
+				$documentType->systemId
+			);
 		}
 		/** @var DOMDocumentFacade $nativeNewDocument */
 		$nativeNewDocument = $nativeDocument->implementation->createDocument(
@@ -57,9 +60,10 @@ class DOMImplementation {
 		$refConstructor = new \ReflectionMethod($document, "__construct");
 		$refConstructor->setAccessible(true);
 		call_user_func($refConstructor->getClosure($document), "");
-		$refProperty = new \ReflectionProperty($document, "domNode");
-		$refProperty->setAccessible(true);
-		$refProperty->setValue($document, $nativeNewDocument);
+		$refNodeProperty = new \ReflectionProperty($document, "domNode");
+		$refNodeProperty->setAccessible(true);
+		$refNodeProperty->setValue($document, $nativeNewDocument);
+
 		return $document;
 	}
 
