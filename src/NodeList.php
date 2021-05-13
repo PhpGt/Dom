@@ -3,7 +3,6 @@ namespace Gt\Dom;
 
 use ArrayAccess;
 use Countable;
-use Gt\Dom\Exception\NamedNodeMapImmutableException;
 use Gt\Dom\Exception\NodeListImmutableException;
 use Gt\Dom\Facade\NodeListFactory;
 use Gt\PropFunc\MagicProp;
