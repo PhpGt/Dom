@@ -20,8 +20,8 @@ use Traversable;
  * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList
  *
  * @property-read int $length The number of nodes in the NodeList.
- * @implements Iterator<int, Node>
- * @implements ArrayAccess<int, Node>
+ * @implements Iterator<int, Node|Element>
+ * @implements ArrayAccess<int, Node|Element>
  */
 class NodeList implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
@@ -66,7 +66,7 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * @return ?Node
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/item
 	 */
-	public function item(int $index):?Node {
+	public function item(int $index):Node|Element|null {
 		if(isset($this->nodeList)) {
 			if(isset($this->nodeList[$index])) {
 				return $this->nodeList[$index];
@@ -156,7 +156,7 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 		return isset($nodeArray[$offset]);
 	}
 
-	public function offsetGet($offset):?Node {
+	public function offsetGet($offset):Node|Element|null {
 		if(isset($this->nodeList)) {
 			return $this->nodeList[$offset] ?? null;
 		}
@@ -174,7 +174,7 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 		throw new NodeListImmutableException();
 	}
 
-	public function current():Node {
+	public function current():Node|Element {
 		if(isset($this->nodeList)) {
 			return $this->nodeList[$this->iteratorKey];
 		}
