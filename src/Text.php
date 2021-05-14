@@ -73,15 +73,16 @@ class Text extends CharacterData {
 	 */
 	public function splitText(int $offset):Text {
 		if($offset > strlen($this->textContent)
-		|| $offset < 0) {
+			|| $offset < 0) {
 			throw new IndexSizeException("Index or size is negative or greater than the allowed amount");
 		}
-		$substr = substr($this->textContent, $offset);
-		$this->textContent = substr($this->textContent, 0, $offset);
+		$substr = substr($this->data, $offset);
+		$this->data = substr($this->data, 0, $offset);
 		$newNode = $this->ownerDocument->createTextNode($substr);
 
 		if($this->parentNode) {
-			$this->parentNode->insertBefore($newNode, $this->nextSibling);
+			/** @var Text $newNode */
+			$newNode = $this->parentNode->insertBefore($newNode, $this->nextSibling);
 		}
 
 		return $newNode;
