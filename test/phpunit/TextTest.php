@@ -69,4 +69,36 @@ class TextTest extends TestCase {
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$value = $sut->splitText(200);
 	}
+
+	public function testSplitTextInsertsNewNode():void {
+		$sut = NodeTestFactory::createTextNode("Hello, {{name}}!");
+		$parent = $sut->ownerDocument->createElement("div");
+		$parent->appendChild($sut);
+		self::assertCount(1, $parent->childNodes);
+
+		$split = $sut->splitText(
+			strpos($sut->textContent, "{{")
+		);
+		self::assertCount(2, $parent->childNodes);
+		self::assertSame("Hello, ", $sut->textContent);
+		self::assertSame("{{name}}!", $split->textContent);
+		self::assertSame("Hello, {{name}}!", $parent->textContent);
+
+		$split->splitText(
+			strpos($split->textContent, "}}") + 2
+		);
+
+		self::assertSame("{{name}}", $split->textContent);
+
+// A test to emulate how a templating system can work:
+		self::assertSame(
+			"<div>Hello, {{name}}!</div>",
+			$parent->outerHTML
+		);
+		$split->textContent = "Cody";
+		self::assertSame(
+			"<div>Hello, Cody!</div>",
+			$parent->outerHTML
+		);
+	}
 }

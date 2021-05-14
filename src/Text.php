@@ -76,7 +76,14 @@ class Text extends CharacterData {
 		|| $offset < 0) {
 			throw new IndexSizeException("Index or size is negative or greater than the allowed amount");
 		}
-		$text = substr($this->textContent, $offset);
-		return $this->ownerDocument->createTextNode($text);
+		$substr = substr($this->textContent, $offset);
+		$this->textContent = substr($this->textContent, 0, $offset);
+		$newNode = $this->ownerDocument->createTextNode($substr);
+
+		if($this->parentNode) {
+			$this->parentNode->insertBefore($newNode, $this->nextSibling);
+		}
+
+		return $newNode;
 	}
 }

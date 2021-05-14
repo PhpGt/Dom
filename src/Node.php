@@ -654,7 +654,12 @@ abstract class Node {
 			$this->removeChild($this->firstChild);
 		}
 
-		$text = $this->ownerDocument->createTextNode($value);
-		$this->appendChild($text);
+		if($this instanceof Text) {
+			$this->nodeValue = $value;
+		}
+		else {
+			$text = $this->ownerDocument->createTextNode($value);
+			$this->appendChild($text);
+		}
 	}
 }
