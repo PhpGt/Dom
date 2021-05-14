@@ -14,7 +14,7 @@ use Gt\Dom\Facade\DOMDocumentFacade;
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/XPathResult
  *
- * @implements Iterator<Element>
+ * @implements Iterator<Element|Node>
  */
 class XPathResult implements Iterator {
 	/** @var DOMNodeList<DOMNode> */
@@ -47,7 +47,7 @@ class XPathResult implements Iterator {
 		return $current;
 	}
 
-	public function current():?Element {
+	public function current():Element|Node|null {
 		$nativeNode = $this->domNodeList->item($this->iteratorKey);
 		if(!$nativeNode) {
 			return null;
