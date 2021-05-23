@@ -7,6 +7,7 @@ use Gt\Dom\HTMLElement\HTMLOptionElement;
 
 /**
  * @method HTMLOptionElement current()
+ * @method HTMLOptionElement|null offsetGet($offset)
  * @implements Iterator<int, HTMLOptionElement>
  * @implements ArrayAccess<int, HTMLOptionElement>
  */

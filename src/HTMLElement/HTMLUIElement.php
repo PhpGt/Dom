@@ -159,7 +159,20 @@ trait HTMLUIElement {
 	}
 
 	protected function __prop_get_value():string {
-		return $this->getAttribute("value") ?? "";
+		$value = $this->getAttribute("value");
+		if(!is_null($value)) {
+			return $value;
+		}
+
+		if($this instanceof HTMLSelectElement) {
+			if($this->selectedIndex === -1) {
+				return "";
+			}
+
+			return $this->options[$this->selectedIndex]->value;
+		}
+
+		return $this->textContent;
 	}
 
 	protected function __prop_set_value(string $value):void {

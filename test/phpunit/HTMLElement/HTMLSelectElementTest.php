@@ -131,4 +131,24 @@ class HTMLSelectElementTest extends HTMLElementTestCase {
 		$sut->removeAttribute("size");
 		self::assertPropertyAttributeCorrelateNumber($sut, "?int:4", "size");
 	}
+
+	public function testValue_noValueAttribute():void {
+		/** @var HTMLSelectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("select");
+		$testValues = [
+			"One",
+			"Two",
+			"Three",
+		];
+		foreach($testValues as $testValue) {
+			$option = $sut->ownerDocument->createElement("option");
+			$option->textContent = $testValue;
+			$sut->appendChild($option);
+		}
+
+		$secondOption = $sut->options[1];
+		$secondOption->selected = true;
+
+		self::assertSame("Two", $sut->value);
+	}
 }
