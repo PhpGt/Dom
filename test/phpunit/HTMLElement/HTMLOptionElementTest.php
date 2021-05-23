@@ -95,4 +95,15 @@ class HTMLOptionElementTest extends HTMLElementTestCase {
 		$sut = NodeTestFactory::createHTMLElement("option");
 		self::assertPropertyAttributeCorrelate($sut, "value");
 	}
+
+	public function testValue_textContentRelationship():void {
+		/** @var HTMLOptionElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("option");
+		$sut->textContent = "Test";
+		self::assertSame("Test", $sut->value);
+
+		$sut->value = "123";
+		self::assertEquals("123", $sut->value);
+		self::assertSame("Test", $sut->textContent);
+	}
 }
