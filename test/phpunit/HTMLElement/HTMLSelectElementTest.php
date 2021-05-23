@@ -151,4 +151,21 @@ class HTMLSelectElementTest extends HTMLElementTestCase {
 
 		self::assertSame("Two", $sut->value);
 	}
+
+	public function testValue_noValueAttribute_nothingSelected():void {
+		/** @var HTMLSelectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("select");
+		$testValues = [
+			"One",
+			"Two",
+			"Three",
+		];
+		foreach($testValues as $testValue) {
+			$option = $sut->ownerDocument->createElement("option");
+			$option->textContent = $testValue;
+			$sut->appendChild($option);
+		}
+
+		self::assertSame("", $sut->value);
+	}
 }
