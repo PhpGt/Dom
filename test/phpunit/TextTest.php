@@ -1,40 +1,104 @@
 <?php
 namespace Gt\Dom\Test;
 
-use Gt\Dom\HTMLDocument;
-use Gt\Dom\Test\Helper\Helper;
+use Gt\Dom\Exception\IndexSizeException;
+use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
 
 class TextTest extends TestCase {
-	public function testIsElementContentWhitespace() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$firstChild = $document->body->firstChild;
-		$this->assertTrue($firstChild->isElementContentWhitespace());
-
-		$h1 = $document->querySelector("h1");
-		$h1Child = $h1->firstChild;
-		$this->assertFalse($h1Child->isElementContentWhitespace());
+	public function testIsElementContentWhitespaceEmptyContent():void {
+		$sut = NodeTestFactory::createTextNode("");
+		self::assertTrue($sut->isElementContentWhitespace);
 	}
 
-	public function testWholeText() {
-		$document = new HTMLDocument(Helper::HTML_TEXT);
-		$para = $document->querySelector("p");
-// Remove the <strong>
-		$para->childNodes[1]->remove();
-// WholeText should contain all text up to the link.
-		$textNode = $para->firstChild;
-		$this->assertStringContainsString("Thru-hiking is great!", $textNode->wholeText);
-		$this->assertStringContainsString(" However, ", $textNode->wholeText);
+	public function testIsElementContentWhitespaceNonEmptyContent():void {
+		$sut = NodeTestFactory::createTextNode("Hello, World");
+		self::assertFalse($sut->isElementContentWhitespace);
 	}
 
-	public function testSplitText() {
-		$document = new HTMLDocument(Helper::HTML_TEXT);
-		$para = $document->querySelector("p");
-		$textNode = $para->firstChild;
-		$textNode->splitText(4);
+	public function testIsElementContentWhitespaceJustSpacesAndTabsContent():void {
+		$sut = NodeTestFactory::createTextNode("   		  
+			          
+  	                ");
+		self::assertTrue($sut->isElementContentWhitespace);
+	}
 
-		$this->assertEquals("Thru", $para->firstChild->textContent);
-		$this->assertStringContainsString("-hiking is great!",
-			$para->firstChild->nextSibling->textContent);
+	public function testWholeTextEmpty():void {
+		$sut = NodeTestFactory::createTextNode();
+		self::assertSame("", $sut->wholeText);
+	}
+
+	public function testWholeTextSingle():void {
+		$sut = NodeTestFactory::createTextNode("test");
+		self::assertSame("test", $sut->wholeText);
+	}
+
+	public function testWholeTextSiblings():void {
+		$sut = NodeTestFactory::createTextNode("test");
+		$test1 = $sut->ownerDocument->createTextNode("one");
+		$test2 = $sut->ownerDocument->createTextNode("two");
+		$parent = $sut->ownerDocument->createElement("test-parent");
+		$parent->append($test1, $sut, $test2);
+		self::assertSame("onetesttwo", $sut->wholeText);
+	}
+
+	public function testWholeTextNonTextSiblings():void {
+		$sut = NodeTestFactory::createTextNode("test");
+		$test1 = $sut->ownerDocument->createElement("test-one");
+		$test2 = $sut->ownerDocument->createTextNode("two");
+		$test3 = $sut->ownerDocument->createTextNode("three");
+		$test4 = $sut->ownerDocument->createElement("test-four");
+		$parent = $sut->ownerDocument->createElement("test-parent");
+		$parent->append($test1, $test2, $sut, $test3, $test4);
+		self::assertSame("twotestthree", $sut->wholeText);
+	}
+
+	public function testSplitTextZero():void {
+		$sut = NodeTestFactory::createTextNode("test");
+		self::assertSame("test", $sut->splitText(0)->textContent);
+	}
+
+	public function testSplitTextIndex():void {
+		$sut = NodeTestFactory::createTextNode("test");
+		self::assertSame("st", $sut->splitText(2)->textContent);
+	}
+
+	public function testSplitTextOutOfBounds():void {
+		$sut = NodeTestFactory::createTextNode("test");
+		self::expectException(IndexSizeException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$value = $sut->splitText(200);
+	}
+
+	public function testSplitTextInsertsNewNode():void {
+		$sut = NodeTestFactory::createTextNode("Hello, {{name}}!");
+		$parent = $sut->ownerDocument->createElement("div");
+		$parent->appendChild($sut);
+		self::assertCount(1, $parent->childNodes);
+
+		$split = $sut->splitText(
+			strpos($sut->textContent, "{{")
+		);
+		self::assertCount(2, $parent->childNodes);
+		self::assertSame("Hello, ", $sut->textContent);
+		self::assertSame("{{name}}!", $split->textContent);
+		self::assertSame("Hello, {{name}}!", $parent->textContent);
+
+		$split->splitText(
+			strpos($split->textContent, "}}") + 2
+		);
+
+		self::assertSame("{{name}}", $split->textContent);
+
+// A test to emulate how a templating system can work:
+		self::assertSame(
+			"<div>Hello, {{name}}!</div>",
+			$parent->outerHTML
+		);
+		$split->textContent = "Cody";
+		self::assertSame(
+			"<div>Hello, Cody!</div>",
+			$parent->outerHTML
+		);
 	}
 }

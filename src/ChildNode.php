@@ -4,54 +4,96 @@ namespace Gt\Dom;
 use DOMNode;
 
 /**
- * Contains methods that are particular to Node objects that can have a parent.
+ * The ChildNode mixin contains methods and properties that are common to all
+ * types of Node objects that can have a parent. It's implemented by Element,
+ * DocumentType, and CharacterData objects.
  *
- * This trait is used by the following classes:
- *  - Element
- *  - DocumentType
- *  - CharacterData
- *
- * @property-read Node|Element $parentNode
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode
  */
 trait ChildNode {
 	/**
-	 * Removes this ChildNode from the children list of its parent.
+	 * Removes the object from the tree it belongs to.
+	 *
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
 	 */
 	public function remove():void {
-		$this->parentNode->removeChild($this);
-	}
-
-	/**
-	 * Inserts a Node into the children list of this ChildNode's parent,
-	 * just before this ChildNode.
-	 * @param DOMNode[] $node
-	 */
-	public function before(...$nodes):void {
-		foreach($nodes as $node) {
-			$this->parentNode->insertBefore($node, $this);
+		if($parentNode = $this->parentNode) {
+			$parentNode->removeChild($this);
 		}
 	}
 
 	/**
-	 * Inserts a Node into the children list of this ChildNode's parent,
-	 * just after this ChildNode.
-	 * @param DOMNode[] $node
+	 * The ChildNode.before() method inserts a set of Node or DOMString
+	 * objects in the children list of this ChildNode's parent, just before
+	 * this ChildNode. DOMString objects are inserted as equivalent Text
+	 * nodes.
+	 *
+	 * @param string|Node ...$nodes A set of Node or DOMString objects to
+	 * insert.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/before
 	 */
-	public function after(...$nodes):void {
-		foreach($nodes as $node) {
-			$this->parentNode->insertBefore($node, $this->nextSibling);
+	public function before(string|Node...$nodes):void {
+		/** @var Node $child */
+		$child = $this;
+
+		if($parentNode = $this->parentNode) {
+			foreach($nodes as $node) {
+				if(is_string($node)) {
+					$node = $this->ownerDocument->createTextNode($node);
+				}
+				/** @var Node $parentNode */
+				$parentNode->insertBefore($node, $child);
+			}
 		}
 	}
 
 	/**
-	 * Replace this ChildNode in the children list of its parent with the
-	 * supplied replacement node.
-	 * @param DOMNode[] $nodes
+	 * The ChildNode.after() method inserts a set of Node or DOMString
+	 * objects in the children list of this ChildNode's parent, just after
+	 * this ChildNode. DOMString objects are inserted as equivalent Text
+	 * nodes.
+	 *
+	 * @param string|Node ...$nodes A set of Node or DOMString objects to
+	 * insert.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/after
 	 */
-	public function replaceWith(...$nodes):void {
-		foreach($nodes as $replacement) {
-			$this->parentNode->insertBefore($replacement, $this);
+	public function after(string|Node...$nodes):void {
+		/** @var Node $child */
+		$child = $this;
+
+		if($parentNode = $this->parentNode) {
+			foreach($nodes as $node) {
+
+				if(is_string($node)) {
+					$node = $this->ownerDocument->createTextNode($node);
+				}
+				/** @var Node $parentNode */
+				$parentNode->insertBefore($node, $child->nextSibling);
+			}
+		}
+	}
+
+	/**
+	 * The ChildNode.replaceWith() method replaces this ChildNode in the
+	 * children list of its parent with a set of Node or DOMString objects.
+	 * DOMString objects are inserted as equivalent Text nodes.
+	 *
+	 * @param string|Node ...$nodes A set of Node or DOMString objects to
+	 * replace.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/replaceWith
+	 */
+	public function replaceWith(string|Node...$nodes):void {
+		if($parent = $this->parentElement) {
+			$nextSibling = $this->nextSibling;
 			$this->remove();
+
+			foreach($nodes as $node) {
+				if(is_string($node)) {
+					$node = $this->ownerDocument->createTextNode($node);
+				}
+				/** @var Element $parent */
+				$parent->insertBefore($node, $nextSibling);
+			}
 		}
 	}
 }

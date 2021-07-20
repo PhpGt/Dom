@@ -1,119 +1,156 @@
 <?php
 namespace Gt\Dom;
 
-use DOMNodeList;
+use ArrayAccess;
+use Countable;
+use Gt\Dom\Exception\HTMLCollectionImmutableException;
+use Gt\Dom\Facade\HTMLCollectionFactory;
+use Gt\PropFunc\MagicProp;
+use Iterator;
 
 /**
- * Represents a Node list that can only contain Element nodes.
+ * The HTMLCollection interface represents a generic collection (array-like
+ * object similar to arguments) of elements (in document order) and offers
+ * methods and properties for selecting from the list.
  *
- * @property-read int $length Number of Element nodes in this collection
+ * Note: This interface is called HTMLCollection for historical reasons (before
+ * the modern DOM, collections implementing this interface could only have HTML
+ * elements as their items).
+ *
+ * An HTMLCollection in the HTML DOM is live; it is automatically updated when
+ * the underlying document is changed.
+ *
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection
+ * @see HTMLCollectionFactory
+ *
+ * @property-read int $length Returns the number of items in the collection.
+ * @implements ArrayAccess<int, Element>
+ * @implements Iterator<int, Element>
  */
-class HTMLCollection extends NodeList {
-	use LiveProperty;
+class HTMLCollection implements ArrayAccess, Countable, Iterator {
+	use MagicProp;
 
-	/** @var Element[] */
-	protected $list;
-	protected $iteratorKey;
+	/** @var callable():NodeList $callback Returns a NodeList, called
+	 * multiple times, allowing the HTMLCollection to be "live" */
+	private $callback;
+	private int $iteratorIndex;
 
-	/** @noinspection PhpMissingParentConstructorInspection */
-	public function __construct(DOMNodeList $domNodeList) {
-		$this->list = [];
-		$this->rewind();
+	protected function __construct(callable $callback) {
+		$this->callback = $callback;
+		$this->iteratorIndex = 0;
+	}
 
-		for($i = 0, $n = $domNodeList->length; $i < $n; $i++) {
-			$item = $domNodeList->item($i);
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/length */
+	protected function __prop_get_length():int {
+		$nodeList = call_user_func($this->callback);
+		return count($nodeList);
+	}
 
-			if(!$item instanceof Element) {
-				continue;
-			}
-
-			$this->list []= $item;
-		}
+	public function count():int {
+		return $this->length;
 	}
 
 	/**
-	 * Returns the number of Elements contained in this Collection.
-	 * Exposed as the $length property.
-	 * @return int Number of Elements
-	 */
-	protected function prop_get_length():int {
-		return count($this->list);
-	}
-
-	/**
-	 * @param string $name Returns the specific Node whose ID or, as a fallback,
-	 * name matches the string specified by $name. Matching by name is only done
-	 * as a last resort, and only if the referenced element supports the name
-	 * attribute.
-	 */
-	public function namedItem(string $name):?Element {
-		$namedElement = null;
-
-// TODO: Use an XPath query here -- it's got to be less costly than iterating.
-		foreach($this as $element) {
-			if($element->getAttribute("id") === $name) {
-				return $element;
-			}
-
-			if(is_null($namedElement)
-			&& $element->getAttribute("name") === $name) {
-				$namedElement = $element;
-			}
-		}
-
-		return $namedElement;
-	}
-
-	/**
-	 * Gets the nth Element object in the internal DOMNodeList.
-	 * @param int $index
-	 * @return Element|null
+	 * The HTMLCollection method item() returns the node located at the
+	 * specified offset into the collection.
+	 *
+	 * @param int $index The position of the Node to be returned. Elements
+	 * appear in an HTMLCollection in the same order in which they appear
+	 * in the document's source.
+	 * @return ?Element The Element at the specified index, or null if index
+	 * is less than zero or greater than or equal to the length property.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/item
 	 */
 	public function item(int $index):?Element {
-		return $this->list[$index] ?? null;
+		/** @var NodeList $nodeList */
+		$nodeList = call_user_func($this->callback);
+		$item = $nodeList->item($index);
+
+		if($item instanceof Element) {
+			return $item;
+		}
+
+		return null;
 	}
 
-// Iterator --------------------------------------------------------------------
+	/**
+	 * Returns the specific node whose ID or, as a fallback, name matches
+	 * the string specified by name. Matching by name is only done as a last
+	 * resort, only in HTML, and only if the referenced element supports the
+	 * name attribute. Returns null if no node exists by the given name.
+	 *
+	 * An alternative to accessing collection[name] (which instead returns
+	 * undefined when name does not exist). This is mostly useful for
+	 * non-JavaScript DOM implementations.
+	 *
+	 * @param string $nameOrId
+	 * @return ?Element
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/namedItem
+	 */
+	public function namedItem(string $nameOrId):?Element {
+		foreach(["id", "name"] as $attribute) {
+			foreach($this as $element) {
+				if($element->getAttribute($attribute) === $nameOrId) {
+					return $element;
+				}
+			}
+		}
 
-	public function rewind():void {
-		$this->iteratorKey = 0;
+		return null;
 	}
 
-	public function key():int {
-		return $this->iteratorKey;
-	}
-
-	public function valid():bool {
-		return isset($this->list[$this->key()]);
-	}
-
-	public function next():void {
-		$this->iteratorKey++;
-	}
-
-	public function current():?Element {
-		return $this->list[$this->key()] ?? null;
-	}
-
-// ArrayAccess -----------------------------------------------------------------
+	/**
+	 * @param int $offset
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
 	public function offsetExists($offset):bool {
-		return isset($offset, $this->list);
+		$element = $this->item($offset);
+		return !is_null($element);
+
 	}
 
+	/**
+	 * @param int $offset
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
 	public function offsetGet($offset):?Element {
 		return $this->item($offset);
 	}
 
+	/**
+	 * @param int $offset
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
 	public function offsetSet($offset, $value):void {
-		throw new \BadMethodCallException("HTMLCollection's items are read only");
+		throw new HTMLCollectionImmutableException();
 	}
 
+	/**
+	 * @param int $offset
+	 * @noinspection PhpMissingParamTypeInspection
+	 */
 	public function offsetUnset($offset):void {
-		throw new \BadMethodCallException("HTMLCollection's items are read only");
+		throw new HTMLCollectionImmutableException();
 	}
 
-// Countable -------------------------------------------------------------------
-	public function count():int {
-		return $this->length;
+	public function current():Element {
+		return $this->item($this->iteratorIndex);
+	}
+
+	public function next():void {
+		$this->iteratorIndex++;
+	}
+
+	public function key():int {
+		return $this->iteratorIndex;
+	}
+
+	public function valid():bool {
+		$item = $this->item($this->iteratorIndex);
+		return !is_null($item);
+	}
+
+	public function rewind():void {
+		$this->iteratorIndex = 0;
 	}
 }

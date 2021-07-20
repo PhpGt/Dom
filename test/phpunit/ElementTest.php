@@ -1,654 +1,567 @@
 <?php
 namespace Gt\Dom\Test;
 
-use DateTime;
 use Gt\Dom\Element;
-use Gt\Dom\HTMLDocument;
-use Gt\Dom\Test\Helper\Helper;
+use Gt\Dom\Exception\InvalidAdjacentPositionException;
+use Gt\Dom\Exception\InvalidCharacterException;
+use Gt\Dom\Test\TestFactory\DocumentTestFactory;
+use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use Gt\Dom\Text;
-use Gt\Dom\TokenList;
 use PHPUnit\Framework\TestCase;
 
 class ElementTest extends TestCase {
-	public function testQuerySelector() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$pAfterH2 = $document->querySelector("h2+p");
-		$aWithinP = $pAfterH2->querySelector("a");
-
-		$a = $document->querySelector("p>a");
-
-		$this->assertInstanceOf(Element::class, $pAfterH2);
-		$this->assertInstanceOf(Element::class, $aWithinP);
-		$this->assertInstanceOf(Element::class, $a);
-		$this->assertSame($a, $aWithinP);
+	public function testIsEqualNodeDifferentTagName():void {
+		$sut = NodeTestFactory::createNode("example");
+		$other = $sut->ownerDocument->createElement("different");
+		self::assertFalse($sut->isEqualNode($other));
 	}
 
-	public function testQuerySelectorAll() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$pCollection = $document->documentElement->querySelectorAll("p");
-		$pNodeList = $document->documentElement->getElementsByTagName("p");
-
-		$this->assertEquals($pNodeList->length, $pCollection->length);
+	public function testIsEqualNodeDifferentAttributeLength():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $other */
+		$other = $sut->cloneNode();
+		$other->setAttribute("name", "unit-test");
+		self::assertFalse($sut->isEqualNode($other));
 	}
 
-	public function testMatches() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$p = $document->getElementsByClassName("plug")->item(0);
-
-		$this->assertTrue($p->matches("p"));
-		$this->assertTrue($p->matches("p.plug"));
-		$this->assertTrue($p->matches("body>p:nth-of-type(3)"));
-		$this->assertTrue($p->matches("p:nth-of-type(3)"));
-		$this->assertTrue($p->matches("body>*"));
-		$this->assertFalse($p->matches("div"));
-		$this->assertFalse($p->matches("body>p:nth-of-type(4)"));
+	public function testIsEqualNodeDifferentAttributeContent():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $other */
+		$other = $sut->cloneNode();
+		$other->setAttribute("name", "unit-test");
+		$sut->setAttribute("something", "other");
+		self::assertFalse($sut->isEqualNode($other));
 	}
 
-	public function testChildElementCount() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		// There is 1 text node within the document.
-		$this->assertGreaterThan(
-			$document->body->childElementCount,
-			$document->body->childNodes->length
+	public function testIsEqualDifferentChildrenEqualContent():void {
+		$sut = NodeTestFactory::createNode("example");
+		$other = $sut->cloneNode();
+		$child1 = $sut->ownerDocument->createElement("child");
+		$child2 = $sut->ownerDocument->createElement("child");
+		$sut->appendChild($child1);
+		$other->appendChild($child2);
+		self::assertTrue($sut->isEqualNode($other));
+	}
+
+	public function testIsEqualDifferentChildrenDifferentContent():void {
+		$sut = NodeTestFactory::createNode("example");
+		$other = $sut->cloneNode();
+		$child1 = $sut->ownerDocument->createElement("child");
+		$child1->innerHTML = "<p>Child 1</p>";
+		$child2 = $sut->ownerDocument->createElement("child");
+		$child2->innerHTML = "<p>Child 2</p>";
+		$sut->appendChild($child1);
+		$other->appendChild($child2);
+		self::assertFalse($sut->isEqualNode($other));
+	}
+
+	public function testAttributesLive():void {
+		$sut = NodeTestFactory::createNode("example");
+		$attributes = $sut->attributes;
+		self::assertCount(0, $attributes);
+		$sut->setAttribute("name", "unti-test");
+		self::assertCount(1, $attributes);
+		$sut->setAttribute("framework", "PHPUnit");
+		self::assertCount(2, $attributes);
+		$sut->setAttribute("name", "unit-test");
+		self::assertCount(2, $attributes);
+	}
+
+	public function testClassList():void {
+		$sut = NodeTestFactory::createNode("example");
+		$classList = $sut->classList;
+		self::assertFalse($classList->contains("a-class"));
+		$sut->className = "something another-thing a-class final-class";
+		self::assertTrue($classList->contains("a-class"));
+	}
+
+	public function testClassListMutate():void {
+		$sut = NodeTestFactory::createNode("example");
+		$classList = $sut->classList;
+		self::assertFalse($classList->contains("a-class"));
+		$sut->className = "something another-thing a-class final-class";
+		$classList->value = "totally different class-list";
+		self::assertFalse($classList->contains("something"));
+		self::assertFalse($classList->contains("another-thing"));
+		self::assertFalse($classList->contains("a-class"));
+		self::assertFalse($classList->contains("final-class"));
+	}
+
+	public function testClassListMutateUpdatesElement():void {
+		$sut = NodeTestFactory::createNode("example");
+		$classList = $sut->classList;
+		self::assertFalse($classList->contains("a-class"));
+		$sut->className = "something another-thing a-class final-class";
+		$classList->value = "updated";
+
+		self::assertFalse($classList->contains("something"));
+		self::assertFalse($sut->classList->contains("something"));
+
+		self::assertTrue($classList->contains("updated"));
+		self::assertTrue($sut->classList->contains("updated"));
+
+		self::assertEquals("updated", $sut->className);
+	}
+
+	public function testClassName():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->className = "something another-thing a-class final-class";
+		self::assertEquals(
+			$sut->className,
+			$sut->getAttribute("class")
 		);
-		$this->assertEquals(
-			$document->body->children->length,
-			$document->body->childElementCount
+	}
+
+	public function testId():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->id = "something";
+		self::assertEquals(
+			$sut->id,
+			$sut->getAttribute("id")
 		);
 	}
 
-	public function testElementClosest() {
-		$document = new HTMLDocument(Helper::HTML_NESTED);
-
-		$p = $document->querySelector('.inner-list p');
-		$this->assertInstanceOf(Element::class, $p);
-
-		$innerList = $document->querySelector('.inner-list');
-		$this->assertInstanceOf(Element::class, $innerList);
-
-		$closestUl = $innerList->closest('ul');
-		$this->assertEquals($innerList, $closestUl);
-
-		$container = $p->closest('.container');
-		$this->assertInstanceOf(Element::class, $container);
-
-		$nonExistentClosestElement = $p->closest('br');
-		$this->assertNull($nonExistentClosestElement);
-
-		$innerPost = $document->querySelector("div.post.inner");
-		$innerListItem = $document->querySelector(".inner-item-1");
-		$outerPost = $document->querySelector("div.post.outer");
-		$this->assertInstanceOf(Element::class, $innerPost);
-		$this->assertInstanceOf(Element::class, $outerPost);
-
-		$closestDivToInnerListItem = $innerListItem->closest("div");
-		$closestDivToInnerPost = $innerPost->closest("div");
-// ..the inner post should match itself, as it is a div.
-		$this->assertSame($closestDivToInnerPost, $innerPost);
-// ..but the inner list item should match up the tree to the outer post
-// ..missing the other divs in the tree.
-		$this->assertSame($closestDivToInnerListItem, $outerPost);
+	public function testInnerHTML():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<p>A paragraph</p>
+		<div>A div</div>";
+		self::assertEquals("A paragraph", $sut->children[0]->innerHTML);
+		self::assertEquals("A div", $sut->children[1]->innerHTML);
 	}
 
-	public function testValueGetter() {
-		$document = new HTMLDocument(Helper::HTML_VALUE);
-
-		$select = $document->getElementById('select');
-		$this->assertEquals('1', $select->value);
-		$select->value = '2';
-		$this->assertEquals('2', $select->value);
-
-		$select = $document->getElementById('select_optgroup');
-		$this->assertEquals('3', $select->value);
-		$select->value = '4';
-		$this->assertEquals('4', $select->value);
-
-		$select = $document->getElementById('select_selected');
-		$this->assertEquals('2', $select->value);
-
-		$select = $document->getElementById('select_empty');
-		$this->assertEquals('', $select->value);
-		$select->value = 'dummy';
-		$this->assertEquals('', $select->value);
-
-// For #201:
-		$select = $document->getElementById("select_inferred_value");
-		$this->assertEquals("Two", $select->value);
+	public function testInnerHTMLReset():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<p>A paragraph</p>
+		<div>A div</div>";
+		$sut->innerHTML = "<example>An example</example><another-example>And another</another-example>";
+		self::assertEquals("An example", $sut->children[0]->innerHTML);
+		self::assertEquals("And another", $sut->children[1]->innerHTML);
 	}
 
-// For #201:
-	public function testSelectValueSetterToValueAttribute() {
-		$document = new HTMLDocument(Helper::HTML_VALUE);
-		$select = $document->getElementById("select_inferred_value");
-		$this->assertEquals("Two", $select->value);
-		$select->value = "Three";
-		$this->assertEquals("Three", $select->value);
-	}
-
-	public function testInnerHTML() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$p = $document->querySelector(".link-to-twitter");
-		$this->assertStringContainsString("<a href=", $p->innerHTML);
-		$this->assertStringContainsString("Greg Bowler", $p->innerHTML);
-		$this->assertStringNotContainsString("<p", $p->innerHTML);
-
-		$p->innerHTML = "This is <strong>very</strong> important!";
-		$this->assertInstanceOf(Element::class, $p->querySelector("strong"));
-		$this->assertStringContainsString("This is", $p->textContent);
-		$this->assertStringContainsString("very", $p->textContent);
-		$this->assertEquals("very", $p->querySelector("strong")->textContent);
-	}
-
-	public function testInnerHTMLWithJson() {
-// This test comes from a real world use-case, where the value of a JSON
-// property within a <script> tag needed updating on the fly. It didn't make
-// practical sense to encode/decode the JSON, so str_replace was used to update
-// a placeholder. In the wild, this caused HTML entities to appear everywhere,
-// incorrectly.
-		$document = new HTMLDocument(Helper::HTML_JSON_HEAD);
-		$ratingValue = "4.5";
-		$ratingCount = 1337;
-		$script = $document->querySelector(".php-schema-rating");
-
-		self::assertStringContainsString(
-			"\"aggregateRating\": {",
-			$script->innerHTML
+	public function testOuterHTML():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<p>A paragraph</p>";
+		self::assertEquals(
+			"<example><p>A paragraph</p></example>",
+			$sut->outerHTML
 		);
+	}
 
-		$script->innerHTML = str_replace([
-			"__RATING_VALUE__",
-			"__RATING_COUNT__",
-		], [
-			$ratingValue,
-			$ratingCount,
-		], $script->innerHTML);
+	public function testOuterHTMLNoParent():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->outerHTML = "<not-example></not-example>";
+// The original reference should not change.
+		self::assertEquals("<example></example>", $sut->outerHTML);
+	}
 
-		self::assertStringContainsString(
-			"\"aggregateRating\": {",
-			$script->innerHTML
+	public function testOuterHTMLSet():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->ownerDocument->appendChild($sut);
+		self::assertCount(
+			1,
+			$sut->ownerDocument->getElementsByTagName("example")
 		);
 
-		$json = json_decode($script->innerHTML);
-		self::assertEquals($ratingValue, $json->aggregateRating->ratingValue);
-		self::assertEquals($ratingCount, $json->aggregateRating->ratingCount);
+		$innerHTML = "<p>A paragraph</p>";
+		$sut->outerHTML = "<changed-outer>$innerHTML</changed-outer>";
+		self::assertCount(
+			0,
+			$sut->ownerDocument->getElementsByTagName("example")
+		);
+		self::assertCount(
+			1,
+			$sut->ownerDocument->getElementsByTagName("changed-outer")
+		);
+		self::assertEquals(
+			"<changed-outer><p>A paragraph</p></changed-outer>",
+			$sut->ownerDocument->getElementsByTagName("changed-outer")->item(0)->outerHTML
+		);
 	}
 
-	public function testOuterHTML() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$p = $document->querySelector(".link-to-twitter");
-		$this->assertStringContainsString("<a href=", $p->outerHTML);
-		$this->assertStringContainsString("Greg Bowler", $p->outerHTML);
-		$this->assertStringContainsString("<p", $p->outerHTML);
-		$this->assertStringContainsString("</p>", $p->outerHTML);
-		$this->assertStringNotContainsString("<h2", $p->outerHTML);
-		$this->assertStringNotContainsString("name=\"forms\">", $p->outerHTML);
+	public function testOuterHTMLSetMultiple():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->ownerDocument->appendChild($sut);
+		self::assertCount(1, $sut->ownerDocument->getElementsByTagName("example"));
+		$sut->outerHTML = "<first-outer>Example1</first-outer><second-outer>Example2</second-outer>";
+		self::assertCount(0, $sut->ownerDocument->getElementsByTagName("example"));
+		self::assertCount(1, $sut->ownerDocument->getElementsByTagName("first-outer"));
+		self::assertCount(1, $sut->ownerDocument->getElementsByTagName("second-outer"));
 	}
 
-	public function testClassListProperty() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$element = $document->getElementById("who");
-		$this->assertInstanceOf(TokenList::class, $element->classList);
-
-		$this->assertTrue($element->classList->contains("m-before-p"));
-		$this->assertFalse($element->classList->contains("nothing"));
+	public function testOuterHTMLParent():void {
+		$html = "<changed-tag>Some content</changed-tag>";
+		$sut = NodeTestFactory::createNode("example");
+		$sut->ownerDocument->appendChild($sut);
+		$sut->outerHTML = $html;
+		self::assertCount(0, $sut->ownerDocument->getElementsByTagName("example"));
+		self::assertCount(1, $sut->ownerDocument->getElementsByTagName("changed-tag"));
 	}
 
-	public function testClassNameProperty() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$element = $document->getElementById("who");
-		$this->assertIsString($element->className);
-
-		$this->assertStringContainsString("m-before-p", $element->className);
-		$this->assertStringNotContainsString("nothing", $element->className);
+	public function testChildren():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = "<p>A paragraph</p>
+		<div>A div</div>";
+		self::assertCount(2, $sut->children);
+		self::assertEquals("A paragraph", $sut->children[0]->innerHTML);
+		self::assertEquals("A div", $sut->children[1]->innerHTML);
 	}
 
-	public function testIdProperty() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$element = $document->getElementById("who");
-		$this->assertEquals("who", $element->id);
+	public function testPrefix():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertEquals("", $sut->prefix);
 	}
 
-	public function testTagNameProperty() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$element = $document->getElementsByTagName("form")[0];
-		$this->assertEquals("form", $element->tagName);
+	public function testTagName():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertEquals("EXAMPLE", $sut->tagName);
+		$sut = NodeTestFactory::createNode("Example");
+		self::assertEquals("EXAMPLE", $sut->tagName);
 	}
 
-	public function testValueProperty() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$paragraph = $document->getElementById("who");
-		$this->assertNull($paragraph->value);
-
-		$input = $document->querySelector("form input[name=who]");
-		$this->assertEquals("Scarlett", $input->value);
-
-		$input->value = "Sparky";
-		$this->assertEquals("Sparky", $input->getAttribute("value"));
+	public function testTagNameInvalid():void {
+		self::expectException(InvalidCharacterException::class);
+		NodeTestFactory::createNode("This can't be done");
 	}
 
-	public function testRemove() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$bodyChildrenCount = count($document->body->children);
-		$paragraph = $document->querySelector("p");
-		$paragraph->remove();
-		$this->assertCount($bodyChildrenCount - 1, $document->body->children);
+	public function testClosestNoMatch():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->closest("nothing"));
 	}
 
-	public function testTextContentDoesNotAffectChildElements() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$firstParagraph = $document->querySelector("p");
-		$firstParagraph->innerText = "<span>Example</span>";
-// TODO: Check that the childNodes property ends up as a Gt Dom HTMLCollection
-		$this->assertGreaterThan(0, count($firstParagraph->childNodes));
+	public function testClosestSelf():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->ownerDocument->appendChild($sut);
+		self::assertSame($sut, $sut->closest("example"));
+	}
 
-		foreach($firstParagraph->childNodes as $child) {
-// There should not be any "span" elements, only text including optional whitespace.
-			$this->assertInstanceOf(Text::class, $child);
+	public function testClosestParent():void {
+		$sut = NodeTestFactory::createNode("example");
+		$context = $sut->ownerDocument;
+		for($i = 0; $i < 10; $i++) {
+			$parent = $sut->ownerDocument->createElement("example-$i");
+			$context->appendChild($parent);
+			$context = $parent;
 		}
+		$context->appendChild($sut);
+
+		$element = $sut->ownerDocument->getElementsByTagName("example-3")->item(0);
+		$closest = $sut->closest("example-3");
+		self::assertSame(
+			$element,
+			$closest
+		);
 	}
 
-	/**
-	 * The test passes, but IDEs do not show the correct types.
-	 */
-	public function testNodeFunctionsReturnGtObjects() {
-		$objectsThatShouldBeElements = [];
-		$document = new HTMLDocument(Helper::HTML);
-		$h1 = $document->querySelector("h1");
-		$objectsThatShouldBeElements["h1"] = $h1;
-		$objectsThatShouldBeElements["h1Clone"] = $h1->cloneNode(true);
-		$objectsThatShouldBeElements["parent"] = $h1->parentNode;
-		$objectsThatShouldBeElements["firstChild"] = $document->body->firstChild;
-
-		$otherDocument = new HTMLDocument();
-		$otherDiv = $otherDocument->createElement("div");
-		$objectsThatShouldBeElements["imported"] = $document->importNode($otherDiv);
-		$objectsThatShouldBeElements["imported-appended"] = $document->appendChild(
-			$objectsThatShouldBeElements["imported"]);
-
-		foreach($objectsThatShouldBeElements as $key => $object) {
-			$this->assertInstanceOf(
-				Element::class,
-				$object,
-				"$key instance of " . gettype($object));
+	public function testClosestWithAnotherMatchingAncestor():void {
+		$sut = NodeTestFactory::createNode("example");
+		$tagNames = ["this-example", "that-example"];
+		$context = $sut->ownerDocument;
+		for($i = 0; $i < 10; $i++) {
+			$tagName = $i % 2 ? $tagNames[0] : $tagNames[1];
+			$parent = $sut->ownerDocument->createElement($tagName);
+			$context->appendChild($parent);
+			$context = $parent;
 		}
-	}
+		$context->appendChild($sut);
 
-	public function testGetInnerText() {
-		$document = new HTMLDocument(Helper::HTML);
-		$h1 = $document->querySelector("h1");
-		$this->assertEquals("Hello!", $h1->innerText);
-	}
-
-	public function testSetInnerText() {
-		$document = new HTMLDocument(Helper::HTML);
-		$h1 = $document->querySelector("h1");
-		$h1->innerText = "Goodbye!";
-		$this->assertEquals("Goodbye!", $h1->textContent);
-	}
-
-	public function testGetNonExistingIdGivesNull() {
-		$document = new HTMLDocument(Helper::HTML);
-		$body = $document->getElementsByTagName("body")[0] ?? null;
-		self::assertNotNull($body);
-		/** @var Element $body */
-		$idByGetAttribute = $body->getAttribute('id');
-		self::assertNull($idByGetAttribute);
-		$idByPropGetId = $body->prop_get_id();
-		self::assertNull($idByPropGetId);
-		$idByMagicGet = $body->id;
-		self::assertNull($idByMagicGet);
-	}
-
-	public function testDataset() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$p = $document->querySelector("p.link-to-twitter");
-
-		self::assertEquals(
-			"twitter",
-			$p->dataset->social
-		);
-		self::assertEquals(
-			"g105b",
-			$p->dataset->socialUsername
+		$thatElements = $sut->ownerDocument->getElementsByTagName("that-example");
+		$closest = $sut->closest("that-example");
+		self::assertSame(
+			$thatElements->item($thatElements->length - 1),
+			$closest
 		);
 	}
 
-	public function testDatasetSetGet() {
-		$document = new HTMLDocument();
-		$element = $document->createElement("div");
-		$message = "Hello, World!";
-		$element->dataset->message = $message;
+	public function testGetAttribute():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertNull($sut->getAttribute("attr"));
+		$sut->setAttribute("attr", "content");
+		self::assertEquals("content", $sut->getAttribute("attr"));
+	}
 
+	public function testGetAttributeNamesNone():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertCount(0, $sut->getAttributeNames());
+	}
+
+	public function testGetAttributeNames():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->setAttribute("name", "test");
+		$sut->setAttribute("framework", "phpunit");
+		$attributeNames = $sut->getAttributeNames();
+		self::assertCount(2, $attributeNames);
+		self::assertContains("name", $attributeNames);
+		self::assertContains("framework", $attributeNames);
+	}
+
+	public function testGetAttributeNS():void {
+		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->getElementById("target");
+		$ns = "http://www.example.com/2014/test";
 		self::assertEquals(
-			$message,
-			$element->dataset->message
+			"Foo value",
+			$sut->getAttributeNS($ns, "foo"));
+	}
+
+	public function testGetAttributeNSNone():void {
+		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->getElementById("target");
+		$ns = "http://www.example.com/2014/test";
+		self::assertNull($sut->getAttributeNS($ns, "nothing"));
+	}
+
+	public function testGetElementsByClassName():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $child1 */
+		$child1 = $sut->cloneNode();
+		/** @var Element $child2 */
+		$child2 = $sut->cloneNode();
+		/** @var Element $child3 */
+		$child3 = $sut->cloneNode();
+
+		$child1->className = "one child-of-sut";
+		$child2->className = "two child-of-sut another-class";
+		$child3->className = "three child-of-sut another-class";
+
+		$sut->append($child1, $child2, $child3);
+		self::assertCount(1, $sut->getElementsByClassName("one"));
+		self::assertCount(1, $sut->getElementsByClassName("two"));
+		self::assertCount(1, $sut->getElementsByClassName("three"));
+		self::assertCount(3, $sut->getElementsByClassName("child-of-sut"));
+		self::assertCount(2, $sut->getElementsByClassName("another-class"));
+	}
+
+	public function testGetElementsByClassNameIsLive():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $child1 */
+		$child1 = $sut->cloneNode();
+
+		$child1->className = "one child-of-sut";
+		$sut->append($child1);
+		self::assertCount(1, $sut->getElementsByClassName("one"));
+		$child1->className = "not-one child-of-sut";
+		self::assertCount(0, $sut->getElementsByClassName("one"));
+		self::assertCount(0, $sut->getElementsByClassName("one child-of-sut"));
+	}
+
+	public function testGetElementsByTagName():void {
+		$sut = NodeTestFactory::createNode("example");
+		$child1 = $sut->cloneNode();
+		$sut->append($child1);
+		self::assertSame(
+			$child1,
+			$sut->getElementsByTagName("example")->item(0)
 		);
 	}
 
-	public function testDatasetCreateElement() {
-		$document = new HTMLDocument();
-		$element = $document->createElement("div");
-		$element->dataset->name = "Example";
-		$element->dataset->multiWord = "Should be hyphenated";
-
-		self::assertEquals(
-			$element->dataset->name,
-			$element->getAttribute("data-name")
+	public function testGetElementsByTagNameNS():void {
+		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->documentElement;
+		$ns = "http://www.example.com/2014/test";
+		self::assertCount(
+			1,
+			$sut->getElementsByTagNameNS($ns, "rect")
 		);
-		self::assertEquals(
-			$element->dataset->multiWord,
-			$element->getAttribute("data-multi-word")
+		self::assertCount(
+			0,
+			$sut->getElementsByTagNameNS("another-namespace", "rect")
 		);
 	}
 
-	public function testDatasetArrayAccess() {
-		$document = new HTMLDocument();
-		$element = $document->createElement("div");
-		$element->dataset->name = "Example";
+	public function testHasAttributes():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertFalse($sut->hasAttributes());
+		$sut->setAttribute("test", "123");
+		self::assertTrue($sut->hasAttributes());
+	}
 
-		self::assertEquals(
-			$element->dataset->name,
-			$element->dataset["name"]
+	public function testInsertAdjacentElementAfterBegin():void {
+		$sut = NodeTestFactory::createNode("example");
+		$pad = $sut->ownerDocument->createElement("pad");
+		$sut->append($pad);
+
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"afterbegin",
+			$toInsert
+		);
+		self::assertInstanceOf(Element::class, $inserted);
+		self::assertSame($sut, $inserted->parentNode);
+		self::assertSame($pad, $inserted->nextSibling);
+	}
+
+	public function testInsertAdjacentElementBeforeEnd():void {
+		$sut = NodeTestFactory::createNode("example");
+		$pad = $sut->ownerDocument->createElement("pad");
+		$sut->append($pad);
+
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"beforeend",
+			$toInsert
+		);
+		self::assertInstanceOf(Element::class, $inserted);
+		self::assertSame($sut, $inserted->parentNode);
+		self::assertSame($pad, $inserted->previousSibling);
+	}
+
+	public function testInsertAdjacentElementBeforeBeginNotConnected():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"beforebegin",
+			$toInsert
+		);
+		self::assertNull($inserted);
+	}
+
+	public function testInsertAdjacentElementBeforeBegin():void {
+		$sut = NodeTestFactory::createNode("example");
+		$root = $sut->ownerDocument->createElement("root");
+		$sut->ownerDocument->appendChild($root);
+		$pad = $sut->ownerDocument->createElement("pad");
+		$root->appendChild($pad);
+		$root->appendChild($sut);
+
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"beforebegin",
+			$toInsert
+		);
+		self::assertInstanceOf(Element::class, $inserted);
+		self::assertSame($pad, $inserted->previousSibling);
+	}
+
+	public function testInsertAdjacentElementAfterEndNotConnected():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"afterend",
+			$toInsert
+		);
+		self::assertNull($inserted);
+	}
+
+	public function testInsertAdjacentElementAfterEnd():void {
+		$sut = NodeTestFactory::createNode("example");
+		$root = $sut->ownerDocument->createElement("root");
+		$sut->ownerDocument->appendChild($root);
+		$pad = $sut->ownerDocument->createElement("pad");
+		$root->appendChild($sut);
+		$root->appendChild($pad);
+
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"afterend",
+			$toInsert
+		);
+		self::assertInstanceOf(Element::class, $inserted);
+		self::assertSame($pad, $inserted->nextSibling);
+	}
+
+	public function testInsertAdjacentElementInvalidPosition():void {
+		$sut = NodeTestFactory::createNode("example");
+		/** @var Element $toInsert */
+		$toInsert = $sut->cloneNode();
+		self::expectException(InvalidAdjacentPositionException::class);
+		$sut->insertAdjacentElement(
+			"nowhere",
+			$toInsert
 		);
 	}
 
-	public function testDatasetArrayAccessIssetUnset() {
-		$document = new HTMLDocument();
-		$element = $document->createElement("div");
-		$element->dataset->name = "Example";
-
-		self::assertTrue(isset($element->dataset["name"]));
-		unset($element->dataset["name"]);
-		self::assertFalse(isset($element->dataset["name"]));
+	public function testInsertAdjacentHTML():void {
+		$sut = NodeTestFactory::createNode("example");
+		$pad = $sut->ownerDocument->createElement("pad");
+		$sut->appendChild($pad);
+		$sut->insertAdjacentHTML(
+			"afterbegin",
+			"<inserted>Testing</inserted>"
+		);
+		self::assertCount(2, $sut->childNodes);
+		self::assertSame(
+			$pad,
+			$sut->getElementsByTagName("inserted")->item(0)->nextSibling
+		);
 	}
 
-	public function testDatasetIssetUnset() {
-		$document = new HTMLDocument();
-		$element = $document->createElement("div");
-
-		self::assertFalse(isset($element->dataset->name));
-		$element->dataset->name = "Example";
-		self::assertTrue(isset($element->dataset->name));
-		unset($element->dataset->name);
-		self::assertFalse(isset($element->dataset->name));
+	public function testInsertAdjacentText():void {
+		$sut = NodeTestFactory::createNode("example");
+		$pad = $sut->ownerDocument->createElement("pad");
+		$sut->appendChild($pad);
+		$sut->insertAdjacentText(
+			"afterbegin",
+			"This is a text node!"
+		);
+		self::assertCount(2, $sut->childNodes);
+		self::assertSame(
+			$pad,
+			$sut->childNodes->item(0)->nextSibling
+		);
+		self::assertInstanceOf(Text::class, $sut->firstChild);
 	}
 
-	public function testFormControlElementsCanHaveFormProperty() {
-		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
-		$form = $document->getElementById('form_2');
-
-		$input = $document->getElementById('f2');
-		self::assertEquals($form, $input->form);
-
-		$button = $document->getElementById('f4');
-		self::assertEquals($form, $button->form);
-
-		$fieldset = $document->getElementById('f5');
-		self::assertEquals($form, $fieldset->form);
-
-		$input = $document->getElementById('f6');
-		self::assertEquals($form, $input->form);
-
-		$object = $document->getElementById('f7');
-		self::assertEquals($form, $object->form);
-
-		$output = $document->getElementById('f8');
-		self::assertEquals($form, $output->form);
-
-		$select = $document->getElementById('f9');
-		self::assertEquals($form, $select->form);
+	public function testMatches():void {
+		$sut = NodeTestFactory::createNode("example");
+		$sut->ownerDocument->appendChild($sut);
+		self::assertTrue($sut->matches("example"));
+		self::assertFalse($sut->matches("not-example"));
 	}
 
-	public function testFormControlElementReturnsParentFormAsFormPropertyIfItDoesNotHaveFormAttribute() {
-		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
-		$form = $document->getElementById('form_1');
-
-		$input = $document->getElementById('f1');
-		self::assertEquals($form, $input->form);
-
-		$button = $document->getElementById('f3');
-		self::assertEquals($form, $button->form);
+	public function testSetAttributeNS():void {
+		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->getElementById("target");
+		$ns = "http://www.example.com/2014/test";
+		$sut->setAttributeNS($ns, "foo", "Updated value");
+		self::assertEquals(
+			"Updated value",
+			$sut->getAttributeNS($ns, "foo"));
 	}
 
-	public function testFormControlElementReturnsNullIfItDoesNotHaveFormAttributeAndDoesNotHaveParentForm() {
-		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
-
-		$input = $document->getElementById('f11');
-		self::assertEquals(null, $input->form);
+	public function testToggleAttribute():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertFalse($sut->hasAttribute("required"));
+		$requiredPresent = $sut->toggleAttribute("required");
+		self::assertTrue($sut->hasAttribute("required"));
+		self::assertTrue($requiredPresent);
+		$requiredPresent = $sut->toggleAttribute("required");
+		self::assertFalse($sut->hasAttribute("required"));
+		self::assertFalse($requiredPresent);
 	}
 
-	public function testNonControlElementRetursNullAsFormProperty() {
-		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
+	public function testToggleAttributeForced():void {
+		$sut = NodeTestFactory::createNode("example");
+		self::assertTrue(
+			$sut->toggleAttribute("required", true)
+		);
+		self::assertTrue($sut->hasAttribute("required"));
+		self::assertTrue(
+			$sut->toggleAttribute("required", true)
+		);
+		self::assertTrue($sut->hasAttribute("required"));
 
-		$span = $document->getElementById('non_form_control_1');
-		self::assertEquals(null, $span->form);
-
-		$span = $document->getElementById('non_form_control_2');
-		self::assertEquals(null, $span->form);
+		self::assertFalse(
+			$sut->toggleAttribute("required", false)
+		);
+		self::assertFalse($sut->hasAttribute("required"));
+		self::assertFalse(
+			$sut->toggleAttribute("required", false)
+		);
+		self::assertFalse($sut->hasAttribute("required"));
 	}
 
-	public function testInputElementWithTypeImagetReturnsNullAsFormProperty() {
-		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
-
-		$input = $document->getElementById('f12');
-		self::assertEquals(null, $input->form);
-	}
-
-	public function testPropertyAttributeCorrelationFormEncoding() {
-		$document = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
-		$form = $document->querySelector("form");
-		$form->encoding = "phpgt/test";
-		self::assertEquals("phpgt/test", $form->getAttribute("enctype"));
-		self::assertEquals("phpgt/test", $form->enctype);
-	}
-
-	public function testPropertyAttributeCorrelationNormalAttribute() {
-		$document = new HTMLDocument(Helper::HTML_FORM_WITH_RADIOS);
-		$link = $document->querySelector("a");
-		$link->href = "/test";
-		self::assertEquals("/test", $link->getAttribute("href"));
-		self::assertEquals("/test", $link->href);
-	}
-
-	public function testPropertyAttributeCorrelationBoolean() {
-		$document = new HTMLDocument(Helper::HTML_FORM_PROPERTY);
-		$input = $document->querySelector("input");
-		$input->autofocus = true;
-		self::assertTrue($input->autofocus);
-		self::assertNotEmpty($input->getAttribute("autofocus"));
-	}
-
-	public function testPropertyDataset() {
-		$document = new HTMLDocument(Helper::HTML_LESS);
-		$p = $document->querySelector("p");
-		$p->dataset->test = "Test Value";
-		self::assertEquals("Test Value", $p->getAttribute("data-test"));
-
-		$p->dataset->another = "Another test value";
-		self::assertEquals("Test Value", $p->getAttribute("data-test"));
-		self::assertEquals("Another test value", $p->getAttribute("data-another"));
-
-		$p->dataset->propWithCamelCase = "Should be hyphenated";
-		self::assertEquals("Should be hyphenated", $p->getAttribute("data-prop-with-camel-case"));
-	}
-
-	public function testPropertyValueAsDate() {
-		$document = new HTMLDocument(Helper::HTML_FORM_WITH_DATES);
-		$input = $document->querySelector("input");
-		$input->value = "1988-04-05";
-		$sut = $input->valueAsDate;
-		self::assertInstanceOf(DateTime::class, $sut);
-		self::assertEquals(new DateTime("1988-04-05"), $sut);
-	}
-
-	public function testPropertyValueAsNumber() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$input = $document->querySelector("input");
-		self::assertEquals(0, $input->valueAsNumber);
-		$input->value = "123.456";
-		self::assertEquals(123.456, $input->valueAsNumber);
-		self::assertIsFloat($input->valueAsNumber);
-	}
-
-	public function testAttributeValueSelection() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$input1 = $document->querySelector("input[name='who']");
-		$input2 = $document->querySelector("input[name=who]");
-		self::assertNotNull($input1);
-		self::assertNotNull($input2);
-		self::assertSame($input1, $input2);
-		self::assertEquals("Scarlett", $input1->value);
-	}
-
-	public function testOptionValueGetSet() {
-		$document = new HTMLDocument(Helper::HTML_SELECTS);
-		foreach($document->querySelectorAll("[name=from] option") as $fromOption) {
-			self::assertIsNumeric($fromOption->value);
-		}
-
-		foreach($document->querySelectorAll("[name=to] option") as $toOption) {
-			self::assertIsNumeric($toOption->value);
-		}
-	}
-
-	public function testSetClassNameProperty() {
-		$document = new HTMLDocument();
-		$element = $document->createElement("div");
-
-		$element->className = "test";
-		self::assertEquals("test", $element->getAttribute("class"));
-	}
-
-	public function testSetIdProperty() {
-		$document = new HTMLDocument();
-		$element = $document->createElement("div");
-
-		$element->id = "test";
-		self::assertEquals("test", $element->id);
-	}
-
-	public function testSetValueOnButton() {
-		$document = new HTMLDocument();
-		$element = $document->createElement("button");
-
-		$element->value = "test";
-		self::assertEquals("test", $element->value);
-	}
-
-	public function testSetOuterHTMLChangesElementInDocument() {
-		$document = new HTMLDocument(Helper::HTML);
-		$element = $document->querySelector("h1");
-		$element->outerHTML = "<p>Hello!</p>";
-
-		$newElement = $document->querySelector("p");
-
-		self::assertNull($document->querySelector("h1"));
-		self::assertNotNull($newElement);
-		self::assertEquals("Hello!", $newElement->innerHTML);
-		self::assertStringContainsString("<p>", $newElement->outerHTML);
-	}
-
-	public function testGetValueAsDateDoesNothingOnNonInputElements() {
-		$document = new HTMLDocument(Helper::HTML_SELECTS);
-		$element = $document->querySelector("select");
-
-		$sut = $element->valueAsDate;
-
-		self::assertNull($sut);
-	}
-
-	public function testGetValueAsNumberDoesNothingOnNonInputElements() {
-		$document = new HTMLDocument(Helper::HTML_SELECTS);
-		$element = $document->querySelector("select");
-
-		$sut = $element->valueAsNumber;
-
-		self::assertNull($sut);
-	}
-
-	public function testDebugInfoSelect() {
-		$document = new HTMLDocument(Helper::HTML_SELECTS);
-		$element = $document->querySelector("select");
-
-		$sut = $element->__debugInfo();
-
-		$expected = [
-			'nodeName' => "select",
-			'nodeValue' => "ZeroOneTwoThreeFourFive",
-			'innerHTML' => '<option value="0">Zero</option><option value="1">One</option><option value="2">Two</option><option value="3">Three</option><option value="4">Four</option><option value="5">Five</option>',
-			"class" => null,
-			"name" => "from",
-			"type" => null,
-			"id" => null,
-			"src" => null,
-			"href" => null
-		];
-
-		self::assertEquals($expected["nodeName"], $sut["nodeName"]);
-		self::assertEquals($expected["nodeValue"], trim(strtr($sut["nodeValue"], ["\t" => '', "\r" => '', "\n" => ''])));
-		self::assertEquals($expected["innerHTML"], trim(strtr($sut["innerHTML"], ["\t" => '', "\r" => '', "\n" => ''])));
-		self::assertEquals($expected['class'], $sut['class']);
-		self::assertEquals($expected["name"], $sut["name"]);
-		self::assertEquals($expected["type"], $sut["type"]);
-		self::assertEquals($expected["id"], $sut["id"]);
-		self::assertEquals($expected["src"], $sut["src"]);
-		self::assertEquals($expected["href"], $sut["href"]);
-	}
-
-	public function testDebugInfoInput() {
-		$document = new HTMLDocument(Helper::HTML_MORE);
-		$element = $document->querySelector("input[name='who']");
-
-		$sut = $element->__debugInfo();
-
-		$expected = [
-			'nodeName' => "input",
-			'nodeValue' => "",
-			'innerHTML' => "",
-			"class" => 'c1 c3',
-			"name" => "who",
-			"type" => null,
-			"id" => null,
-			"src" => null,
-			"href" => null,
-
-		];
-		// die(var_dump($sut));
-		self::assertEquals($expected, $sut);
-	}
-
-	public function testDebugInfoAnchor() {
-		$document = new HTMLDocument(Helper::HTML_TEXT);
-		$element = $document->querySelector("a");
-
-		$sut = $element->__debugInfo();
-
-		$expected = [
-			'nodeName' => "a",
-			'nodeValue' => "casting a\n  ballot",
-			'innerHTML' => "casting a\n  ballot",
-			"class" => null,
-			"name" => null,
-			"type" => null,
-			"id" => null,
-			"src" => null,
-			"href" => "http://en.wikipedia.org/wiki/Absentee_ballot",
-
-		];
-		self::assertEquals($expected, $sut);
-	}
-
-	public function testBooleanAttributes() {
-		$document = new HTMLDocument();
-		foreach(Element::BOOLEAN_ATTRIBUTES as $attribute) {
-			$tagName = uniqid("custom-element-");
-			$element = $document->createElement($tagName);
-
-			self::assertFalse($element->hasAttribute($attribute));
-			self::assertFalse($element->$attribute);
-			$element->$attribute = true;
-			self::assertTrue($element->$attribute);
-			self::assertTrue($element->hasAttribute($attribute));
-		}
+	public function testRemoveAttributeNS():void {
+		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->getElementById("target");
+		$ns = "http://www.example.com/2014/test";
+		$sut->removeAttributeNS($ns, "foo");
+		self::assertFalse(
+			$sut->hasAttributeNS($ns, "foo"));
 	}
 }

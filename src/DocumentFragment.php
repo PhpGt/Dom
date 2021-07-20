@@ -1,74 +1,43 @@
 <?php
 namespace Gt\Dom;
 
-use DOMDocument;
-use DOMDocumentFragment;
-use Exception;
+use DOMXPath;
+use Gt\Dom\Facade\DOMDocumentFacade;
 
 /**
- * Represents a minimal document object that has no parent. It is used as a
- * light-weight version of Document to store well-formed or potentially
- * non-well-formed fragments of XML.
- *
- * Various other methods can take a document fragment as an argument (e.g.,
- * any Node interface methods such as Node.appendChild and Node.insertBefore),
- * in which case the children of the fragment are appended or inserted, not
- * the fragment itself.
- *
- * This interface is also of great use with Web components: <template>
- * elements contains a DocumentFragment in their HTMLTemplateElement::$content
- * property.
- *
- * An empty DocumentFragment can be created using the
- * Document::createDocumentFragment() method or the constructor.
- * @property ?string $innerHTML Gets the HTML serialization of the element's descendants (read only).
- * @property string $innerText Represents the "rendered" text content of a node and its descendants.
+ * The DocumentFragment interface represents a minimal document object that has
+ * no parent. It is used as a lightweight version of Document that stores a
+ * segment of a document structure comprised of nodes just like a standard
+ * document. The key difference is due to the fact that the document fragment
+ * isn't part of the active document tree structure. Changes made to the
+ * fragment don't affect the document (even on reflow) or incur any performance
+ * impact when changes are made.
  */
-class DocumentFragment extends DOMDocumentFragment {
-	use LiveProperty, ParentNode;
+class DocumentFragment extends Node {
+	use ParentNode;
 
-	public function appendHTML(string $data):bool {
-		try {
-			$tempDocument = new HTMLDocument($data);
-
-			foreach($tempDocument->body->children as $child) {
-				$node = $this->ownerDocument->importNode(
-					$child,
-					true
-				);
-				$this->appendChild($node);
-			}
-
-			return true;
+	/**
+	 * Returns the first Element node within the DocumentFragment, in
+	 * document order, that matches the specified ID. Functionally
+	 * equivalent to Document.getElementById().
+	 *
+	 * @param string $id
+	 * @return ?Element
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment/getElementById
+	 */
+	public function getElementById(string $id):?Element {
+		$nativeNode = $this->domNode;
+		/** @var DOMDocumentFacade $nativeDocument */
+		$nativeDocument = $this->ownerDocument->getNativeDomNode($this->ownerDocument);
+		$xpath = new DOMXPath($nativeDocument);
+		$result = $xpath->evaluate("*[@id='$id']", $nativeNode);
+		if($result->length === 0) {
+			return null;
 		}
-		catch(Exception $exception) {
-			return false;
-		}
+
+		/** @var Element $element */
+		/** @noinspection PhpUnnecessaryLocalVariableInspection */
+		$element = $this->ownerDocument->getGtDomNode($result->item(0));
+		return $element;
 	}
-
-	protected function getRootDocument(): DOMDocument {
-		return $this->ownerDocument;
-	}
-
-	public function prop_get_innerText():string {
-		return $this->textContent;
-	}
-
-	public function prop_set_innerText(string $value):string {
-		$this->textContent = $value;
-		return $this->textContent;
-	}
-
-    public function prop_get_innerHTML():?string {
-	    if ($this->hasChildNodes()) {
-            $childHtmlArray = [];
-            foreach ($this->childNodes as $child) {
-                $childHtmlArray [] = $this->ownerDocument->saveHTML($child);
-            }
-
-            return implode(PHP_EOL, $childHtmlArray);
-        }
-
-        return null;
-    }
 }
