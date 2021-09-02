@@ -488,7 +488,7 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/firstChild */
 	protected function __prop_get_firstChild():?Node {
-		$nativeNode = $this->domNode->firstChild;
+		$nativeNode = $this->domNode->firstChild ?? null;
 		if(!$nativeNode) {
 			return null;
 		}
@@ -516,7 +516,7 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/lastChild */
 	protected function __prop_get_lastChild():?Node {
-		$nativeNode = $this->domNode->lastChild;
+		$nativeNode = $this->domNode->lastChild ?? null;
 		if(!$nativeNode) {
 			return null;
 		}
@@ -526,7 +526,7 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nextSibling */
 	protected function __prop_get_nextSibling():?Node {
-		$nativeNode = $this->domNode->nextSibling;
+		$nativeNode = $this->domNode->nextSibling ?? null;
 		if(!$nativeNode) {
 			return null;
 		}
@@ -536,12 +536,12 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName */
 	protected function __prop_get_nodeName():string {
-		return $this->domNode->nodeName;
+		return $this->domNode->nodeName ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType */
 	protected function __prop_get_nodeType():int {
-		return $this->domNode->nodeType;
+		return $this->domNode->nodeType ?? 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
@@ -555,7 +555,7 @@ abstract class Node {
 			return null;
 		}
 
-		return $this->domNode->nodeValue;
+		return $this->domNode->nodeValue ?? null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
@@ -589,7 +589,7 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentNode */
 	protected function __prop_get_parentNode():?Node {
-		$nativeNode = $this->domNode->parentNode;
+		$nativeNode = $this->domNode->parentNode ?? null;
 		if(!$nativeNode) {
 			return null;
 		}
@@ -599,7 +599,7 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentElement */
 	protected function __prop_get_parentElement():?Node {
-		$nativeNode = $this->domNode->parentNode;
+		$nativeNode = $this->domNode->parentNode ?? null;
 		if(!$nativeNode || !$nativeNode instanceof DOMElementFacade) {
 			return null;
 		}
@@ -609,7 +609,7 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/previousSibling */
 	protected function __prop_get_previousSibling():?Node {
-		$nativeNode = $this->domNode->previousSibling;
+		$nativeNode = $this->domNode->previousSibling ?? null;
 		if(!$nativeNode) {
 			return null;
 		}
