@@ -5,6 +5,7 @@ use ArrayAccess;
 use Countable;
 use Gt\Dom\Exception\HTMLCollectionImmutableException;
 use Gt\Dom\Facade\HTMLCollectionFactory;
+use Gt\Dom\Facade\NodeListFactory;
 use Gt\PropFunc\MagicProp;
 use Iterator;
 
@@ -24,7 +25,7 @@ use Iterator;
  * @see HTMLCollectionFactory
  *
  * @property-read int $length Returns the number of items in the collection.
- * @implements ArrayAccess<int, Element>
+ * @implements ArrayAccess<string|int, Element|RadioNodeList|null>
  * @implements Iterator<int, Element>
  */
 class HTMLCollection implements ArrayAccess, Countable, Iterator {
@@ -84,24 +85,43 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	 * non-JavaScript DOM implementations.
 	 *
 	 * @param string $nameOrId
-	 * @return ?Element
+	 * @return Element|RadioNodeList|null
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/namedItem
 	 */
-	public function namedItem(string $nameOrId):?Element {
-		foreach(["id", "name"] as $attribute) {
+	public function namedItem(string $nameOrId):Element|RadioNodeList|null {
+		$matches = [
+			"id" => [],
+			"name" => [],
+		];
+
+		foreach($matches as $attribute => $list) {
 			foreach($this as $element) {
 				if($element->getAttribute($attribute) === $nameOrId) {
-					return $element;
+					array_push($matches[$attribute], $element);
 				}
 			}
 		}
 
-		return null;
+		if(isset($matches["id"][0])) {
+			return $matches["id"][0];
+		}
+
+		$count = count($matches["name"]);
+		if($count === 0) {
+			return null;
+		}
+		elseif($count === 1) {
+			return $matches["name"][0];
+		}
+		else {
+			return NodeListFactory::createRadioNodeList(
+				fn() => $matches["name"]
+			);
+		}
 	}
 
 	/**
 	 * @param int $offset
-	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function offsetExists($offset):bool {
 		$element = $this->item($offset);
@@ -110,16 +130,14 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	}
 
 	/**
-	 * @param int $offset
-	 * @noinspection PhpMissingParamTypeInspection
+	 * @param string|int $offset
 	 */
-	public function offsetGet($offset):?Element {
+	public function offsetGet($offset):Element|RadioNodeList|null {
 		return $this->item($offset);
 	}
 
 	/**
-	 * @param int $offset
-	 * @noinspection PhpMissingParamTypeInspection
+	 * @param string|int $offset
 	 */
 	public function offsetSet($offset, $value):void {
 		throw new HTMLCollectionImmutableException();
@@ -127,7 +145,6 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 
 	/**
 	 * @param int $offset
-	 * @noinspection PhpMissingParamTypeInspection
 	 */
 	public function offsetUnset($offset):void {
 		throw new HTMLCollectionImmutableException();

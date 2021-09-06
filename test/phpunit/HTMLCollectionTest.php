@@ -5,6 +5,8 @@ use Gt\Dom\Element;
 use Gt\Dom\Exception\HTMLCollectionImmutableException;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NodeListFactory;
+use Gt\Dom\HTMLElement\HTMLInputElement;
+use Gt\Dom\RadioNodeList;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -62,6 +64,131 @@ class HTMLCollectionTest extends TestCase {
 		self::assertSame($element2, $sut->namedItem("second"));
 		self::assertSame($element2, $sut->namedItem("xyz"));
 		self::assertNull($sut->namedItem("nope"));
+	}
+
+	public function testNamedItemRadio():void {
+		/** @var array<HTMLInputElement> $radioElementList */
+		$radioElementList = [];
+
+		for($i = 0; $i < 10; $i++) {
+			/** @var HTMLInputElement $radio */
+			$radio = NodeTestFactory::createHTMLElement("input");
+			$radio->type = "radio";
+			$radio->name = "example";
+			$radio->value = "val-$i";
+			array_push($radioElementList, $radio);
+		}
+
+		$radioElementList[2]->checked = true;
+
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			...$radioElementList
+		));
+
+		$radioNodeList = $sut->namedItem("example");
+		self::assertInstanceOf(RadioNodeList::class, $radioNodeList);
+		self::assertEquals("val-2", $radioNodeList->value);
+	}
+
+	public function testNamedItemRadio_noChecked():void {
+		/** @var array<HTMLInputElement> $radioElementList */
+		$radioElementList = [];
+
+		for($i = 0; $i < 10; $i++) {
+			/** @var HTMLInputElement $radio */
+			$radio = NodeTestFactory::createHTMLElement("input");
+			$radio->type = "radio";
+			$radio->name = "example";
+			$radio->value = "val-$i";
+			array_push($radioElementList, $radio);
+		}
+
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			...$radioElementList
+		));
+
+		$radioNodeList = $sut->namedItem("example");
+		self::assertInstanceOf(RadioNodeList::class, $radioNodeList);
+		self::assertEquals("", $radioNodeList->value);
+	}
+
+	public function testNamedItemRadio_checkbox():void {
+		/** @var array<HTMLInputElement> $radioElementList */
+		$radioElementList = [];
+
+		for($i = 0; $i < 10; $i++) {
+			/** @var HTMLInputElement $radio */
+			$radio = NodeTestFactory::createHTMLElement("input");
+			$radio->type = "checkbox";
+			$radio->name = "example";
+			$radio->value = "val-$i";
+			array_push($radioElementList, $radio);
+		}
+
+		$radioElementList[2]->checked = true;
+
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			...$radioElementList
+		));
+
+		$radioNodeList = $sut->namedItem("example");
+		self::assertInstanceOf(RadioNodeList::class, $radioNodeList);
+		self::assertEquals("", $radioNodeList->value);
+	}
+
+	public function testNamedItemRadio_setValue():void {
+		/** @var array<HTMLInputElement> $radioElementList */
+		$radioElementList = [];
+
+		for($i = 0; $i < 10; $i++) {
+			/** @var HTMLInputElement $radio */
+			$radio = NodeTestFactory::createHTMLElement("input");
+			$radio->type = "radio";
+			$radio->name = "example";
+			$radio->value = "val-$i";
+			array_push($radioElementList, $radio);
+		}
+
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			...$radioElementList
+		));
+
+		$radioNodeList = $sut->namedItem("example");
+		$radioNodeList->value = "val-7";
+
+		foreach($radioElementList as $i => $radio) {
+			if($i === 7) {
+				self::assertTrue($radio->checked);
+			}
+			else {
+				self::assertFalse($radio->checked);
+			}
+		}
+	}
+
+	public function testNamedItemRadio_setValue_checkbox():void {
+		/** @var array<HTMLInputElement> $radioElementList */
+		$radioElementList = [];
+
+		for($i = 0; $i < 10; $i++) {
+			/** @var HTMLInputElement $radio */
+			$radio = NodeTestFactory::createHTMLElement("input");
+			$radio->type = "checkbox";
+			$radio->name = "example";
+			$radio->value = "val-$i";
+			array_push($radioElementList, $radio);
+		}
+
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			...$radioElementList
+		));
+
+		$radioNodeList = $sut->namedItem("example");
+		$radioNodeList->value = "val-7";
+
+		foreach($radioElementList as $radio) {
+			self::assertFalse($radio->checked);
+		}
 	}
 
 	public function testOffsetExists():void {

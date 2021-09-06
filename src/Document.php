@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DOMDocument;
 use DOMException;
 use DOMNode;
 use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
@@ -67,7 +68,7 @@ class Document extends Node implements StreamInterface {
 			$string = $this->domDocument->saveHTML();
 		}
 
-		return $string;
+		return trim($string) . "\n";
 	}
 
 	public function getGtDomNode(DOMNode $nativeNode):Node {
@@ -107,7 +108,9 @@ class Document extends Node implements StreamInterface {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/doctype */
 	protected function __prop_get_doctype():?DocumentType {
-		$domDoctype = $this->domDocument->getNativeDomNode($this)->doctype;
+		/** @var DOMDocument $nativeDomNode */
+		$nativeDomNode = $this->domDocument->getNativeDomNode($this);
+		$domDoctype = $nativeDomNode->doctype;
 		if(!$domDoctype) {
 			return null;
 		}
