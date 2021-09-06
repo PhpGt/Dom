@@ -5,8 +5,8 @@ use Gt\Dom\Element;
 use Gt\Dom\Exception\HTMLCollectionImmutableException;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NodeListFactory;
-use Gt\Dom\HTMLCollection;
-use Gt\Dom\HTMLOptionsCollection;
+use Gt\Dom\HTMLElement\HTMLInputElement;
+use Gt\Dom\RadioNodeList;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -64,6 +64,30 @@ class HTMLCollectionTest extends TestCase {
 		self::assertSame($element2, $sut->namedItem("second"));
 		self::assertSame($element2, $sut->namedItem("xyz"));
 		self::assertNull($sut->namedItem("nope"));
+	}
+
+	public function testNamedItemRadio():void {
+		/** @var array<HTMLInputElement> $radioElementList */
+		$radioElementList = [];
+
+		for($i = 0; $i < 10; $i++) {
+			/** @var HTMLInputElement $radio */
+			$radio = NodeTestFactory::createHTMLElement("input");
+			$radio->type = "radio";
+			$radio->name = "example";
+			$radio->value = "val-$i";
+			array_push($radioElementList, $radio);
+		}
+
+		$radioElementList[2]->checked = true;
+
+		$sut = HTMLCollectionFactory::create(fn() => NodeListFactory::create(
+			...$radioElementList
+		));
+
+		$radioNodeList = $sut->namedItem("example");
+		self::assertInstanceOf(RadioNodeList::class, $radioNodeList);
+		self::assertEquals("val-2", $radioNodeList->value);
 	}
 
 	public function testOffsetExists():void {

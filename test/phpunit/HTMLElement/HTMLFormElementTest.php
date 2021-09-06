@@ -6,6 +6,7 @@ use Gt\Dom\HTMLElement\HTMLFormElement;
 use Gt\Dom\HTMLElement\HTMLInputElement;
 use Gt\Dom\HTMLElement\HTMLTextAreaElement;
 use Gt\Dom\HTMLFormControlsCollection;
+use Gt\Dom\RadioNodeList;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
 class HTMLFormElementTest extends HTMLElementTestCase {
