@@ -5,6 +5,8 @@ use Gt\Dom\Element;
 use Gt\Dom\Exception\HTMLCollectionImmutableException;
 use Gt\Dom\Facade\HTMLCollectionFactory;
 use Gt\Dom\Facade\NodeListFactory;
+use Gt\Dom\HTMLCollection;
+use Gt\Dom\HTMLOptionsCollection;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
 

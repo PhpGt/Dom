@@ -24,8 +24,9 @@ use Iterator;
  * @see HTMLCollectionFactory
  *
  * @property-read int $length Returns the number of items in the collection.
- * @implements ArrayAccess<int, Element>
- * @implements Iterator<int, Element>
+ * @template T of Element
+ * @implements ArrayAccess<int, T>
+ * @implements Iterator<int, T>
  */
 class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
