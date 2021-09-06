@@ -19,4 +19,14 @@ class RadioNodeList extends NodeList {
 
 		return null;
 	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/RadioNodeList/value */
+	public function __prop_set_value(string $value):void {
+		foreach($this as $node) {
+			/** @var HTMLInputElement $node */
+			if($node->value === $value) {
+				$node->checked = true;
+			}
+		}
+	}
 }
