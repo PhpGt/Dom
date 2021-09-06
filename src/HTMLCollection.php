@@ -25,9 +25,8 @@ use Iterator;
  * @see HTMLCollectionFactory
  *
  * @property-read int $length Returns the number of items in the collection.
- * @template T of Element
- * @implements ArrayAccess<int, T>
- * @implements Iterator<int, T>
+ * @implements ArrayAccess<string|int, Element|RadioNodeList|null>
+ * @implements Iterator<int, Element>
  */
 class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
@@ -131,14 +130,14 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	}
 
 	/**
-	 * @param int $offset
+	 * @param string|int $offset
 	 */
-	public function offsetGet($offset):?Element {
+	public function offsetGet($offset):Element|RadioNodeList|null {
 		return $this->item($offset);
 	}
 
 	/**
-	 * @param int $offset
+	 * @param string|int $offset
 	 */
 	public function offsetSet($offset, $value):void {
 		throw new HTMLCollectionImmutableException();
