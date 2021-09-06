@@ -67,7 +67,7 @@ class Document extends Node implements StreamInterface {
 			$string = $this->domDocument->saveHTML();
 		}
 
-		return $string;
+		return trim($string) . "\n";
 	}
 
 	public function getGtDomNode(DOMNode $nativeNode):Node {
