@@ -9,21 +9,29 @@ use Gt\Dom\HTMLElement\HTMLInputElement;
  */
 class RadioNodeList extends NodeList {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/RadioNodeList/value */
-	public function __prop_get_value():?string {
+	public function __prop_get_value():string {
 		foreach($this as $node) {
 			/** @var HTMLInputElement $node */
+			if($node->type !== "radio") {
+				return "";
+			}
+
 			if($node->checked) {
 				return $node->value;
 			}
 		}
 
-		return null;
+		return "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/RadioNodeList/value */
 	public function __prop_set_value(string $value):void {
 		foreach($this as $node) {
 			/** @var HTMLInputElement $node */
+			if($node->type !== "radio") {
+				return;
+			}
+
 			if($node->value === $value) {
 				$node->checked = true;
 			}
