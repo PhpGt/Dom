@@ -83,6 +83,8 @@ trait DocumentStream {
 	 * @throws RuntimeException on failure.
 	 */
 	public function seek($offset, $whence = SEEK_SET):void {
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$result = null;
 		$this->fillStream();
 
 		try {
