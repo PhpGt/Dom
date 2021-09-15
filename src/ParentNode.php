@@ -191,7 +191,7 @@ trait ParentNode {
 	 * elements using selectors for more information about using selectors
 	 * to identify elements. Multiple selectors may be specified by
 	 * separating them using commas.
-	 * @return NodeList<Element> A non-live NodeList containing one Element
+	 * @return NodeList A non-live NodeList containing one Element
 	 * object for each descendant node that matches at least one of the
 	 * specified selectors.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/querySelectorAll

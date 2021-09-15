@@ -12,7 +12,6 @@ class DocumentFragmentTest extends TestCase {
 	}
 
 	public function testGetElementById():void {
-		/** @var DocumentFragment $sut */
 		$sut = NodeTestFactory::createFragment();
 		$nodeWithId = $sut->ownerDocument->createElement("div");
 		$nodeWithId->id = "test";
