@@ -103,6 +103,12 @@ class Element extends Node {
 			$child->parentNode->removeChild($child);
 		}
 
+		$innerHTML = mb_convert_encoding(
+			$innerHTML,
+			"HTML-ENTITIES",
+			"utf-8"
+		);
+
 		$tempDocument = new Document();
 		/** @var DOMDocument $nativeTempDocument */
 		$nativeTempDocument = $tempDocument->domNode;
