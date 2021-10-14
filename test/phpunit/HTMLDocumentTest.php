@@ -37,8 +37,9 @@ class HTMLDocumentTest extends TestCase {
 		);
 	}
 
-//	public function testCreatedWithNoDocType():void {
-//		$sut = HTMLDocumentFactory::create("<html><body><h1>Hello!</h1></body></html>");
-//		echo $sut;
-//	}
+	public function testEmojiEncoding():void {
+		$html = "<h1>I ❤️ my 🐈</h1>";
+		$sut = HTMLDocumentFactory::create($html);
+		self::assertStringContainsString("$html", (string)$sut);
+	}
 }

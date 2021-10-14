@@ -68,6 +68,11 @@ class Document extends Node implements StreamInterface {
 			$string = $this->domDocument->saveHTML();
 		}
 
+		$string = mb_convert_encoding(
+			$string,
+			"UTF-8",
+			"HTML-ENTITIES"
+		);
 		return trim($string) . "\n";
 	}
 
