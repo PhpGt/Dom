@@ -129,6 +129,21 @@ class ElementTest extends TestCase {
 		self::assertEquals("A div", $sut->children[1]->innerHTML);
 	}
 
+	public function testInnerHTML_unicode():void {
+		// Note the special apostrophe.
+		$message = "Let’s go on a digital journey together.";
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = $message;
+		self::assertEquals($message, $sut->innerHTML);
+	}
+
+	public function testInnerHTML_emoji():void {
+		$message = "I ❤️ my 🐈";
+		$sut = NodeTestFactory::createNode("example");
+		$sut->innerHTML = $message;
+		self::assertEquals($message, $sut->innerHTML);
+	}
+
 	public function testInnerHTMLReset():void {
 		$sut = NodeTestFactory::createNode("example");
 		$sut->innerHTML = "<p>A paragraph</p>
