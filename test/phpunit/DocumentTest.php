@@ -13,12 +13,12 @@ HTML;
 
 	public function testToStringEmpty() {
 		$sut = new Document();
-		$string = (string)$sut;
-		if(PHP_MAJOR_VERSION < 8) {
+		$expected = "";
+		if(PHP_MAJOR_VERSION >= 8) {
 			// To catch v8-specific EOL.
-			$string .= PHP_EOL;
+			$expected .= PHP_EOL;
 		}
-		self::assertEquals("", $string);
+		self::assertEquals($expected, (string)$sut);
 	}
 
 	public function testToString() {
