@@ -4,16 +4,16 @@
 	"type": "library",
 
 	"require": {
-		"php": ">=7.2",
+		"php": ">=7.3",
 		"ext-dom": "*",
 		"ext-libxml": "*",
 		"ext-mbstring": "*",
-		"phpgt/cssxpath": ">=1.1.2",
+		"phpgt/cssxpath": "^1.1.3",
 		"psr/http-message": "1.*"
 	},
 
 	"require-dev": {
-		"phpunit/phpunit": ">=9.3.8"
+		"phpunit/phpunit": "~9.5"
 	},
 
 	"license": "MIT",
@@ -58,6 +58,11 @@
 		{
 			"name": "Jaroslav Týc",
 			"homepage": "https://www.jaroslavtyc.com/",
+			"role": "Developer"
+		},
+		{
+			"name": "Andrii Beziazychnyi",
+			"homepage": "https://www.atwix.com/",
 			"role": "Developer"
 		}
 	],

@@ -5,6 +5,7 @@ use DOMDocument;
 use DOMNode;
 use DOMXPath;
 use Gt\CssXPath\Translator;
+use ReturnTypeWillChange;
 
 /**
  * Contains methods that are particular to Node objects that can have children.
@@ -72,7 +73,8 @@ trait ParentNode {
 		return new HTMLCollection($x->query($selector, $this));
 	}
 
-	public function getElementsByTagName($name):HTMLCollection {
+	#[ReturnTypeWillChange]
+	public function getElementsByTagName($name) {
 		$nodeList = parent::getElementsByTagName($name);
 		if($nodeList instanceof NodeList) {
 			return $nodeList;

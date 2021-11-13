@@ -5,6 +5,7 @@ use DOMNodeList;
 use ArrayAccess;
 use Countable;
 use Iterator;
+use ReturnTypeWillChange;
 
 /**
  * @property-read int $length
@@ -58,6 +59,7 @@ class NodeList implements Iterator, ArrayAccess, Countable {
 	}
 
 	/** @return Node|null */
+	#[ReturnTypeWillChange]
 	public function current() {
 		return $this->list[$this->key()] ?? null;
 	}
