@@ -13,7 +13,7 @@ HTML;
 
 	public function testToStringEmpty() {
 		$sut = new Document();
-		self::assertEquals("", $sut);
+		self::assertEquals("", (string)$sut);
 	}
 
 	public function testToString() {
