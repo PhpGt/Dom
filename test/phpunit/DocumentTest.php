@@ -13,7 +13,12 @@ HTML;
 
 	public function testToStringEmpty() {
 		$sut = new Document();
-		self::assertEquals("", (string)$sut);
+		$string = (string)$sut;
+		if(PHP_MAJOR_VERSION >= 8) {
+			// To catch v8-specific EOL.
+			$string .= PHP_EOL;
+		}
+		self::assertEquals("", $string);
 	}
 
 	public function testToString() {
@@ -41,7 +46,8 @@ HTML;
 
 	public function testGetSizeEmpty() {
 		$sut = new Document();
-		self::assertEquals(0, $sut->getSize());
+		// Single EOL character in v8 onwards.
+		self::assertEquals(PHP_MAJOR_VERSION >= 8 ? 1 : 0, $sut->getSize());
 	}
 
 	public function testGetSize() {
