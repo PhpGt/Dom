@@ -20,7 +20,8 @@ class Text extends DOMText {
 	 * @see http://php.net/manual/en/domtext.iswhitespaceinelementcontent.php
 	 * @see https://developer.mozilla.org/en-US/docs/Web/API/Text/isElementContentWhitespace
 	 */
-	public function isElementContentWhitespace() {
+    #[\ReturnTypeWillChange]
+    public function isElementContentWhitespace() {
 		return $this->isWhitespaceInElementContent();
 	}
 }

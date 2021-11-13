@@ -193,7 +193,8 @@ class Element extends DOMElement {
 		return $collection->item(count($collection) - 1);
 	}
 
-	public function getAttribute($name):?string {
+    #[\ReturnTypeWillChange]
+    public function getAttribute($name):?string {
 		$value = parent::getAttribute($name);
 		if(strlen($value) === 0) {
 			return null;

@@ -72,7 +72,8 @@ trait ParentNode {
 		return new HTMLCollection($x->query($selector, $this));
 	}
 
-	public function getElementsByTagName($name):HTMLCollection {
+    #[\ReturnTypeWillChange]
+	public function getElementsByTagName($name) {
 		$nodeList = parent::getElementsByTagName($name);
 		if($nodeList instanceof NodeList) {
 			return $nodeList;

@@ -58,6 +58,7 @@ class NodeList implements Iterator, ArrayAccess, Countable {
 	}
 
 	/** @return Node|null */
+    #[\ReturnTypeWillChange]
 	public function current() {
 		return $this->list[$this->key()] ?? null;
 	}
