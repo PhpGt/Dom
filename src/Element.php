@@ -5,6 +5,7 @@ use DateTime;
 use DOMAttr;
 use DOMDocument;
 use DOMElement;
+use ReturnTypeWillChange;
 
 /**
  * The most general base class from which all objects in a Document inherit.
@@ -193,8 +194,8 @@ class Element extends DOMElement {
 		return $collection->item(count($collection) - 1);
 	}
 
-    #[\ReturnTypeWillChange]
-    public function getAttribute($name):?string {
+	#[ReturnTypeWillChange]
+	public function getAttribute($name):?string {
 		$value = parent::getAttribute($name);
 		if(strlen($value) === 0) {
 			return null;
