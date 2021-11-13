@@ -14,7 +14,7 @@ HTML;
 	public function testToStringEmpty() {
 		$sut = new Document();
 		$string = (string)$sut;
-		if(PHP_MAJOR_VERSION >= 8) {
+		if(PHP_MAJOR_VERSION < 8) {
 			// To catch v8-specific EOL.
 			$string .= PHP_EOL;
 		}
