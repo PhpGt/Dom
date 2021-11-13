@@ -13,7 +13,7 @@ HTML;
 
 	public function testToStringEmpty() {
 		$sut = new Document();
-		self::assertEquals(PHP_EOL, $sut);
+		self::assertEquals("", $sut);
 	}
 
 	public function testToString() {
@@ -41,7 +41,7 @@ HTML;
 
 	public function testGetSizeEmpty() {
 		$sut = new Document();
-		self::assertEquals(1, $sut->getSize());
+		self::assertEquals(0, $sut->getSize());
 	}
 
 	public function testGetSize() {

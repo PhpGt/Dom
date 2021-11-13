@@ -29,7 +29,7 @@ class TokenList {
 	private function tok():void {
 		$attributeValue = $this->element->getAttribute($this->attributeName);
 		$this->tokenArray = array_filter(
-			explode(" ", $attributeValue)
+			explode(" ", $attributeValue ?? "")
 		);
 	}
 
