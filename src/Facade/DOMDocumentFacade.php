@@ -208,8 +208,8 @@ class DOMDocumentFacade extends DOMDocument {
 	 */
 	public function __construct(
 		private Document $gtDocument,
-		$version = "",
-		$encoding = ""
+		string $version = "",
+		string $encoding = ""
 	) {
 		parent::__construct($version, $encoding);
 		$this->registerNodeClasses();

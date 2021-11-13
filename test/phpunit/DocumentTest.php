@@ -19,6 +19,7 @@ use Gt\Dom\HTMLElement\HTMLBodyElement;
 use Gt\Dom\HTMLElement\HTMLHeadElement;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\XMLDocument;
 use Gt\PropFunc\PropertyReadOnlyException;
 use PHPUnit\Framework\TestCase;
 
