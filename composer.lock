@@ -8,20 +8,20 @@
     "packages": [
         {
             "name": "phpgt/cssxpath",
-            "version": "v1.1.3",
+            "version": "v1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PhpGt/CssXPath.git",
-                "reference": "64813864ab00e52cbde2cd517d6c6235b7f9ac69"
+                "reference": "7f073ba346c49a339a7b2cda9ccfdb1994c5d271"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PhpGt/CssXPath/zipball/64813864ab00e52cbde2cd517d6c6235b7f9ac69",
-                "reference": "64813864ab00e52cbde2cd517d6c6235b7f9ac69",
+                "url": "https://api.github.com/repos/PhpGt/CssXPath/zipball/7f073ba346c49a339a7b2cda9ccfdb1994c5d271",
+                "reference": "7f073ba346c49a339a7b2cda9ccfdb1994c5d271",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.4"
+                "php": ">=7.3"
             },
             "require-dev": {
                 "ext-dom": "*",
@@ -50,15 +50,15 @@
             "description": "Convert CSS selectors to XPath queries.",
             "support": {
                 "issues": "https://github.com/PhpGt/CssXPath/issues",
-                "source": "https://github.com/PhpGt/CssXPath/tree/v1.1.3"
+                "source": "https://github.com/PhpGt/CssXPath/tree/v1.1.4"
             },
             "funding": [
                 {
-                    "url": "https://github.com/phpgt",
+                    "url": "https://github.com/sponsors/PhpGt",
                     "type": "github"
                 }
             ],
-            "time": "2021-01-28T13:27:01+00:00"
+            "time": "2021-11-13T15:40:44+00:00"
         },
         {
             "name": "phpgt/propfunc",
@@ -2336,5 +2336,5 @@
         "ext-mbstring": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
