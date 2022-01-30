@@ -176,6 +176,14 @@ trait HTMLUIElement {
 	}
 
 	protected function __prop_set_value(string $value):void {
+		if($this instanceof HTMLSelectElement) {
+			/** @var HTMLOptionElement $option */
+			foreach($this->options as $option) {
+				$option->selected = ($option->value === $value);
+			}
+			return;
+		}
+
 		$this->setAttribute("value", $value);
 	}
 

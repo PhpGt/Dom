@@ -536,12 +536,12 @@ abstract class Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName */
 	protected function __prop_get_nodeName():string {
-		return $this->domNode->nodeName ?? "";
+		return $this->domNode->nodeName;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType */
 	protected function __prop_get_nodeType():int {
-		return $this->domNode->nodeType ?? 0;
+		return $this->domNode->nodeType;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
@@ -555,7 +555,7 @@ abstract class Node {
 			return null;
 		}
 
-		return $this->domNode->nodeValue ?? null;
+		return $this->domNode->nodeValue;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue */
