@@ -91,7 +91,8 @@ class HTMLOptionElement extends HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/value */
 	protected function __prop_get_value():string {
-		if($value = $this->getAttribute("value")) {
+		$value = $this->getAttribute("value");
+		if(!is_null($value)) {
 			return $value;
 		}
 

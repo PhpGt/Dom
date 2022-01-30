@@ -221,4 +221,25 @@ class HTMLSelectElementTest extends HTMLElementTestCase {
 			}
 		}
 	}
+
+	public function testValue_setBinaryNumber():void {
+		/** @var HTMLSelectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("select");
+		/** @var HTMLOptionElement $optionEmpty */
+		$optionEmpty = $sut->ownerDocument->createElement("option");
+		/** @var HTMLOptionElement $optionYes */
+		$optionYes = $sut->ownerDocument->createElement("option");
+		$optionYes->textContent = "Yes";
+		$optionYes->value = "1";
+		/** @var HTMLOptionElement $optionNo */
+		$optionNo = $sut->ownerDocument->createElement("option");
+		$optionNo->textContent = "No";
+		$optionNo->value = "0";
+
+		$sut->append($optionEmpty, $optionYes, $optionNo);
+		$sut->value = "0";
+
+		self::assertTrue($optionNo->selected);
+		self::assertFalse($optionYes->selected);
+	}
 }
