@@ -193,4 +193,32 @@ class HTMLSelectElementTest extends HTMLElementTestCase {
 			}
 		}
 	}
+
+	public function testValue_selectsAppropriateOptions_withValueAttribute():void {
+		/** @var HTMLSelectElement $sut */
+		$sut = NodeTestFactory::createHTMLElement("select");
+		$testValues = [
+			1 => "One",
+			2 => "Two",
+			3 => "Three",
+		];
+		foreach($testValues as $testValue => $testTextContent) {
+			/** @var HTMLOptionElement $option */
+			$option = $sut->ownerDocument->createElement("option");
+			$option->value = (string)$testValue;
+			$option->textContent = $testTextContent;
+			$sut->appendChild($option);
+		}
+
+		$sut->value = 2;
+		/** @var HTMLOptionElement $option */
+		foreach($sut->options as $option) {
+			if($option->value == 2) {
+				self::assertTrue($option->selected);
+			}
+			else {
+				self::assertFalse($option->selected);
+			}
+		}
+	}
 }
