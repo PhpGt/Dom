@@ -2,6 +2,7 @@
 namespace Gt\Dom\Test\HTMLElement;
 
 use Gt\Dom\HTMLElement\HTMLScriptElement;
+use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
 class HTMLScriptElementTest extends HTMLElementTestCase {
@@ -58,5 +59,17 @@ class HTMLScriptElementTest extends HTMLElementTestCase {
 		/** @var HTMLScriptElement $sut */
 		$sut = NodeTestFactory::createHTMLElement("script");
 		self::assertPropertyAttributeCorrelate($sut, "referrerpolicy", "referrerPolicy");
+	}
+
+	public function testInlineScriptTags():void {
+		$document = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_INLINE_SCRIPT_WITH_TAGS);
+		/** @var HTMLScriptElement $sut */
+		$sut = $document->querySelector("script");
+		$innerHTML = $sut->innerHTML;
+
+		self::assertStringContainsString("<h2>lorem ipsum</h2>", $innerHTML);
+		self::assertStringContainsString("<p>lorem <strong>lorem ipsum</strong></p>", $innerHTML);
+		self::assertStringContainsString("<button class=\"button\">click</button>", $innerHTML);
+		self::assertStringContainsString("</div>", $innerHTML);
 	}
 }
