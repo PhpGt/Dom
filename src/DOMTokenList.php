@@ -256,7 +256,7 @@ class DOMTokenList implements Countable, Iterator {
 		}
 	}
 
-	public function count() {
+	public function count():int {
 		return $this->length;
 	}
 
