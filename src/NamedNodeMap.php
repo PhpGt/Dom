@@ -235,7 +235,7 @@ class NamedNodeMap implements ArrayAccess, Countable, Iterator {
 		throw new NamedNodeMapImmutableException("Use removeNamedItem instead of ArrayAccess");
 	}
 
-	public function count() {
+	public function count():int {
 		return $this->getNative()->length;
 	}
 
