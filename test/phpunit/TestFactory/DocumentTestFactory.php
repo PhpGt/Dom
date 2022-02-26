@@ -262,6 +262,26 @@ XML;
 </svg>
 
 XML;
+	const HTML_INLINE_SCRIPT_WITH_TAGS = <<<HTML
+<!doctype html>
+<body>
+	<h1>Hello, JavaScript!</h1>
+	<script>
+	{
+	    const btn = document.querySelector("#test3");
+	    btn.addEventListener("click", e => {
+		document.querySelector("#test3div").innerHTML = `
+		    <div class="module">
+			<h2>lorem ipsum</h2>
+			<p>lorem <strong>lorem ipsum</strong></p>
+			<button class="button">click</button>
+		    </div>
+		`;
+	    });
+	}
+	</script>
+</body>
+HTML;
 
 
 	public static function createHTMLDocument(
