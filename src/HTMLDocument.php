@@ -1,66 +1,74 @@
 <?php
 namespace Gt\Dom;
 
-use Gt\Dom\HTMLElement\HTMLElement;
+use Gt\PropFunc\MagicProp;
 
 /**
- * @method HTMLElement createElement(string $tagName)
+ * @property-read Element $body
+ * @property-read Element $head
+ * @property-read HTMLCollection $embeds
+ *
+// * @method getElementsByTagName(string $tagName)
  */
 class HTMLDocument extends Document {
-	const DEFAULT_DOCTYPE = "<!doctype html>";
-	const EMPTY_DOCUMENT_STRING = self::DEFAULT_DOCTYPE . "<html><head></head><body></body></html>";
-	const W3_NAMESPACE = "http://www.w3.org/1999/xhtml";
+	use MagicProp;
 
-	public function __construct(string $html = "") {
+	public function __construct(
+		string $html = "<!doctype html>",
+		public readonly string $characterSet = "UTF-8"
+	) {
 		parent::__construct();
 
-		if(strlen($html) === 0) {
-			$html = self::EMPTY_DOCUMENT_STRING;
-		}
-
-// Default the doctype to HTML5's doctype.
-		$posDoctype = stripos($html, "<!doctype");
-		$posFirstAngleBracket = strpos($html, "<");
-		if(false === $posDoctype
-		|| $posDoctype > $posFirstAngleBracket) {
-			$html = self::DEFAULT_DOCTYPE . $html;
-		}
-
-		$this->open();
-		$html = preg_replace_callback(
-			'/[\x{80}-\x{10FFFF}]/u',
-			function($match) {
-				return mb_convert_encoding(
-					$match[0],
-					"HTML-ENTITIES",
-					"UTF-8"
-				);
-			},
-			$html
+		$html = mb_convert_encoding(
+			$html,
+			"HTML-ENTITIES",
+			$this->characterSet,
 		);
-		$this->domDocument->loadHTML($html, LIBXML_SCHEMA_CREATE);
+		$this->loadHTML($html);
 
-		if(!$this->domDocument->documentElement) {
-			$html = $this->domDocument->createElement("html");
-			$this->domDocument->appendChild($html);
-		}
-
-		if(!$this->domDocument->getElementsByTagName("head")->item(0)
-		) {
-			$head = $this->domDocument->createElement("head");
-			$this->domDocument->documentElement->insertBefore(
-				$head,
-				$this->domDocument->documentElement->firstChild
-			);
-		}
-		if(!$this->domDocument->getElementsByTagName("body")->item(0)
-		) {
-			$body = $this->domDocument->createElement("body");
-			$this->domDocument->documentElement->appendChild($body);
+		if(is_null($this->documentElement)) {
+			$this->appendChild($this->createElement("html"));
 		}
 	}
 
-	protected function __prop_get_contentType():string {
-		return "text/html";
+	public function __toString():string {
+		$documentElement = $this->documentElement;
+		if(is_null($documentElement)) {
+			$documentElement = $this->createElement("html");
+			$this->appendChild($documentElement);
+		}
+		if(is_null($this->head)) {
+			$documentElement->prepend($this->createElement("head"));
+		}
+		if(is_null($this->body)) {
+			$documentElement->append($this->createElement("body"));
+		}
+		return parent::__toString();
+	}
+
+	public function __prop_get_body():Element {
+// TODO: Type hint node lists properly.
+		$body = $this->getElementsByTagName("body")?->item(0);
+		if(is_null($body)) {
+			$body = $this->createElement("body");
+			$this->documentElement->append($body);
+		}
+
+		return $body;
+	}
+
+	public function __prop_get_head():Element {
+// TODO: Type hint node lists properly.
+		$head = $this->getElementsByTagName("head")?->item(0);
+		if(is_null($head)) {
+			$head = $this->createElement("head");
+			$this->documentElement->prepend($head);
+		}
+
+		return $head;
+	}
+
+	public function __prop_get_embeds():HTMLCollection {
+		return $this->getElementsByTagName("embed");
 	}
 }

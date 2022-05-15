@@ -1,21 +1,19 @@
 <?php
 namespace Gt\Dom;
 
+use Gt\PropFunc\MagicProp;
+
 class XMLDocument extends Document {
-	const EMPTY_DOCUMENT_STRING = "<?xml ?>";
+	use MagicProp;
 
-	public function __construct(string $xml = "") {
+	public function __construct(
+		string $xml = "<?xml ?>",
+		public readonly string $characterSet = "UTF-8",
+	) {
 		parent::__construct();
-
-		if(strlen($xml) === 0) {
-			$xml = self::EMPTY_DOCUMENT_STRING;
+		$this->loadXML($xml);
+		if(is_null($this->documentElement)) {
+			$this->appendChild($this->createElement("xml"));
 		}
-
-		$this->open();
-		$this->domDocument->loadXML($xml);
-	}
-
-	protected function __prop_get_contentType():string {
-		return "text/xml";
 	}
 }

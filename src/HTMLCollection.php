@@ -3,36 +3,18 @@ namespace Gt\Dom;
 
 use ArrayAccess;
 use Countable;
-use Gt\Dom\Exception\HTMLCollectionImmutableException;
-use Gt\Dom\Facade\HTMLCollectionFactory;
-use Gt\Dom\Facade\NodeListFactory;
 use Gt\PropFunc\MagicProp;
 use Iterator;
+use JetBrains\PhpStorm\Internal\LanguageLevelTypeAware;
+use JetBrains\PhpStorm\Internal\TentativeType;
 
 /**
- * The HTMLCollection interface represents a generic collection (array-like
- * object similar to arguments) of elements (in document order) and offers
- * methods and properties for selecting from the list.
- *
- * Note: This interface is called HTMLCollection for historical reasons (before
- * the modern DOM, collections implementing this interface could only have HTML
- * elements as their items).
- *
- * An HTMLCollection in the HTML DOM is live; it is automatically updated when
- * the underlying document is changed.
- *
- * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection
- * @see HTMLCollectionFactory
- *
- * @property-read int $length Returns the number of items in the collection.
- * @implements ArrayAccess<string|int, Element|RadioNodeList|null>
- * @implements Iterator<int, Element>
+ * @property-read int $length
  */
 class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
 
-	/** @var callable():NodeList $callback Returns a NodeList, called
-	 * multiple times, allowing the HTMLCollection to be "live" */
+	/** @var callable */
 	private $callback;
 	private int $iteratorIndex;
 
@@ -41,15 +23,55 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 		$this->iteratorIndex = 0;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/length */
-	protected function __prop_get_length():int {
-		$nodeList = call_user_func($this->callback);
-		return count($nodeList);
+	public function __prop_get_length():int {
+		return 0;
 	}
 
-	public function count():int {
-		return $this->length;
+// ArrayAccess functions:
+	public function offsetExists(mixed $offset):bool {
+		// TODO: Implement offsetExists() method.
 	}
+
+	public function offsetGet(mixed $offset):mixed {
+		// TODO: Implement offsetGet() method.
+	}
+
+	public function offsetSet(mixed $offset, mixed $value):void {
+		// TODO: Implement offsetSet() method.
+	}
+
+	public function offsetUnset(mixed $offset):void {
+		// TODO: Implement offsetUnset() method.
+	}
+// End of ArrayAccess functions.
+
+// Countable functions:
+	public function count():int {
+		// TODO: Implement count() method.
+	}
+// End of Countable functions.
+
+// Iterator functions:
+	public function current():mixed {
+		// TODO: Implement current() method.
+	}
+
+	public function next():void {
+		// TODO: Implement next() method.
+	}
+
+	public function key():mixed {
+		// TODO: Implement key() method.
+	}
+
+	public function valid():bool {
+		// TODO: Implement valid() method.
+	}
+
+	public function rewind():void {
+		// TODO: Implement rewind() method.
+	}
+// End of Iterator functions.
 
 	/**
 	 * The HTMLCollection method item() returns the node located at the
@@ -118,56 +140,5 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 				fn() => $matches["name"]
 			);
 		}
-	}
-
-	/**
-	 * @param int $offset
-	 */
-	public function offsetExists($offset):bool {
-		$element = $this->item($offset);
-		return !is_null($element);
-
-	}
-
-	/**
-	 * @param string|int $offset
-	 */
-	public function offsetGet($offset):Element|RadioNodeList|null {
-		return $this->item($offset);
-	}
-
-	/**
-	 * @param string|int $offset
-	 */
-	public function offsetSet($offset, $value):void {
-		throw new HTMLCollectionImmutableException();
-	}
-
-	/**
-	 * @param int $offset
-	 */
-	public function offsetUnset($offset):void {
-		throw new HTMLCollectionImmutableException();
-	}
-
-	public function current():Element {
-		return $this->item($this->iteratorIndex);
-	}
-
-	public function next():void {
-		$this->iteratorIndex++;
-	}
-
-	public function key():int {
-		return $this->iteratorIndex;
-	}
-
-	public function valid():bool {
-		$item = $this->item($this->iteratorIndex);
-		return !is_null($item);
-	}
-
-	public function rewind():void {
-		$this->iteratorIndex = 0;
 	}
 }
