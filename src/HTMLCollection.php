@@ -8,6 +8,20 @@ use Gt\PropFunc\MagicProp;
 use Iterator;
 
 /**
+ * The HTMLCollection interface represents a generic collection (array-like
+ * object similar to arguments) of elements (in document order) and offers
+ * methods and properties for selecting from the list.
+ *
+ * Note: This interface is called HTMLCollection for historical reasons (before
+ * the modern DOM, collections implementing this interface could only have HTML
+ * elements as their items).
+ *
+ * An HTMLCollection in the HTML DOM is live; it is automatically updated when
+ * the underlying document is changed.
+ *
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection
+ * @see HTMLCollectionFactory
+ *
  * @property-read int $length
  * @implements ArrayAccess<int, Element>
  * @implements Iterator<int, Element>

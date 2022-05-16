@@ -50,7 +50,6 @@ class HTMLDocument extends Document {
 	}
 
 	public function __prop_get_body():Element {
-// TODO: Type hint node lists properly.
 		$body = $this->getElementsByTagName("body")->item(0);
 		if(is_null($body)) {
 			$body = $this->createElement("body");
@@ -61,7 +60,6 @@ class HTMLDocument extends Document {
 	}
 
 	public function __prop_get_head():Element {
-// TODO: Type hint node lists properly.
 		$head = $this->getElementsByTagName("head")->item(0);
 		if(is_null($head)) {
 			$head = $this->createElement("head");
