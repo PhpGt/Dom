@@ -23,6 +23,7 @@ jobs:
       - name: Upload build archive for test runners
         uses: actions/upload-artifact@v2
         with:
+          php_version: '8.1'
           name: build-artifact
           path: /tmp/github-actions
 
@@ -42,7 +43,7 @@ jobs:
       - name: PHP Unit tests
         uses: php-actions/phpunit@v2
         with:
-          php_version: 8.0
+          php_version: '8.1'
           php_extensions: xdebug
           configuration: test/phpunit/phpunit.xml
           bootstrap: vendor/autoload.php
@@ -63,5 +64,6 @@ jobs:
       - name: PHP Static Analysis
         uses: php-actions/phpstan@v2
         with:
+          php_version: '8.1'
           path: src/
           level: 6
