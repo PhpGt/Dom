@@ -6,4 +6,5 @@ enum ElementType {
 	case HTMLBodyElement;
 	case HTMLHtmlElement;
 	case HTMLUnknownElement;
+	case HTMLHeadElement;
 }

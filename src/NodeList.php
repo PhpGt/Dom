@@ -39,7 +39,7 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * behaves similarly to HTMLCollection (which is ALWAYS live).
 	 * @see HTMLCollection
 	 */
-	public function __construct(Node|callable...$representation) {
+	public function __construct(Node|Element|callable...$representation) {
 		if(isset($representation[0]) && is_callable($representation[0])) {
 			$this->callback = $representation[0];
 		}

@@ -2,7 +2,7 @@
 namespace Gt\Dom;
 
 class NodeListFactory extends NodeList {
-	public static function create(Node...$nodeList):NodeList {
+	public static function create(Node|Element...$nodeList):NodeList {
 		return new NodeList(...$nodeList);
 	}
 
