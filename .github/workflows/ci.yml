@@ -23,7 +23,6 @@ jobs:
       - name: Upload build archive for test runners
         uses: actions/upload-artifact@v2
         with:
-          php_version: '8.1'
           name: build-artifact
           path: /tmp/github-actions
 
