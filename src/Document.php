@@ -10,8 +10,10 @@ use ReturnTypeWillChange;
 use Stringable;
 
 /**
- * @property-read Element $documentElement
+ * @property-read ?Element $documentElement
  * @property-read DocumentType $doctype
+ *
+ * @method Element createElement(string $tagName)
  */
 abstract class Document extends DOMDocument implements Stringable {
 	const NodeClassLookup = [
@@ -31,20 +33,15 @@ abstract class Document extends DOMDocument implements Stringable {
 //		DOMProcessingInstruction::class => DOMProcessingInstructionFacade::class,
 	];
 
-	public readonly string $characterSet;
-	public readonly string $contentType;
-
-	public function __construct() {
+	public function __construct(
+		public readonly string $characterSet,
+		public readonly string $contentType,
+	) {
 		$className = get_class($this);
 		if($className === Document::class) {
 			throw new DocumentMustBeExtendedException("You are trying to construct a plain Gt\\Dom\\Document - instead, you should use Gt\\Dom\\HTMLDocument or Gt\\Dom\\XMLDocument");
 		}
-		elseif($className === XMLDocument::class) {
-			$this->contentType = "application/xml";
-		}
-		elseif($className === HTMLDocument::class) {
-			$this->contentType = "text/html";
-		}
+
 		parent::__construct("1.0", $this->characterSet);
 		$this->registerNodeClasses();
 		libxml_use_internal_errors(true);
@@ -66,6 +63,7 @@ abstract class Document extends DOMDocument implements Stringable {
 		return trim($string) . "\n";
 	}
 
+	/** @phpstan-ignore-next-line */
 	#[ReturnTypeWillChange]
 	public function getElementsByTagName(string $qualifiedName):HTMLCollection {
 		return HTMLCollectionFactory::create(function() use($qualifiedName) {

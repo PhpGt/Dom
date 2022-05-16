@@ -4,8 +4,8 @@ namespace Gt\Dom;
 use Gt\PropFunc\MagicProp;
 
 /**
- * @property-read Element $body
- * @property-read Element $head
+ * @property-read ?Element $body
+ * @property-read ?Element $head
  * @property-read HTMLCollection $embeds
  *
 // * @method getElementsByTagName(string $tagName)
@@ -15,9 +15,12 @@ class HTMLDocument extends Document {
 
 	public function __construct(
 		string $html = "<!doctype html>",
-		public readonly string $characterSet = "UTF-8"
+		string $characterSet = "UTF-8"
 	) {
-		parent::__construct();
+		parent::__construct(
+			$characterSet,
+			"text/html",
+		);
 
 		$html = mb_convert_encoding(
 			$html,
@@ -48,7 +51,7 @@ class HTMLDocument extends Document {
 
 	public function __prop_get_body():Element {
 // TODO: Type hint node lists properly.
-		$body = $this->getElementsByTagName("body")?->item(0);
+		$body = $this->getElementsByTagName("body")->item(0);
 		if(is_null($body)) {
 			$body = $this->createElement("body");
 			$this->documentElement->append($body);
@@ -59,7 +62,7 @@ class HTMLDocument extends Document {
 
 	public function __prop_get_head():Element {
 // TODO: Type hint node lists properly.
-		$head = $this->getElementsByTagName("head")?->item(0);
+		$head = $this->getElementsByTagName("head")->item(0);
 		if(is_null($head)) {
 			$head = $this->createElement("head");
 			$this->documentElement->prepend($head);

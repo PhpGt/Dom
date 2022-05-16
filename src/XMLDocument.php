@@ -8,9 +8,13 @@ class XMLDocument extends Document {
 
 	public function __construct(
 		string $xml = "<?xml ?>",
-		public readonly string $characterSet = "UTF-8",
+		string $characterSet = "UTF-8",
 	) {
-		parent::__construct();
+		parent::__construct(
+			$characterSet,
+			"application/xml",
+		);
+
 		$this->loadXML($xml);
 		if(is_null($this->documentElement)) {
 			$this->appendChild($this->createElement("xml"));

@@ -3,13 +3,14 @@ namespace Gt\Dom;
 
 use ArrayAccess;
 use Countable;
+use Gt\Dom\Exception\HTMLCollectionImmutableException;
 use Gt\PropFunc\MagicProp;
 use Iterator;
-use JetBrains\PhpStorm\Internal\LanguageLevelTypeAware;
-use JetBrains\PhpStorm\Internal\TentativeType;
 
 /**
  * @property-read int $length
+ * @implements ArrayAccess<int, Element>
+ * @implements Iterator<int, Element>
  */
 class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
@@ -23,53 +24,58 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 		$this->iteratorIndex = 0;
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/length */
 	public function __prop_get_length():int {
-		return 0;
+		return $this->count();
 	}
 
 // ArrayAccess functions:
+
+	/** @param int $offset */
 	public function offsetExists(mixed $offset):bool {
-		// TODO: Implement offsetExists() method.
+		return !is_null($this->item($offset));
 	}
 
-	public function offsetGet(mixed $offset):mixed {
-		// TODO: Implement offsetGet() method.
+	/** @param int $offset */
+	public function offsetGet(mixed $offset):?Element {
+		return $this->item($offset);
 	}
 
 	public function offsetSet(mixed $offset, mixed $value):void {
-		// TODO: Implement offsetSet() method.
+		throw new HTMLCollectionImmutableException();
 	}
 
 	public function offsetUnset(mixed $offset):void {
-		// TODO: Implement offsetUnset() method.
+		throw new HTMLCollectionImmutableException();
 	}
 // End of ArrayAccess functions.
 
 // Countable functions:
 	public function count():int {
-		// TODO: Implement count() method.
+		$nodeList = call_user_func($this->callback);
+		return count($nodeList);
 	}
 // End of Countable functions.
 
 // Iterator functions:
-	public function current():mixed {
-		// TODO: Implement current() method.
-	}
-
-	public function next():void {
-		// TODO: Implement next() method.
-	}
-
-	public function key():mixed {
-		// TODO: Implement key() method.
+	public function rewind():void {
+		$this->iteratorIndex = 0;
 	}
 
 	public function valid():bool {
-		// TODO: Implement valid() method.
+		return $this->offsetExists($this->iteratorIndex);
 	}
 
-	public function rewind():void {
-		// TODO: Implement rewind() method.
+	public function key():int {
+		return $this->iteratorIndex;
+	}
+
+	public function current():?Element {
+		return $this->offsetGet($this->iteratorIndex);
+	}
+
+	public function next():void {
+		$this->iteratorIndex++;
 	}
 // End of Iterator functions.
 
@@ -110,35 +116,36 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	 * @return Element|RadioNodeList|null
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/namedItem
 	 */
-	public function namedItem(string $nameOrId):Element|RadioNodeList|null {
-		$matches = [
-			"id" => [],
-			"name" => [],
-		];
-
-		foreach($matches as $attribute => $list) {
-			foreach($this as $element) {
-				if($element->getAttribute($attribute) === $nameOrId) {
-					array_push($matches[$attribute], $element);
-				}
-			}
-		}
-
-		if(isset($matches["id"][0])) {
-			return $matches["id"][0];
-		}
-
-		$count = count($matches["name"]);
-		if($count === 0) {
-			return null;
-		}
-		elseif($count === 1) {
-			return $matches["name"][0];
-		}
-		else {
-			return NodeListFactory::createRadioNodeList(
-				fn() => $matches["name"]
-			);
-		}
-	}
+// TODO: Enable namedItem when you get there in tests (disabled for PHPStan's benefit)
+//	public function namedItem(string $nameOrId):Element|RadioNodeList|null {
+//		$matches = [
+//			"id" => [],
+//			"name" => [],
+//		];
+//
+//		foreach($matches as $attribute => $list) {
+//			foreach($this as $element) {
+//				if($element->getAttribute($attribute) === $nameOrId) {
+//					array_push($matches[$attribute], $element);
+//				}
+//			}
+//		}
+//
+//		if(isset($matches["id"][0])) {
+//			return $matches["id"][0];
+//		}
+//
+//		$count = count($matches["name"]);
+//		if($count === 0) {
+//			return null;
+//		}
+//		elseif($count === 1) {
+//			return $matches["name"][0];
+//		}
+//		else {
+//			return NodeListFactory::createRadioNodeList(
+//				fn() => $matches["name"]
+//			);
+//		}
+//	}
 }
