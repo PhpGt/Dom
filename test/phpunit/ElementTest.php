@@ -1,8 +1,11 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\HTMLDocument;
+use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\XMLDocument;
 use PHPUnit\Framework\TestCase;
 
 class ElementTest extends TestCase {
@@ -145,228 +148,244 @@ class ElementTest extends TestCase {
 		self::assertEquals($message, $sut->innerHTML);
 	}
 
-//	public function testInnerHTML_emoji():void {
-//		$message = "I ❤️ my 🐈";
-//		$sut = $document->createElement("example");
-//		$sut->innerHTML = $message;
-//		self::assertEquals($message, $sut->innerHTML);
-//	}
-//
-//	public function testInnerHTMLReset():void {
-//		$sut = $document->createElement("example");
-//		$sut->innerHTML = "<p>A paragraph</p>
-//		<div>A div</div>";
-//		$sut->innerHTML = "<example>An example</example><another-example>And another</another-example>";
-//		self::assertEquals("An example", $sut->children[0]->innerHTML);
-//		self::assertEquals("And another", $sut->children[1]->innerHTML);
-//	}
-//
-//	public function testOuterHTML():void {
-//		$sut = $document->createElement("example");
-//		$sut->innerHTML = "<p>A paragraph</p>";
-//		self::assertEquals(
-//			"<example><p>A paragraph</p></example>",
-//			$sut->outerHTML
-//		);
-//	}
-//
-//	public function testOuterHTMLNoParent():void {
-//		$sut = $document->createElement("example");
-//		$sut->outerHTML = "<not-example></not-example>";
-//// The original reference should not change.
-//		self::assertEquals("<example></example>", $sut->outerHTML);
-//	}
-//
-//	public function testOuterHTMLSet():void {
-//		$sut = $document->createElement("example");
-//		$sut->ownerDocument->appendChild($sut);
-//		self::assertCount(
-//			1,
-//			$sut->ownerDocument->getElementsByTagName("example")
-//		);
-//
-//		$innerHTML = "<p>A paragraph</p>";
-//		$sut->outerHTML = "<changed-outer>$innerHTML</changed-outer>";
-//		self::assertCount(
-//			0,
-//			$sut->ownerDocument->getElementsByTagName("example")
-//		);
-//		self::assertCount(
-//			1,
-//			$sut->ownerDocument->getElementsByTagName("changed-outer")
-//		);
-//		self::assertEquals(
-//			"<changed-outer><p>A paragraph</p></changed-outer>",
-//			$sut->ownerDocument->getElementsByTagName("changed-outer")->item(0)->outerHTML
-//		);
-//	}
-//
-//	public function testOuterHTMLSetMultiple():void {
-//		$sut = $document->createElement("example");
-//		$sut->ownerDocument->appendChild($sut);
-//		self::assertCount(1, $sut->ownerDocument->getElementsByTagName("example"));
-//		$sut->outerHTML = "<first-outer>Example1</first-outer><second-outer>Example2</second-outer>";
-//		self::assertCount(0, $sut->ownerDocument->getElementsByTagName("example"));
-//		self::assertCount(1, $sut->ownerDocument->getElementsByTagName("first-outer"));
-//		self::assertCount(1, $sut->ownerDocument->getElementsByTagName("second-outer"));
-//	}
-//
-//	public function testOuterHTMLParent():void {
-//		$html = "<changed-tag>Some content</changed-tag>";
-//		$sut = $document->createElement("example");
-//		$sut->ownerDocument->appendChild($sut);
-//		$sut->outerHTML = $html;
-//		self::assertCount(0, $sut->ownerDocument->getElementsByTagName("example"));
-//		self::assertCount(1, $sut->ownerDocument->getElementsByTagName("changed-tag"));
-//	}
-//
-//	public function testChildren():void {
-//		$sut = $document->createElement("example");
-//		$sut->innerHTML = "<p>A paragraph</p>
-//		<div>A div</div>";
-//		self::assertCount(2, $sut->children);
-//		self::assertEquals("A paragraph", $sut->children[0]->innerHTML);
-//		self::assertEquals("A div", $sut->children[1]->innerHTML);
-//	}
-//
-//	public function testPrefix():void {
-//		$sut = $document->createElement("example");
-//		self::assertEquals("", $sut->prefix);
-//	}
-//
-//	public function testTagName():void {
-//		$sut = $document->createElement("example");
-//		self::assertEquals("EXAMPLE", $sut->tagName);
-//		$sut = $document->createElement("Example");
-//		self::assertEquals("EXAMPLE", $sut->tagName);
-//	}
-//
-//	public function testTagNameInvalid():void {
-//		self::expectException(InvalidCharacterException::class);
-//		$document->createElement("This can't be done");
-//	}
-//
-//	public function testClosestNoMatch():void {
-//		$sut = $document->createElement("example");
-//		self::assertNull($sut->closest("nothing"));
-//	}
-//
-//	public function testClosestSelf():void {
-//		$sut = $document->createElement("example");
-//		$sut->ownerDocument->appendChild($sut);
-//		self::assertSame($sut, $sut->closest("example"));
-//	}
-//
-//	public function testClosestParent():void {
-//		$sut = $document->createElement("example");
-//		$context = $sut->ownerDocument;
-//		for($i = 0; $i < 10; $i++) {
-//			$parent = $sut->ownerDocument->createElement("example-$i");
-//			$context->appendChild($parent);
-//			$context = $parent;
-//		}
-//		$context->appendChild($sut);
-//
-//		$element = $sut->ownerDocument->getElementsByTagName("example-3")->item(0);
-//		$closest = $sut->closest("example-3");
-//		self::assertSame(
-//			$element,
-//			$closest
-//		);
-//	}
-//
-//	public function testClosestWithAnotherMatchingAncestor():void {
-//		$sut = $document->createElement("example");
-//		$tagNames = ["this-example", "that-example"];
-//		$context = $sut->ownerDocument;
-//		for($i = 0; $i < 10; $i++) {
-//			$tagName = $i % 2 ? $tagNames[0] : $tagNames[1];
-//			$parent = $sut->ownerDocument->createElement($tagName);
-//			$context->appendChild($parent);
-//			$context = $parent;
-//		}
-//		$context->appendChild($sut);
-//
-//		$thatElements = $sut->ownerDocument->getElementsByTagName("that-example");
-//		$closest = $sut->closest("that-example");
-//		self::assertSame(
-//			$thatElements->item($thatElements->length - 1),
-//			$closest
-//		);
-//	}
-//
-//	public function testGetAttribute():void {
-//		$sut = $document->createElement("example");
-//		self::assertNull($sut->getAttribute("attr"));
-//		$sut->setAttribute("attr", "content");
-//		self::assertEquals("content", $sut->getAttribute("attr"));
-//	}
-//
-//	public function testGetAttributeNamesNone():void {
-//		$sut = $document->createElement("example");
-//		self::assertCount(0, $sut->getAttributeNames());
-//	}
-//
-//	public function testGetAttributeNames():void {
-//		$sut = $document->createElement("example");
-//		$sut->setAttribute("name", "test");
-//		$sut->setAttribute("framework", "phpunit");
-//		$attributeNames = $sut->getAttributeNames();
-//		self::assertCount(2, $attributeNames);
-//		self::assertContains("name", $attributeNames);
-//		self::assertContains("framework", $attributeNames);
-//	}
-//
-//	public function testGetAttributeNS():void {
-//		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
-//		$sut = $xmlDoc->getElementById("target");
-//		$ns = "http://www.example.com/2014/test";
-//		self::assertEquals(
-//			"Foo value",
-//			$sut->getAttributeNS($ns, "foo"));
-//	}
-//
-//	public function testGetAttributeNSNone():void {
-//		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
-//		$sut = $xmlDoc->getElementById("target");
-//		$ns = "http://www.example.com/2014/test";
-//		self::assertNull($sut->getAttributeNS($ns, "nothing"));
-//	}
-//
-//	public function testGetElementsByClassName():void {
-//		$sut = $document->createElement("example");
-//		/** @var Element $child1 */
-//		$child1 = $sut->cloneNode();
-//		/** @var Element $child2 */
-//		$child2 = $sut->cloneNode();
-//		/** @var Element $child3 */
-//		$child3 = $sut->cloneNode();
-//
-//		$child1->className = "one child-of-sut";
-//		$child2->className = "two child-of-sut another-class";
-//		$child3->className = "three child-of-sut another-class";
-//
-//		$sut->append($child1, $child2, $child3);
-//		self::assertCount(1, $sut->getElementsByClassName("one"));
-//		self::assertCount(1, $sut->getElementsByClassName("two"));
-//		self::assertCount(1, $sut->getElementsByClassName("three"));
-//		self::assertCount(3, $sut->getElementsByClassName("child-of-sut"));
-//		self::assertCount(2, $sut->getElementsByClassName("another-class"));
-//	}
-//
-//	public function testGetElementsByClassNameIsLive():void {
-//		$sut = $document->createElement("example");
-//		/** @var Element $child1 */
-//		$child1 = $sut->cloneNode();
-//
-//		$child1->className = "one child-of-sut";
-//		$sut->append($child1);
-//		self::assertCount(1, $sut->getElementsByClassName("one"));
-//		$child1->className = "not-one child-of-sut";
-//		self::assertCount(0, $sut->getElementsByClassName("one"));
-//		self::assertCount(0, $sut->getElementsByClassName("one child-of-sut"));
-//	}
-//
+	public function testInnerHTML_emoji():void {
+		$document = new HTMLDocument();
+		$message = "I ❤️ my 🐈";
+		$sut = $document->createElement("example");
+		$sut->innerHTML = $message;
+		self::assertEquals($message, $sut->innerHTML);
+	}
+
+	public function testInnerHTMLReset():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$sut->innerHTML = "<p>A paragraph</p>
+		<div>A div</div>";
+		$sut->innerHTML = "<example>An example</example><another-example>And another</another-example>";
+		self::assertEquals("An example", $sut->children[0]->innerHTML);
+		self::assertEquals("And another", $sut->children[1]->innerHTML);
+	}
+
+	public function testOuterHTML():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$sut->innerHTML = "<p>A paragraph</p>";
+		self::assertEquals(
+			"<example><p>A paragraph</p></example>",
+			$sut->outerHTML
+		);
+	}
+
+	public function testOuterHTMLNoParent():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$sut->outerHTML = "<not-example></not-example>";
+// The original reference should not change.
+		self::assertEquals("<example></example>", $sut->outerHTML);
+	}
+
+	public function testOuterHTMLSet():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$document->body->appendChild($sut);
+		self::assertCount(
+			1,
+			$document->getElementsByTagName("example")
+		);
+
+		$innerHTML = "<p>A paragraph</p>";
+		$sut->outerHTML = "<changed-outer>$innerHTML</changed-outer>";
+		self::assertCount(
+			0,
+			$document->getElementsByTagName("example")
+		);
+		self::assertCount(
+			1,
+			$document->getElementsByTagName("changed-outer")
+		);
+		self::assertEquals(
+			"<changed-outer><p>A paragraph</p></changed-outer>",
+			$document->getElementsByTagName("changed-outer")->item(0)->outerHTML
+		);
+	}
+
+	public function testOuterHTMLSetMultiple():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$document->body->appendChild($sut);
+		self::assertCount(1, $document->getElementsByTagName("example"));
+		$sut->outerHTML = "<first-outer>Example1</first-outer><second-outer>Example2</second-outer>";
+		self::assertCount(0, $document->getElementsByTagName("example"));
+		self::assertCount(1, $document->getElementsByTagName("first-outer"));
+		self::assertCount(1, $document->getElementsByTagName("second-outer"));
+	}
+
+	public function testOuterHTMLParent():void {
+		$document = new HTMLDocument();
+		$html = "<changed-tag>Some content</changed-tag>";
+		$sut = $document->createElement("example");
+		$document->body->appendChild($sut);
+		$sut->outerHTML = $html;
+		self::assertCount(0, $document->getElementsByTagName("example"));
+		self::assertCount(1, $document->getElementsByTagName("changed-tag"));
+	}
+
+	public function testChildren():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$sut->innerHTML = "<p>A paragraph</p>
+		<div>A div</div>";
+		self::assertCount(2, $sut->children);
+		self::assertEquals("A paragraph", $sut->children[0]->innerHTML);
+		self::assertEquals("A div", $sut->children[1]->innerHTML);
+	}
+
+	public function testPrefix():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		self::assertEquals("", $sut->prefix);
+	}
+
+	public function testTagName():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		self::assertEquals("example", $sut->tagName);
+		$sut = $document->createElement("Example");
+		self::assertEquals("example", $sut->tagName);
+	}
+
+	public function testTagNameInvalid():void {
+		$document = new HTMLDocument();
+		self::expectException(InvalidCharacterException::class);
+		$document->createElement("This can't be done");
+	}
+
+	public function testClosestNoMatch():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		self::assertNull($sut->closest("nothing"));
+	}
+
+	public function testClosestSelf():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$document->body->appendChild($sut);
+		self::assertSame($sut, $sut->closest("example"));
+	}
+
+	public function testClosestParent():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$context = $document->body;
+		for($i = 0; $i < 10; $i++) {
+			$parent = $document->createElement("example-$i");
+			$context->appendChild($parent);
+			$context = $parent;
+		}
+		$context->appendChild($sut);
+
+		$element = $document->getElementsByTagName("example-3")->item(0);
+		$closest = $sut->closest("example-3");
+		self::assertSame(
+			$element,
+			$closest
+		);
+	}
+
+	public function testClosestWithAnotherMatchingAncestor():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$tagNames = ["this-example", "that-example"];
+		$context = $document->body;
+		for($i = 0; $i < 10; $i++) {
+			$tagName = $i % 2 ? $tagNames[0] : $tagNames[1];
+			$parent = $document->createElement($tagName);
+			$context->appendChild($parent);
+			$context = $parent;
+		}
+		$context->appendChild($sut);
+
+		$thatElements = $document->getElementsByTagName("that-example");
+		$closest = $sut->closest("that-example");
+		self::assertSame(
+			$thatElements->item($thatElements->length - 1),
+			$closest
+		);
+	}
+
+	public function testGetAttribute():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		self::assertNull($sut->getAttribute("attr"));
+		$sut->setAttribute("attr", "content");
+		self::assertEquals("content", $sut->getAttribute("attr"));
+	}
+
+	public function testGetAttributeNamesNone():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		self::assertCount(0, $sut->getAttributeNames());
+	}
+
+	public function testGetAttributeNames():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$sut->setAttribute("name", "test");
+		$sut->setAttribute("framework", "phpunit");
+		$attributeNames = $sut->getAttributeNames();
+		self::assertCount(2, $attributeNames);
+		self::assertContains("name", $attributeNames);
+		self::assertContains("framework", $attributeNames);
+	}
+
+	public function testGetAttributeNS():void {
+		$xmlDoc = new XMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->getElementById("target");
+		$ns = "http://www.example.com/2014/test";
+		self::assertEquals(
+			"Foo value",
+			$sut->getAttributeNS($ns, "foo"));
+	}
+
+	public function testGetAttributeNSNone():void {
+		$xmlDoc = new XMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->getElementById("target");
+		$ns = "http://www.example.com/2014/test";
+		self::assertNull($sut->getAttributeNS($ns, "nothing"));
+	}
+
+	public function testGetElementsByClassName():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$child1 = $sut->cloneNode();
+		$child2 = $sut->cloneNode();
+		$child3 = $sut->cloneNode();
+
+		$child1->className = "one child-of-sut";
+		$child2->className = "two child-of-sut another-class";
+		$child3->className = "three child-of-sut another-class";
+
+		$sut->append($child1, $child2, $child3);
+		self::assertCount(1, $sut->getElementsByClassName("one"));
+		self::assertCount(1, $sut->getElementsByClassName("two"));
+		self::assertCount(1, $sut->getElementsByClassName("three"));
+		self::assertCount(3, $sut->getElementsByClassName("child-of-sut"));
+		self::assertCount(2, $sut->getElementsByClassName("another-class"));
+	}
+
+	public function testGetElementsByClassNameIsLive():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$child1 = $sut->cloneNode();
+
+		$child1->className = "one child-of-sut";
+		$sut->append($child1);
+		self::assertCount(1, $sut->getElementsByClassName("one"));
+		$child1->className = "not-one child-of-sut";
+		self::assertCount(0, $sut->getElementsByClassName("one"));
+		self::assertCount(0, $sut->getElementsByClassName("one child-of-sut"));
+	}
+
 //	public function testGetElementsByTagName():void {
 //		$sut = $document->createElement("example");
 //		$child1 = $sut->cloneNode();

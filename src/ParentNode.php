@@ -105,7 +105,7 @@ trait ParentNode {
 	 * case the empty DocumentFragment is returned.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
 	 */
-	public function appendChild(Node|Element|Text|DOMNode $aChild):Node|Element {
+	public function appendChild(Node|Element|Text|DOMNode $aChild):Node|Element|Text {
 		if($this instanceof Document) {
 			if($aChild instanceof Text) {
 				throw new TextNodeCanNotBeRootNodeException("Cannot insert a Text as a child of a Document");

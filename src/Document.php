@@ -157,9 +157,18 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
 	 */
 	public function createElement(string $localName, string $value = ""):Element {
-		/** @var Element $element */
-		$element = parent::createElement($localName, $value);
-		return $element;
+		$localName = strtolower($localName);
+		try {
+			/** @var Element $element */
+			$element = parent::createElement($localName, $value);
+			return $element;
+		}
+		catch(\DOMException $exception) {
+			if(str_contains($exception->getMessage(), "Invalid Character Error")) {
+				throw new InvalidCharacterException();
+			}
+			throw $exception;
+		}
 	}
 
 	/**

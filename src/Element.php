@@ -44,7 +44,7 @@ class Element extends DOMElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/className */
 	protected function __prop_get_className():string {
-		return $this->getAttribute("class");
+		return $this->getAttribute("class") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/className */
@@ -122,7 +122,8 @@ class Element extends DOMElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
 	protected function __prop_set_outerHTML(string $outerHTML):void {
-		if(!$this->parentNode) {
+		$parentNode = $this->parentNode;
+		if(!$parentNode) {
 			return;
 		}
 
@@ -130,16 +131,52 @@ class Element extends DOMElement {
 		$tempDocument->loadHTML($outerHTML);
 		$body = $tempDocument->getElementsByTagName("body")->item(0);
 
-		$this->parentNode->removeChild($this);
+		$parentNode->removeChild($this);
 		for($i = 0, $len = $body->childNodes->length; $i < $len; $i++) {
 			$imported = $this->ownerDocument->importNode(
 				$body->childNodes->item($i),
 				true
 			);
-			$this->parentNode->insertBefore(
+			$parentNode->insertBefore(
 				$imported,
 				$this->nextSibling
 			);
 		}
+	}
+
+	/**
+	 * The closest() method traverses the Element and its parents (heading
+	 * toward the document root) until it finds a node that matches the
+	 * provided selector string. Will return itself or the matching
+	 * ancestor. If no such element exists, it returns null.
+	 *
+	 * @param string $selectors a DOMString containing a selector list.
+	 * ex: p:hover, .toto + q
+	 * @return ?Element The Element which is the closest ancestor of the
+	 * selected element. It may be null.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
+	 */
+	public function closest(string $selectors):?Element {
+		$furthestAncestor = $this;
+		while($furthestAncestor->parentElement) {
+			$furthestAncestor = $furthestAncestor->parentElement;
+		}
+		if($furthestAncestor === $this) {
+			$furthestAncestor = $this->ownerDocument;
+		}
+
+		$matchesArray = iterator_to_array(
+			$furthestAncestor->querySelectorAll($selectors)
+		);
+		$context = $this;
+
+		do {
+			if(in_array($context, $matchesArray, true)) {
+				return $context;
+			}
+		}
+		while($context = $context->parentElement);
+
+		return null;
 	}
 }
