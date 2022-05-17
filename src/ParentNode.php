@@ -20,6 +20,8 @@ use Gt\Dom\Exception\WrongDocumentErrorException;
  * ParentNode which are elements.
  * @property-read HTMLCollection $children A live HTMLCollection containing all
  *  objects of type Element that are children of this ParentNode.
+ * @property-read HTMLDocument|XMLDocument $document
+ * @property-read HTMLDocument|XMLDocument $ownerDocument
  * @property-read ?Element $firstElementChild The Element that is the first
  *  child of this ParentNode.
  * @property-read ?Element $lastElementChild The Element that is the last
@@ -96,14 +98,14 @@ trait ParentNode {
 	 * DOM tree, the node will be detached from its current position and
 	 * attached at the new position.
 	 *
-	 * @param Node|Element $aChild The node to append to the given parent
+	 * @param Node|Element|Text $aChild The node to append to the given parent
 	 * node (commonly an element).
 	 * @return Node|Element The returned value is the appended
 	 * child (aChild), except when aChild is a DocumentFragment, in which
 	 * case the empty DocumentFragment is returned.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
 	 */
-	public function appendChild(DOMNode $aChild):Node|Element {
+	public function appendChild(Node|Element|Text|DOMNode $aChild):Node|Element {
 		if($this instanceof Document) {
 			if($aChild instanceof Text) {
 				throw new TextNodeCanNotBeRootNodeException("Cannot insert a Text as a child of a Document");
@@ -115,7 +117,9 @@ trait ParentNode {
 		}
 
 		try {
-			return parent::appendChild($aChild);
+			/** @var Element|Node $appended */
+			$appended = parent::appendChild($aChild);
+			return $appended;
 		}
 		catch(DOMException $exception) {
 			if(strstr("Wrong Document Error", $exception->getMessage())) {

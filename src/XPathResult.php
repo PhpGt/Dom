@@ -32,7 +32,9 @@ class XPathResult implements Iterator {
 
 		$nodeArray = [];
 		for($i = 0, $len = $result->length; $i < $len; $i++) {
-			array_push($nodeArray, $result->item($i));
+			/** @var Node|Element $item */
+			$item = $result->item($i);
+			array_push($nodeArray, $item);
 		}
 		$this->nodeList = NodeListFactory::create(...$nodeArray);
 		$this->iteratorKey = 0;

@@ -307,7 +307,7 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 	 * If you need to get access to an element which doesn't have an ID,
 	 * you can use querySelector() to find the element using any selector.
 	 *
-	 * @param string $id The ID of the element to locate. The ID is
+	 * @param string $elementId The ID of the element to locate. The ID is
 	 * case-sensitive string which is unique within the document; only one
 	 * element may have any given ID.
 	 * @return ?Element An Element object describing the DOM element object
@@ -382,6 +382,7 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 	 * HTMLCollection is live, meaning that it updates itself automatically
 	 * to stay in sync with the DOM tree without having to call
 	 * document.getElementsByTagName() again.
+	 * @return HTMLCollection<Element>
 	 * @phpstan-ignore-next-line
 	 */
 	#[ReturnTypeWillChange]
@@ -391,7 +392,11 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 		});
 	}
 
-	/** @see Node::isEqualNode() */
+	/**
+	 * @see Node::isEqualNode()
+	 * @param Node|Element $otherNode
+	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
+	 */
 	public function isEqualNode(Node|Element|DOMNode $otherNode):bool {
 		return $this->documentElement->isEqualNode($otherNode);
 	}

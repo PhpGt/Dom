@@ -1,17 +1,19 @@
 <?php
 namespace Gt\Dom;
 
+use DOMNode;
+
 trait ElementNode {
 	/**
 	 * Returns a Boolean which indicates whether or not two nodes are of
 	 * the same type and all their defining data points match.
 	 *
-	 * @param Node $otherNode The Node to compare equality with.
+	 * @param Node|Element|Document|DocumentType|Attr|ProcessingInstruction $otherNode
+	 * The Node to compare equality with.
 	 * @return bool
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isEqualNode
-	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
-	public function isEqualNode(Node|Element|Document $otherNode):bool {
+	public function isEqualNode(Node|Element|Document|DocumentType|Attr|ProcessingInstruction|DOMNode $otherNode):bool {
 		if($otherNode instanceof Document) {
 			$otherNode = $otherNode->documentElement;
 		}
@@ -26,7 +28,7 @@ trait ElementNode {
 		}
 
 		if($this instanceof DocumentType
-			&& $otherNode instanceof DocumentType) {
+		&& $otherNode instanceof DocumentType) {
 			return $this->name === $otherNode->name
 				&& $this->publicId === $otherNode->publicId
 				&& $this->systemId === $otherNode->systemId;
@@ -68,7 +70,7 @@ trait ElementNode {
 		}
 
 		if($this instanceof ProcessingInstruction
-			&& $otherNode instanceof ProcessingInstruction) {
+		&& $otherNode instanceof ProcessingInstruction) {
 			return $this->target === $otherNode->target
 				&& $this->data === $otherNode->data;
 		}

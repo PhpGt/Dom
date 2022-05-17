@@ -389,7 +389,7 @@ trait Traversal {
 		return null;
 	}
 
-	private function filterFunction(Node $node):int {
+	private function filterFunction(Node|Element|Attr|Text|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node):int {
 		$show = $this->pWhatToShow;
 		if($show === NodeFilter::SHOW_ALL) {
 			return NodeFilter::FILTER_ACCEPT;
