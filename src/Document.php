@@ -24,10 +24,11 @@ use Stringable;
  * @property-read ?Element $documentElement Returns the Element that is a direct child of the document. For HTML documents, this is normally the HTMLHtmlElement object representing the document's <html> element.
  * @property-read DocumentType $doctype Returns the Document Type Definition (DTD) of the current document.
  *
- * @method Element importNode(Node|Element $node, bool $deep)
+ * @method Element importNode(Node|Element $node, bool $deep = false)
  */
 abstract class Document extends DOMDocument implements Stringable, StreamInterface {
 	use DocumentStream;
+	use ParentNode;
 
 	const NodeClassLookup = [
 		DOMDocument::class => Document::class,
@@ -274,10 +275,104 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 		return TreeWalkerFactory::create($root, $whatToShow, $filter);
 	}
 
+	/**
+	 * Returns an XPathResult based on an XPath expression.
+	 *
+	 * @param string $xpathExpression is a string representing the XPath to
+	 * be evaluated.
+	 * @param null|Node|Element $contextNode Leave null to default to $this node
+	 * @return XPathResult
+	 */
+	public function evaluate(
+		string $xpathExpression,
+		null|Node|Element $contextNode = null
+	):XPathResult {
+		if(!$contextNode) {
+			$contextNode = $this->documentElement;
+		}
+
+		return XPathResultFactory::create(
+			$xpathExpression,
+			$this,
+			$contextNode,
+		);
+	}
+
+	/**
+	 * The Document method getElementById() returns an Element object
+	 * representing the element whose id property matches the specified
+	 * string. Since element IDs are required to be unique if specified,
+	 * they're a useful way to get access to a specific element quickly.
+	 *
+	 * If you need to get access to an element which doesn't have an ID,
+	 * you can use querySelector() to find the element using any selector.
+	 *
+	 * @param string $id The ID of the element to locate. The ID is
+	 * case-sensitive string which is unique within the document; only one
+	 * element may have any given ID.
+	 * @return ?Element An Element object describing the DOM element object
+	 * matching the specified ID, or null if no matching element was found
+	 * in the document.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById
+	 */
 	public function getElementById(string $elementId):?Element {
 		/** @var ?Element $element */
 		$element = parent::getElementById($elementId);
+
+		if(is_null($element) && $this instanceof XMLDocument) {
+// Known limitation in XML documents: IDs are not always registered.
+// Try using XPath instead.
+			$element = $this->evaluate("//*[@id='$elementId']")->current();
+		}
+
 		return $element;
+	}
+
+	/**
+	 * The getElementsByClassName method of Document interface returns an
+	 * array-like object of all child elements which have all of the given
+	 * class name(s). When called on the document object, the complete
+	 * document is searched, including the root node. You may also call
+	 * getElementsByClassName() on any element; it will return only
+	 * elements which are descendants of the specified root element with
+	 * the given class name(s).
+	 *
+	 * @param string $names a string representing the class name(s) to
+	 * match; multiple class names are separated by whitespace.
+	 * @return HTMLCollection a live HTMLCollection of found elements.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByClassName
+	 */
+	public function getElementsByClassName(string $names):HTMLCollection {
+		$querySelector = "";
+		foreach(explode(" ", $names) as $name) {
+			if(strlen($querySelector) > 0) {
+				$querySelector .= " ";
+			}
+
+			$querySelector .= ".$name";
+		}
+
+		return HTMLCollectionFactory::create(
+			fn() => $this->querySelectorAll($querySelector)
+		);
+	}
+
+	/**
+	 * The getElementsByName() method of the Document object returns a
+	 * NodeList Collection of elements with a given name in the document.
+	 *
+	 * @param string $name the value of the name attribute of the
+	 * element(s).
+	 * @return NodeList a live NodeList Collection, meaning it automatically
+	 * updates as new elements with the same name are added to/removed from
+	 * the document.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByName
+	 */
+	public function getElementsByName(string $name):NodeList {
+		$querySelector = "[name=$name]";
+		return NodeListFactory::createLive(
+			fn() => $this->querySelectorAll($querySelector)
+		);
 	}
 
 	/**
@@ -294,6 +389,11 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 		return HTMLCollectionFactory::create(function() use($qualifiedName) {
 			return parent::getElementsByTagName($qualifiedName);
 		});
+	}
+
+	/** @see Node::isEqualNode() */
+	public function isEqualNode(Node|Element|DOMNode $otherNode):bool {
+		return $this->documentElement->isEqualNode($otherNode);
 	}
 
 	/**

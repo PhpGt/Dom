@@ -7,4 +7,5 @@ class Node extends DOMNode {
 	use NonDocumentTypeChildNode;
 	use ChildNode;
 	use ParentNode;
+	use ElementNode;
 }

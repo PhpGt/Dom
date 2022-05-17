@@ -1,7 +1,12 @@
 <?php
 namespace Gt\Dom;
 
+use DOMException;
+use DOMNode;
 use Gt\CssXPath\Translator;
+use Gt\Dom\Exception\DocumentHasMoreThanOneElementChildException;
+use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
+use Gt\Dom\Exception\WrongDocumentErrorException;
 
 /**
  * @link https://dom.spec.whatwg.org/#parentnode
@@ -86,6 +91,43 @@ trait ParentNode {
 	}
 
 	/**
+	 * Adds the specified childNode argument as the last child to the
+	 * current node. If the argument referenced an existing node on the
+	 * DOM tree, the node will be detached from its current position and
+	 * attached at the new position.
+	 *
+	 * @param Node|Element $aChild The node to append to the given parent
+	 * node (commonly an element).
+	 * @return Node|Element The returned value is the appended
+	 * child (aChild), except when aChild is a DocumentFragment, in which
+	 * case the empty DocumentFragment is returned.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
+	 */
+	public function appendChild(DOMNode $aChild):Node|Element {
+		if($this instanceof Document) {
+			if($aChild instanceof Text) {
+				throw new TextNodeCanNotBeRootNodeException("Cannot insert a Text as a child of a Document");
+			}
+
+			if($this->childElementCount > 0) {
+				throw new DocumentHasMoreThanOneElementChildException("Cannot have more than one Element child of a Document");
+			}
+		}
+
+		try {
+			return parent::appendChild($aChild);
+		}
+		catch(DOMException $exception) {
+			if(strstr("Wrong Document Error", $exception->getMessage())) {
+				throw new WrongDocumentErrorException();
+			}
+			else {
+				throw $exception;
+			}
+		}
+	}
+
+	/**
 	 * The ParentNode.replaceChildren() method replaces the existing
 	 * children of a Node with a specified new set of children. These can
 	 * be DOMString or Node objects.
@@ -147,12 +189,14 @@ trait ParentNode {
 		$context = $this;
 		$prefix = ".//";
 		if($this instanceof Document) {
-			$context = $this->firstChild;
+			$context = $this->firstElementChild;
 			$prefix = "//";
 		}
 
+		$document = ($this instanceof Document) ? $this : $this->ownerDocument;
+
 		$translator = new Translator($selectors, $prefix);
-		$xpathResult = $this->ownerDocument->evaluate(
+		$xpathResult = $document->evaluate(
 			$translator,
 			$context
 		);
