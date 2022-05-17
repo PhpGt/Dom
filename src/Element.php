@@ -14,16 +14,12 @@ use Gt\PropFunc\MagicProp;
  * @property-read DOMTokenList $classList Returns a DOMTokenList containing the list of class attributes.
  * @property string $className Is a DOMString representing the class of the element.
  * @property-read ElementType $elementType
- * @property-read null|Node|Element $firstChild
  * @property-read null|Element $firstElementChild
- * @property-read null|Node|Element $lastChild
  * @property-read null|Element $lastElementChild
  * @property string $id Is a DOMString representing the id of the element.
  * @property string $innerHTML Is a DOMString representing the markup of the element's content.
  * @property-read ?string $namespaceURI The namespace URI of the element, or null if it is no namespace.
  * @property-read null|Element $nextElementSibling An Element, the element immediately following the given one in the tree, or null if there's no sibling node.
- * @property-read null|Node|Element $nextSibling Returns a Node representing the next node in the tree, or null if there isn't such node.
- * @property-read null|Node|Element $previousSibling Returns a Node representing the previous node in the tree, or null if there isn't such node.
  * @property-read null|Element $previousElementSibling Returns a Node representing the previous node in the tree, or null if there isn't such node.
  * @property string $outerHTML Is a DOMString representing the markup of the element including its content. When used as a setter, replaces the element with nodes parsed from the given string.
  * @property-read string $prefix A DOMString representing the namespace prefix of the element, or null if no prefix is specified.
