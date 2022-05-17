@@ -1,10 +1,12 @@
 <?php
 namespace Gt\Dom\Test;
 
+use Gt\Dom\Exception\InvalidAdjacentPositionException;
 use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\Text;
 use Gt\Dom\XMLDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -386,224 +388,227 @@ class ElementTest extends TestCase {
 		self::assertCount(0, $sut->getElementsByClassName("one child-of-sut"));
 	}
 
-//	public function testGetElementsByTagName():void {
-//		$sut = $document->createElement("example");
-//		$child1 = $sut->cloneNode();
-//		$sut->append($child1);
-//		self::assertSame(
-//			$child1,
-//			$sut->getElementsByTagName("example")->item(0)
-//		);
-//	}
-//
-//	public function testGetElementsByTagNameNS():void {
-//		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
-//		$sut = $xmlDoc->documentElement;
-//		$ns = "http://www.example.com/2014/test";
-//		self::assertCount(
-//			1,
-//			$sut->getElementsByTagNameNS($ns, "rect")
-//		);
-//		self::assertCount(
-//			0,
-//			$sut->getElementsByTagNameNS("another-namespace", "rect")
-//		);
-//	}
-//
-//	public function testHasAttributes():void {
-//		$sut = $document->createElement("example");
-//		self::assertFalse($sut->hasAttributes());
-//		$sut->setAttribute("test", "123");
-//		self::assertTrue($sut->hasAttributes());
-//	}
-//
-//	public function testInsertAdjacentElementAfterBegin():void {
-//		$sut = $document->createElement("example");
-//		$pad = $sut->ownerDocument->createElement("pad");
-//		$sut->append($pad);
-//
-//		/** @var Element $toInsert */
-//		$toInsert = $sut->cloneNode();
-//		$inserted = $sut->insertAdjacentElement(
-//			"afterbegin",
-//			$toInsert
-//		);
-//		self::assertInstanceOf(Element::class, $inserted);
-//		self::assertSame($sut, $inserted->parentNode);
-//		self::assertSame($pad, $inserted->nextSibling);
-//	}
-//
-//	public function testInsertAdjacentElementBeforeEnd():void {
-//		$sut = $document->createElement("example");
-//		$pad = $sut->ownerDocument->createElement("pad");
-//		$sut->append($pad);
-//
-//		/** @var Element $toInsert */
-//		$toInsert = $sut->cloneNode();
-//		$inserted = $sut->insertAdjacentElement(
-//			"beforeend",
-//			$toInsert
-//		);
-//		self::assertInstanceOf(Element::class, $inserted);
-//		self::assertSame($sut, $inserted->parentNode);
-//		self::assertSame($pad, $inserted->previousSibling);
-//	}
-//
-//	public function testInsertAdjacentElementBeforeBeginNotConnected():void {
-//		$sut = $document->createElement("example");
-//		/** @var Element $toInsert */
-//		$toInsert = $sut->cloneNode();
-//		$inserted = $sut->insertAdjacentElement(
-//			"beforebegin",
-//			$toInsert
-//		);
-//		self::assertNull($inserted);
-//	}
-//
-//	public function testInsertAdjacentElementBeforeBegin():void {
-//		$sut = $document->createElement("example");
-//		$root = $sut->ownerDocument->createElement("root");
-//		$sut->ownerDocument->appendChild($root);
-//		$pad = $sut->ownerDocument->createElement("pad");
-//		$root->appendChild($pad);
-//		$root->appendChild($sut);
-//
-//		/** @var Element $toInsert */
-//		$toInsert = $sut->cloneNode();
-//		$inserted = $sut->insertAdjacentElement(
-//			"beforebegin",
-//			$toInsert
-//		);
-//		self::assertInstanceOf(Element::class, $inserted);
-//		self::assertSame($pad, $inserted->previousSibling);
-//	}
-//
-//	public function testInsertAdjacentElementAfterEndNotConnected():void {
-//		$sut = $document->createElement("example");
-//		/** @var Element $toInsert */
-//		$toInsert = $sut->cloneNode();
-//		$inserted = $sut->insertAdjacentElement(
-//			"afterend",
-//			$toInsert
-//		);
-//		self::assertNull($inserted);
-//	}
-//
-//	public function testInsertAdjacentElementAfterEnd():void {
-//		$sut = $document->createElement("example");
-//		$root = $sut->ownerDocument->createElement("root");
-//		$sut->ownerDocument->appendChild($root);
-//		$pad = $sut->ownerDocument->createElement("pad");
-//		$root->appendChild($sut);
-//		$root->appendChild($pad);
-//
-//		/** @var Element $toInsert */
-//		$toInsert = $sut->cloneNode();
-//		$inserted = $sut->insertAdjacentElement(
-//			"afterend",
-//			$toInsert
-//		);
-//		self::assertInstanceOf(Element::class, $inserted);
-//		self::assertSame($pad, $inserted->nextSibling);
-//	}
-//
-//	public function testInsertAdjacentElementInvalidPosition():void {
-//		$sut = $document->createElement("example");
-//		/** @var Element $toInsert */
-//		$toInsert = $sut->cloneNode();
-//		self::expectException(InvalidAdjacentPositionException::class);
-//		$sut->insertAdjacentElement(
-//			"nowhere",
-//			$toInsert
-//		);
-//	}
-//
-//	public function testInsertAdjacentHTML():void {
-//		$sut = $document->createElement("example");
-//		$pad = $sut->ownerDocument->createElement("pad");
-//		$sut->appendChild($pad);
-//		$sut->insertAdjacentHTML(
-//			"afterbegin",
-//			"<inserted>Testing</inserted>"
-//		);
-//		self::assertCount(2, $sut->childNodes);
-//		self::assertSame(
-//			$pad,
-//			$sut->getElementsByTagName("inserted")->item(0)->nextSibling
-//		);
-//	}
-//
-//	public function testInsertAdjacentText():void {
-//		$sut = $document->createElement("example");
-//		$pad = $sut->ownerDocument->createElement("pad");
-//		$sut->appendChild($pad);
-//		$sut->insertAdjacentText(
-//			"afterbegin",
-//			"This is a text node!"
-//		);
-//		self::assertCount(2, $sut->childNodes);
-//		self::assertSame(
-//			$pad,
-//			$sut->childNodes->item(0)->nextSibling
-//		);
-//		self::assertInstanceOf(Text::class, $sut->firstChild);
-//	}
-//
-//	public function testMatches():void {
-//		$sut = $document->createElement("example");
-//		$sut->ownerDocument->appendChild($sut);
-//		self::assertTrue($sut->matches("example"));
-//		self::assertFalse($sut->matches("not-example"));
-//	}
-//
-//	public function testSetAttributeNS():void {
-//		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
-//		$sut = $xmlDoc->getElementById("target");
-//		$ns = "http://www.example.com/2014/test";
-//		$sut->setAttributeNS($ns, "foo", "Updated value");
-//		self::assertEquals(
-//			"Updated value",
-//			$sut->getAttributeNS($ns, "foo"));
-//	}
-//
-//	public function testToggleAttribute():void {
-//		$sut = $document->createElement("example");
-//		self::assertFalse($sut->hasAttribute("required"));
-//		$requiredPresent = $sut->toggleAttribute("required");
-//		self::assertTrue($sut->hasAttribute("required"));
-//		self::assertTrue($requiredPresent);
-//		$requiredPresent = $sut->toggleAttribute("required");
-//		self::assertFalse($sut->hasAttribute("required"));
-//		self::assertFalse($requiredPresent);
-//	}
-//
-//	public function testToggleAttributeForced():void {
-//		$sut = $document->createElement("example");
-//		self::assertTrue(
-//			$sut->toggleAttribute("required", true)
-//		);
-//		self::assertTrue($sut->hasAttribute("required"));
-//		self::assertTrue(
-//			$sut->toggleAttribute("required", true)
-//		);
-//		self::assertTrue($sut->hasAttribute("required"));
-//
-//		self::assertFalse(
-//			$sut->toggleAttribute("required", false)
-//		);
-//		self::assertFalse($sut->hasAttribute("required"));
-//		self::assertFalse(
-//			$sut->toggleAttribute("required", false)
-//		);
-//		self::assertFalse($sut->hasAttribute("required"));
-//	}
-//
-//	public function testRemoveAttributeNS():void {
-//		$xmlDoc = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_SHAPE);
-//		$sut = $xmlDoc->getElementById("target");
-//		$ns = "http://www.example.com/2014/test";
-//		$sut->removeAttributeNS($ns, "foo");
-//		self::assertFalse(
-//			$sut->hasAttributeNS($ns, "foo"));
-//	}
+	public function testGetElementsByTagName():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$child1 = $sut->cloneNode();
+		$sut->append($child1);
+		self::assertSame(
+			$child1,
+			$sut->getElementsByTagName("example")->item(0)
+		);
+	}
+
+	public function testGetElementsByTagNameNS():void {
+		$xmlDoc = new XMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->documentElement;
+		$ns = "http://www.example.com/2014/test";
+		self::assertCount(
+			1,
+			$sut->getElementsByTagNameNS($ns, "rect")
+		);
+		self::assertCount(
+			0,
+			$sut->getElementsByTagNameNS("another-namespace", "rect")
+		);
+	}
+
+	public function testHasAttributes():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		self::assertFalse($sut->hasAttributes());
+		$sut->setAttribute("test", "123");
+		self::assertTrue($sut->hasAttributes());
+	}
+
+	public function testInsertAdjacentElementAfterBegin():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$pad = $sut->ownerDocument->createElement("pad");
+		$sut->append($pad);
+
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"afterbegin",
+			$toInsert
+		);
+		self::assertSame($sut, $inserted->parentNode);
+		self::assertSame($pad, $inserted->nextSibling);
+	}
+
+	public function testInsertAdjacentElementBeforeEnd():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$pad = $sut->ownerDocument->createElement("pad");
+		$sut->append($pad);
+
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"beforeend",
+			$toInsert
+		);
+		self::assertSame($sut, $inserted->parentNode);
+		self::assertSame($pad, $inserted->previousSibling);
+	}
+
+	public function testInsertAdjacentElementBeforeBeginNotConnected():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"beforebegin",
+			$toInsert
+		);
+		self::assertNull($inserted);
+	}
+
+	public function testInsertAdjacentElementBeforeBegin():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$root = $document->createElement("root");
+		$document->body->appendChild($root);
+		$pad = $sut->ownerDocument->createElement("pad");
+		$root->appendChild($pad);
+		$root->appendChild($sut);
+
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"beforebegin",
+			$toInsert
+		);
+		self::assertSame($pad, $inserted->previousSibling);
+	}
+
+	public function testInsertAdjacentElementAfterEndNotConnected():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"afterend",
+			$toInsert
+		);
+		self::assertNull($inserted);
+	}
+
+	public function testInsertAdjacentElementAfterEnd():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$root = $document->createElement("root");
+		$document->body->appendChild($root);
+		$pad = $document->createElement("pad");
+		$root->appendChild($sut);
+		$root->appendChild($pad);
+
+		$toInsert = $sut->cloneNode();
+		$inserted = $sut->insertAdjacentElement(
+			"afterend",
+			$toInsert
+		);
+		self::assertSame($pad, $inserted->nextSibling);
+	}
+
+	public function testInsertAdjacentElementInvalidPosition():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$toInsert = $sut->cloneNode();
+		self::expectException(InvalidAdjacentPositionException::class);
+		$sut->insertAdjacentElement(
+			"nowhere",
+			$toInsert
+		);
+	}
+
+	public function testInsertAdjacentHTML():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$pad = $sut->ownerDocument->createElement("pad");
+		$sut->appendChild($pad);
+		$sut->insertAdjacentHTML(
+			"afterbegin",
+			"<inserted>Testing</inserted>"
+		);
+		self::assertCount(2, $sut->childNodes);
+		self::assertSame(
+			$pad,
+			$sut->getElementsByTagName("inserted")->item(0)->nextSibling
+		);
+	}
+
+	public function testInsertAdjacentText():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$pad = $sut->ownerDocument->createElement("pad");
+		$sut->appendChild($pad);
+		$sut->insertAdjacentText(
+			"afterbegin",
+			"This is a text node!"
+		);
+		self::assertCount(2, $sut->childNodes);
+		self::assertSame(
+			$pad,
+			$sut->childNodes->item(0)->nextSibling
+		);
+		self::assertInstanceOf(Text::class, $sut->firstChild);
+	}
+
+	public function testMatches():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$document->body->appendChild($sut);
+		self::assertTrue($sut->matches("example"));
+		self::assertFalse($sut->matches("not-example"));
+	}
+
+	public function testSetAttributeNS():void {
+		$xmlDoc = new XMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->getElementById("target");
+		$ns = "http://www.example.com/2014/test";
+		$sut->setAttributeNS($ns, "foo", "Updated value");
+		self::assertEquals(
+			"Updated value",
+			$sut->getAttributeNS($ns, "foo"));
+	}
+
+	public function testToggleAttribute():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		self::assertFalse($sut->hasAttribute("required"));
+		$requiredPresent = $sut->toggleAttribute("required");
+		self::assertTrue($sut->hasAttribute("required"));
+		self::assertTrue($requiredPresent);
+		$requiredPresent = $sut->toggleAttribute("required");
+		self::assertFalse($sut->hasAttribute("required"));
+		self::assertFalse($requiredPresent);
+	}
+
+	public function testToggleAttributeForced():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		self::assertTrue(
+			$sut->toggleAttribute("required", true)
+		);
+		self::assertTrue($sut->hasAttribute("required"));
+		self::assertTrue(
+			$sut->toggleAttribute("required", true)
+		);
+		self::assertTrue($sut->hasAttribute("required"));
+
+		self::assertFalse(
+			$sut->toggleAttribute("required", false)
+		);
+		self::assertFalse($sut->hasAttribute("required"));
+		self::assertFalse(
+			$sut->toggleAttribute("required", false)
+		);
+		self::assertFalse($sut->hasAttribute("required"));
+	}
+
+	public function testRemoveAttributeNS():void {
+		$xmlDoc = new XMLDocument(DocumentTestFactory::XML_SHAPE);
+		$sut = $xmlDoc->getElementById("target");
+		$ns = "http://www.example.com/2014/test";
+		$sut->removeAttributeNS($ns, "foo");
+		self::assertFalse(
+			$sut->hasAttributeNS($ns, "foo"));
+	}
 }

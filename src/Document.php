@@ -3,12 +3,16 @@ namespace Gt\Dom;
 
 use DOMAttr;
 use DOMCdataSection;
+use DOMCharacterData;
 use DOMComment;
 use DOMDocument;
 use DOMDocumentFragment;
 use DOMDocumentType;
 use DOMElement;
+use DOMEntity;
+use DOMEntityReference;
 use DOMNode;
+use DOMNotation;
 use DOMProcessingInstruction;
 use DOMText;
 use Gt\Dom\Exception\DocumentMustBeExtendedException;
@@ -25,6 +29,7 @@ use Stringable;
  * @property-read DocumentType $doctype Returns the Document Type Definition (DTD) of the current document.
  *
  * @method Element importNode(Node|Element $node, bool $deep = false)
+ * @method DocumentFragment createDocumentFragment()
  */
 abstract class Document extends DOMDocument implements Stringable, StreamInterface {
 	use DocumentStream;
@@ -35,15 +40,15 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 		DOMDocument::class => Document::class,
 		DOMAttr::class => Attr::class,
 		DOMCdataSection::class => CdataSection::class,
-//		DOMCharacterData::class => DOMCharacterDataFacade::class,
+		DOMCharacterData::class => CharacterData::class,
 		DOMComment::class => Comment::class,
 		DOMDocumentFragment::class => DocumentFragment::class,
 		DOMDocumentType::class => DocumentType::class,
 		DOMElement::class => Element::class,
-//		DOMEntity::class => DOMEntityFacade::class,
-//		DOMEntityReference::class => DOMEntityReferenceFacade::class,
+		DOMEntity::class => Entity::class,
+		DOMEntityReference::class => EntityReference::class,
 		DOMNode::class => Node::class,
-//		DOMNotation::class => DOMNotationFacade::class,
+		DOMNotation::class => Notation::class,
 		DOMText::class => Text::class,
 		DOMProcessingInstruction::class => ProcessingInstruction::class,
 	];

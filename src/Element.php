@@ -3,6 +3,8 @@ namespace Gt\Dom;
 
 use DOMElement;
 use DOMNamedNodeMap;
+use Gt\Dom\Exception\InvalidAdjacentPositionException;
+use Gt\Dom\Exception\XPathQueryException;
 use Gt\PropFunc\MagicProp;
 
 /**
@@ -178,5 +180,190 @@ class Element extends DOMElement {
 		while($context = $context->parentElement);
 
 		return null;
+	}
+
+	/**
+	 * The insertAdjacentElement() method of the Element interface inserts
+	 * a given element node at a given position relative to the element it
+	 * is invoked upon.
+	 *
+	 * @param string $position A DOMString representing the position
+	 * relative to the targetElement; must match (case-insensitively) one
+	 * of the following strings:
+	 * 'beforebegin': Before the targetElement itself.
+	 * 'afterbegin': Just inside the targetElement, before its first child.
+	 * 'beforeend': Just inside the targetElement, after its last child.
+	 * 'afterend': After the targetElement itself.
+	 *
+	 * @param Node|Element $element The element to be inserted into the tree.
+	 * @return ?Element The element that was inserted, or null, if the
+	 * insertion failed.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
+	 */
+	public function insertAdjacentElement(
+		string $position,
+		Node|Element|DocumentFragment|Text $element
+	):?Element {
+		switch($position) {
+		case "beforebegin":
+			$context = $this->parentNode;
+			$before = $this;
+			break;
+
+		case "afterbegin":
+			$context = $this;
+			$before = $this->firstChild;
+			break;
+
+		case "beforeend":
+			$context = $this;
+			$before = null;
+			break;
+
+		case "afterend":
+			$context = $this->parentNode;
+			$before = $this->nextSibling;
+			break;
+
+		default:
+			throw new InvalidAdjacentPositionException($position);
+		}
+
+		if(!$context) {
+			return null;
+		}
+
+		/** @var Element $inserted */
+		$inserted = $context->insertBefore($element, $before);
+		if(!$inserted instanceof Element) {
+			return null;
+		}
+
+		return $inserted;
+	}
+
+	/**
+	 * The insertAdjacentHTML() method of the Element interface parses the
+	 * specified text as HTML or XML and inserts the resulting nodes into
+	 * the DOM tree at a specified position. It does not reparse the element
+	 * it is being used on, and thus it does not corrupt the existing
+	 * elements inside that element. This avoids the extra step of
+	 * serialization, making it much faster than direct innerHTML
+	 * manipulation.
+	 *
+	 * @param string $position A DOMString representing the position
+	 * relative to the element; must be one of the following strings:
+	 * 'beforebegin': Before the element itself.
+	 * 'afterbegin': Just inside the element, before its first child.
+	 * 'beforeend': Just inside the element, after its last child.
+	 * 'afterend': After the element itself.
+	 * @param string $text The string to be parsed as HTML or XML and
+	 * inserted into the tree.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentHTML
+	 */
+	public function insertAdjacentHTML(
+		string $position,
+		string $text
+	):void {
+		$tempTagName = "insert-adjacent-html-temp";
+		$tempElement = $this->ownerDocument->createElement($tempTagName);
+		$tempElement->innerHTML = $text;
+		$fragment = $this->ownerDocument->createDocumentFragment();
+		while($child = $tempElement->firstChild) {
+			$fragment->appendChild($child);
+		}
+		$this->insertAdjacentElement($position, $fragment);
+	}
+
+	/**
+	 * The insertAdjacentText() method of the Element interface inserts a
+	 * given text node at a given position relative to the element it is
+	 * invoked upon.
+	 *
+	 * @param string $position A DOMString representing the position
+	 * relative to the element; must be one of the following strings:
+	 * 'beforebegin': Before the element itself.
+	 * 'afterbegin': Just inside the element, before its first child.
+	 * 'beforeend': Just inside the element, after its last child.
+	 * 'afterend': After the element itself.
+	 * @param string $text A DOMString representing the text to be
+	 * inserted into the tree.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentText
+	 */
+	public function insertAdjacentText(
+		string $position,
+		string $text
+	):void {
+		$tempTagName = "insert-adjacent-html-temp";
+		$tempElement = $this->ownerDocument->createElement($tempTagName);
+		$tempElement->textContent = $text;
+		$fragment = $this->ownerDocument->createDocumentFragment();
+		while($child = $tempElement->firstChild) {
+			$fragment->appendChild($child);
+		}
+		$this->insertAdjacentElement($position, $fragment);
+	}
+
+	/**
+	 * The matches() method checks to see if the Element would be selected
+	 * by the provided selectorString -- in other words -- checks if the
+	 * element "is" the selector.
+	 *
+	 * @param string $selectorString a string representing the selector to
+	 * test.
+	 * @return bool
+	 * @throws XPathQueryException if the specified selector string is
+	 * invalid.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
+	 */
+	public function matches(string $selectorString):bool {
+		$matches = $this->ownerDocument->querySelectorAll($selectorString);
+		foreach($matches as $match) {
+			if($match === $this) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * The toggleAttribute() method of the Element interface toggles a
+	 * Boolean attribute (removing it if it is present and adding it if it
+	 * is not present) on the given element.
+	 *
+	 * @param string $name A DOMString specifying the name of the attribute
+	 * to be toggled. The attribute name is automatically converted to all
+	 * lower-case when toggleAttribute() is called on an HTML element in an
+	 * HTML document.
+	 * @param bool $force A boolean value to determine whether the attribute
+	 * should be added or removed, no matter whether the attribute is
+	 * present or not at the moment.
+	 * @return bool true if attribute name is eventually present, and false
+	 * otherwise.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/toggleAttribute
+	 */
+	public function toggleAttribute(
+		string $name,
+		bool $force = null
+	):bool {
+		$add = true;
+		if(is_null($force)) {
+			if($this->hasAttribute($name)) {
+				$add = false;
+			}
+		}
+		else {
+			$add = $force;
+		}
+
+		if($add) {
+			$this->setAttribute($name, "");
+			return true;
+		}
+		else {
+			$this->removeAttribute($name);
+			return false;
+		}
 	}
 }
