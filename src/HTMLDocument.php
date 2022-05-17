@@ -44,36 +44,14 @@ class HTMLDocument extends Document {
 		}
 	}
 
-	public function __toString():string {
-		$documentElement = $this->documentElement;
-		if(is_null($documentElement)) {
-			$documentElement = $this->createElement("html");
-			$this->appendChild($documentElement);
-		}
-
-		return parent::__toString();
-	}
-
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/body */
 	public function __prop_get_body():null|Element {
-		$body = $this->getElementsByTagName("body")->item(0);
-		if(is_null($body)) {
-			$body = $this->createElement("body");
-			$this->documentElement->append($body);
-		}
-
-		return $body;
+		return $this->getElementsByTagName("body")->item(0);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/head */
 	public function __prop_get_head():null|Element {
-		$head = $this->getElementsByTagName("head")->item(0);
-//		if(is_null($head)) {
-//			$head = $this->createElement("head");
-//			$this->documentElement->prepend($head);
-//		}
-
-		return $head;
+		return $this->getElementsByTagName("head")->item(0);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/embeds */

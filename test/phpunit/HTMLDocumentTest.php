@@ -41,6 +41,11 @@ class HTMLDocumentTest extends TestCase {
 		);
 	}
 
+	public function testConstructor_createsBody():void {
+		$sut = new HTMLDocument("<!<!doctype html><head></head>");
+		self::assertInstanceOf(Element::class, $sut->body);
+	}
+
 	public function testAppendChild_createdElementsAreNotNamespaced():void {
 		$sut = new HTMLDocument('<html lang="en"><head><title>Test</title></head><body></body></html>');
 		$div = $sut->createElement("div");
