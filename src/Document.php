@@ -11,6 +11,7 @@ use DOMDocumentType;
 use DOMElement;
 use DOMEntity;
 use DOMEntityReference;
+use DOMException;
 use DOMNode;
 use DOMNotation;
 use DOMProcessingInstruction;
@@ -168,11 +169,8 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 			$element = parent::createElement($localName, $value);
 			return $element;
 		}
-		catch(\DOMException $exception) {
-			if(str_contains($exception->getMessage(), "Invalid Character Error")) {
-				throw new InvalidCharacterException();
-			}
-			throw $exception;
+		catch(DOMException $exception) {
+			throw new InvalidCharacterException();
 		}
 	}
 

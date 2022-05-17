@@ -142,12 +142,8 @@ trait DocumentStream {
 	 * @throws RuntimeException on failure.
 	 */
 	public function write($string):int {
-		if(!$this->isWritable()) {
+		if(!$this->isWritable() || !$this instanceof HTMLDocument) {
 			throw new DocumentStreamNotWritableException();
-		}
-
-		if(!$this instanceof HTMLDocument) {
-			throw new WriteOnNonHTMLDocumentException("Operation is not supported");
 		}
 
 		$this->body?->append($string);
