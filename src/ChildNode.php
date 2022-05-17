@@ -9,7 +9,7 @@ namespace Gt\Dom;
  * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode
  *
  * @property-read null|Element $parentElement
- * @property-read null|Node $parentNode
+ * @property-read null|Node|Element $parentNode
  *
  * @method void before(Node|Element|string...$nodes) Inserts a set of Node objects or strings in the children list of the Element's parent, just before the Element.
  * @method void after(Node|Element|string...$nodes) Inserts a set of Node objects or strings in the children list of the Element's parent, just after the Element.
