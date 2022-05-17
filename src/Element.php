@@ -106,15 +106,16 @@ class Element extends DOMElement {
 			"<html-fragment>$innerHTML</html-fragment>"
 		);
 		$innerFragmentNode = $tempDocument->getElementsByTagName(
-			"html-fragment")->item(0);
+			"html-fragment"
+		)->item(0);
 
-		$imported = $tempDocument->importNode(
+		$imported = $this->ownerDocument->importNode(
 			$innerFragmentNode,
 			true
 		);
 
 		while($imported->firstChild) {
-			$this->ownerDocument->appendChild($imported->firstChild);
+			$this->appendChild($imported->firstChild);
 		}
 	}
 

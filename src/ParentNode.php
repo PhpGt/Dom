@@ -121,13 +121,13 @@ trait ParentNode {
 			$appended = parent::appendChild($aChild);
 			return $appended;
 		}
+		/** @noinspection PhpRedundantCatchClauseInspection */
 		catch(DOMException $exception) {
 			if(strstr("Wrong Document Error", $exception->getMessage())) {
 				throw new WrongDocumentErrorException();
 			}
-			else {
-				throw $exception;
-			}
+
+			throw $exception;
 		}
 	}
 

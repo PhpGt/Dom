@@ -4,9 +4,7 @@ namespace Gt\Dom\Test\TestFactory;
 use Gt\Dom\Document;
 use Gt\Dom\DocumentFragment;
 use Gt\Dom\Element;
-use Gt\Dom\Facade\HTMLDocumentFactory;
 use Gt\Dom\HTMLDocument;
-use Gt\Dom\HTMLElement\HTMLElement;
 
 class NodeTestFactory {
 	public static function createNode(
@@ -14,7 +12,7 @@ class NodeTestFactory {
 		Document $document = null
 	):Element {
 		if(!$document) {
-			$document = new Document();
+			$document = new HTMLDocument();
 		}
 
 		return $document->createElement($tagName);

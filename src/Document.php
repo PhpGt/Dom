@@ -51,11 +51,6 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 		public readonly string $characterSet,
 		public readonly string $contentType,
 	) {
-		$className = get_class($this);
-		if($className === Document::class) {
-			throw new DocumentMustBeExtendedException("You are trying to construct a plain Gt\\Dom\\Document - instead, you should use Gt\\Dom\\HTMLDocument or Gt\\Dom\\XMLDocument");
-		}
-
 		parent::__construct("1.0", $this->characterSet);
 		$this->registerNodeClasses();
 		libxml_use_internal_errors(true);

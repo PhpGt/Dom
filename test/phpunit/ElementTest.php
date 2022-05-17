@@ -123,12 +123,11 @@ class ElementTest extends TestCase {
 //
 //	public function testInnerHTML():void {
 //		$sut = NodeTestFactory::createNode("example");
-//		$sut->innerHTML = "<p>A paragraph</p>
-//		<div>A div</div>";
+//		$sut->innerHTML = "<p>A paragraph</p> <div>A div</div>";
 //		self::assertEquals("A paragraph", $sut->children[0]->innerHTML);
 //		self::assertEquals("A div", $sut->children[1]->innerHTML);
 //	}
-//
+
 //	public function testInnerHTML_unicode():void {
 //		// Note the special apostrophe.
 //		$message = "Let’s go on a digital journey together.";
