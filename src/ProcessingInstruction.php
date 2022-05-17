@@ -3,4 +3,6 @@ namespace Gt\Dom;
 
 use DOMProcessingInstruction;
 
-class ProcessingInstruction extends DOMProcessingInstruction {}
+class ProcessingInstruction extends DOMProcessingInstruction {
+	use RegisteredNodeClass;
+}

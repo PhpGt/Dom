@@ -34,7 +34,7 @@ class Element extends DOMElement {
 	use NonDocumentTypeChildNode;
 	use ChildNode;
 	use ParentNode;
-	use ElementNode;
+	use RegisteredNodeClass;
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/classList */
 	protected function __prop_get_classList():DOMTokenList {

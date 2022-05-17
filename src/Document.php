@@ -29,6 +29,7 @@ use Stringable;
 abstract class Document extends DOMDocument implements Stringable, StreamInterface {
 	use DocumentStream;
 	use ParentNode;
+	use RegisteredNodeClass;
 
 	const NodeClassLookup = [
 		DOMDocument::class => Document::class,

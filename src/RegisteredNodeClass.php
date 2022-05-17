@@ -3,7 +3,18 @@ namespace Gt\Dom;
 
 use DOMNode;
 
-trait ElementNode {
+/**
+ * The DOMDocument inheritance model has some strange quirks in the
+ * specification and PHP implementation.
+ *
+ * @property-read null|Node|Element $nextSibling Returns a Node representing the next node in the tree, or null if there isn't such node.
+ * @property-read null|Node|Element $firstChild
+ * @property-read null|Node|Element $lastChild
+ * @property-read null|Node|Element $previousSibling Returns a Node representing the previous node in the tree, or null if there isn't such node.
+ *
+ * @method Node|Element cloneNode(bool $deep = false)
+ */
+trait RegisteredNodeClass {
 	/**
 	 * Returns a Boolean which indicates whether or not two nodes are of
 	 * the same type and all their defining data points match.

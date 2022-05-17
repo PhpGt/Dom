@@ -3,4 +3,6 @@ namespace Gt\Dom;
 
 use DOMComment;
 
-class Comment extends DOMComment {}
+class Comment extends DOMComment {
+	use RegisteredNodeClass;
+}

@@ -3,4 +3,6 @@ namespace Gt\Dom;
 
 use DOMText;
 
-class Text extends DOMText {}
+class Text extends DOMText {
+	use RegisteredNodeClass;
+}

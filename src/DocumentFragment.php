@@ -3,4 +3,6 @@ namespace Gt\Dom;
 
 use DOMDocumentFragment;
 
-class DocumentFragment extends DOMDocumentFragment {}
+class DocumentFragment extends DOMDocumentFragment {
+	use RegisteredNodeClass;
+}
