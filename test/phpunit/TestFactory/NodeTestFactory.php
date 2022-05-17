@@ -21,9 +21,9 @@ class NodeTestFactory {
 	public static function createHTMLElement(
 		string $tagName,
 		HTMLDocument $document = null
-	):HTMLElement {
+	):Element {
 		if(!$document) {
-			$document = HTMLDocumentFactory::create("");
+			$document = new HTMLDocument();
 		}
 
 		return $document->createElement($tagName);

@@ -130,36 +130,35 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	 * @return Element|RadioNodeList|null
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/namedItem
 	 */
-// TODO: Enable namedItem when you get there in tests (disabled for PHPStan's benefit)
-//	public function namedItem(string $nameOrId):Element|RadioNodeList|null {
-//		$matches = [
-//			"id" => [],
-//			"name" => [],
-//		];
-//
-//		foreach($matches as $attribute => $list) {
-//			foreach($this as $element) {
-//				if($element->getAttribute($attribute) === $nameOrId) {
-//					array_push($matches[$attribute], $element);
-//				}
-//			}
-//		}
-//
-//		if(isset($matches["id"][0])) {
-//			return $matches["id"][0];
-//		}
-//
-//		$count = count($matches["name"]);
-//		if($count === 0) {
-//			return null;
-//		}
-//		elseif($count === 1) {
-//			return $matches["name"][0];
-//		}
-//		else {
-//			return NodeListFactory::createRadioNodeList(
-//				fn() => $matches["name"]
-//			);
-//		}
-//	}
+	public function namedItem(string $nameOrId):Element|RadioNodeList|null {
+		$matches = [
+			"id" => [],
+			"name" => [],
+		];
+
+		foreach($matches as $attribute => $list) {
+			foreach($this as $element) {
+				if($element->getAttribute($attribute) === $nameOrId) {
+					array_push($matches[$attribute], $element);
+				}
+			}
+		}
+
+		if(isset($matches["id"][0])) {
+			return $matches["id"][0];
+		}
+
+		$count = count($matches["name"]);
+		if($count === 0) {
+			return null;
+		}
+		elseif($count === 1) {
+			return $matches["name"][0];
+		}
+		else {
+			return NodeListFactory::createRadioNodeList(
+				fn() => $matches["name"]
+			);
+		}
+	}
 }

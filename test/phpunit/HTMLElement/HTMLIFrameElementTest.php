@@ -1,7 +1,7 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
+use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\HTMLElement\HTMLIFrameElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 

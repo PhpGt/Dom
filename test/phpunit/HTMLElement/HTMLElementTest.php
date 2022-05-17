@@ -4,7 +4,6 @@ namespace Gt\Dom\Test\HTMLElement;
 use Gt\Dom\ClientSide\CSSStyleDeclaration;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\EnumeratedValueException;
-use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
 use Gt\Dom\Test\TestFactory\HTMLElementTestFactory;
 use PHPUnit\Framework\TestCase;
 

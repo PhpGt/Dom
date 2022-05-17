@@ -5,6 +5,7 @@ use DOMElement;
 use DOMNamedNodeMap;
 use Gt\Dom\Exception\InvalidAdjacentPositionException;
 use Gt\Dom\Exception\XPathQueryException;
+use Gt\Dom\HTMLElement\HTMLElement;
 use Gt\PropFunc\MagicProp;
 use ReturnTypeWillChange;
 
@@ -34,6 +35,7 @@ class Element extends DOMElement {
 	use ChildNode;
 	use ParentNode;
 	use RegisteredNodeClass;
+	use HTMLElement;
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/classList */
 	protected function __prop_get_classList():DOMTokenList {

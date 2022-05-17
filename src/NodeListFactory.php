@@ -10,7 +10,7 @@ class NodeListFactory extends NodeList {
 		return new NodeList($callback);
 	}
 
-//	public static function createRadioNodeList(callable $callback):RadioNodeList {
-//		return new RadioNodeList($callback);
-//	}
+	public static function createRadioNodeList(callable $callback):RadioNodeList {
+		return new RadioNodeList($callback);
+	}
 }

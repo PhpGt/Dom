@@ -1,15 +1,6 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use DateTime;
-use Gt\Dom\ClientSide\FileList;
-use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
-use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
-use Gt\Dom\HTMLElement\HTMLFormElement;
-use Gt\Dom\HTMLElement\HTMLInputElement;
-use Gt\Dom\HTMLElement\HTMLLabelElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
-
 class HTMLInputElementTest extends HTMLElementTestCase {
 //	public function testChecked():void {
 //		/** @var HTMLInputElement $sut */
