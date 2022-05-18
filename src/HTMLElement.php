@@ -282,11 +282,16 @@ trait HTMLElement {
 		$this->setAttribute("name", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/value */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataElement/value
+	 */
 	protected function __prop_get_value():string {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLButtonElement,
+			ElementType::HTMLDataElement,
 		);
 		$value = $this->getAttribute("value");
 		if(!is_null($value)) {
@@ -304,11 +309,16 @@ trait HTMLElement {
 		return $this->textContent;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/value */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataElement/value
+	 */
 	protected function __prop_set_value(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLButtonElement,
+			ElementType::HTMLDataElement,
 		);
 		$this->setAttribute("value", $value);
 	}
