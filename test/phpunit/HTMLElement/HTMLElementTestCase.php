@@ -46,98 +46,98 @@ abstract class HTMLElementTestCase extends TestCase {
 		);
 	}
 
-//	protected static function assertPropertyAttributeCorrelateBool(
-//		HTMLElement $sut,
-//		string $attribute,
-//		string $property = null
-//	):void {
-//		if(is_null($property)) {
-//			$property = $attribute;
-//		}
-//
-//		$current = $sut->$property;
-//		self::assertIsBool($current);
-//
-//		$sut->$property = !$current;
-//		self::assertSame(!$current, $sut->$property);
-//
-//		if($current) {
-//			self::assertFalse($sut->hasAttribute($attribute));
-//		}
-//		else {
-//			self::assertTrue($sut->hasAttribute($attribute));
-//		}
-//
-//		$sut->$property = $current;
-//		self::assertSame($current, $sut->$property);
-//
-//		if($current) {
-//			self::assertTrue($sut->hasAttribute($attribute));
-//		}
-//		else {
-//			self::assertFalse($sut->hasAttribute($attribute));
-//		}
-//	}
-//
-//	/**
-//	 * @param string $type "int" or "float", prefixed with "?" to indicate
-//	 * nullable, suffixed with ":" and then a default value if the non-set
-//	 * value is not null-ish.
-//	 */
-//	protected static function assertPropertyAttributeCorrelateNumber(
-//		HTMLElement $sut,
-//		string $type,
-//		string $attribute,
-//		string $property = null
-//	):void {
-//		if(is_null($property)) {
-//			$property = $attribute;
-//		}
-//
-//		$current = $sut->$property;
-//
-//		$attributeValue = $sut->getAttribute("attribute");
-//
-//		if(strstr($type, ":")) {
-//			$default = substr($type, strpos($type, ":") + 1);
-//			self::assertEquals($current, $default);
-//		}
-//		else {
-//			self::assertEquals($current, $attributeValue);
-//		}
-//
-//		if($type[0] !== "?") {
-//			self::assertNotNull($current);
-//		}
-//
-//		for($i = 0; $i < 10; $i++) {
-//			$value = rand(1, 999999);
-//			if(strstr($type, "float")) {
-//				$value /= (rand(9, 99) / 10);
-//			}
-//
-//			$sut->setAttribute($attribute, (string)$value);
-//			$attributeValue = $sut->getAttribute($attribute);
-//			self::assertEquals($sut->$property, $attributeValue);
-//
-//			if(!$type[0] != "?") {
-//				self::assertNotNull($attributeValue);
-//			}
-//		}
-//
-//		for($i = 0; $i < 10; $i++) {
-//			$value = rand(1, 999999);
-//			if(strstr($type, "float")) {
-//				$value /= (rand(9, 99) / 10);
-//			}
-//
-//			$sut->$property = $value;
-//			$propertyValue = $sut->$property;
-//			self::assertEquals($sut->getAttribute($attribute), $propertyValue);
-//
-//			if(!$type[0] != "?") {
-//				self::assertNotNull($propertyValue);
-//			}
-//		}
-//	}
+	protected static function assertPropertyAttributeCorrelateBool(
+		Element $sut,
+		string $attribute,
+		string $property = null
+	):void {
+		if(is_null($property)) {
+			$property = $attribute;
+		}
+
+		$current = $sut->$property;
+		self::assertIsBool($current);
+
+		$sut->$property = !$current;
+		self::assertSame(!$current, $sut->$property);
+
+		if($current) {
+			self::assertFalse($sut->hasAttribute($attribute));
+		}
+		else {
+			self::assertTrue($sut->hasAttribute($attribute));
+		}
+
+		$sut->$property = $current;
+		self::assertSame($current, $sut->$property);
+
+		if($current) {
+			self::assertTrue($sut->hasAttribute($attribute));
+		}
+		else {
+			self::assertFalse($sut->hasAttribute($attribute));
+		}
+	}
+
+	/**
+	 * @param string $type "int" or "float", prefixed with "?" to indicate
+	 * nullable, suffixed with ":" and then a default value if the non-set
+	 * value is not null-ish.
+	 */
+	protected static function assertPropertyAttributeCorrelateNumber(
+		Element $sut,
+		string $type,
+		string $attribute,
+		string $property = null
+	):void {
+		if(is_null($property)) {
+			$property = $attribute;
+		}
+
+		$current = $sut->$property;
+
+		$attributeValue = $sut->getAttribute("attribute");
+
+		if(strstr($type, ":")) {
+			$default = substr($type, strpos($type, ":") + 1);
+			self::assertEquals($current, $default);
+		}
+		else {
+			self::assertEquals($current, $attributeValue);
+		}
+
+		if($type[0] !== "?") {
+			self::assertNotNull($current);
+		}
+
+		for($i = 0; $i < 10; $i++) {
+			$value = rand(1, 999999);
+			if(strstr($type, "float")) {
+				$value /= (rand(9, 99) / 10);
+			}
+
+			$sut->setAttribute($attribute, (string)$value);
+			$attributeValue = $sut->getAttribute($attribute);
+			self::assertEquals($sut->$property, $attributeValue);
+
+			if(!$type[0] != "?") {
+				self::assertNotNull($attributeValue);
+			}
+		}
+
+		for($i = 0; $i < 10; $i++) {
+			$value = rand(1, 999999);
+			if(strstr($type, "float")) {
+				$value /= (rand(9, 99) / 10);
+			}
+
+			$sut->$property = $value;
+			$propertyValue = $sut->$property;
+			self::assertEquals($sut->getAttribute($attribute), $propertyValue);
+
+			if(!$type[0] != "?") {
+				self::assertNotNull($propertyValue);
+			}
+		}
+	}
 }
