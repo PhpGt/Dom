@@ -262,22 +262,32 @@ trait HTMLElement {
 		$this->textContent = $value;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/type */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/type
+	 */
 	protected function __prop_get_type():string {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLInputElement,
 			ElementType::HTMLButtonElement,
+			ElementType::HTMLEmbedElement,
 		);
 		return $this->getAttribute("type") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/type */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/type
+	 */
 	protected function __prop_set_type(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLInputElement,
 			ElementType::HTMLButtonElement,
+			ElementType::HTMLEmbedElement,
 		);
 		$this->setAttribute("type", $value);
 	}
@@ -1083,15 +1093,27 @@ trait HTMLElement {
 		return "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/src */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/src
+	 */
 	protected function __prop_get_src():string {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLEmbedElement,
+		);
 		return $this->getAttribute("src") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/src */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/src
+	 */
 	protected function __prop_set_src(string $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLEmbedElement,
+		);
 		$this->setAttribute("src", $value);
 	}
 
@@ -1324,27 +1346,51 @@ trait HTMLElement {
 		$this->setAttribute("for", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/height
+	 */
 	protected function __prop_get_height():int {
-		$this->allowTypes(ElementType::HTMLCanvasElement);
-		return $this->getAttribute("height") ?? 0;
+		$this->allowTypes(
+			ElementType::HTMLCanvasElement,
+			ElementType::HTMLEmbedElement,
+		);
+		return (int)$this->getAttribute("height");
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/height
+	 */
 	protected function __prop_set_height(int $value):void {
-		$this->allowTypes(ElementType::HTMLCanvasElement);
+		$this->allowTypes(
+			ElementType::HTMLCanvasElement,
+			ElementType::HTMLEmbedElement,
+		);
 		$this->setAttribute("height", (string)$value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/width
+	 */
 	protected function __prop_get_width():int {
-		$this->allowTypes(ElementType::HTMLCanvasElement);
-		return $this->getAttribute("width") ?? 0;
+		$this->allowTypes(
+			ElementType::HTMLCanvasElement,
+			ElementType::HTMLEmbedElement,
+		);
+		return (int)$this->getAttribute("width");
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/width
+	 */
 	protected function __prop_set_width(int $value):void {
-		$this->allowTypes(ElementType::HTMLCanvasElement);
+		$this->allowTypes(
+			ElementType::HTMLCanvasElement,
+			ElementType::HTMLEmbedElement,
+		);
 		$this->setAttribute("width", (string)$value);
 	}
 
