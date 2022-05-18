@@ -194,6 +194,8 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property string $dateTime Is a DOMString reflecting the datetime HTML attribute, containing a date-and-time string representing a timestamp for the change.
  * @property string $data Returns a DOMString that reflects the data HTML attribute, specifying the address of a resource's data.
  * @property bool $typeMustMatch Is a Boolean that reflects the typemustmatch HTML attribute, indicating if the resource specified by data must only be played if it matches the type attribute.
+ * @property bool $reversed Is a Boolean value reflecting the reversed and defining if the numbering is descending, that is its value is true, or ascending (false).
+ * @property int $start Is a long value reflecting the start and defining the value of the first number of the first element of the list.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -582,6 +584,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/type
 	 */
 	protected function __prop_get_type():string {
 		$this->allowTypes(
@@ -592,6 +595,7 @@ trait HTMLElement {
 			ElementType::HTMLFieldSetElement,
 			ElementType::HTMLLinkElement,
 			ElementType::HTMLObjectElement,
+			ElementType::HTMLOListElement,
 		);
 
 		if($this->elementType === ElementType::HTMLFieldSetElement) {
@@ -608,6 +612,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/type
 	 */
 	protected function __prop_set_type(string $value):void {
 		$this->allowTypes(
@@ -618,6 +623,7 @@ trait HTMLElement {
 			ElementType::HTMLFieldSetElement,
 			ElementType::HTMLLinkElement,
 			ElementType::HTMLObjectElement,
+			ElementType::HTMLOListElement,
 		);
 		$this->setAttribute("type", $value);
 	}
@@ -2993,5 +2999,46 @@ trait HTMLElement {
 		else {
 			$this->removeAttribute("typemustmatch");
 		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/reversed */
+	protected function __prop_get_reversed():bool {
+		$this->allowTypes(
+			ElementType::HTMLOListElement,
+		);
+		return $this->hasAttribute("reversed");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/reversed */
+	protected function __prop_set_reversed(bool $value):void {
+		$this->allowTypes(
+			ElementType::HTMLOListElement,
+		);
+		if($value) {
+			$this->setAttribute("reversed", "");
+		}
+		else {
+			$this->removeAttribute("reversed");
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/start */
+	protected function __prop_get_start():int {
+		$this->allowTypes(
+			ElementType::HTMLOListElement,
+		);
+		if($this->hasAttribute("start")) {
+			return (int)$this->getAttribute("start");
+		}
+
+		return 1;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/start */
+	protected function __prop_set_start(int $value):void {
+		$this->allowTypes(
+			ElementType::HTMLOListElement,
+		);
+		$this->setAttribute("start", (string)$value);
 	}
 }

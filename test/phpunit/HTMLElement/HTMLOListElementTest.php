@@ -1,26 +1,25 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLOListElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLOListElementTest extends HTMLElementTestCase {
-//	public function testReversed():void {
-//		/** @var HTMLOListElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("ol");
-//		self::assertPropertyAttributeCorrelateBool($sut, "reversed");
-//	}
-//
-//	public function testStart():void {
-//		/** @var HTMLOListElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("ol");
-//		self::assertSame(1, $sut->start);
-//		self::assertPropertyAttributeCorrelateNumber($sut, "int:1",  "start");
-//	}
-//
-//	public function testType():void {
-//		/** @var HTMLOListElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("ol");
-//		self::assertPropertyAttributeCorrelate($sut, "type");
-//	}
+	public function testReversed():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("ol");
+		self::assertPropertyAttributeCorrelateBool($sut, "reversed");
+	}
+
+	public function testStart():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("ol");
+		self::assertSame(1, $sut->start);
+		self::assertPropertyAttributeCorrelateNumber($sut, "int:1",  "start");
+	}
+
+	public function testType():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("ol");
+		self::assertPropertyAttributeCorrelate($sut, "type");
+	}
 }
