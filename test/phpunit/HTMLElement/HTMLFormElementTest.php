@@ -91,7 +91,6 @@ class HTMLFormElementTest extends HTMLElementTestCase {
 	}
 
 	public function testArrayAccess():void {
-		$this->markTestSkipped("Return to test once HTMLTextAreaElement is implemented");
 		$document = new HTMLDocument();
 		$sut = $document->createElement("form");
 		self::assertFalse(isset($sut["nothing"]));

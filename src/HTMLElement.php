@@ -135,6 +135,13 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property string $acceptCharset A DOMString reflecting the value of the form's accept-charset HTML attribute, representing the character encoding that the server accepts.
  * @property string $autocomplete A DOMString reflecting the value of the form's autocomplete HTML attribute, indicating whether the controls in this form can have their values automatically populated by the browser.
  * @property bool $noValidate A Boolean reflecting the value of the form's novalidate HTML attribute, indicating whether the form should not be validated.
+ * @property string $autocapitalize Returns / Sets the element's capitalization behavior for user input. Valid values are: none, off, characters, words, sentences.
+ * @property int $cols Returns / Sets the element's cols attribute, indicating the visible width of the text area.
+ * @property string $defaultValue Returns / Sets the control's default value, which behaves like the Node.textContent property.
+ * @property int $maxLength Returns / Sets the element's maxlength attribute, indicating the maximum number of characters the user can enter. This constraint is evaluated only when the value changes.
+ * @property int $minLength Returns / Sets the element's minlength attribute, indicating the minimum number of characters the user can enter. This constraint is evaluated only when the value changes.
+ * @property int $rows Returns / Sets the element's rows attribute, indicating the number of visible text lines for the control.
+ * @property string $wrap Returns / Sets the wrap HTML attribute, indicating how the control wraps text.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -547,12 +554,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/name
 	 */
 	protected function __prop_get_name():string {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFormElement,
+			ElementType::HTMLTextAreaElement,
 		);
 		return $this->getAttribute("name") ?? "";
 	}
@@ -561,12 +570,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/name
 	 */
 	protected function __prop_set_name(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFormElement,
+			ElementType::HTMLTextAreaElement,
 		);
 		$this->setAttribute("name", $value);
 	}
@@ -576,6 +587,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/value
 	 */
 	protected function __prop_get_value():string {
 		$this->allowTypes(
@@ -583,6 +595,7 @@ trait HTMLElement {
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLDataElement,
 			ElementType::HTMLOptionElement,
+			ElementType::HTMLTextAreaElement,
 		);
 		$value = $this->getAttribute("value");
 		if(!is_null($value)) {
@@ -605,6 +618,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/value
 	 */
 	protected function __prop_set_value(string $value):void {
 		$this->allowTypes(
@@ -612,6 +626,7 @@ trait HTMLElement {
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLDataElement,
 			ElementType::HTMLOptionElement,
+			ElementType::HTMLTextAreaElement,
 		);
 		$this->setAttribute("value", $value);
 	}
@@ -1816,5 +1831,101 @@ trait HTMLElement {
 		else {
 			$this->removeAttribute("novalidate");
 		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/autocapitalize */
+	protected function __prop_get_autocapitalize():string {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		return $this->getAttribute("autocapitalize") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/autocapitalize */
+	protected function __prop_set_autocapitalize(string $value):void {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->setAttribute("autocapitalize", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/cols */
+	protected function __prop_get_cols():int {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		if($this->hasAttribute("cols")) {
+			return (int)$this->getAttribute("cols");
+		}
+		return 20;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/cols */
+	protected function __prop_set_cols(int $value):void {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->setAttribute("cols", (string)$value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/defaultValue */
+	protected function __prop_get_defaultValue():string {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		return $this->value;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/defaultValue */
+	protected function __prop_set_defaultValue(string $value):void {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->value = $value;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/maxLength */
+	protected function __prop_get_maxLength():int {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		if($this->hasAttribute("maxlength")) {
+			return (int)$this->getAttribute("maxlength");
+		}
+		return -1;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/maxLength */
+	protected function __prop_set_maxLength(int $value):void {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->setAttribute("maxlength", (string)$value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/minLength */
+	protected function __prop_get_minLength():int {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		if($this->hasAttribute("minlength")) {
+			return (int)$this->getAttribute("minlength");
+		}
+		return -1;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/minLength */
+	protected function __prop_set_minLength(int $value):void {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->setAttribute("minlength", (string)$value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/rows */
+	protected function __prop_get_rows():int {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		if($this->hasAttribute("rows")) {
+			return (int)$this->getAttribute("rows");
+		}
+		return 2;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/rows */
+	protected function __prop_set_rows(int $value):void {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->setAttribute("rows", (string)$value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/wrap */
+	protected function __prop_get_wrap():string {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		return $this->getAttribute("wrap") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/wrap */
+	protected function __prop_set_wrap(string $value):void {
+		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->setAttribute("wrap", $value);
 	}
 }
