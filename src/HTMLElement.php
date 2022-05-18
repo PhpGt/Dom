@@ -10,6 +10,7 @@ use Gt\Dom\ClientSide\FileList;
 use Gt\Dom\ClientSide\MediaController;
 use Gt\Dom\ClientSide\MediaError;
 use Gt\Dom\ClientSide\MediaStream;
+use Gt\Dom\ClientSide\StyleSheet;
 use Gt\Dom\ClientSide\TextTrackList;
 use Gt\Dom\ClientSide\TimeRanges;
 use Gt\Dom\ClientSide\ValidityState;
@@ -180,6 +181,9 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property ?DateTimeInterface $valueAsDate Returns / Sets the value of the element, interpreted as a date, or null if conversion is not possible.
  * @property int|float|null $valueAsNumber Returns the value of the element, interpreted as one of the following, in order: A time value, A number, NaN if conversion is impossible.
  * @property string $inputMode Provides a hint to browsers as to the type of virtual keyboard configuration to use when editing this element or its contents.
+ * @property string $as Is a DOMString representing the type of content being loaded by the HTML link.
+ * @property string $media Is a DOMString representing a list of one or more media formats to which the resource applies.
+ * @property-read StyleSheet $sheet Returns the StyleSheet object associated with the given element, or null if there is none.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -525,15 +529,27 @@ trait HTMLElement {
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hreflang */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hreflang
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/hreflang
+	 */
 	protected function __prop_get_hreflang():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLLinkElement,
+		);
 		return $this->getAttribute("hreflang") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hreflang */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hreflang
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/hreflang
+	 */
 	protected function __prop_set_hreflang(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLLinkElement,
+		);
 		$this->setAttribute("hreflang", $value);
 	}
 
@@ -554,6 +570,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/type
 	 */
 	protected function __prop_get_type():string {
 		$this->allowTypes(
@@ -562,6 +579,7 @@ trait HTMLElement {
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLFieldSetElement,
+			ElementType::HTMLLinkElement,
 		);
 
 		if($this->elementType === ElementType::HTMLFieldSetElement) {
@@ -576,6 +594,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/type
 	 */
 	protected function __prop_set_type(string $value):void {
 		$this->allowTypes(
@@ -584,6 +603,7 @@ trait HTMLElement {
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLFieldSetElement,
+			ElementType::HTMLLinkElement,
 		);
 		$this->setAttribute("type", $value);
 	}
@@ -698,12 +718,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/href
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/href
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLBaseElement/href
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/href
 	 */
 	protected function __prop_get_href():string {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
 			ElementType::HTMLBaseElement,
+			ElementType::HTMLLinkElement,
 		);
 		return $this->getAttribute("href") ?? "";
 	}
@@ -712,12 +734,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/href
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/href
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLBaseElement/href
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/href
 	 */
 	protected function __prop_set_href(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
 			ElementType::HTMLBaseElement,
+			ElementType::HTMLLinkElement,
 		);
 		$this->setAttribute("href", $value);
 	}
@@ -974,6 +998,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/referrerPolicy
 	 */
 	protected function __prop_get_referrerPolicy():string {
 		$this->allowTypes(
@@ -981,6 +1006,7 @@ trait HTMLElement {
 			ElementType::HTMLAreaElement,
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLLinkElement,
 		);
 		return $this->getAttribute("referrerpolicy") ?? "";
 	}
@@ -990,6 +1016,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/referrerPolicy
 	 */
 	protected function __prop_set_referrerPolicy(string $value):void {
 		$this->allowTypes(
@@ -997,6 +1024,7 @@ trait HTMLElement {
 			ElementType::HTMLAreaElement,
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLLinkElement,
 		);
 		$this->setAttribute("referrerpolicy", $value);
 	}
@@ -1004,11 +1032,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/rel
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/rel
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/rel
 	 */
 	protected function __prop_get_rel():string {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
+			ElementType::HTMLLinkElement,
 		);
 		return $this->getAttribute("rel") ?? "";
 	}
@@ -1016,11 +1046,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/rel
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/rel
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/rel
 	 */
 	protected function __prop_set_rel(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
+			ElementType::HTMLLinkElement,
 		);
 		$this->setAttribute("rel", $value);
 	}
@@ -1028,11 +1060,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/relList
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/relList
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/relList
 	 */
 	protected function __prop_get_relList():DOMTokenList {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
+			ElementType::HTMLLinkElement,
 		);
 		return DOMTokenListFactory::create(
 			fn() => explode(" ", $this->rel),
@@ -1553,11 +1587,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/disabled
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/disabled
 	 */
 	protected function __prop_get_disabled():bool {
 		$this->allowTypes(
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFieldSetElement,
+			ElementType::HTMLLinkElement,
 		);
 		return $this->hasAttribute("disabled");
 	}
@@ -1565,11 +1601,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/disabled
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/disabled
 	 */
 	protected function __prop_set_disabled(bool $value):void {
 		$this->allowTypes(
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFieldSetElement,
+			ElementType::HTMLLinkElement,
 		);
 		if($value) {
 			$this->setAttribute("disabled", "");
@@ -2640,5 +2678,45 @@ trait HTMLElement {
 			ElementType::HTMLInputElement,
 		);
 		$this->setAttribute("inputmode", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/as */
+	protected function __prop_get_as():string {
+		$this->allowTypes(
+			ElementType::HTMLLinkElement,
+		);
+		return $this->getAttribute("as") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/as */
+	protected function __prop_set_as(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLLinkElement,
+		);
+		$this->setAttribute("as", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/media */
+	protected function __prop_get_media():string {
+		$this->allowTypes(
+			ElementType::HTMLLinkElement,
+		);
+		return $this->getAttribute("media") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/media */
+	protected function __prop_set_media(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLLinkElement,
+		);
+		$this->setAttribute("media", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/sheet */
+	protected function __prop_get_sheet():StyleSheet {
+		$this->allowTypes(
+			ElementType::HTMLLinkElement,
+		);
+		return new StyleSheet();
 	}
 }
