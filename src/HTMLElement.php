@@ -101,7 +101,7 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property float $volume Is a double indicating the audio volume, from 0.0 (silent) to 1.0 (loudest).
  * @property bool $autofocus Is a Boolean indicating whether the control should have input focus when the page loads, unless the user overrides it, for example by typing in a different control. Only one form-associated element in a document can have this attribute specified.
  * @property bool $disabled Is a Boolean indicating whether the control is disabled, meaning that it does not accept any clicks.
- * @property-read ?Element $form Is a HTMLFormElement reflecting the form that this element is associated with.
+ * @property-read ?Element $form Is a HTMLFormElement reflecting the form that this element is associated with. If the element is a <legend>, if the legend has a fieldset element as its parent, then this attribute returns the same value as the form attribute on the parent fieldset element. Otherwise, it returns null.
  * @property-read NodeList $labels Is a NodeList that represents a list of <label> elements that are labels for this HTMLUIElement.
  * @property bool $readOnly Returns / Sets the element's readonly attribute, indicating that the user cannot modify the value of the control.
  * @property bool $required Returns / Sets the element's required attribute, indicating that the user must fill in a value before submitting a form.
@@ -1579,19 +1579,30 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/form
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/form
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/form
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLegendElement/form
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/form
 	 */
 	protected function __prop_get_form():?Element {
 		$this->allowTypes(
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLLabelElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLLegendElement,
+			ElementType::HTMLFieldSetElement,
 		);
 		$context = $this;
 		while($context->parentElement) {
 			$context = $context->parentElement;
 
-			if($context->elementType === ElementType::HTMLFormElement) {
-				return $context;
+			if($this->elementType === ElementType::HTMLLegendElement) {
+				if($context->elementType === ElementType::HTMLFieldSetElement) {
+					return $context->form;
+				}
+			}
+			else {
+				if($context->elementType === ElementType::HTMLFormElement) {
+					return $context;
+				}
 			}
 		}
 
