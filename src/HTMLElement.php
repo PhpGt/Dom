@@ -185,6 +185,8 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property string $media Is a DOMString representing a list of one or more media formats to which the resource applies.
  * @property-read StyleSheet $sheet Returns the StyleSheet object associated with the given element, or null if there is none.
  * @property-read HTMLCollection $areas Is a live HTMLCollection representing the <area> elements associated to this <map>.
+ * @property string $content Gets or sets the value of meta-data property.
+ * @property string $httpEquiv Gets or sets the name of an HTTP response header to define for a document.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -616,6 +618,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMetaElement/name
 	 */
 	protected function __prop_get_name():string {
 		$this->allowTypes(
@@ -625,6 +628,7 @@ trait HTMLElement {
 			ElementType::HTMLTextAreaElement,
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLMapElement,
+			ElementType::HTMLMetaElement,
 		);
 		return $this->getAttribute("name") ?? "";
 	}
@@ -636,6 +640,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMetaElement/name
 	 */
 	protected function __prop_set_name(string $value):void {
 		$this->allowTypes(
@@ -645,6 +650,7 @@ trait HTMLElement {
 			ElementType::HTMLTextAreaElement,
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLMapElement,
+			ElementType::HTMLMetaElement,
 		);
 		$this->setAttribute("name", $value);
 	}
@@ -2735,5 +2741,53 @@ trait HTMLElement {
 		return HTMLCollectionFactory::create(
 			fn() => $this->getElementsByTagName("area")
 		);
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/content
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMetaElement/content
+	 */
+	protected function __prop_get_content():string {
+		$this->allowTypes(
+			ElementType::HTMLMapElement,
+			ElementType::HTMLMetaElement,
+		);
+		return $this->getAttribute("content") ?? "";
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/content
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMetaElement/content
+	 */
+	protected function __prop_set_content(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLMapElement,
+			ElementType::HTMLMetaElement,
+		);
+		$this->setAttribute("content", $value);
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/httpEquiv
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMetaElement/httpEquiv
+	 */
+	protected function __prop_get_httpEquiv():string {
+		$this->allowTypes(
+			ElementType::HTMLMapElement,
+			ElementType::HTMLMetaElement,
+		);
+		return $this->getAttribute("http-equiv") ?? "";
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/httpEquiv
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMetaElement/httpEquiv
+	 */
+	protected function __prop_set_httpEquiv(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLMapElement,
+			ElementType::HTMLMetaElement,
+		);
+		$this->setAttribute("http-equiv", $value);
 	}
 }
