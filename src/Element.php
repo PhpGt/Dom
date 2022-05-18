@@ -132,7 +132,7 @@ class Element extends DOMElement implements ArrayAccess, Countable {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */
 	protected function __prop_get_id():string {
-		return $this->getAttribute("id");
+		return $this->getAttribute("id") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */

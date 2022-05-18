@@ -98,7 +98,7 @@ abstract class HTMLElementTestCase extends TestCase {
 
 		$attributeValue = $sut->getAttribute("attribute");
 
-		if(strstr($type, ":")) {
+		if(str_contains($type, ":")) {
 			$default = substr($type, strpos($type, ":") + 1);
 			self::assertEquals($current, $default);
 		}
@@ -112,7 +112,7 @@ abstract class HTMLElementTestCase extends TestCase {
 
 		for($i = 0; $i < 10; $i++) {
 			$value = rand(1, 999999);
-			if(strstr($type, "float")) {
+			if(str_contains($type, "float")) {
 				$value /= (rand(9, 99) / 10);
 			}
 
@@ -127,7 +127,7 @@ abstract class HTMLElementTestCase extends TestCase {
 
 		for($i = 0; $i < 10; $i++) {
 			$value = rand(1, 999999);
-			if(strstr($type, "float")) {
+			if(str_contains($type, "float")) {
 				$value /= (rand(9, 99) / 10);
 			}
 

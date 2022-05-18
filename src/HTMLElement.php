@@ -1,8 +1,12 @@
 <?php
 namespace Gt\Dom;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 use Gt\Dom\ClientSide\AudioTrackList;
 use Gt\Dom\ClientSide\CSSStyleDeclaration;
+use Gt\Dom\ClientSide\FileList;
 use Gt\Dom\ClientSide\MediaController;
 use Gt\Dom\ClientSide\MediaError;
 use Gt\Dom\ClientSide\MediaStream;
@@ -156,6 +160,26 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property string $useMap A DOMString reflecting the usemap HTML attribute, containing the page-local URL of the <map> element describing the image map to use. The page-local URL is a pound (hash) symbol (#) followed by the ID of the <map> element, such as #my-map-element. The <map> in turn contains <area> elements indicating the clickable areas in the image.
  * @property-read int $x An integer indicating the horizontal offset of the left border edge of the image's CSS layout box relative to the origin of the <html> element's containing block.
  * @property-read int $y The integer vertical offset of the top border edge of the image's CSS layout box relative to the origin of the <html> element's containing block.
+ * @property bool $defaultChecked Returns / Sets the default state of a radio button or checkbox as originally specified in HTML that created this object.
+ * @property bool $indeterminate Returns whether the checkbox or radio button is in indeterminate state. For checkboxes, the effect is that the appearance of the checkbox is obscured/greyed in some way as to indicate its state is indeterminate (not checked but not unchecked). Does not affect the value of the checked attribute, and clicking the checkbox will set the value to false.
+ * Properties that apply only to elements of type `file`:
+ * @property string $accept Returns / Sets the element's accept attribute, containing comma-separated list of file types accepted by the server when type is file.
+ * @property FileList $files Returns/accepts a FileList object, which contains a list of File objects representing the files selected for upload.
+ * @property string $formAction Is a DOMString reflecting the URI of a resource that processes information submitted by the HTMLUIElement. If specified, this attribute overrides the action attribute of the <form> element that owns this element.
+ * @property string $formEncType Is a DOMString reflecting the type of content that is used to submit the form to the server. If specified, this attribute overrides the enctype attribute of the <form> element that owns this element.
+ * @property string $formMethod Is a DOMString reflecting the HTTP method that the browser uses to submit the form. If specified, this attribute overrides the method attribute of the <form> element that owns this element.
+ * @property bool $formNoValidate Is a Boolean indicating that the form is not to be validated when it is submitted. If specified, this attribute overrides the novalidate attribute of the <form> element that owns this element.
+ * @property string $formTarget Is a DOMString reflecting a name or keyword indicating where to display the response that is received after submitting the form. If specified, this attribute overrides the target attribute of the <form> element that owns this element.
+ * @property string $max Returns / Sets the element's max attribute, containing the maximum (numeric or date-time) value for this item, which must not be less than its minimum (min attribute) value.
+ * @property string $min Returns / Sets the element's min attribute, containing the minimum (numeric or date-time) value for this item, which must not be greater than its maximum (max attribute) value.
+ * @property string $pattern Returns / Sets the element's pattern attribute, containing a regular expression that the control's value is checked against. Use the title attribute to describe the pattern to help the user. This attribute applies when the value of the type attribute is text, search, tel, url or email; otherwise it is ignored.
+ * @property string $placeholder Returns / Sets the element's placeholder attribute, containing a hint to the user of what can be entered in the control. The placeholder text must not contain carriage returns or line-feeds. This attribute applies when the value of the type attribute is text, search, tel, url or email; otherwise it is ignored.
+ * @property ?int $size Returns / Sets the element's size attribute, containing visual size of the control. This value is in pixels unless the value of type is text or password, in which case, it is an integer number of characters. Applies only when type is set to text, search, tel, url, email, or password; otherwise it is ignored.
+ * @property bool $multiple Returns / Sets the element's multiple attribute, indicating whether more than one value is possible (e.g., multiple files).
+ * @property string $step Returns / Sets the element's step attribute, which works with min and max to limit the increments at which a numeric or date-time value can be set. It can be the string any or a positive floating point number. If this is not set to any, the control accepts only values at multiples of the step value greater than the minimum.
+ * @property ?DateTimeInterface $valueAsDate Returns / Sets the value of the element, interpreted as a date, or null if conversion is not possible.
+ * @property int|float|null $valueAsNumber Returns the value of the element, interpreted as one of the following, in order: A time value, A number, NaN if conversion is impossible.
+ * @property string $inputMode Provides a hint to browsers as to the type of virtual keyboard configuration to use when editing this element or its contents.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -1103,11 +1127,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/alt
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/alt
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/alt
 	 */
 	protected function __prop_get_alt():string {
 		$this->allowTypes(
 			ElementType::HTMLAreaElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLInputElement,
 		);
 		return $this->getAttribute("alt") ?? "";
 	}
@@ -1115,11 +1141,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/alt
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/alt
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/alt
 	 */
 	protected function __prop_set_alt(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAreaElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLInputElement,
 		);
 		$this->setAttribute("alt", $value);
 	}
@@ -1434,6 +1462,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/src
 	 */
 	protected function __prop_get_src():string {
 		$this->allowTypes(
@@ -1441,6 +1470,7 @@ trait HTMLElement {
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLInputElement,
 		);
 		return $this->getAttribute("src") ?? "";
 	}
@@ -1450,6 +1480,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/src
 	 */
 	protected function __prop_set_src(string $value):void {
 		$this->allowTypes(
@@ -1457,6 +1488,7 @@ trait HTMLElement {
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLInputElement,
 		);
 		$this->setAttribute("src", $value);
 	}
@@ -1587,13 +1619,27 @@ trait HTMLElement {
 //		});
 //	}
 
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/readOnly
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/readOnly
+	 */
 	protected function __prop_get_readOnly():bool {
-		$this->allowTypes(ElementType::HTMLButtonElement);
+		$this->allowTypes(
+			ElementType::HTMLButtonElement,
+			ElementType::HTMLInputElement,
+		);
 		return $this->hasAttribute("readonly");
 	}
 
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/readOnly
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/readOnly
+	 */
 	protected function __prop_set_readOnly(bool $value):void {
-		$this->allowTypes(ElementType::HTMLButtonElement);
+		$this->allowTypes(
+			ElementType::HTMLButtonElement,
+			ElementType::HTMLInputElement,
+		);
 		if($value) {
 			$this->setAttribute("readonly", "");
 		}
@@ -1652,16 +1698,22 @@ trait HTMLElement {
 		return new ValidityState();
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-labels */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/labels
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/labels
+	 */
 	protected function __prop_get_labels():NodeList {
-		$this->allowTypes(ElementType::HTMLButtonElement);
+		$this->allowTypes(
+			ElementType::HTMLButtonElement,
+			ElementType::HTMLInputElement,
+		);
 		$input = $this;
 		return NodeListFactory::createLive(function() use($input) {
 			$labelsArray = [];
 
 			$context = $input;
 			while($context = $context->parentElement) {
-				if($context instanceof HTMLLabelElement) {
+				if($context->elementType === ElementType::HTMLLabelElement) {
 					array_push($labelsArray, $context);
 					break;
 				}
@@ -1707,6 +1759,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/height
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/height
 	 */
 	protected function __prop_get_height():int {
 		$this->allowTypes(
@@ -1714,6 +1767,7 @@ trait HTMLElement {
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLInputElement,
 		);
 		return (int)$this->getAttribute("height");
 	}
@@ -1723,6 +1777,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/height
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/height
 	 */
 	protected function __prop_set_height(int $value):void {
 		$this->allowTypes(
@@ -1730,6 +1785,7 @@ trait HTMLElement {
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLInputElement,
 		);
 		$this->setAttribute("height", (string)$value);
 	}
@@ -1739,6 +1795,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/width
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/width
 	 */
 	protected function __prop_get_width():int {
 		$this->allowTypes(
@@ -1746,6 +1803,7 @@ trait HTMLElement {
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLInputElement,
 		);
 		return (int)$this->getAttribute("width");
 	}
@@ -1755,6 +1813,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/width
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/width
 	 */
 	protected function __prop_set_width(int $value):void {
 		$this->allowTypes(
@@ -1762,6 +1821,7 @@ trait HTMLElement {
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLInputElement,
 		);
 		$this->setAttribute("width", (string)$value);
 	}
@@ -1913,15 +1973,27 @@ trait HTMLElement {
 		}
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/autocapitalize */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/autocapitalize
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/autocapitalize
+	 */
 	protected function __prop_get_autocapitalize():string {
-		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->allowTypes(
+			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLInputElement,
+		);
 		return $this->getAttribute("autocapitalize") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/autocapitalize */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/autocapitalize
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/autocapitalize
+	 */
 	protected function __prop_set_autocapitalize(string $value):void {
-		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->allowTypes(
+			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLInputElement,
+		);
 		$this->setAttribute("autocapitalize", $value);
 	}
 
@@ -1952,33 +2024,57 @@ trait HTMLElement {
 		$this->value = $value;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/maxLength */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/maxLength
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/maxLength
+	 */
 	protected function __prop_get_maxLength():int {
-		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->allowTypes(
+			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLInputElement,
+		);
 		if($this->hasAttribute("maxlength")) {
 			return (int)$this->getAttribute("maxlength");
 		}
 		return -1;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/maxLength */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/maxLength
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/maxLength
+	 */
 	protected function __prop_set_maxLength(int $value):void {
-		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->allowTypes(
+			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLInputElement,
+		);
 		$this->setAttribute("maxlength", (string)$value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/minLength */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/minLength
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/minLength
+	 */
 	protected function __prop_get_minLength():int {
-		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->allowTypes(
+			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLInputElement,
+		);
 		if($this->hasAttribute("minlength")) {
 			return (int)$this->getAttribute("minlength");
 		}
 		return -1;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/minLength */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/minLength
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/minLength
+	 */
 	protected function __prop_set_minLength(int $value):void {
-		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->allowTypes(
+			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLInputElement,
+		);
 		$this->setAttribute("minlength", (string)$value);
 	}
 
@@ -2121,5 +2217,413 @@ trait HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/y */
 	protected function __prop_get_y():int {
 		return 0;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#defaultChecked */
+	protected function __prop_get_defaultChecked():bool {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		return $this->checked;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#defaultChecked */
+	protected function __prop_set_defaultChecked(bool $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->checked = $value;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#indeterminate */
+	protected function __prop_get_indeterminate():bool {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		throw new ClientSideOnlyFunctionalityException("indeterminate");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#indeterminate */
+	protected function __prop_set_indeterminate(bool $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		throw new ClientSideOnlyFunctionalityException("indeterminate");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#accept */
+	protected function __prop_get_accept():string {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		return $this->getAttribute("accept") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#accept */
+	protected function __prop_set_accept(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->setAttribute("accept", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#files */
+	protected function __prop_get_files():FileList {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		return new FileList();
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#files */
+	protected function __prop_set_files(FileList $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		throw new ClientSideOnlyFunctionalityException();
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formaction */
+	protected function __prop_get_formAction():string {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		if($this->hasAttribute("formaction")) {
+			return $this->getAttribute("formaction");
+		}
+
+		while($parent = $this->parentElement) {
+			if($parent->elementType === ElementType::HTMLFormElement) {
+				break;
+			}
+		}
+
+		if(!$parent) {
+			return "";
+		}
+
+		return $parent->getAttribute("action") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/formAction */
+	protected function __prop_set_formAction(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->setAttribute("formaction", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formenctype */
+	protected function __prop_get_formEncType():string {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		if($this->hasAttribute("formenctype")) {
+			return $this->getAttribute("formenctype");
+		}
+
+		while($parent = $this->parentElement) {
+			if($parent->elementType === ElementType::HTMLFormElement) {
+				break;
+			}
+		}
+
+		if(!$parent) {
+			return "";
+		}
+
+		return $parent->getAttribute("enctype") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formenctype */
+	protected function __prop_set_formEncType(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->setAttribute("formenctype", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formmethod */
+	protected function __prop_get_formMethod():string {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		if($this->hasAttribute("formmethod")) {
+			return $this->getAttribute("formmethod");
+		}
+
+		while($parent = $this->parentElement) {
+			if($parent->elementType === ElementType::HTMLFormElement) {
+				break;
+			}
+		}
+
+		if(!$parent) {
+			return "";
+		}
+
+		return $parent->getAttribute("method") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formmethod */
+	protected function __prop_set_formMethod(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->setAttribute("formmethod", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formnovalidate */
+	protected function __prop_get_formNoValidate():bool {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		return $this->hasAttribute("formnovalidate");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formnovalidate */
+	protected function __prop_set_formNoValidate(bool $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		if($value) {
+			$this->setAttribute("formnovalidate", "");
+		}
+		else {
+			$this->removeAttribute("formnovalidate");
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formtarget */
+	protected function __prop_get_formTarget():string {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		if($this->hasAttribute("formtarget")) {
+			return $this->getAttribute("formtarget");
+		}
+
+		while($parent = $this->parentElement) {
+			if($parent->elementType === ElementType::HTMLFormElement) {
+				break;
+			}
+		}
+
+		if(!$parent) {
+			return "";
+		}
+
+		return $parent->getAttribute("target") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-formtarget */
+	protected function __prop_set_formTarget(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->setAttribute("formtarget", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-max */
+	protected function __prop_get_max():string {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		return $this->getAttribute("max") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-max */
+	protected function __prop_set_max(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->setAttribute("max", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-min */
+	protected function __prop_get_min():string {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		return $this->getAttribute("min") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-min */
+	protected function __prop_set_min(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->setAttribute("min", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-pattern */
+	protected function __prop_get_pattern():string {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		return $this->getAttribute("pattern") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-pattern */
+	protected function __prop_set_pattern(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->setAttribute("pattern", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-placeholder */
+	protected function __prop_get_placeholder():string {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		return $this->getAttribute("placeholder") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-placeholder */
+	protected function __prop_set_placeholder(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->setAttribute("placeholder", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-size */
+	protected function __prop_get_size():?int {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		if($this->hasAttribute("size")) {
+			return (int)$this->getAttribute("size");
+		}
+
+		return null;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-size */
+	protected function __prop_set_size(int $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->setAttribute("size", (string)$value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-multiple */
+	protected function __prop_get_multiple():bool {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		return $this->hasAttribute("multiple");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-multiple */
+	protected function __prop_set_multiple(bool $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		if($value) {
+			$this->setAttribute("multiple", "");
+		}
+		else {
+			$this->removeAttribute("multiple");
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-step */
+	protected function __prop_get_step():string {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		return $this->getAttribute("step") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-step */
+	protected function __prop_set_step(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->setAttribute("step", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#property-valueAsDate */
+	protected function __prop_get_valueAsDate():?DateTimeInterface {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		if(empty($this->value)) {
+			return null;
+		}
+
+		if(is_numeric($this->value)) {
+			$dateTime = new DateTimeImmutable();
+			return $dateTime->setTimestamp((int)$this->value);
+		}
+
+		try {
+			$dateTime = new DateTimeImmutable($this->value);
+		}
+		catch(Exception) {
+			return null;
+		}
+
+		return $dateTime;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#property-valueAsDate */
+	protected function __prop_set_valueAsDate(DateTimeInterface $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+// See here for why we're using this format:
+// https://developer.mozilla.org/en-US/docs/Web/HTML/Date_and_time_formats#local_date_and_time_strings
+		$this->value = $value->format("Y-m-d\TH:i:s");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#property-valueAsNumber */
+	protected function __prop_get_valueAsNumber():int|float|null {
+		if(str_starts_with($this->type, "date")) {
+			$dateTime = $this->valueAsDate;
+			if($dateTime) {
+				return $dateTime->getTimestamp();
+			}
+
+			return null;
+		}
+
+		if(is_numeric($this->value)) {
+			return (float)$this->value;
+		}
+
+		return null;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#property-valueAsNumber */
+	protected function __prop_set_valueAsNumber(int|float $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		if(str_starts_with($this->type, "date")) {
+			$dateTime = new DateTimeImmutable();
+			$this->valueAsDate = $dateTime->setTimestamp($value);
+		}
+		else {
+			$this->value = (string)$value;
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#attr-inputmode */
+	protected function __prop_get_inputMode():string {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		return $this->getAttribute("inputmode") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#attr-inputmode */
+	protected function __prop_set_inputMode(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+		);
+		$this->setAttribute("inputmode", $value);
 	}
 }
