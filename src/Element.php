@@ -5,7 +5,6 @@ use DOMElement;
 use DOMNamedNodeMap;
 use Gt\Dom\Exception\InvalidAdjacentPositionException;
 use Gt\Dom\Exception\XPathQueryException;
-use Gt\Dom\HTMLElement\HTMLElement;
 use Gt\PropFunc\MagicProp;
 use ReturnTypeWillChange;
 
@@ -59,9 +58,69 @@ class Element extends DOMElement {
 
 	public function __prop_get_elementType():ElementType {
 		return match($this->tagName) {
+			"a" => ElementType::HTMLAnchorElement,
+			"area" => ElementType::HTMLAreaElement,
+			"audio" => ElementType::HTMLAudioElement,
+			"base" => ElementType::HTMLBaseElement,
 			"body" => ElementType::HTMLBodyElement,
+			"br" => ElementType::HTMLBRElement,
+			"button" => ElementType::HTMLButtonElement,
+			"canvas" => ElementType::HTMLCanvasElement,
+			"data" => ElementType::HTMLDataElement,
+			"datalist" => ElementType::HTMLDataListElement,
+			"details" => ElementType::HTMLDetailsElement,
+			"dialog" => ElementType::HTMLDialogElement,
+			"div" => ElementType::HTMLDivElement,
+			"dl" => ElementType::HTMLDListElement,
+			"embed" => ElementType::HTMLEmbedElement,
+			"fieldset" => ElementType::HTMLFieldSetElement,
+			"form" => ElementType::HTMLFormElement,
 			"head" => ElementType::HTMLHeadElement,
+			"heading" => ElementType::HTMLHeadingElement,
+			"hr" => ElementType::HTMLHRElement,
 			"html" => ElementType::HTMLHtmlElement,
+			"iframe" => ElementType::HTMLIFrameElement,
+			"input" => ElementType::HTMLInputElement,
+			"label" => ElementType::HTMLLabelElement,
+			"legend" => ElementType::HTMLLegendElement,
+			"li" => ElementType::HTMLLiElement,
+			"link" => ElementType::HTMLLinkElement,
+			"map" => ElementType::HTMLMapElement,
+			"media" => ElementType::HTMLMediaElement,
+			"menu" => ElementType::HTMLMenuElement,
+			"meta" => ElementType::HTMLMetaElement,
+			"meter" => ElementType::HTMLMeterElement,
+			"del", "ins" => ElementType::HTMLModElement,
+			"object" => ElementType::HTMLObjectElement,
+			"ol" => ElementType::HTMLOListElement,
+			"optgroup" => ElementType::HTMLOptGroupElement,
+			"option" => ElementType::HTMLOptionElement,
+			"output" => ElementType::HTMLOutputElement,
+			"p" => ElementType::HTMLParagraphElement,
+			"param" => ElementType::HTMLParamElement,
+			"picture" => ElementType::HTMLPictureElement,
+			"pre" => ElementType::HTMLPreElement,
+			"progress" => ElementType::HTMLProgressElement,
+			"blockquote", "q", "cite" => ElementType::HTMLQuoteElement,
+			"script" => ElementType::HTMLScriptElement,
+			"select" => ElementType::HTMLSelectElement,
+			"source" => ElementType::HTMLSourceElement,
+			"span" => ElementType::HTMLSpanElement,
+			"style" => ElementType::HTMLStyleElement,
+			"caption" => ElementType::HTMLTableCaptionElement,
+			"th", "td" => ElementType::HTMLTableCellElement,
+			"col", "colgroup" => ElementType::HTMLTableColElement,
+			"table" => ElementType::HTMLTableElement,
+			"tr" => ElementType::HTMLTableRowElement,
+			"tfoot", "thead", "tbody" => ElementType::HTMLTableSectionElement,
+			"template" => ElementType::HTMLTemplateElement,
+			"textarea" => ElementType::HTMLTextAreaElement,
+			"time" => ElementType::HTMLTimeElement,
+			"title" => ElementType::HTMLTitleElement,
+			"track" => ElementType::HTMLTrackElement,
+			"ul" => ElementType::HTMLUListElement,
+			"video" => ElementType::HTMLVideoElement,
+
 			default => isset($this->ownerDocument) && $this->ownerDocument instanceof HTMLDocument
 				? ElementType::HTMLUnknownElement
 				: ElementType::Element,

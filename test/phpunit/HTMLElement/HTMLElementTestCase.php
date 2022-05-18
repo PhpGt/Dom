@@ -1,53 +1,51 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLElement;
-use Gt\Dom\HTMLElement\HTMLImageElement;
-use Gt\Dom\HTMLElement\HTMLInputElement;
+use Gt\Dom\Element;
 use PHPUnit\Framework\TestCase;
 
 abstract class HTMLElementTestCase extends TestCase {
-//	protected function assertPropertyAttributeCorrelate(
-//		HTMLElement $element,
-//		string $attribute,
-//		string $property = null
-//	):void {
-//		if(is_null($property)) {
-//			$property = $attribute;
-//		}
-//
-//		self::assertEquals(
-//			"",
-//			$element->getAttribute($attribute)
-//		);
-//		self::assertEquals(
-//			$element->$property,
-//			$element->getAttribute($attribute)
-//		);
-//
-//		$value = uniqid();
-//		$element->setAttribute($attribute, $value);
-//		self::assertEquals(
-//			$value,
-//			$element->getAttribute($attribute)
-//		);
-//		self::assertEquals(
-//			$element->$property,
-//			$element->getAttribute($attribute)
-//		);
-//
-//		$value2 = uniqid();
-//		$element->$property = $value2;
-//		self::assertEquals(
-//			$value2,
-//			$element->getAttribute($attribute)
-//		);
-//		self::assertEquals(
-//			$element->$property,
-//			$element->getAttribute($attribute)
-//		);
-//	}
-//
+	protected function assertPropertyAttributeCorrelate(
+		Element $element,
+		string $attribute,
+		string $property = null
+	):void {
+		if(is_null($property)) {
+			$property = $attribute;
+		}
+
+		self::assertEquals(
+			"",
+			$element->getAttribute($attribute)
+		);
+		self::assertEquals(
+			$element->$property,
+			$element->getAttribute($attribute)
+		);
+
+		$value = uniqid();
+		$element->setAttribute($attribute, $value);
+		self::assertEquals(
+			$value,
+			$element->getAttribute($attribute)
+		);
+		self::assertEquals(
+			$element->$property,
+			$element->getAttribute($attribute)
+		);
+
+		$value2 = uniqid();
+		$element->$property = $value2;
+		self::assertEquals(
+			$value2,
+			$element->getAttribute($attribute)
+		);
+		self::assertEquals(
+			$element->$property,
+			$element->getAttribute($attribute)
+		);
+	}
+
 //	protected static function assertPropertyAttributeCorrelateBool(
 //		HTMLElement $sut,
 //		string $attribute,

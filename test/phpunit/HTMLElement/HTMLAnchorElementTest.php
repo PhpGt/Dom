@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
+use Gt\Dom\HTMLDocument;
 use Gt\Dom\HTMLElement\HTMLAnchorElement;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 
@@ -26,12 +27,12 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 //		}
 //	}
 //
-//	public function testType():void {
-//		/** @var HTMLAnchorElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("a");
-//		self::assertPropertyAttributeCorrelate($sut, "type");
-//	}
-//
+	public function testType():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
+		self::assertPropertyAttributeCorrelate($sut, "type");
+	}
+
 //	public function testToStringEmpty():void {
 //		/** @var HTMLAnchorElement $sut */
 //		$sut = NodeTestFactory::createHTMLElement("a");
