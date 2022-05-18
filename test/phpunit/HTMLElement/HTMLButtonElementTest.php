@@ -46,7 +46,6 @@ class HTMLButtonElementTest extends HTMLElementTestCase {
 	}
 
 	public function testLabels():void {
-		$this->markTestSkipped("Revisit once HTMLLabelElement is implemented");
 		$document = new HTMLDocument();
 		$sut = $document->createElement("button");
 		$sut->id = "sut";

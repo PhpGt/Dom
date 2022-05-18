@@ -103,6 +103,8 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property-read string $validationMessage Is a DOMString representing the localized message that describes the validation constraints that the control does not satisfy (if any). This attribute is the empty string if the control is not a candidate for constraint validation (willValidate is false), or it satisfies its constraints.
  * @property-read ValidityState $validity Is a ValidityState representing the validity states that this button is in.
  * @property string $value Is a DOMString representing the current form control value of the HTMLUIElement.
+ * @property-read ?Element $control Is a HTMLElement representing the control with which the label is associated.
+ * @property string $htmlFor Is a string containing the ID of the labeled control. This reflects the for attribute.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -1129,15 +1131,29 @@ trait HTMLElement {
 		}
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/form */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/form
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/form
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/form
+	 */
 	protected function __prop_get_form():?Element {
-		$this->allowTypes(ElementType::HTMLButtonElement);
+		$this->allowTypes(
+			ElementType::HTMLButtonElement,
+			ElementType::HTMLLabelElement,
+			ElementType::HTMLInputElement,
+		);
 		$context = $this;
 		while($context->parentElement) {
 			$context = $context->parentElement;
 
 			if($context->elementType === ElementType::HTMLFormElement) {
 				return $context;
+			}
+		}
+
+		if($this->elementType === ElementType::HTMLLabelElement) {
+			if($input = $this->control) {
+				return $input->form;
 			}
 		}
 
@@ -1247,5 +1263,30 @@ trait HTMLElement {
 
 			return $labelsArray;
 		});
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/control */
+	protected function __prop_get_control():?Element {
+		$this->allowTypes(ElementType::HTMLLabelElement);
+		if($for = $this->htmlFor) {
+			if($input = $this->ownerDocument->getElementById($for)) {
+				return $input;
+			}
+		}
+
+		$inputList = $this->getElementsByTagName("input");
+		return $inputList[0] ?? null;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor */
+	protected function __prop_get_htmlFor():string {
+		$this->allowTypes(ElementType::HTMLLabelElement);
+		return $this->getAttribute("for") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor */
+	protected function __prop_set_htmlFor(string $value):void {
+		$this->allowTypes(ElementType::HTMLLabelElement);
+		$this->setAttribute("for", $value);
 	}
 }
