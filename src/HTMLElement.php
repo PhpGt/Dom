@@ -109,6 +109,7 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property int $width The width HTML attribute of the <canvas> element is a positive integer reflecting the number of logical pixels (or RGBA values) going across one row of the canvas. When the attribute is not specified, or if it is set to an invalid value, like a negative, the default value of 300 is used. If no [separate] CSS width is assigned to the <canvas>, then this value will also be used as the width of the canvas in the length-unit CSS Pixel.
  * @property-read HTMLCollection $options Is a HTMLCollection representing a collection of the contained option elements.
  * @property bool $open Is a boolean reflecting the open HTML attribute, indicating whether or not the element’s contents (not counting the <summary>) is to be shown to the user.
+ * @property string $returnValue A DOMString that sets or returns the return value for the dialog.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -1332,21 +1333,37 @@ trait HTMLElement {
 		$this->setAttribute("width", (string)$value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataListElement/options */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataListElement/options
+	 */
 	protected function __prop_get_options():HTMLCollection {
-		$this->allowTypes(ElementType::HTMLDataListElement);
+		$this->allowTypes(
+			ElementType::HTMLDataListElement,
+		);
 		return $this->getElementsByTagName("option");
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement/open */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement/open
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/open
+	 */
 	protected function __prop_get_open():bool {
-		$this->allowTypes(ElementType::HTMLDetailsElement);
+		$this->allowTypes(
+			ElementType::HTMLDetailsElement,
+			ElementType::HTMLDialogElement,
+		);
 		return $this->hasAttribute("open");
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement/open */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement/open
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/open
+	 */
 	protected function __prop_set_open(bool $value):void {
-		$this->allowTypes(ElementType::HTMLDetailsElement);
+		$this->allowTypes(
+			ElementType::HTMLDetailsElement,
+			ElementType::HTMLDialogElement,
+		);
 
 		if($value) {
 			$this->setAttribute("open","");
@@ -1354,5 +1371,15 @@ trait HTMLElement {
 		else {
 			$this->removeAttribute("open");
 		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/returnValue */
+	protected function __prop_get_returnValue():string {
+		throw new ClientSideOnlyFunctionalityException("returnValue");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/returnValue */
+	protected function __prop_set_returnValue(string $value):void {
+		throw new ClientSideOnlyFunctionalityException("returnValue");
 	}
 }
