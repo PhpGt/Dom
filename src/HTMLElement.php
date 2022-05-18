@@ -142,6 +142,9 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property int $minLength Returns / Sets the element's minlength attribute, indicating the minimum number of characters the user can enter. This constraint is evaluated only when the value changes.
  * @property int $rows Returns / Sets the element's rows attribute, indicating the number of visible text lines for the control.
  * @property string $wrap Returns / Sets the wrap HTML attribute, indicating how the control wraps text.
+ * @property-read Document $contentDocument Returns a Document, the active document in the inline frame's nested browsing context.
+ * @property-read Node $contentWindow Returns a WindowProxy, the window proxy for the nested browsing context.
+ * @property string $srcdoc Is a DOMString that represents the content to display in the frame.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -555,6 +558,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/name
 	 */
 	protected function __prop_get_name():string {
 		$this->allowTypes(
@@ -562,6 +566,7 @@ trait HTMLElement {
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFormElement,
 			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLIFrameElement,
 		);
 		return $this->getAttribute("name") ?? "";
 	}
@@ -571,6 +576,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/name
 	 */
 	protected function __prop_set_name(string $value):void {
 		$this->allowTypes(
@@ -578,6 +584,7 @@ trait HTMLElement {
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFormElement,
 			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLIFrameElement,
 		);
 		$this->setAttribute("name", $value);
 	}
@@ -926,11 +933,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/referrerPolicy
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/referrerPolicy
 	 */
 	protected function __prop_get_referrerPolicy():string {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
+			ElementType::HTMLIFrameElement,
 		);
 		return $this->getAttribute("referrerpolicy") ?? "";
 	}
@@ -938,11 +947,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/referrerPolicy
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/referrerPolicy
 	 */
 	protected function __prop_set_referrerPolicy(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
+			ElementType::HTMLIFrameElement,
 		);
 		$this->setAttribute("referrerpolicy", $value);
 	}
@@ -1376,11 +1387,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/src
 	 */
 	protected function __prop_get_src():string {
 		$this->allowTypes(
 			ElementType::HTMLAudioElement,
 			ElementType::HTMLEmbedElement,
+			ElementType::HTMLIFrameElement,
 		);
 		return $this->getAttribute("src") ?? "";
 	}
@@ -1388,11 +1401,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/src
 	 */
 	protected function __prop_set_src(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAudioElement,
 			ElementType::HTMLEmbedElement,
+			ElementType::HTMLIFrameElement,
 		);
 		$this->setAttribute("src", $value);
 	}
@@ -1641,11 +1656,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/height
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/height
 	 */
 	protected function __prop_get_height():int {
 		$this->allowTypes(
 			ElementType::HTMLCanvasElement,
 			ElementType::HTMLEmbedElement,
+			ElementType::HTMLIFrameElement,
 		);
 		return (int)$this->getAttribute("height");
 	}
@@ -1653,11 +1670,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/height
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/height
 	 */
 	protected function __prop_set_height(int $value):void {
 		$this->allowTypes(
 			ElementType::HTMLCanvasElement,
 			ElementType::HTMLEmbedElement,
+			ElementType::HTMLIFrameElement,
 		);
 		$this->setAttribute("height", (string)$value);
 	}
@@ -1665,11 +1684,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/width
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/width
 	 */
 	protected function __prop_get_width():int {
 		$this->allowTypes(
 			ElementType::HTMLCanvasElement,
 			ElementType::HTMLEmbedElement,
+			ElementType::HTMLIFrameElement,
 		);
 		return (int)$this->getAttribute("width");
 	}
@@ -1677,11 +1698,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/width
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/width
 	 */
 	protected function __prop_set_width(int $value):void {
 		$this->allowTypes(
 			ElementType::HTMLCanvasElement,
 			ElementType::HTMLEmbedElement,
+			ElementType::HTMLIFrameElement,
 		);
 		$this->setAttribute("width", (string)$value);
 	}
@@ -1927,5 +1950,29 @@ trait HTMLElement {
 	protected function __prop_set_wrap(string $value):void {
 		$this->allowTypes(ElementType::HTMLTextAreaElement);
 		$this->setAttribute("wrap", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/contentDocument */
+	protected function __prop_get_contentDocument():Document {
+		$this->allowTypes(ElementType::HTMLIFrameElement);
+		throw new ClientSideOnlyFunctionalityException("contentDocument");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/contentWindow */
+	protected function __prop_get_contentWindow():Node {
+		$this->allowTypes(ElementType::HTMLIFrameElement);
+		throw new ClientSideOnlyFunctionalityException("contentWindow");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/srcdoc */
+	protected function __prop_get_srcdoc():string {
+		$this->allowTypes(ElementType::HTMLIFrameElement);
+		return $this->getAttribute("srcdoc") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/srcdoc */
+	protected function __prop_set_srcdoc(string $value):void {
+		$this->allowTypes(ElementType::HTMLIFrameElement);
+		$this->setAttribute("srcdoc", $value);
 	}
 }
