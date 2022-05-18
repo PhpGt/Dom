@@ -192,6 +192,8 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property ?float $optimum A double representing the optimum, reflecting the optimum attribute.
  * @property string $cite Is a DOMString reflecting the cite HTML attribute, containing a URI of a resource explaining the change.
  * @property string $dateTime Is a DOMString reflecting the datetime HTML attribute, containing a date-and-time string representing a timestamp for the change.
+ * @property string $data Returns a DOMString that reflects the data HTML attribute, specifying the address of a resource's data.
+ * @property bool $typeMustMatch Is a Boolean that reflects the typemustmatch HTML attribute, indicating if the resource specified by data must only be played if it matches the type attribute.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -579,6 +581,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/type
 	 */
 	protected function __prop_get_type():string {
 		$this->allowTypes(
@@ -588,6 +591,7 @@ trait HTMLElement {
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLFieldSetElement,
 			ElementType::HTMLLinkElement,
+			ElementType::HTMLObjectElement,
 		);
 
 		if($this->elementType === ElementType::HTMLFieldSetElement) {
@@ -603,6 +607,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/type
 	 */
 	protected function __prop_set_type(string $value):void {
 		$this->allowTypes(
@@ -612,6 +617,7 @@ trait HTMLElement {
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLFieldSetElement,
 			ElementType::HTMLLinkElement,
+			ElementType::HTMLObjectElement,
 		);
 		$this->setAttribute("type", $value);
 	}
@@ -624,6 +630,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMetaElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/name
 	 */
 	protected function __prop_get_name():string {
 		$this->allowTypes(
@@ -634,6 +641,7 @@ trait HTMLElement {
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLMapElement,
 			ElementType::HTMLMetaElement,
+			ElementType::HTMLObjectElement,
 		);
 		return $this->getAttribute("name") ?? "";
 	}
@@ -646,6 +654,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMetaElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/name
 	 */
 	protected function __prop_set_name(string $value):void {
 		$this->allowTypes(
@@ -656,6 +665,7 @@ trait HTMLElement {
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLMapElement,
 			ElementType::HTMLMetaElement,
+			ElementType::HTMLObjectElement,
 		);
 		$this->setAttribute("name", $value);
 	}
@@ -1614,6 +1624,7 @@ trait HTMLElement {
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFieldSetElement,
 			ElementType::HTMLLinkElement,
+			ElementType::HTMLObjectElement,
 		);
 		return $this->hasAttribute("disabled");
 	}
@@ -1643,6 +1654,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/form
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLegendElement/form
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/form
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/form
 	 */
 	protected function __prop_get_form():?Element {
 		$this->allowTypes(
@@ -1651,6 +1663,7 @@ trait HTMLElement {
 			ElementType::HTMLInputElement,
 			ElementType::HTMLLegendElement,
 			ElementType::HTMLFieldSetElement,
+			ElementType::HTMLObjectElement,
 		);
 		$context = $this;
 		while($context->parentElement) {
@@ -1737,8 +1750,12 @@ trait HTMLElement {
 	}
 
 	protected function __prop_get_willValidate():bool {
-		$this->allowTypes(ElementType::HTMLButtonElement);
-		if($this->elementType === ElementType::HTMLButtonElement) {
+		$this->allowTypes(
+			ElementType::HTMLButtonElement,
+			ElementType::HTMLObjectElement,
+		);
+		if($this->elementType === ElementType::HTMLButtonElement
+		|| $this->elementType === ElementType::HTMLObjectElement) {
 			return false;
 		}
 
@@ -1761,13 +1778,27 @@ trait HTMLElement {
 		return true;
 	}
 
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/validationMessage
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/validationMessage
+	 */
 	protected function __prop_get_validationMessage():string {
-		$this->allowTypes(ElementType::HTMLButtonElement);
+		$this->allowTypes(
+			ElementType::HTMLButtonElement,
+			ElementType::HTMLObjectElement,
+		);
 		return "";
 	}
 
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/validity
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/validity
+	 */
 	protected function __prop_get_validity():ValidityState {
-		$this->allowTypes(ElementType::HTMLButtonElement);
+		$this->allowTypes(
+			ElementType::HTMLButtonElement,
+			ElementType::HTMLObjectElement,
+		);
 		return new ValidityState();
 	}
 
@@ -1835,6 +1866,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/height
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/height
 	 */
 	protected function __prop_get_height():int {
 		$this->allowTypes(
@@ -1843,6 +1875,7 @@ trait HTMLElement {
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLObjectElement,
 		);
 		return (int)$this->getAttribute("height");
 	}
@@ -1853,6 +1886,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/height
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/height
 	 */
 	protected function __prop_set_height(int $value):void {
 		$this->allowTypes(
@@ -1861,6 +1895,7 @@ trait HTMLElement {
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLObjectElement,
 		);
 		$this->setAttribute("height", (string)$value);
 	}
@@ -1871,6 +1906,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/width
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/width
 	 */
 	protected function __prop_get_width():int {
 		$this->allowTypes(
@@ -1879,6 +1915,7 @@ trait HTMLElement {
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLObjectElement,
 		);
 		return (int)$this->getAttribute("width");
 	}
@@ -1889,6 +1926,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/width
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/width
 	 */
 	protected function __prop_set_width(int $value):void {
 		$this->allowTypes(
@@ -1897,6 +1935,7 @@ trait HTMLElement {
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLObjectElement,
 		);
 		$this->setAttribute("width", (string)$value);
 	}
@@ -2180,15 +2219,27 @@ trait HTMLElement {
 		$this->setAttribute("wrap", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/contentDocument */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/contentDocument
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/contentDocument
+	 */
 	protected function __prop_get_contentDocument():Document {
-		$this->allowTypes(ElementType::HTMLIFrameElement);
+		$this->allowTypes(
+			ElementType::HTMLIFrameElement,
+			ElementType::HTMLObjectElement,
+		);
 		throw new ClientSideOnlyFunctionalityException("contentDocument");
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/contentWindow */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/contentWindow
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/contentWindow
+	 */
 	protected function __prop_get_contentWindow():Node {
-		$this->allowTypes(ElementType::HTMLIFrameElement);
+		$this->allowTypes(
+			ElementType::HTMLIFrameElement,
+			ElementType::HTMLObjectElement,
+		);
 		throw new ClientSideOnlyFunctionalityException("contentWindow");
 	}
 
@@ -2905,5 +2956,42 @@ trait HTMLElement {
 			ElementType::HTMLModElement,
 		);
 		$this->setAttribute("datetime", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/data */
+	protected function __prop_get_data():string {
+		$this->allowTypes(
+			ElementType::HTMLObjectElement,
+		);
+		return $this->getAttribute("data") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/data */
+	protected function __prop_set_data(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLObjectElement,
+		);
+		$this->setAttribute("data", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/typeMustMatch */
+	protected function __prop_get_typeMustMatch():bool {
+		$this->allowTypes(
+			ElementType::HTMLObjectElement,
+		);
+		return $this->hasAttribute("typemustmatch");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/typeMustMatch */
+	protected function __prop_set_typeMustMatch(bool $value):void {
+		$this->allowTypes(
+			ElementType::HTMLObjectElement,
+		);
+		if($value) {
+			$this->setAttribute("typemustmatch", "");
+		}
+		else {
+			$this->removeAttribute("typemustmatch");
+		}
 	}
 }

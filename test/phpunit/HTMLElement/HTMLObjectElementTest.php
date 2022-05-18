@@ -2,95 +2,98 @@
 namespace Gt\Dom\Test\HTMLElement;
 
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
-use Gt\Dom\HTMLElement\HTMLObjectElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLObjectElementTest extends HTMLElementTestCase {
-//	public function testContentDocument():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::assertNull($sut->contentDocument);
-//	}
-//
-//	public function testContentWindow():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::assertNull($sut->contentWindow);
-//	}
-//
-//	public function testData():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::assertPropertyAttributeCorrelate($sut, "data");
-//	}
-//
-//	public function testFormNone():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::assertNull($sut->form);
-//	}
-//
-//	public function testForm():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		$form = $sut->ownerDocument->createElement("form");
-//		$form->appendChild($sut);
-//		self::assertSame($form, $sut->form);
-//	}
-//
-//	public function testHeight():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::assertPropertyAttributeCorrelate($sut, "height");
-//	}
-//
-//	public function testName():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::assertPropertyAttributeCorrelate($sut, "name");
-//	}
-//
-//	public function testType():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::assertPropertyAttributeCorrelate($sut, "type");
-//	}
-//
-//	public function testTypeMustMatch():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::assertPropertyAttributeCorrelateBool($sut, "typemustmatch", "typeMustMatch");
-//	}
-//
-//	public function testUseMap():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::assertPropertyAttributeCorrelate($sut, "usemap", "useMap");
-//	}
-//
-//	public function testValidationMessage():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::assertSame("", $sut->validationMessage);
-//	}
-//
-//	public function testValidity():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::expectException(ClientSideOnlyFunctionalityException::class);
-//		/** @noinspection PhpUnusedLocalVariableInspection */
-//		$value = $sut->validity;
-//	}
-//
-//	public function testWidth():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::assertPropertyAttributeCorrelate($sut, "width");
-//	}
-//
-//	public function testWillValidate():void {
-//		/** @var HTMLObjectElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("object");
-//		self::assertFalse($sut->willValidate);
-//	}
+	public function testContentDocument():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$test = $sut->contentDocument;
+	}
+
+	public function testContentWindow():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$test = $sut->contentWindow;
+	}
+
+	public function testData():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::assertPropertyAttributeCorrelate($sut, "data");
+	}
+
+	public function testFormNone():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::assertNull($sut->form);
+	}
+
+	public function testForm():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		$form = $sut->ownerDocument->createElement("form");
+		$form->appendChild($sut);
+		self::assertSame($form, $sut->form);
+	}
+
+	public function testHeight():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int", "height");
+	}
+
+	public function testName():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::assertPropertyAttributeCorrelate($sut, "name");
+	}
+
+	public function testType():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::assertPropertyAttributeCorrelate($sut, "type");
+	}
+
+	public function testTypeMustMatch():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::assertPropertyAttributeCorrelateBool($sut, "typemustmatch", "typeMustMatch");
+	}
+
+	public function testUseMap():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::assertPropertyAttributeCorrelate($sut, "usemap", "useMap");
+	}
+
+	public function testValidationMessage():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::assertSame("", $sut->validationMessage);
+	}
+
+	public function testValidity():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$value = $sut->validity;
+	}
+
+	public function testWidth():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int", "width");
+	}
+
+	public function testWillValidate():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("object");
+		self::assertFalse($sut->willValidate);
+	}
 }
