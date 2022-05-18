@@ -10,6 +10,7 @@ use Gt\Dom\ClientSide\TextTrackList;
 use Gt\Dom\ClientSide\TimeRanges;
 use Gt\Dom\ClientSide\ValidityState;
 use Gt\Dom\ClientSide\VideoTrackList;
+use Gt\Dom\Exception\ArrayAccessReadOnlyException;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\EnumeratedValueException;
 use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
@@ -125,7 +126,15 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property int $tabIndex Is a long that represents this element's position in the tabbing order.
  * @property string $title Is a DOMString containing the text that appears in a popup box when mouse is over the element.
  * @property CSSStyleDeclaration $style Is a CSSStyleDeclaration, an object representing the declarations of an element's style attributes.
- * @property-read HTMLCollection $elements The elements belonging to this field set.
+ * @property-read HTMLCollection|HTMLFormControlsCollection $elements The elements belonging to this parent.
+ * @property-read int $length A long reflecting the number of controls in the form.
+ * @property string $method A DOMString reflecting the value of the form's method HTML attribute, indicating the HTTP method used to submit the form. Only specified values can be set.
+ * @property string $action A DOMString reflecting the value of the form's action HTML attribute, containing the URI of a program that processes the information submitted by the form.
+ * @property string $encoding A DOMString reflecting the value of the form's enctype HTML attribute, indicating the type of content that is used to transmit the form to the server. Only specified values can be set. The two properties are synonyms.
+ * @property string $enctype A DOMString reflecting the value of the form's enctype HTML attribute, indicating the type of content that is used to transmit the form to the server. Only specified values can be set. The two properties are synonyms.
+ * @property string $acceptCharset A DOMString reflecting the value of the form's accept-charset HTML attribute, representing the character encoding that the server accepts.
+ * @property string $autocomplete A DOMString reflecting the value of the form's autocomplete HTML attribute, indicating whether the controls in this form can have their values automatically populated by the browser.
+ * @property bool $noValidate A Boolean reflecting the value of the form's novalidate HTML attribute, indicating whether the form should not be validated.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -162,6 +171,35 @@ trait HTMLElement {
 			return "";
 		}
 	}
+
+// ArrayAccess functions:
+	public function offsetExists(mixed $offset):bool {
+		$this->allowTypes(ElementType::HTMLFormElement);
+		$match = $this->elements->namedItem($offset);
+		return !is_null($match);
+	}
+
+	public function offsetGet(mixed $offset):?Element {
+		$this->allowTypes(ElementType::HTMLFormElement);
+		return $this->elements->namedItem($offset);
+	}
+
+	public function offsetSet(mixed $offset, mixed $value):void {
+		$this->allowTypes(ElementType::HTMLFormElement);
+		throw new ArrayAccessReadOnlyException();
+	}
+
+	public function offsetUnset(mixed $offset):void {
+		$this->allowTypes(ElementType::HTMLFormElement);
+		throw new ArrayAccessReadOnlyException();
+	}
+// End ArrayAccess functions.
+
+// Countable functions:
+	public function count():int {
+		return $this->length;
+	}
+// End Countable functions.
 
 	/**
 	 * Builds and returns a URL string from the existing href attribute
@@ -505,20 +543,30 @@ trait HTMLElement {
 		$this->setAttribute("type", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/name */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/name
+	 */
 	protected function __prop_get_name():string {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLButtonElement,
+			ElementType::HTMLFormElement,
 		);
 		return $this->getAttribute("name") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/name */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/name
+	 */
 	protected function __prop_set_name(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLButtonElement,
+			ElementType::HTMLFormElement,
 		);
 		$this->setAttribute("name", $value);
 	}
@@ -957,12 +1005,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/target
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/target
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLBaseElement/target
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/target
 	 */
 	protected function __prop_get_target():string {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
 			ElementType::HTMLBaseElement,
+			ElementType::HTMLFormElement,
 		);
 		return $this->getAttribute("target") ?? "";
 	}
@@ -971,12 +1021,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/target
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/target
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLBaseElement/target
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/target
 	 */
 	protected function __prop_set_target(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
 			ElementType::HTMLBaseElement,
+			ElementType::HTMLFormElement,
 		);
 		$this->setAttribute("target", $value);
 	}
@@ -1671,12 +1723,98 @@ trait HTMLElement {
 		throw new ClientSideOnlyFunctionalityException("returnValue");
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/elements */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/elements
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/elements
+	 */
 	protected function __prop_get_elements():HTMLCollection {
-		$this->allowTypes(ElementType::HTMLFieldSetElement);
-		return HTMLCollectionFactory::create(
-		// List of elements from: https://html.spec.whatwg.org/multipage/forms.html#category-listed
+		$this->allowTypes(
+			ElementType::HTMLFieldSetElement,
+			ElementType::HTMLFormElement,
+		);
+		return HTMLCollectionFactory::createHTMLFormControlsCollection(
+// List of elements from: https://html.spec.whatwg.org/multipage/forms.html#category-listed
 			fn() => $this->querySelectorAll("button, fieldset, input, object, output, select, textarea, [name], [disabled]")
 		);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/length */
+	protected function __prop_get_length():int {
+		return count($this->elements);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/method */
+	protected function __prop_get_method():string {
+		return $this->getAttribute("method") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/method */
+	protected function __prop_set_method(string $value):void {
+		$this->setAttribute("method", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/action */
+	protected function __prop_get_action():string {
+		return $this->getAttribute("action") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/action */
+	protected function __prop_set_action(string $value):void {
+		$this->setAttribute("action", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/encoding */
+	protected function __prop_get_encoding():string {
+		return $this->getAttribute("enctype") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/encoding */
+	protected function __prop_set_encoding(string $value):void {
+		$this->setAttribute("enctype", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/enctype */
+	protected function __prop_get_enctype():string {
+		return $this->getAttribute("enctype") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/enctype */
+	protected function __prop_set_enctype(string $value):void {
+		$this->setAttribute("enctype", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/acceptCharset */
+	protected function __prop_get_acceptCharset():string {
+		return $this->getAttribute("accept-charset") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/acceptCharset */
+	protected function __prop_set_acceptCharset(string $value):void {
+		$this->setAttribute("accept-charset", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/autocomplete */
+	protected function __prop_get_autocomplete():string {
+		return $this->getAttribute("autocomplete") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/autocomplete */
+	protected function __prop_set_autocomplete(string $value):void {
+		$this->setAttribute("autocomplete", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/noValidate */
+	protected function __prop_get_noValidate():bool {
+		return $this->hasAttribute("novalidate");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/noValidate */
+	protected function __prop_set_noValidate(bool $value):void {
+		if($value) {
+			$this->setAttribute("novalidate", "");
+		}
+		else {
+			$this->removeAttribute("novalidate");
+		}
 	}
 }

@@ -11,4 +11,10 @@ class HTMLCollectionFactory extends HTMLCollection {
 	):HTMLOptionsCollection {
 		return new HTMLOptionsCollection($callback);
 	}
+
+	public static function createHTMLFormControlsCollection(
+		callable $callback
+	):HTMLFormControlsCollection {
+		return new HTMLFormControlsCollection($callback);
+	}
 }

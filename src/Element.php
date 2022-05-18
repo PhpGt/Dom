@@ -1,6 +1,8 @@
 <?php
 namespace Gt\Dom;
 
+use ArrayAccess;
+use Countable;
 use DOMElement;
 use DOMNamedNodeMap;
 use Gt\Dom\Exception\InvalidAdjacentPositionException;
@@ -28,7 +30,7 @@ use ReturnTypeWillChange;
  * @property-read string $prefix A DOMString representing the namespace prefix of the element, or null if no prefix is specified.
  * @property-read string $tagName Returns a String with the name of the tag for the given element.
  */
-class Element extends DOMElement {
+class Element extends DOMElement implements ArrayAccess, Countable {
 	use MagicProp;
 	use NonDocumentTypeChildNode;
 	use ChildNode;
