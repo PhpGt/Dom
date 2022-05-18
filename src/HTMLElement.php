@@ -197,6 +197,9 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property bool $reversed Is a Boolean value reflecting the reversed and defining if the numbering is descending, that is its value is true, or ascending (false).
  * @property int $start Is a long value reflecting the start and defining the value of the first number of the first element of the list.
  * @property string $label Is a DOMString representing the label for the group.
+ * @property bool $defaultSelected Is a Boolean that contains the initial value of the selected HTML attribute, indicating whether the option is selected by default or not.
+ * @property-read int $index Is a long representing the position of the option within the list of options it belongs to, in tree-order. If the option is not part of a list of options, like when it is part of the <datalist> element, the value is 0.
+ * @property bool $selected Is a Boolean that indicates whether the option is currently selected.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -566,15 +569,27 @@ trait HTMLElement {
 		$this->setAttribute("hreflang", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/text */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/text
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/text
+	 */
 	protected function __prop_get_text():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLOptionElement,
+		);
 		return $this->textContent;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/text */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/text
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/text
+	 */
 	protected function __prop_set_text(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLOptionElement,
+		);
 		$this->textContent = $value;
 	}
 
@@ -1626,6 +1641,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/disabled
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/disabled
 	 */
 	protected function __prop_get_disabled():bool {
 		$this->allowTypes(
@@ -1634,6 +1650,7 @@ trait HTMLElement {
 			ElementType::HTMLLinkElement,
 			ElementType::HTMLObjectElement,
 			ElementType::HTMLOptGroupElement,
+			ElementType::HTMLOptionElement,
 		);
 		return $this->hasAttribute("disabled");
 	}
@@ -1643,6 +1660,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/disabled
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/disabled
 	 */
 	protected function __prop_set_disabled(bool $value):void {
 		$this->allowTypes(
@@ -1650,6 +1668,7 @@ trait HTMLElement {
 			ElementType::HTMLFieldSetElement,
 			ElementType::HTMLLinkElement,
 			ElementType::HTMLOptGroupElement,
+			ElementType::HTMLOptionElement,
 		);
 		if($value) {
 			$this->setAttribute("disabled", "");
@@ -1666,6 +1685,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLegendElement/form
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/form
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/form
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/form
 	 */
 	protected function __prop_get_form():?Element {
 		$this->allowTypes(
@@ -1675,6 +1695,7 @@ trait HTMLElement {
 			ElementType::HTMLLegendElement,
 			ElementType::HTMLFieldSetElement,
 			ElementType::HTMLObjectElement,
+			ElementType::HTMLOptionElement,
 		);
 		$context = $this;
 		while($context->parentElement) {
@@ -3047,19 +3068,110 @@ trait HTMLElement {
 		$this->setAttribute("start", (string)$value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/label */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/label
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/label
+	 */
 	protected function __prop_get_label():string {
 		$this->allowTypes(
 			ElementType::HTMLOptGroupElement,
+			ElementType::HTMLOptionElement,
 		);
-		return $this->getAttribute("label") ?? "";
+		if($label = $this->getAttribute("label")) {
+			return $label;
+		}
+
+		if($this->elementType === ElementType::HTMLOptionElement) {
+			return $this->textContent;
+		}
+
+		return "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/label */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/label
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/label
+	 */
 	protected function __prop_set_label(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLOptGroupElement,
+			ElementType::HTMLOptionElement,
 		);
 		$this->setAttribute("label", $value);
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/defaultSelected
+	 */
+	protected function __prop_get_defaultSelected():bool {
+		$this->allowTypes(
+			ElementType::HTMLOptionElement,
+		);
+		return $this->selected;
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/defaultSelected
+	 */
+	protected function __prop_set_defaultSelected(bool $value):void {
+		$this->allowTypes(
+			ElementType::HTMLOptionElement,
+		);
+		$this->selected = $value;
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/index
+	 */
+	protected function __prop_get_index():int {
+		$this->allowTypes(
+			ElementType::HTMLOptionElement,
+		);
+		$parent = $this->parentElement;
+		if($parent && $parent->elementType === ElementType::HTMLSelectElement) {
+			foreach($parent->children as $i => $childElement) {
+				if($childElement === $this) {
+					return $i;
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/selected
+	 */
+	protected function __prop_get_selected():bool {
+		$this->allowTypes(
+			ElementType::HTMLOptionElement,
+		);
+		return $this->hasAttribute("selected");
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/selected
+	 */
+	protected function __prop_set_selected(bool $value):void {
+		$this->allowTypes(
+			ElementType::HTMLOptionElement,
+		);
+		if($value) {
+			$context = $this;
+			while($context = $context->parentElement) {
+				if($context instanceof HTMLSelectElement
+					&& !$context->multiple) {
+					foreach($context->options as $option) {
+						/** @var HTMLOptionElement $option */
+						$option->removeAttribute("selected");
+					}
+				}
+			}
+
+			$this->setAttribute("selected", "");
+		}
+		else {
+			$this->removeAttribute("selected");
+		}
 	}
 }
