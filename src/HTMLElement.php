@@ -184,6 +184,7 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property string $as Is a DOMString representing the type of content being loaded by the HTML link.
  * @property string $media Is a DOMString representing a list of one or more media formats to which the resource applies.
  * @property-read StyleSheet $sheet Returns the StyleSheet object associated with the given element, or null if there is none.
+ * @property-read HTMLCollection $areas Is a live HTMLCollection representing the <area> elements associated to this <map>.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -614,6 +615,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/name
 	 */
 	protected function __prop_get_name():string {
 		$this->allowTypes(
@@ -622,6 +624,7 @@ trait HTMLElement {
 			ElementType::HTMLFormElement,
 			ElementType::HTMLTextAreaElement,
 			ElementType::HTMLIFrameElement,
+			ElementType::HTMLMapElement,
 		);
 		return $this->getAttribute("name") ?? "";
 	}
@@ -632,6 +635,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/name
 	 */
 	protected function __prop_set_name(string $value):void {
 		$this->allowTypes(
@@ -640,6 +644,7 @@ trait HTMLElement {
 			ElementType::HTMLFormElement,
 			ElementType::HTMLTextAreaElement,
 			ElementType::HTMLIFrameElement,
+			ElementType::HTMLMapElement,
 		);
 		$this->setAttribute("name", $value);
 	}
@@ -2718,5 +2723,17 @@ trait HTMLElement {
 			ElementType::HTMLLinkElement,
 		);
 		return new StyleSheet();
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/areas
+	 */
+	protected function __prop_get_areas():HTMLCollection {
+		$this->allowTypes(
+			ElementType::HTMLMapElement,
+		);
+		return HTMLCollectionFactory::create(
+			fn() => $this->getElementsByTagName("area")
+		);
 	}
 }
