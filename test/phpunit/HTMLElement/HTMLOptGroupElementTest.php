@@ -1,19 +1,18 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLOptGroupElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLOptGroupElementTest extends HTMLElementTestCase {
-//	public function testDisabled():void {
-//		/** @var HTMLOptGroupElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("optgroup");
-//		self::assertPropertyAttributeCorrelateBool($sut, "disabled");
-//	}
-//
-//	public function testLabel():void {
-//		/** @var HTMLOptGroupElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("optgroup");
-//		self::assertPropertyAttributeCorrelate($sut, "label");
-//	}
+	public function testDisabled():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("optgroup");
+		self::assertPropertyAttributeCorrelateBool($sut, "disabled");
+	}
+
+	public function testLabel():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("optgroup");
+		self::assertPropertyAttributeCorrelate($sut, "label");
+	}
 }

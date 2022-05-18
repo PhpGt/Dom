@@ -196,6 +196,7 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property bool $typeMustMatch Is a Boolean that reflects the typemustmatch HTML attribute, indicating if the resource specified by data must only be played if it matches the type attribute.
  * @property bool $reversed Is a Boolean value reflecting the reversed and defining if the numbering is descending, that is its value is true, or ascending (false).
  * @property int $start Is a long value reflecting the start and defining the value of the first number of the first element of the list.
+ * @property string $label Is a DOMString representing the label for the group.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -1624,6 +1625,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/disabled
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/disabled
 	 */
 	protected function __prop_get_disabled():bool {
 		$this->allowTypes(
@@ -1631,6 +1633,7 @@ trait HTMLElement {
 			ElementType::HTMLFieldSetElement,
 			ElementType::HTMLLinkElement,
 			ElementType::HTMLObjectElement,
+			ElementType::HTMLOptGroupElement,
 		);
 		return $this->hasAttribute("disabled");
 	}
@@ -1639,12 +1642,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/disabled
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/disabled
 	 */
 	protected function __prop_set_disabled(bool $value):void {
 		$this->allowTypes(
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFieldSetElement,
 			ElementType::HTMLLinkElement,
+			ElementType::HTMLOptGroupElement,
 		);
 		if($value) {
 			$this->setAttribute("disabled", "");
@@ -3040,5 +3045,21 @@ trait HTMLElement {
 			ElementType::HTMLOListElement,
 		);
 		$this->setAttribute("start", (string)$value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/label */
+	protected function __prop_get_label():string {
+		$this->allowTypes(
+			ElementType::HTMLOptGroupElement,
+		);
+		return $this->getAttribute("label") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/label */
+	protected function __prop_set_label(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLOptGroupElement,
+		);
+		$this->setAttribute("label", $value);
 	}
 }
