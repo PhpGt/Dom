@@ -115,12 +115,12 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property int $height The height HTML attribute of the <canvas> element is a positive integer reflecting the number of logical pixels (or RGBA values) going down one column of the canvas. When the attribute is not specified, or if it is set to an invalid value, like a negative, the default value of 150 is used. If no [separate] CSS height is assigned to the <canvas>, then this value will also be used as the height of the canvas in the length-unit CSS Pixel.
  * @property int $width The width HTML attribute of the <canvas> element is a positive integer reflecting the number of logical pixels (or RGBA values) going across one row of the canvas. When the attribute is not specified, or if it is set to an invalid value, like a negative, the default value of 300 is used. If no [separate] CSS width is assigned to the <canvas>, then this value will also be used as the width of the canvas in the length-unit CSS Pixel.
  * @property-read HTMLCollection $options Is a HTMLCollection representing a collection of the contained option elements.
- * @property bool $open Is a boolean reflecting the open HTML attribute, indicating whether or not the element’s contents (not counting the <summary>) is to be shown to the user.
+ * @property bool $open Is a boolean reflecting the open HTML attribute, indicating whether the element’s contents (not counting the <summary>) is to be shown to the user.
  * @property string $returnValue A DOMString that sets or returns the return value for the dialog.
  * @property string $accessKey Is a DOMString representing the access key assigned to the element.
  * @property-read string $accessKeyLabel Returns a DOMString containing the element's assigned access key.
  * @property string $contentEditable Is a DOMString, where a value of true means the element is editable and a value of false means it isn't.
- * @property-read bool $isContentEditable Returns a Boolean that indicates whether or not the content of the element can be edited.
+ * @property-read bool $isContentEditable Returns a Boolean that indicates whether the content of the element can be edited.
  * @property string $dir Is a DOMString, reflecting the dir global attribute, representing the directionality of the element. Possible values are "ltr", "rtl", and "auto".
  * @property bool $draggable Is a Boolean indicating if the element can be dragged.
  * @property string $enterKeyHint Is a DOMString defining what action label (or icon) to present for the enter key on virtual keyboards.
@@ -187,6 +187,9 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property-read HTMLCollection $areas Is a live HTMLCollection representing the <area> elements associated to this <map>.
  * @property string $content Gets or sets the value of meta-data property.
  * @property string $httpEquiv Gets or sets the name of an HTTP response header to define for a document.
+ * @property ?float $high A double representing the value of the high boundary, reflecting the high attribute.
+ * @property ?float $low A double representing the value of the low boundary, reflecting the lowattribute.
+ * @property ?float $optimum A double representing the optimum, reflecting the optimum attribute.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -393,7 +396,7 @@ trait HTMLElement {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/draggable */
 	protected function __prop_get_draggable():bool {
 		$attr = $this->getAttribute("draggable");
-		return !is_null($attr) && $attr === "true";
+		return !is_null($attr) && $attr !== "false";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/draggable */
@@ -471,9 +474,9 @@ trait HTMLElement {
 			}
 
 			$parentElement = $node->parentNode;
-			$closestHidden = $parentElement->closest("[hidden]");
+			$closestHidden = $parentElement?->closest("[hidden]");
 			if($parentElement
-				&& $closestHidden) {
+			&& $closestHidden) {
 				continue;
 			}
 
@@ -662,6 +665,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLiElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/value
 	 */
 	protected function __prop_get_value():string {
 		$this->allowTypes(
@@ -671,6 +675,7 @@ trait HTMLElement {
 			ElementType::HTMLOptionElement,
 			ElementType::HTMLTextAreaElement,
 			ElementType::HTMLLiElement,
+			ElementType::HTMLMeterElement,
 		);
 		$value = $this->getAttribute("value");
 		if(!is_null($value)) {
@@ -695,6 +700,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLiElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/value
 	 */
 	protected function __prop_set_value(string $value):void {
 		$this->allowTypes(
@@ -704,6 +710,7 @@ trait HTMLElement {
 			ElementType::HTMLOptionElement,
 			ElementType::HTMLTextAreaElement,
 			ElementType::HTMLLiElement,
+			ElementType::HTMLMeterElement,
 		);
 		$this->setAttribute("value", $value);
 	}
@@ -1744,7 +1751,7 @@ trait HTMLElement {
 		$context = $this;
 		while($context->parentElement) {
 			$context = $context->parentElement;
-			if($context instanceof HTMLDataListElement) {
+			if($context->elementType === ElementType::HTMLDataListElement) {
 				return false;
 			}
 		}
@@ -1765,11 +1772,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/labels
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/labels
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/labels
 	 */
 	protected function __prop_get_labels():NodeList {
 		$this->allowTypes(
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLMeterElement,
 		);
 		$input = $this;
 		return NodeListFactory::createLive(function() use($input) {
@@ -2488,34 +2497,50 @@ trait HTMLElement {
 		$this->setAttribute("formtarget", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-max */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-max
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/max
+	 */
 	protected function __prop_get_max():string {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLMeterElement,
 		);
 		return $this->getAttribute("max") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-max */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-max
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/max
+	 */
 	protected function __prop_set_max(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLMeterElement,
 		);
 		$this->setAttribute("max", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-min */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-min
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/min
+	 */
 	protected function __prop_get_min():string {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLMeterElement,
 		);
 		return $this->getAttribute("min") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-min */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-min
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/min
+	 */
 	protected function __prop_set_min(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLMeterElement,
 		);
 		$this->setAttribute("min", $value);
 	}
@@ -2647,11 +2672,8 @@ trait HTMLElement {
 	protected function __prop_get_valueAsNumber():int|float|null {
 		if(str_starts_with($this->type, "date")) {
 			$dateTime = $this->valueAsDate;
-			if($dateTime) {
-				return $dateTime->getTimestamp();
-			}
+			return $dateTime?->getTimestamp();
 
-			return null;
 		}
 
 		if(is_numeric($this->value)) {
@@ -2789,5 +2811,65 @@ trait HTMLElement {
 			ElementType::HTMLMetaElement,
 		);
 		$this->setAttribute("http-equiv", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/high */
+	protected function __prop_get_high():?float {
+		$this->allowTypes(
+			ElementType::HTMLMeterElement,
+		);
+		if($this->hasAttribute("high")) {
+			return (float)$this->getAttribute("high");
+		}
+
+		return null;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/high */
+	protected function __prop_set_high(float $value):void {
+		$this->allowTypes(
+			ElementType::HTMLMeterElement,
+		);
+		$this->setAttribute("high", (string)$value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/low */
+	protected function __prop_get_low():?float {
+		$this->allowTypes(
+			ElementType::HTMLMeterElement,
+		);
+		if($this->hasAttribute("low")) {
+			return (float)$this->getAttribute("low");
+		}
+
+		return null;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/low */
+	protected function __prop_set_low(float $value):void {
+		$this->allowTypes(
+			ElementType::HTMLMeterElement,
+		);
+		$this->setAttribute("low", (string)$value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/optimum */
+	protected function __prop_get_optimum():?float {
+		$this->allowTypes(
+			ElementType::HTMLMeterElement,
+		);
+		if($this->hasAttribute("optimum")) {
+			return (float)$this->getAttribute("optimum");
+		}
+
+		return null;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/optimum */
+	protected function __prop_set_optimum(float $value):void {
+		$this->allowTypes(
+			ElementType::HTMLMeterElement,
+		);
+		$this->setAttribute("optimum", (string)$value);
 	}
 }
