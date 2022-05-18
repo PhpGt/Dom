@@ -145,6 +145,17 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property-read Document $contentDocument Returns a Document, the active document in the inline frame's nested browsing context.
  * @property-read Node $contentWindow Returns a WindowProxy, the window proxy for the nested browsing context.
  * @property string $srcdoc Is a DOMString that represents the content to display in the frame.
+ * @property-read bool $complete Returns a Boolean that is true if the browser has finished fetching the image, whether successful or not. That means this value is also true if the image has no src value indicating an image to load.
+ * @property string $decoding An optional DOMString representing a hint given to the browser on how it should decode the image. If this value is provided, it must be one of the possible permitted values: sync to decode the image synchronously, async to decode it asynchronously, or auto to indicate no preference (which is the default). Read the decoding page for details on the implications of this property's values.
+ * @property bool $isMap A Boolean that reflects the ismap HTML attribute, indicating that the image is part of a server-side image map. This is different from a client-side image map, specified using an <img> element and a corresponding <map> which contains <area> elements indicating the clickable areas in the image. The image must be contained within an <a> element; see the ismap page for details.
+ * @property string $loading A DOMString providing a hint to the browser used to optimize loading the document by determining whether to load the image immediately (eager) or on an as-needed basis (lazy).
+ * @property-read int $naturalHeight Returns an integer value representing the intrinsic height of the image in CSS pixels, if it is available; else, it shows 0. This is the height the image would be if it were rendered at its natural full size.
+ * @property-read int $naturalWidth An integer value representing the intrinsic width of the image in CSS pixels, if it is available; otherwise, it will show 0. This is the width the image would be if it were rendered at its natural full size.
+ * @property string $sizes A DOMString reflecting the sizes HTML attribute. This string specifies a list of comma-separated conditional sizes for the image; that is, for a given viewport size, a particular image size is to be used. Read the documentation on the sizes page for details on the format of this string.
+ * @property string $srcset A USVString reflecting the srcset HTML attribute. This specifies a list of candidate images, separated by commas (',', U+002C COMMA). Each candidate image is a URL followed by a space, followed by a specially-formatted string indicating the size of the image. The size may be specified either the width or a size multiple. Read the srcset page for specifics on the format of the size substring.
+ * @property string $useMap A DOMString reflecting the usemap HTML attribute, containing the page-local URL of the <map> element describing the image map to use. The page-local URL is a pound (hash) symbol (#) followed by the ID of the <map> element, such as #my-map-element. The <map> in turn contains <area> elements indicating the clickable areas in the image.
+ * @property-read int $x An integer indicating the horizontal offset of the left border edge of the image's CSS layout box relative to the origin of the <html> element's containing block.
+ * @property-read int $y The integer vertical offset of the top border edge of the image's CSS layout box relative to the origin of the <html> element's containing block.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -934,12 +945,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/referrerPolicy
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy
 	 */
 	protected function __prop_get_referrerPolicy():string {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
 			ElementType::HTMLIFrameElement,
+			ElementType::HTMLImageElement,
 		);
 		return $this->getAttribute("referrerpolicy") ?? "";
 	}
@@ -948,12 +961,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/referrerPolicy
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy
 	 */
 	protected function __prop_set_referrerPolicy(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
 			ElementType::HTMLIFrameElement,
+			ElementType::HTMLImageElement,
 		);
 		$this->setAttribute("referrerpolicy", $value);
 	}
@@ -1085,15 +1100,27 @@ trait HTMLElement {
 		);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/alt */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/alt
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/alt
+	 */
 	protected function __prop_get_alt():string {
-		$this->allowTypes(ElementType::HTMLAreaElement);
+		$this->allowTypes(
+			ElementType::HTMLAreaElement,
+			ElementType::HTMLImageElement,
+		);
 		return $this->getAttribute("alt") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/alt */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/alt
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/alt
+	 */
 	protected function __prop_set_alt(string $value):void {
-		$this->allowTypes(ElementType::HTMLAreaElement);
+		$this->allowTypes(
+			ElementType::HTMLAreaElement,
+			ElementType::HTMLImageElement,
+		);
 		$this->setAttribute("alt", $value);
 	}
 
@@ -1188,21 +1215,39 @@ trait HTMLElement {
 		);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/crossOrigin */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/crossOrigin
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/crossOrigin
+	 */
 	protected function __prop_get_crossOrigin():string {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLImageElement,
+		);
 		return $this->getAttribute("crossorigin") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/crossOrigin */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/crossOrigin
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/crossOrigin
+	 */
 	protected function __prop_set_crossOrigin(string $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLImageElement,
+		);
 		$this->setAttribute("crossorigin", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentSrc */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentSrc
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/currentSrc
+	 */
 	protected function __prop_get_currentSrc():string {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLImageElement,
+		);
 		return "";
 	}
 
@@ -1388,12 +1433,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/src
 	 */
 	protected function __prop_get_src():string {
 		$this->allowTypes(
 			ElementType::HTMLAudioElement,
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLIFrameElement,
+			ElementType::HTMLImageElement,
 		);
 		return $this->getAttribute("src") ?? "";
 	}
@@ -1402,12 +1449,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/src
 	 */
 	protected function __prop_set_src(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAudioElement,
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLIFrameElement,
+			ElementType::HTMLImageElement,
 		);
 		$this->setAttribute("src", $value);
 	}
@@ -1657,12 +1706,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/height
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/height
 	 */
 	protected function __prop_get_height():int {
 		$this->allowTypes(
 			ElementType::HTMLCanvasElement,
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLIFrameElement,
+			ElementType::HTMLImageElement,
 		);
 		return (int)$this->getAttribute("height");
 	}
@@ -1671,12 +1722,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/height
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/height
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/height
 	 */
 	protected function __prop_set_height(int $value):void {
 		$this->allowTypes(
 			ElementType::HTMLCanvasElement,
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLIFrameElement,
+			ElementType::HTMLImageElement,
 		);
 		$this->setAttribute("height", (string)$value);
 	}
@@ -1685,12 +1738,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/width
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/width
 	 */
 	protected function __prop_get_width():int {
 		$this->allowTypes(
 			ElementType::HTMLCanvasElement,
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLIFrameElement,
+			ElementType::HTMLImageElement,
 		);
 		return (int)$this->getAttribute("width");
 	}
@@ -1699,12 +1754,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/width
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/width
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/width
 	 */
 	protected function __prop_set_width(int $value):void {
 		$this->allowTypes(
 			ElementType::HTMLCanvasElement,
 			ElementType::HTMLEmbedElement,
 			ElementType::HTMLIFrameElement,
+			ElementType::HTMLImageElement,
 		);
 		$this->setAttribute("width", (string)$value);
 	}
@@ -1974,5 +2031,95 @@ trait HTMLElement {
 	protected function __prop_set_srcdoc(string $value):void {
 		$this->allowTypes(ElementType::HTMLIFrameElement);
 		$this->setAttribute("srcdoc", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/complete */
+	protected function __prop_get_complete():bool {
+		return false;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/decoding */
+	protected function __prop_get_decoding():string {
+		return $this->getAttribute("decoding") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/decoding */
+	protected function __prop_set_decoding(string $value):void {
+		$this->setAttribute("decoding", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/isMap */
+	protected function __prop_get_isMap():bool {
+		return $this->hasAttribute("ismap");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/isMap */
+	protected function __prop_set_isMap(bool $value):void {
+		if($value) {
+			$this->setAttribute("ismap", "");
+		}
+		else {
+			$this->removeAttribute("ismap");
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/loading */
+	protected function __prop_get_loading():string {
+		return $this->getAttribute("loading") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/loading */
+	protected function __prop_set_loading(string $value):void {
+		$this->setAttribute("loading", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/naturalHeight */
+	protected function __prop_get_naturalHeight():int {
+		return 0;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/naturalWidth */
+	protected function __prop_get_naturalWidth():int {
+		return 0;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes */
+	protected function __prop_get_sizes():string {
+		return $this->getAttribute("sizes") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/sizes */
+	protected function __prop_set_sizes(string $value):void {
+		$this->setAttribute("sizes", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset */
+	protected function __prop_get_srcset():string {
+		return $this->getAttribute("srcset") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/srcset */
+	protected function __prop_set_srcset(string $value):void {
+		$this->setAttribute("srcset", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/useMap */
+	protected function __prop_get_useMap():string {
+		return $this->getAttribute("usemap") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/useMap */
+	protected function __prop_set_useMap(string $value):void {
+		$this->setAttribute("usemap", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/x */
+	protected function __prop_get_x():int {
+		return 0;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/y */
+	protected function __prop_get_y():int {
+		return 0;
 	}
 }

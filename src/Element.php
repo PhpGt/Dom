@@ -82,6 +82,7 @@ class Element extends DOMElement implements ArrayAccess, Countable {
 			"hr" => ElementType::HTMLHRElement,
 			"html" => ElementType::HTMLHtmlElement,
 			"iframe" => ElementType::HTMLIFrameElement,
+			"img" => ElementType::HTMLImageElement,
 			"input" => ElementType::HTMLInputElement,
 			"label" => ElementType::HTMLLabelElement,
 			"legend" => ElementType::HTMLLegendElement,
