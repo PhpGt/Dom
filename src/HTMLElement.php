@@ -8,6 +8,7 @@ use Gt\Dom\ClientSide\MediaError;
 use Gt\Dom\ClientSide\MediaStream;
 use Gt\Dom\ClientSide\TextTrackList;
 use Gt\Dom\ClientSide\TimeRanges;
+use Gt\Dom\ClientSide\ValidityState;
 use Gt\Dom\ClientSide\VideoTrackList;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
@@ -92,6 +93,16 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property-read TextTrackList $textTracks Returns the list of TextTrack objects contained in the element.
  * @property-read VideoTrackList $videoTracks Returns the list of VideoTrack objects contained in the element.
  * @property float $volume Is a double indicating the audio volume, from 0.0 (silent) to 1.0 (loudest).
+ * @property bool $autofocus Is a Boolean indicating whether or not the control should have input focus when the page loads, unless the user overrides it, for example by typing in a different control. Only one form-associated element in a document can have this attribute specified.
+ * @property bool $disabled Is a Boolean indicating whether or not the control is disabled, meaning that it does not accept any clicks.
+ * @property-read ?Element $form Is a HTMLFormElement reflecting the form that this element is associated with.
+ * @property-read NodeList $labels Is a NodeList that represents a list of <label> elements that are labels for this HTMLUIElement.
+ * @property bool $readOnly Returns / Sets the element's readonly attribute, indicating that the user cannot modify the value of the control.
+ * @property bool $required Returns / Sets the element's required attribute, indicating that the user must fill in a value before submitting a form.
+ * @property-read bool $willValidate Is a Boolean indicating whether the button is a candidate for constraint validation. It is false if any conditions bar it from constraint validation, including: its type property is reset or button; it has a <datalist> ancestor; or the disabled property is set to true.
+ * @property-read string $validationMessage Is a DOMString representing the localized message that describes the validation constraints that the control does not satisfy (if any). This attribute is the empty string if the control is not a candidate for constraint validation (willValidate is false), or it satisfies its constraints.
+ * @property-read ValidityState $validity Is a ValidityState representing the validity states that this button is in.
+ * @property string $value Is a DOMString representing the current form control value of the HTMLUIElement.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -231,31 +242,48 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/type */
 	protected function __prop_get_type():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement, ElementType::HTMLInputElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLInputElement,
+			ElementType::HTMLButtonElement,
+		);
 		return $this->getAttribute("type") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/type */
 	protected function __prop_set_type(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement, ElementType::HTMLInputElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLInputElement,
+			ElementType::HTMLButtonElement,
+		);
 		$this->setAttribute("type", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/name */
 	protected function __prop_get_name():string {
-		$this->allowTypes(ElementType::HTMLInputElement);
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+			ElementType::HTMLButtonElement,
+		);
 		return $this->getAttribute("name") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/name */
 	protected function __prop_set_name(string $value):void {
-		$this->allowTypes(ElementType::HTMLInputElement);
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+			ElementType::HTMLButtonElement,
+		);
 		$this->setAttribute("name", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/value */
 	protected function __prop_get_value():string {
-		$this->allowTypes(ElementType::HTMLInputElement);
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+			ElementType::HTMLButtonElement,
+		);
 		$value = $this->getAttribute("value");
 		if(!is_null($value)) {
 			return $value;
@@ -274,7 +302,10 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/value */
 	protected function __prop_set_value(string $value):void {
-		$this->allowTypes(ElementType::HTMLInputElement);
+		$this->allowTypes(
+			ElementType::HTMLInputElement,
+			ElementType::HTMLButtonElement,
+		);
 		$this->setAttribute("value", $value);
 	}
 
@@ -743,26 +774,31 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/shape */
 	protected function __prop_get_shape():string {
+		$this->allowTypes(ElementType::HTMLAreaElement);
 		return $this->getAttribute("shape") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/shape */
 	protected function __prop_set_shape(string $value):void {
+		$this->allowTypes(ElementType::HTMLAreaElement);
 		$this->setAttribute("shape", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/audioTracks */
 	protected function __prop_get_audioTracks():AudioTrackList {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return new AudioTrackList();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/autoplay */
 	protected function __prop_get_autoplay():bool {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return $this->hasAttribute("autoplay");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/autplay */
 	protected function __prop_set_autoplay(bool $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		if($value) {
 			$this->setAttribute("autoplay", "");
 		}
@@ -773,21 +809,25 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/buffered */
 	protected function __prop_get_buffered():TimeRanges {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return new TimeRanges();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controller */
 	protected function __prop_get_controller():?MediaController {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controls */
 	protected function __prop_get_controls():bool {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return $this->hasAttribute("controls");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controls */
 	protected function __prop_set_controls(bool $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		if($value) {
 			$this->setAttribute("controls", "");
 		}
@@ -798,6 +838,7 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controlsList */
 	protected function __prop_get_controlsList():DOMTokenList {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return DOMTokenListFactory::create(
 			fn() => explode(
 				" ",
@@ -812,36 +853,43 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/crossOrigin */
 	protected function __prop_get_crossOrigin():string {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return $this->getAttribute("crossorigin") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/crossOrigin */
 	protected function __prop_set_crossOrigin(string $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		$this->setAttribute("crossorigin", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentSrc */
 	protected function __prop_get_currentSrc():string {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime */
 	protected function __prop_get_currentTime():float {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime */
 	protected function __prop_set_currentTime(float $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultMuted */
 	protected function __prop_get_defaultMuted():bool {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return $this->hasAttribute("muted");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultMuted */
 	protected function __prop_set_defaultMuted(bool $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		if($value) {
 			$this->setAttribute("muted", "");
 		}
@@ -852,46 +900,55 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultPlaybackRate */
 	protected function __prop_get_defaultPlaybackRate():float {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultPlaybackRate */
 	protected function __prop_set_defaultPlaybackRate(float $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/disableRemotePlayback */
 	protected function __prop_get_disableRemotePlayback():bool {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/disableRemotePlayback */
 	protected function __prop_set_disableRemotePlayback(bool $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/duration */
 	protected function __prop_get_duration():?float {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/ended */
 	protected function __prop_get_ended():bool {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return false;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/error */
 	protected function __prop_get_error():?MediaError {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/loop */
 	protected function __prop_get_loop():bool {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return $this->hasAttribute("loop");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/loop */
 	protected function __prop_set_loop(bool $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		if($value) {
 			$this->setAttribute("loop", "");
 		}
@@ -902,116 +959,293 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/mediaGroup */
 	protected function __prop_get_mediaGroup():string {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return $this->getAttribute("mediagroup") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/mediaGroup */
 	protected function __prop_set_mediaGroup(string $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		$this->setAttribute("mediagroup", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/muted */
 	protected function __prop_get_muted():bool {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException("Use defaultMuted for server-side use");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/muted */
 	protected function __prop_set_muted(bool $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException("Use defaultMuted for server-side use");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/networkState */
 	protected function __prop_get_networkState():int {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/paused */
 	protected function __prop_get_paused():bool {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/playbackRate */
 	protected function __prop_get_playbackRate():float {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/playbackRate */
 	protected function __prop_set_playbackRate(float $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/played */
 	protected function __prop_get_played():TimeRanges {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return new TimeRanges();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/preload */
 	protected function __prop_get_preload():string {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return $this->getAttribute("preload") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/preload */
 	protected function __prop_set_preload(string $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		$this->setAttribute("preload", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState */
 	protected function __prop_get_readyState():int {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/seekable */
 	protected function __prop_get_seekable():TimeRanges {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return new TimeRanges();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/seeking */
 	protected function __prop_get_seeking():bool {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return false;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/sinkId */
 	protected function __prop_get_sinkId():string {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/src */
 	protected function __prop_get_src():string {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return $this->getAttribute("src") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/src */
 	protected function __prop_set_src(string $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		$this->setAttribute("src", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/srcObject */
 	protected function __prop_get_srcObject():MediaStream {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return new MediaStream();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/srcObject */
 	protected function __prop_set_srcObject(MediaStream $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/textTracks */
 	protected function __prop_get_textTracks():TextTrackList {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return new TextTrackList();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/videoTracks */
 	protected function __prop_get_videoTracks():VideoTrackList {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		return new VideoTrackList();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/volume */
 	protected function __prop_get_volume():float {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/volume */
 	protected function __prop_set_volume(float $value):void {
+		$this->allowTypes(ElementType::HTMLAudioElement);
 		throw new ClientSideOnlyFunctionalityException();
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/autofocus */
+	protected function __prop_get_autofocus():bool {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		return $this->hasAttribute("autofocus");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/autofocus */
+	protected function __prop_set_autofocus(bool $value):void {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		if($value) {
+			$this->setAttribute("autofocus", "");
+		}
+		else {
+			$this->removeAttribute("autofocus");
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/disabled */
+	protected function __prop_get_disabled():bool {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		return $this->hasAttribute("disabled");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/disabled */
+	protected function __prop_set_disabled(bool $value):void {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		if($value) {
+			$this->setAttribute("disabled", "");
+		}
+		else {
+			$this->removeAttribute("disabled");
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/form */
+	protected function __prop_get_form():?Element {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		$context = $this;
+		while($context->parentElement) {
+			$context = $context->parentElement;
+
+			if($context->elementType === ElementType::HTMLFormElement) {
+				return $context;
+			}
+		}
+
+		return null;
+	}
+
+//	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/labels */
+//	protected function __prop_get_labels():NodeList {
+//		return NodeListFactory::createLive(function():array {
+//			$labelsArray = [];
+//			foreach($this->ownerDocument->getElementsByTagName("label") as $label) {
+//				/** @var HTMLLabelElement $label */
+//				if($label->htmlFor === $this->id) {
+//					array_push($labelsArray, $label);
+//				}
+//			}
+//
+//			return $labelsArray;
+//		});
+//	}
+
+	protected function __prop_get_readOnly():bool {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		return $this->hasAttribute("readonly");
+	}
+
+	protected function __prop_set_readOnly(bool $value):void {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		if($value) {
+			$this->setAttribute("readonly", "");
+		}
+		else {
+			$this->removeAttribute("readonly");
+		}
+	}
+
+	protected function __prop_get_required():bool {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		return $this->hasAttribute("required");
+	}
+
+	protected function __prop_set_required(bool $value):void {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		if($value) {
+			$this->setAttribute("required", "");
+		}
+		else {
+			$this->removeAttribute("required");
+		}
+	}
+
+	protected function __prop_get_willValidate():bool {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		if($this->elementType === ElementType::HTMLButtonElement) {
+			return false;
+		}
+
+		if($this->disabled) {
+			return false;
+		}
+
+		if(in_array($this->type, ["hidden", "reset", "button"])) {
+			return false;
+		}
+
+		$context = $this;
+		while($context->parentElement) {
+			$context = $context->parentElement;
+			if($context instanceof HTMLDataListElement) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	protected function __prop_get_validationMessage():string {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		return "";
+	}
+
+	protected function __prop_get_validity():ValidityState {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		return new ValidityState();
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-labels */
+	protected function __prop_get_labels():NodeList {
+		$this->allowTypes(ElementType::HTMLButtonElement);
+		$input = $this;
+		return NodeListFactory::createLive(function() use($input) {
+			$labelsArray = [];
+
+			$context = $input;
+			while($context = $context->parentElement) {
+				if($context instanceof HTMLLabelElement) {
+					array_push($labelsArray, $context);
+					break;
+				}
+			}
+
+			if($id = $input->id) {
+				foreach($input->ownerDocument->querySelectorAll("label[for='$id']") as $label) {
+					array_push($labelsArray, $label);
+				}
+			}
+
+			return $labelsArray;
+		});
 	}
 }
