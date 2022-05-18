@@ -190,6 +190,8 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property ?float $high A double representing the value of the high boundary, reflecting the high attribute.
  * @property ?float $low A double representing the value of the low boundary, reflecting the lowattribute.
  * @property ?float $optimum A double representing the optimum, reflecting the optimum attribute.
+ * @property string $cite Is a DOMString reflecting the cite HTML attribute, containing a URI of a resource explaining the change.
+ * @property string $dateTime Is a DOMString reflecting the datetime HTML attribute, containing a date-and-time string representing a timestamp for the change.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -2871,5 +2873,37 @@ trait HTMLElement {
 			ElementType::HTMLMeterElement,
 		);
 		$this->setAttribute("optimum", (string)$value);
+	}
+
+	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/cite */
+	public function __prop_get_cite():string {
+		$this->allowTypes(
+			ElementType::HTMLModElement,
+		);
+		return $this->getAttribute("cite") ?? "";
+	}
+
+	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/cite */
+	public function __prop_set_cite(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLModElement,
+		);
+		$this->setAttribute("cite", $value);
+	}
+
+	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/dateTime */
+	public function __prop_get_dateTime():string {
+		$this->allowTypes(
+			ElementType::HTMLModElement,
+		);
+		return $this->getAttribute("datetime") ?? "";
+	}
+
+	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/dateTime */
+	public function __prop_set_dateTime(string $value):void {
+		$this->allowTypes(
+			ElementType::HTMLModElement,
+		);
+		$this->setAttribute("datetime", $value);
 	}
 }
