@@ -305,34 +305,6 @@ class Element extends DOMElement {
 	}
 
 	/**
-	 * The Element method getElementsByClassName() returns a live
-	 * HTMLCollection which contains every descendant element which has the
-	 * specified class name or names.
-	 *
-	 * The method getElementsByClassName() on the Document interface works
-	 * essentially the same way, except it acts on the entire document,
-	 * starting at the document root.
-	 *
-	 * @param string $names A DOMString containing one or more class names to match on, separated by whitespace.
-	 * @return HTMLCollection An HTMLCollection providing a live-updating list of every element which is a member of every class in names.
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByClassName
-	 */
-	public function getElementsByClassName(string $names):HTMLCollection {
-		$querySelector = "";
-		foreach(explode(" ", $names) as $name) {
-			if(strlen($querySelector) > 0) {
-				$querySelector .= " ";
-			}
-
-			$querySelector .= ".$name";
-		}
-
-		return HTMLCollectionFactory::create(
-			fn() => $this->querySelectorAll($querySelector)
-		);
-	}
-
-	/**
 	 * The insertAdjacentElement() method of the Element interface inserts
 	 * a given element node at a given position relative to the element it
 	 * is invoked upon.

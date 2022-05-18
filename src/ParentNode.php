@@ -7,6 +7,7 @@ use Gt\CssXPath\Translator;
 use Gt\Dom\Exception\DocumentHasMoreThanOneElementChildException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WrongDocumentErrorException;
+use ReturnTypeWillChange;
 
 /**
  * @link https://dom.spec.whatwg.org/#parentnode
@@ -206,5 +207,98 @@ trait ParentNode {
 		);
 		$nodeArray = iterator_to_array($xpathResult);
 		return NodeListFactory::create(...$nodeArray);
+	}
+
+	/**
+	 * The Element method getElementsByClassName() returns a live
+	 * HTMLCollection which contains every descendant element which has the
+	 * specified class name or names.
+	 *
+	 * The method getElementsByClassName() on the Document interface works
+	 * essentially the same way, except it acts on the entire document,
+	 * starting at the document root.
+	 *
+	 * @param string $names A DOMString containing one or more class names to match on, separated by whitespace.
+	 * @return HTMLCollection An HTMLCollection providing a live-updating list of every element which is a member of every class in names.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByClassName
+	 */
+	public function getElementsByClassName(string $names):HTMLCollection {
+		$querySelector = "";
+		foreach(explode(" ", $names) as $name) {
+			if(strlen($querySelector) > 0) {
+				$querySelector .= " ";
+			}
+
+			$querySelector .= ".$name";
+		}
+
+		return HTMLCollectionFactory::create(
+			fn() => $this->querySelectorAll($querySelector)
+		);
+	}
+
+	/**
+	 * The Document method getElementById() returns an Element object
+	 * representing the element whose id property matches the specified
+	 * string. Since element IDs are required to be unique if specified,
+	 * they're a useful way to get access to a specific element quickly.
+	 *
+	 * If you need to get access to an element which doesn't have an ID,
+	 * you can use querySelector() to find the element using any selector.
+	 *
+	 * @param string $elementId The ID of the element to locate. The ID is
+	 * case-sensitive string which is unique within the document; only one
+	 * element may have any given ID.
+	 * @return ?Element An Element object describing the DOM element object
+	 * matching the specified ID, or null if no matching element was found
+	 * in the document.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById
+	 */
+	public function getElementById(string $elementId):?Element {
+		/** @var ?Element $element */
+		$element = parent::getElementById($elementId);
+
+		if(is_null($element) && $this instanceof XMLDocument) {
+// Known limitation in XML documents: IDs are not always registered.
+// Try using XPath instead.
+			$element = $this->evaluate("//*[@id='$elementId']")->current();
+		}
+
+		return $element;
+	}
+
+	/**
+	 * The getElementsByName() method of the Document object returns a
+	 * NodeList Collection of elements with a given name in the document.
+	 *
+	 * @param string $name the value of the name attribute of the
+	 * element(s).
+	 * @return NodeList a live NodeList Collection, meaning it automatically
+	 * updates as new elements with the same name are added to/removed from
+	 * the document.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByName
+	 */
+	public function getElementsByName(string $name):NodeList {
+		$querySelector = "[name=$name]";
+		return NodeListFactory::createLive(
+			fn() => $this->querySelectorAll($querySelector)
+		);
+	}
+
+	/**
+	 * The getElementsByTagName method of Document interface returns an
+	 * HTMLCollection of elements with the given tag name. The complete
+	 * document is searched, including the root node. The returned
+	 * HTMLCollection is live, meaning that it updates itself automatically
+	 * to stay in sync with the DOM tree without having to call
+	 * document.getElementsByTagName() again.
+	 * @return HTMLCollection<Element>
+	 * @phpstan-ignore-next-line
+	 */
+	#[ReturnTypeWillChange]
+	public function getElementsByTagName(string $qualifiedName):HTMLCollection {
+		return HTMLCollectionFactory::create(function() use($qualifiedName) {
+			return parent::getElementsByTagName($qualifiedName);
+		});
 	}
 }

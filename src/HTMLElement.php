@@ -107,6 +107,7 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property string $htmlFor Is a string containing the ID of the labeled control. This reflects the for attribute.
  * @property int $height The height HTML attribute of the <canvas> element is a positive integer reflecting the number of logical pixels (or RGBA values) going down one column of the canvas. When the attribute is not specified, or if it is set to an invalid value, like a negative, the default value of 150 is used. If no [separate] CSS height is assigned to the <canvas>, then this value will also be used as the height of the canvas in the length-unit CSS Pixel.
  * @property int $width The width HTML attribute of the <canvas> element is a positive integer reflecting the number of logical pixels (or RGBA values) going across one row of the canvas. When the attribute is not specified, or if it is set to an invalid value, like a negative, the default value of 300 is used. If no [separate] CSS width is assigned to the <canvas>, then this value will also be used as the width of the canvas in the length-unit CSS Pixel.
+ * @property-read HTMLCollection $options Is a HTMLCollection representing a collection of the contained option elements.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -286,12 +287,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/value
 	 */
 	protected function __prop_get_value():string {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLDataElement,
+			ElementType::HTMLOptionElement,
 		);
 		$value = $this->getAttribute("value");
 		if(!is_null($value)) {
@@ -313,12 +316,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/value
 	 */
 	protected function __prop_set_value(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLDataElement,
+			ElementType::HTMLOptionElement,
 		);
 		$this->setAttribute("value", $value);
 	}
@@ -1324,5 +1329,11 @@ trait HTMLElement {
 	protected function __prop_set_width(int $value):void {
 		$this->allowTypes(ElementType::HTMLCanvasElement);
 		$this->setAttribute("width", (string)$value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataListElement/options */
+	protected function __prop_get_options():HTMLCollection {
+		$this->allowTypes(ElementType::HTMLDataListElement);
+		return $this->getElementsByTagName("option");
 	}
 }
