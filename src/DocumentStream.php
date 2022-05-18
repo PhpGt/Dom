@@ -156,7 +156,7 @@ trait DocumentStream {
 	 * @return bool
 	 */
 	public function isReadable():bool {
-		$mode = $this->getMetadata("mode");
+		$mode = $this->getMetadata("mode") ?? "";
 		$readable = false;
 
 		if(strstr($mode, "r")

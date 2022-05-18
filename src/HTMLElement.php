@@ -50,6 +50,9 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property string $search Is a USVString representing the search element, including leading question mark ('?'), if any, of the referenced URL.
  * @property string $target Is a DOMString that reflects the target HTML attribute, indicating where to display the linked resource.
  * @property string $username Is a USVString containing the username specified before the domain name.
+ * @property string $alt Is a DOMString that reflects the alt HTML attribute, containing alternative text for the element.
+ * @property string $coords Is a DOMString that reflects the coords HTML attribute, containing coordinates to define the hot-spot region.
+ * @property string $shape Is a DOMString that reflects the shape HTML attribute, indicating the shape of the hot-spot, limited to known values.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -73,8 +76,18 @@ trait HTMLElement {
 	}
 
 	public function __toString():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
-		return $this->href;
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
+
+		if($this->elementType === ElementType::HTMLAnchorElement
+		|| $this->elementType === ElementType::HTMLAreaElement) {
+			return $this->href;
+		}
+		else {
+			return "";
+		}
 	}
 
 	/**
@@ -245,31 +258,55 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/href */
 	protected function __prop_get_href():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		return $this->getAttribute("href") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/href */
 	protected function __prop_set_href(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->setAttribute("href", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/download */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/download
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/download
+	 */
 	protected function __prop_get_download():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		return $this->getAttribute("download") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/download */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/download
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/download
+	 */
 	protected function __prop_set_download(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->setAttribute("download", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hash */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hash
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/hash
+	 */
 	protected function __prop_get_hash():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		if($hash = parse_url($this->href, PHP_URL_FRAGMENT)) {
 			return "#$hash";
 		}
@@ -277,17 +314,29 @@ trait HTMLElement {
 		return "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hash */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hash
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/hash
+	 */
 	protected function __prop_set_hash(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->href = $this->buildUrl(
 			fragment: $value
 		);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/host */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/host
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/host
+	 */
 	protected function __prop_get_host():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		if($host = parse_url($this->href, PHP_URL_HOST)) {
 			$port = parse_url($this->href, PHP_URL_PORT);
 			if($port) {
@@ -300,9 +349,15 @@ trait HTMLElement {
 		return "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/host */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/host
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/host
+	 */
 	protected function __prop_set_host(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$newHost = strtok($value, ":");
 		$newPort = parse_url($value, PHP_URL_PORT);
 		$this->href = $this->buildUrl(
@@ -313,16 +368,23 @@ trait HTMLElement {
 
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hostname
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/hostname
 	 * @noinspection PhpArrayShapeAttributeCanBeAddedInspection
 	 */
 	protected function __prop_get_hostname():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		return parse_url($this->href, PHP_URL_HOST);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/hostname */
 	protected function __prop_set_hostname(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->href = $this->buildUrl(
 			host: $value
 		);
@@ -330,7 +392,10 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/origin */
 	protected function __prop_get_origin():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$origin = "";
 		if($scheme = parse_url($this->href, PHP_URL_SCHEME)) {
 			$origin .= "$scheme://";
@@ -356,13 +421,19 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/password */
 	protected function __prop_get_password():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		return parse_url($this->href, PHP_URL_PASS) ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/password */
 	protected function __prop_set_password(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->href = $this->buildUrl(
 			pass: $value
 		);
@@ -373,35 +444,62 @@ trait HTMLElement {
 	 * @noinspection PhpArrayShapeAttributeCanBeAddedInspection
 	 */
 	protected function __prop_get_pathname():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		return parse_url($this->href, PHP_URL_PATH);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/pathname */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/pathname
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/pathname
+	 */
 	protected function __prop_set_pathname(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->href = $this->buildUrl(
 			path: $value
 		);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/port */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/port
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/port
+	 */
 	protected function __prop_get_port():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		return parse_url($this->href, PHP_URL_PORT) ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/port */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/port
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/port
+	 */
 	protected function __prop_set_port(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->href = $this->buildUrl(
 			port: (int)$value
 		);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/protocol */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/protocol
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/protocol
+	 */
 	protected function __prop_get_protocol():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		if($scheme = parse_url($this->href, PHP_URL_SCHEME)) {
 			return "$scheme:";
 		}
@@ -409,50 +507,92 @@ trait HTMLElement {
 		return "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/protocol */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/protocol
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/protocol
+	 */
 	protected function __prop_set_protocol(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->href = $this->buildUrl(
 			scheme: $value
 		);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/referrerPolicy */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/referrerPolicy
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/referrerPolicy
+	 */
 	protected function __prop_get_referrerPolicy():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		return $this->getAttribute("referrerpolicy") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/referrerPolicy */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/referrerPolicy
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/referrerPolicy
+	 */
 	protected function __prop_set_referrerPolicy(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->setAttribute("referrerpolicy", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/rel */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/rel
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/rel
+	 */
 	protected function __prop_get_rel():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		return $this->getAttribute("rel") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/rel */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/rel
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/rel
+	 */
 	protected function __prop_set_rel(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->setAttribute("rel", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/relList */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/relList
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/relList
+	 */
 	protected function __prop_get_relList():DOMTokenList {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		return DOMTokenListFactory::create(
 			fn() => explode(" ", $this->rel),
 			fn(string...$tokens) => $this->rel = implode(" ", $tokens)
 		);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/search */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/search
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/search
+	 */
 	protected function __prop_get_search():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		if($query = parse_url($this->href, PHP_URL_QUERY)) {
 			return "?$query";
 		}
@@ -460,37 +600,101 @@ trait HTMLElement {
 		return "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/search */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/search
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/search
+	 */
 	protected function __prop_set_search(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->href = $this->buildUrl(
 			query: $value
 		);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/target */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/target
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/target
+	 */
 	protected function __prop_get_target():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		return $this->getAttribute("target") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/target */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/target
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/target
+	 */
 	protected function __prop_set_target(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->setAttribute("target", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/username */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/username
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/username
+	 */
 	protected function __prop_get_username():string {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		return parse_url($this->href, PHP_URL_USER) ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/username */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/username
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/username
+	 */
 	protected function __prop_set_username(string $value):void {
-		$this->allowTypes(ElementType::HTMLAnchorElement);
+		$this->allowTypes(
+			ElementType::HTMLAnchorElement,
+			ElementType::HTMLAreaElement,
+		);
 		$this->href = $this->buildUrl(
 			user: $value
 		);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/alt */
+	protected function __prop_get_alt():string {
+		$this->allowTypes(ElementType::HTMLAreaElement);
+		return $this->getAttribute("alt") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/alt */
+	protected function __prop_set_alt(string $value):void {
+		$this->allowTypes(ElementType::HTMLAreaElement);
+		$this->setAttribute("alt", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/coords */
+	protected function __prop_get_coords():string {
+		$this->allowTypes(ElementType::HTMLAreaElement);
+		return $this->getAttribute("coords") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/coords */
+	protected function __prop_set_coords(string $value):void {
+		$this->allowTypes(ElementType::HTMLAreaElement);
+		$this->setAttribute("coords", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/shape */
+	protected function __prop_get_shape():string {
+		return $this->getAttribute("shape") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/shape */
+	protected function __prop_set_shape(string $value):void {
+		$this->setAttribute("shape", $value);
 	}
 }
