@@ -1,13 +1,12 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLLiElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLLiElementTest extends HTMLElementTestCase {
-//	public function testValue():void {
-//		/** @var HTMLLiElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("li");
-//		self::assertPropertyAttributeCorrelateNumber($sut, "int", "value");
-//	}
+	public function testValue():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("li");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int", "value");
+	}
 }

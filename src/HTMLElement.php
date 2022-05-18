@@ -630,6 +630,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLiElement/value
 	 */
 	protected function __prop_get_value():string {
 		$this->allowTypes(
@@ -638,6 +639,7 @@ trait HTMLElement {
 			ElementType::HTMLDataElement,
 			ElementType::HTMLOptionElement,
 			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLLiElement,
 		);
 		$value = $this->getAttribute("value");
 		if(!is_null($value)) {
@@ -661,6 +663,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLiElement/value
 	 */
 	protected function __prop_set_value(string $value):void {
 		$this->allowTypes(
@@ -669,6 +672,7 @@ trait HTMLElement {
 			ElementType::HTMLDataElement,
 			ElementType::HTMLOptionElement,
 			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLLiElement,
 		);
 		$this->setAttribute("value", $value);
 	}
