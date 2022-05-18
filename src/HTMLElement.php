@@ -125,6 +125,7 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property int $tabIndex Is a long that represents this element's position in the tabbing order.
  * @property string $title Is a DOMString containing the text that appears in a popup box when mouse is over the element.
  * @property CSSStyleDeclaration $style Is a CSSStyleDeclaration, an object representing the declarations of an element's style attributes.
+ * @property-read HTMLCollection $elements The elements belonging to this field set.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -228,6 +229,209 @@ trait HTMLElement {
 		return $url;
 	}
 
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/accessKey */
+	protected function __prop_get_accessKey():string {
+		return $this->getAttribute("accesskey") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/accessKey */
+	protected function __prop_set_accessKey(string $value):void {
+		$this->setAttribute("accesskey", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/accessKeyLabel */
+	protected function __prop_get_accessKeyLabel():string {
+		throw new ClientSideOnlyFunctionalityException();
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/contentEditable */
+	protected function __prop_get_contentEditable():string {
+		$attr = $this->getAttribute("contenteditable");
+		return $attr ?: "inherit";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/contentEditable */
+	protected function __prop_set_contentEditable(string $value):void {
+		switch($value) {
+		case "true":
+		case "false":
+		case "inherit":
+			$this->setAttribute("contenteditable", $value);
+			break;
+		default:
+			throw new EnumeratedValueException($value);
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/isContentEditable */
+	protected function __prop_get_isContentEditable():bool {
+		$attr = $this->getAttribute("contenteditable");
+		if(!$attr || $attr === "false") {
+			return false;
+		}
+
+		if($attr === "true") {
+			return true;
+		}
+
+		$context = $this;
+		while($parent = $context->parentElement) {
+			$parentAttr = $parent->getAttribute("contenteditable");
+			if($parentAttr === "true") {
+				return true;
+			}
+			if($parentAttr === "false") {
+				return false;
+			}
+
+			$context = $parent;
+		}
+
+		return false;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dir */
+	protected function __prop_get_dir():string {
+		return $this->getAttribute("dir") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dir */
+	protected function __prop_set_dir(string $value):void {
+		$this->setAttribute("dir", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/draggable */
+	protected function __prop_get_draggable():bool {
+		$attr = $this->getAttribute("draggable");
+		return !is_null($attr) && $attr === "true";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/draggable */
+	protected function __prop_set_draggable(bool $value):void {
+		$strValue = $value ? "true" : "false";
+		$this->setAttribute("draggable", $strValue);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/enterKeyHint */
+	protected function __prop_get_enterKeyHint():string {
+		return $this->getAttribute("enterkeyhint") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/enterKeyHint */
+	protected function __prop_set_enterKeyHint(string $value):void {
+		switch($value) {
+		case "enter":
+		case "done":
+		case "go":
+		case "next":
+		case "previous":
+		case "search":
+		case "send":
+			$this->setAttribute("enterkeyhint", $value);
+			break;
+
+		default:
+			throw new EnumeratedValueException($value);
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/hidden */
+	protected function __prop_get_hidden():bool {
+		return $this->hasAttribute("hidden");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/hidden */
+	protected function __prop_set_hidden(bool $value):void {
+		if($value) {
+			$this->setAttribute("hidden", "");
+		}
+		else {
+			$this->removeAttribute("hidden");
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert */
+	protected function __prop_get_inert():bool {
+		return $this->hasAttribute("inert");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert */
+	protected function __prop_set_inert(bool $value):void {
+		if($value) {
+			$this->setAttribute("inert", "");
+		}
+		else {
+			$this->removeAttribute("inert");
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText */
+	protected function __prop_get_innerText():string {
+		$treeWalker = $this->ownerDocument->createTreeWalker(
+			$this,
+			NodeFilter::SHOW_TEXT
+		);
+
+		$textArray = [];
+
+		foreach($treeWalker as $i => $node) {
+			if($i === 0) {
+				// Skip the root node.
+				continue;
+			}
+
+			$parentElement = $node->parentNode;
+			$closestHidden = $parentElement->closest("[hidden]");
+			if($parentElement
+				&& $closestHidden) {
+				continue;
+			}
+
+			array_push($textArray, $node->textContent);
+		}
+
+		return implode("", $textArray);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText */
+	protected function __prop_set_innerText(string $value):void {
+		$this->textContent = $value;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/lang */
+	protected function __prop_get_lang():string {
+		return $this->getAttribute("lang") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/lang */
+	protected function __prop_set_lang(string $value):void {
+		$this->setAttribute("lang", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/title */
+	protected function __prop_get_title():string {
+		return $this->getAttribute("title") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/title */
+	protected function __prop_set_title(string $value):void {
+		$this->setAttribute("title", $value);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/tabIndex */
+	protected function __prop_get_tabIndex():int {
+		if($this->hasAttribute("tabindex")) {
+			return (int)$this->getAttribute("tabindex");
+		}
+
+		return -1;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/tabIndex */
+	protected function __prop_set_tabIndex(int $tabIndex):void {
+		$this->setAttribute("tabindex", (string)$tabIndex);
+	}
+
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style */
 	protected function __prop_get_style():CSSStyleDeclaration {
 		return new CSSStyleDeclaration();
@@ -266,6 +470,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/type
 	 */
 	protected function __prop_get_type():string {
 		$this->allowTypes(
@@ -273,7 +478,13 @@ trait HTMLElement {
 			ElementType::HTMLInputElement,
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLEmbedElement,
+			ElementType::HTMLFieldSetElement,
 		);
+
+		if($this->elementType === ElementType::HTMLFieldSetElement) {
+			return "fieldset";
+		}
+
 		return $this->getAttribute("type") ?? "";
 	}
 
@@ -281,6 +492,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLEmbedElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/type
 	 */
 	protected function __prop_set_type(string $value):void {
 		$this->allowTypes(
@@ -288,6 +500,7 @@ trait HTMLElement {
 			ElementType::HTMLInputElement,
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLEmbedElement,
+			ElementType::HTMLFieldSetElement,
 		);
 		$this->setAttribute("type", $value);
 	}
@@ -1170,15 +1383,27 @@ trait HTMLElement {
 		}
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/disabled */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/disabled
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/disabled
+	 */
 	protected function __prop_get_disabled():bool {
-		$this->allowTypes(ElementType::HTMLButtonElement);
+		$this->allowTypes(
+			ElementType::HTMLButtonElement,
+			ElementType::HTMLFieldSetElement,
+		);
 		return $this->hasAttribute("disabled");
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/disabled */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/disabled
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/disabled
+	 */
 	protected function __prop_set_disabled(bool $value):void {
-		$this->allowTypes(ElementType::HTMLButtonElement);
+		$this->allowTypes(
+			ElementType::HTMLButtonElement,
+			ElementType::HTMLFieldSetElement,
+		);
 		if($value) {
 			$this->setAttribute("disabled", "");
 		}
@@ -1446,206 +1671,12 @@ trait HTMLElement {
 		throw new ClientSideOnlyFunctionalityException("returnValue");
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/accessKey */
-	protected function __prop_get_accessKey():string {
-		return $this->getAttribute("accesskey") ?? "";
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/accessKey */
-	protected function __prop_set_accessKey(string $value):void {
-		$this->setAttribute("accesskey", $value);
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/accessKeyLabel */
-	protected function __prop_get_accessKeyLabel():string {
-		throw new ClientSideOnlyFunctionalityException();
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/contentEditable */
-	protected function __prop_get_contentEditable():string {
-		$attr = $this->getAttribute("contenteditable");
-		return $attr ?: "inherit";
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/contentEditable */
-	protected function __prop_set_contentEditable(string $value):void {
-		switch($value) {
-		case "true":
-		case "false":
-		case "inherit":
-			$this->setAttribute("contenteditable", $value);
-			break;
-		default:
-			throw new EnumeratedValueException($value);
-		}
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/isContentEditable */
-	protected function __prop_get_isContentEditable():bool {
-		$attr = $this->getAttribute("contenteditable");
-		if(!$attr || $attr === "false") {
-			return false;
-		}
-
-		if($attr === "true") {
-			return true;
-		}
-
-		$context = $this;
-		while($parent = $context->parentElement) {
-			$parentAttr = $parent->getAttribute("contenteditable");
-			if($parentAttr === "true") {
-				return true;
-			}
-			if($parentAttr === "false") {
-				return false;
-			}
-
-			$context = $parent;
-		}
-
-		return false;
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dir */
-	protected function __prop_get_dir():string {
-		return $this->getAttribute("dir") ?? "";
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dir */
-	protected function __prop_set_dir(string $value):void {
-		$this->setAttribute("dir", $value);
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/draggable */
-	protected function __prop_get_draggable():bool {
-		$attr = $this->getAttribute("draggable");
-		return !is_null($attr) && $attr === "true";
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/draggable */
-	protected function __prop_set_draggable(bool $value):void {
-		$strValue = $value ? "true" : "false";
-		$this->setAttribute("draggable", $strValue);
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/enterKeyHint */
-	protected function __prop_get_enterKeyHint():string {
-		return $this->getAttribute("enterkeyhint") ?? "";
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/enterKeyHint */
-	protected function __prop_set_enterKeyHint(string $value):void {
-		switch($value) {
-		case "enter":
-		case "done":
-		case "go":
-		case "next":
-		case "previous":
-		case "search":
-		case "send":
-			$this->setAttribute("enterkeyhint", $value);
-			break;
-
-		default:
-			throw new EnumeratedValueException($value);
-		}
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/hidden */
-	protected function __prop_get_hidden():bool {
-		return $this->hasAttribute("hidden");
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/hidden */
-	protected function __prop_set_hidden(bool $value):void {
-		if($value) {
-			$this->setAttribute("hidden", "");
-		}
-		else {
-			$this->removeAttribute("hidden");
-		}
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert */
-	protected function __prop_get_inert():bool {
-		return $this->hasAttribute("inert");
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert */
-	protected function __prop_set_inert(bool $value):void {
-		if($value) {
-			$this->setAttribute("inert", "");
-		}
-		else {
-			$this->removeAttribute("inert");
-		}
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText */
-	protected function __prop_get_innerText():string {
-		$treeWalker = $this->ownerDocument->createTreeWalker(
-			$this,
-			NodeFilter::SHOW_TEXT
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/elements */
+	protected function __prop_get_elements():HTMLCollection {
+		$this->allowTypes(ElementType::HTMLFieldSetElement);
+		return HTMLCollectionFactory::create(
+		// List of elements from: https://html.spec.whatwg.org/multipage/forms.html#category-listed
+			fn() => $this->querySelectorAll("button, fieldset, input, object, output, select, textarea, [name], [disabled]")
 		);
-
-		$textArray = [];
-
-		foreach($treeWalker as $i => $node) {
-			if($i === 0) {
-				// Skip the root node.
-				continue;
-			}
-
-			$parentElement = $node->parentNode;
-			$closestHidden = $parentElement->closest("[hidden]");
-			if($parentElement
-				&& $closestHidden) {
-				continue;
-			}
-
-			array_push($textArray, $node->textContent);
-		}
-
-		return implode("", $textArray);
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText */
-	protected function __prop_set_innerText(string $value):void {
-		$this->textContent = $value;
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/lang */
-	protected function __prop_get_lang():string {
-		return $this->getAttribute("lang") ?? "";
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/lang */
-	protected function __prop_set_lang(string $value):void {
-		$this->setAttribute("lang", $value);
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/title */
-	protected function __prop_get_title():string {
-		return $this->getAttribute("title") ?? "";
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/title */
-	protected function __prop_set_title(string $value):void {
-		$this->setAttribute("title", $value);
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/tabIndex */
-	protected function __prop_get_tabIndex():int {
-		if($this->hasAttribute("tabindex")) {
-			return (int)$this->getAttribute("tabindex");
-		}
-
-		return -1;
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/tabIndex */
-	protected function __prop_set_tabIndex(int $tabIndex):void {
-		$this->setAttribute("tabindex", (string)$tabIndex);
 	}
 }
