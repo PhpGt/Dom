@@ -79,12 +79,12 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property bool $loop A Boolean that reflects the loop HTML attribute, which indicates whether the media element should start over when it reaches the end.
  * @property string $mediaGroup A DOMString that reflects the mediagroup HTML attribute, which indicates the name of the group of elements it belongs to. A group of media elements shares a common MediaController.
  * @property bool $muted Is a Boolean that determines whether audio is muted. true if the audio is muted and false otherwise.
- * @property-read int $networkState Returns a unsigned short (enumeration) indicating the current state of fetching the media over the network.
+ * @property-read int $networkState Returns an unsigned short (enumeration) indicating the current state of fetching the media over the network.
  * @property-read bool $paused Returns a Boolean that indicates whether the media element is paused.
  * @property float $playbackRate Is a double that indicates the rate at which the media is being played back.
  * @property-read TimeRanges $played Returns a TimeRanges object that contains the ranges of the media source that the browser has played, if any.
  * @property string $preload Is a DOMString that reflects the preload HTML attribute, indicating what data should be preloaded, if any. Possible values are: none, metadata, auto.
- * @property-read int $readyState Returns a unsigned short (enumeration) indicating the readiness state of the media.
+ * @property-read int $readyState Returns an unsigned short (enumeration) indicating the readiness state of the media.
  * @property-read TimeRanges $seekable Returns a TimeRanges object that contains the time ranges that the user is able to seek to, if any.
  * @property-read bool $seeking Returns a Boolean that indicates whether the media is in the process of seeking to a new position.
  * @property-read string $sinkId Returns a DOMString that is the unique ID of the audio device delivering output, or an empty string if it is using the user agent default. This ID should be one of the MediaDeviceInfo.deviceid values returned from MediaDevices.enumerateDevices(), id-multimedia, or id-communications.
@@ -93,8 +93,8 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property-read TextTrackList $textTracks Returns the list of TextTrack objects contained in the element.
  * @property-read VideoTrackList $videoTracks Returns the list of VideoTrack objects contained in the element.
  * @property float $volume Is a double indicating the audio volume, from 0.0 (silent) to 1.0 (loudest).
- * @property bool $autofocus Is a Boolean indicating whether or not the control should have input focus when the page loads, unless the user overrides it, for example by typing in a different control. Only one form-associated element in a document can have this attribute specified.
- * @property bool $disabled Is a Boolean indicating whether or not the control is disabled, meaning that it does not accept any clicks.
+ * @property bool $autofocus Is a Boolean indicating whether the control should have input focus when the page loads, unless the user overrides it, for example by typing in a different control. Only one form-associated element in a document can have this attribute specified.
+ * @property bool $disabled Is a Boolean indicating whether the control is disabled, meaning that it does not accept any clicks.
  * @property-read ?Element $form Is a HTMLFormElement reflecting the form that this element is associated with.
  * @property-read NodeList $labels Is a NodeList that represents a list of <label> elements that are labels for this HTMLUIElement.
  * @property bool $readOnly Returns / Sets the element's readonly attribute, indicating that the user cannot modify the value of the control.
@@ -108,6 +108,7 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property int $height The height HTML attribute of the <canvas> element is a positive integer reflecting the number of logical pixels (or RGBA values) going down one column of the canvas. When the attribute is not specified, or if it is set to an invalid value, like a negative, the default value of 150 is used. If no [separate] CSS height is assigned to the <canvas>, then this value will also be used as the height of the canvas in the length-unit CSS Pixel.
  * @property int $width The width HTML attribute of the <canvas> element is a positive integer reflecting the number of logical pixels (or RGBA values) going across one row of the canvas. When the attribute is not specified, or if it is set to an invalid value, like a negative, the default value of 300 is used. If no [separate] CSS width is assigned to the <canvas>, then this value will also be used as the width of the canvas in the length-unit CSS Pixel.
  * @property-read HTMLCollection $options Is a HTMLCollection representing a collection of the contained option elements.
+ * @property bool $open Is a boolean reflecting the open HTML attribute, indicating whether or not the element’s contents (not counting the <summary>) is to be shown to the user.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -1335,5 +1336,23 @@ trait HTMLElement {
 	protected function __prop_get_options():HTMLCollection {
 		$this->allowTypes(ElementType::HTMLDataListElement);
 		return $this->getElementsByTagName("option");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement/open */
+	protected function __prop_get_open():bool {
+		$this->allowTypes(ElementType::HTMLDetailsElement);
+		return $this->hasAttribute("open");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement/open */
+	protected function __prop_set_open(bool $value):void {
+		$this->allowTypes(ElementType::HTMLDetailsElement);
+
+		if($value) {
+			$this->setAttribute("open","");
+		}
+		else {
+			$this->removeAttribute("open");
+		}
 	}
 }
