@@ -295,20 +295,30 @@ trait HTMLElement {
 		}
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/href */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/href
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/href
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLBaseElement/href
+	 */
 	protected function __prop_get_href():string {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
+			ElementType::HTMLBaseElement,
 		);
 		return $this->getAttribute("href") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/href */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/href
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/href
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLBaseElement/href
+	 */
 	protected function __prop_set_href(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
+			ElementType::HTMLBaseElement,
 		);
 		$this->setAttribute("href", $value);
 	}
@@ -656,11 +666,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/target
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/target
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLBaseElement/target
 	 */
 	protected function __prop_get_target():string {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
+			ElementType::HTMLBaseElement,
 		);
 		return $this->getAttribute("target") ?? "";
 	}
@@ -668,11 +680,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/target
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAreaElement/target
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLBaseElement/target
 	 */
 	protected function __prop_set_target(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
+			ElementType::HTMLBaseElement,
 		);
 		$this->setAttribute("target", $value);
 	}
