@@ -654,6 +654,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMetaElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLParamElement/name
 	 */
 	protected function __prop_get_name():string {
 		$this->allowTypes(
@@ -665,6 +666,7 @@ trait HTMLElement {
 			ElementType::HTMLMapElement,
 			ElementType::HTMLMetaElement,
 			ElementType::HTMLObjectElement,
+			ElementType::HTMLParamElement,
 		);
 		return $this->getAttribute("name") ?? "";
 	}
@@ -678,6 +680,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMetaElement/name
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/name
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLParamElement/name
 	 */
 	protected function __prop_set_name(string $value):void {
 		$this->allowTypes(
@@ -689,6 +692,7 @@ trait HTMLElement {
 			ElementType::HTMLMapElement,
 			ElementType::HTMLMetaElement,
 			ElementType::HTMLObjectElement,
+			ElementType::HTMLParamElement,
 		);
 		$this->setAttribute("name", $value);
 	}
@@ -701,6 +705,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLiElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLParamElement/value
 	 */
 	protected function __prop_get_value():string {
 		$this->allowTypes(
@@ -712,6 +717,7 @@ trait HTMLElement {
 			ElementType::HTMLLiElement,
 			ElementType::HTMLMeterElement,
 			ElementType::HTMLOutputElement,
+			ElementType::HTMLParamElement,
 		);
 		$value = $this->getAttribute("value");
 		if(!is_null($value)) {
@@ -737,6 +743,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLiElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLParamElement/value
 	 */
 	protected function __prop_set_value(string $value):void {
 		$this->allowTypes(
@@ -748,6 +755,7 @@ trait HTMLElement {
 			ElementType::HTMLLiElement,
 			ElementType::HTMLMeterElement,
 			ElementType::HTMLOutputElement,
+			ElementType::HTMLParamElement,
 		);
 		$this->setAttribute("value", $value);
 	}
