@@ -201,6 +201,7 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property-read int $index Is a long representing the position of the option within the list of options it belongs to, in tree-order. If the option is not part of a list of options, like when it is part of the <datalist> element, the value is 0.
  * @property bool $selected Is a Boolean that indicates whether the option is currently selected.
  * @property-read DOMStringMap $dataset The dataset read-only property of the HTMLOrForeignElement mixin provides read/write access to custom data attributes (data-*) on elements.
+ * @property-read float $position Returns a double value returning the result of dividing the current value (value) by the maximum value (max); if the progress bar is an indeterminate progress bar, it returns -1.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -365,6 +366,12 @@ trait HTMLElement {
 		default:
 			throw new EnumeratedValueException($value);
 		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/dataset */
+	protected function __prop_get_dataset():DOMStringMap {
+		/** @var HTMLElement $this */
+		return DOMStringMapFactory::createDataset($this);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/isContentEditable */
@@ -706,6 +713,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLiElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLParamElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLProgressElement/value
 	 */
 	protected function __prop_get_value():string {
 		$this->allowTypes(
@@ -718,6 +726,7 @@ trait HTMLElement {
 			ElementType::HTMLMeterElement,
 			ElementType::HTMLOutputElement,
 			ElementType::HTMLParamElement,
+			ElementType::HTMLProgressElement,
 		);
 		$value = $this->getAttribute("value");
 		if(!is_null($value)) {
@@ -744,6 +753,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLiElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLParamElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLProgressElement/value
 	 */
 	protected function __prop_set_value(string $value):void {
 		$this->allowTypes(
@@ -756,6 +766,7 @@ trait HTMLElement {
 			ElementType::HTMLMeterElement,
 			ElementType::HTMLOutputElement,
 			ElementType::HTMLParamElement,
+			ElementType::HTMLProgressElement,
 		);
 		$this->setAttribute("value", $value);
 	}
@@ -2628,11 +2639,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-max
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/max
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLProgressElement/max
 	 */
 	protected function __prop_get_max():string {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLMeterElement,
+			ElementType::HTMLProgressElement,
 		);
 		return $this->getAttribute("max") ?? "";
 	}
@@ -2640,11 +2653,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-max
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/max
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLProgressElement/max
 	 */
 	protected function __prop_set_max(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLMeterElement,
+			ElementType::HTMLProgressElement,
 		);
 		$this->setAttribute("max", $value);
 	}
@@ -3218,9 +3233,17 @@ trait HTMLElement {
 		}
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/dataset */
-	protected function __prop_get_dataset():DOMStringMap {
-		/** @var HTMLElement $this */
-		return DOMStringMapFactory::createDataset($this);
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLProgressElement/position
+	 */
+	protected function __prop_get_position():float {
+		$this->allowTypes(
+			ElementType::HTMLProgressElement,
+		);
+		if(!$this->max) {
+			return -1;
+		}
+
+		return min($this->value / $this->max, 1);
 	}
 }
