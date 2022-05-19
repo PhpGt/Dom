@@ -3016,18 +3016,26 @@ trait HTMLElement {
 		$this->setAttribute("optimum", (string)$value);
 	}
 
-	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/cite */
+	/**
+	 * https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/cite
+	 * https://developer.mozilla.org/en-US/docs/Web/API/HTMLQuoteElement/cite
+	 */
 	public function __prop_get_cite():string {
 		$this->allowTypes(
 			ElementType::HTMLModElement,
+			ElementType::HTMLQuoteElement,
 		);
 		return $this->getAttribute("cite") ?? "";
 	}
 
-	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/cite */
+	/**
+	 * https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/cite
+	 * https://developer.mozilla.org/en-US/docs/Web/API/HTMLQuoteElement/cite
+	 */
 	public function __prop_set_cite(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLModElement,
+			ElementType::HTMLQuoteElement,
 		);
 		$this->setAttribute("cite", $value);
 	}
