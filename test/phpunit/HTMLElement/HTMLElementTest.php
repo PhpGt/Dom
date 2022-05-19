@@ -7,7 +7,7 @@ use Gt\Dom\Exception\EnumeratedValueException;
 use Gt\Dom\HTMLDocument;
 use PHPUnit\Framework\TestCase;
 
-class HTMLElementTest extends TestCase {
+class HTMLElementTest extends HTMLElementTestCase {
 	public function testAccessKeyNone():void {
 		$document = new HTMLDocument();
 		$sut = $document->createElement("div");
@@ -301,5 +301,20 @@ class HTMLElementTest extends TestCase {
 		$style = self::createMock(CSSStyleDeclaration::class);
 		self::expectException(ClientSideOnlyFunctionalityException::class);
 		$sut->style = $style;
+	}
+
+	public function testDatasetEmpty():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
+		self::assertEmpty($sut->dataset);
+		self::assertCount(0, $sut->dataset);
+		self::assertNull($sut->dataset->get("nothing"));
+	}
+
+	public function testDatasetSetsDataAttribute():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
+		$sut->dataset->set("example", "something");
+		self::assertEquals("something", $sut->getAttribute("data-example"));
 	}
 }

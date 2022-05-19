@@ -200,6 +200,7 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property bool $defaultSelected Is a Boolean that contains the initial value of the selected HTML attribute, indicating whether the option is selected by default or not.
  * @property-read int $index Is a long representing the position of the option within the list of options it belongs to, in tree-order. If the option is not part of a list of options, like when it is part of the <datalist> element, the value is 0.
  * @property bool $selected Is a Boolean that indicates whether the option is currently selected.
+ * @property-read DOMStringMap $dataset The dataset read-only property of the HTMLOrForeignElement mixin provides read/write access to custom data attributes (data-*) on elements.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -3173,5 +3174,11 @@ trait HTMLElement {
 		else {
 			$this->removeAttribute("selected");
 		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/dataset */
+	protected function __prop_get_dataset():DOMStringMap {
+		/** @var HTMLElement $this */
+		return DOMStringMapFactory::createDataset($this);
 	}
 }
