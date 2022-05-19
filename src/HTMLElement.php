@@ -619,6 +619,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/type
 	 */
 	protected function __prop_get_type():string {
 		$this->allowTypes(
@@ -631,6 +632,7 @@ trait HTMLElement {
 			ElementType::HTMLObjectElement,
 			ElementType::HTMLOListElement,
 			ElementType::HTMLScriptElement,
+			ElementType::HTMLSourceElement,
 		);
 
 		if($this->elementType === ElementType::HTMLFieldSetElement) {
@@ -649,6 +651,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/type
 	 */
 	protected function __prop_set_type(string $value):void {
 		$this->allowTypes(
@@ -661,6 +664,7 @@ trait HTMLElement {
 			ElementType::HTMLObjectElement,
 			ElementType::HTMLOListElement,
 			ElementType::HTMLScriptElement,
+			ElementType::HTMLSourceElement,
 		);
 		$this->setAttribute("type", $value);
 	}
@@ -1611,6 +1615,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/src
 	 */
 	protected function __prop_get_src():string {
 		$this->allowTypes(
@@ -1620,6 +1625,7 @@ trait HTMLElement {
 			ElementType::HTMLImageElement,
 			ElementType::HTMLInputElement,
 			ElementType::HTMLScriptElement,
+			ElementType::HTMLSourceElement,
 		);
 		return $this->getAttribute("src") ?? "";
 	}
@@ -1631,6 +1637,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/src
 	 */
 	protected function __prop_set_src(string $value):void {
 		$this->allowTypes(
@@ -1640,6 +1647,7 @@ trait HTMLElement {
 			ElementType::HTMLImageElement,
 			ElementType::HTMLInputElement,
 			ElementType::HTMLScriptElement,
+			ElementType::HTMLSourceElement,
 		);
 		$this->setAttribute("src", $value);
 	}
@@ -2942,18 +2950,26 @@ trait HTMLElement {
 		$this->setAttribute("as", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/media */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/media
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/media
+	 */
 	protected function __prop_get_media():string {
 		$this->allowTypes(
 			ElementType::HTMLLinkElement,
+			ElementType::HTMLSourceElement,
 		);
 		return $this->getAttribute("media") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/media */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/media
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/media
+	 */
 	protected function __prop_set_media(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLLinkElement,
+			ElementType::HTMLSourceElement,
 		);
 		$this->setAttribute("media", $value);
 	}
