@@ -31,7 +31,7 @@ class HTMLDocument extends Document {
 			"HTML-ENTITIES",
 			$this->characterSet,
 		);
-		$this->loadHTML($html, LIBXML_SCHEMA_CREATE);
+		$this->loadHTML($html, LIBXML_SCHEMA_CREATE | LIBXML_COMPACT);
 
 		if(is_null($this->documentElement)) {
 			$this->appendChild($this->createElement("html"));

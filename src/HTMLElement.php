@@ -205,6 +205,8 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property bool $async The async and defer attributes are Boolean attributes that control how the script should be executed. The defer and async attributes must not be specified if the src attribute is absent.
  * @property bool $defer The async and defer attributes are Boolean attributes that control how the script should be executed. The defer and async attributes must not be specified if the src attribute is absent.
  * @property bool $noModule Is a Boolean that if true, stops the script's execution in browsers that support ES2015 modules — used to run fallback scripts in older browsers that do not support JavaScript modules.
+ * @property int $selectedIndex A long reflecting the index of the first selected <option> element. The value -1 indicates no element is selected.
+ * @property-read HTMLCollection $selectedOptions An HTMLCollection representing the set of <option> elements that are selected.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -725,6 +727,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLParamElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLProgressElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/value
 	 */
 	protected function __prop_get_value():string {
 		$this->allowTypes(
@@ -738,6 +741,7 @@ trait HTMLElement {
 			ElementType::HTMLOutputElement,
 			ElementType::HTMLParamElement,
 			ElementType::HTMLProgressElement,
+			ElementType::HTMLSelectElement,
 		);
 		$value = $this->getAttribute("value");
 		if(!is_null($value)) {
@@ -765,6 +769,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMeterElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLParamElement/value
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLProgressElement/value
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/value
 	 */
 	protected function __prop_set_value(string $value):void {
 		$this->allowTypes(
@@ -778,8 +783,19 @@ trait HTMLElement {
 			ElementType::HTMLOutputElement,
 			ElementType::HTMLParamElement,
 			ElementType::HTMLProgressElement,
+			ElementType::HTMLSelectElement,
 		);
-		$this->setAttribute("value", $value);
+
+		if($this->elementType === ElementType::HTMLSelectElement) {
+			foreach($this->options as $option) {
+				if($option->value === $value) {
+					$option->selected = true;
+				}
+			}
+		}
+		else {
+			$this->setAttribute("value", $value);
+		}
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#checked */
@@ -2039,10 +2055,12 @@ trait HTMLElement {
 
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLDataListElement/options
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/options
 	 */
 	protected function __prop_get_options():HTMLCollection {
 		$this->allowTypes(
 			ElementType::HTMLDataListElement,
+			ElementType::HTMLSelectElement,
 		);
 		return $this->getElementsByTagName("option");
 	}
@@ -2092,12 +2110,21 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFieldSetElement/elements
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/elements
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/elements
 	 */
 	protected function __prop_get_elements():HTMLCollection {
 		$this->allowTypes(
 			ElementType::HTMLFieldSetElement,
 			ElementType::HTMLFormElement,
+			ElementType::HTMLSelectElement,
 		);
+
+		if($this->elementType === ElementType::HTMLSelectElement) {
+			return HTMLCollectionFactory::createHTMLOptionsCollection(
+				fn() => $this->children
+			);
+		}
+
 		return HTMLCollectionFactory::createHTMLFormControlsCollection(
 // List of elements from: https://html.spec.whatwg.org/multipage/forms.html#category-listed
 			fn() => $this->querySelectorAll("button, fieldset, input, object, output, select, textarea, [name], [disabled]")
@@ -2743,38 +2770,58 @@ trait HTMLElement {
 		$this->setAttribute("placeholder", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-size */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-size
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/size
+	 */
 	protected function __prop_get_size():?int {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLSelectElement,
 		);
 		if($this->hasAttribute("size")) {
 			return (int)$this->getAttribute("size");
 		}
 
+		if($this->elementType === ElementType::HTMLSelectElement) {
+			return $this->multiple ? 4 : 1;
+		}
+
 		return null;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-size */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-size
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/size
+	 */
 	protected function __prop_set_size(int $value):void {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLSelectElement,
 		);
 		$this->setAttribute("size", (string)$value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-multiple */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-multiple
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/multiple
+	 */
 	protected function __prop_get_multiple():bool {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLSelectElement,
 		);
 		return $this->hasAttribute("multiple");
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-multiple */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-multiple
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/multiple
+	 */
 	protected function __prop_set_multiple(bool $value):void {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLSelectElement,
 		);
 		if($value) {
 			$this->setAttribute("multiple", "");
@@ -3248,10 +3295,9 @@ trait HTMLElement {
 		if($value) {
 			$context = $this;
 			while($context = $context->parentElement) {
-				if($context instanceof HTMLSelectElement
-					&& !$context->multiple) {
+				if($context->elementType === ElementType::HTMLSelectElement
+				&& !$context->multiple) {
 					foreach($context->options as $option) {
-						/** @var HTMLOptionElement $option */
 						$option->removeAttribute("selected");
 					}
 				}
@@ -3338,6 +3384,56 @@ trait HTMLElement {
 		}
 		else {
 			$this->removeAttribute("nomodule");
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/selectedIndex */
+	protected function __prop_get_selectedIndex():int {
+		$this->allowTypes(
+			ElementType::HTMLSelectElement,
+		);
+		foreach($this->options as $i => $option) {
+			if(!$option->selected) {
+				continue;
+			}
+
+			return $i;
+		}
+
+		return -1;
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/selectedIndex
+	 */
+	protected function __prop_set_selectedIndex(int $value):void {
+		$this->allowTypes(
+			ElementType::HTMLSelectElement,
+		);
+		foreach($this->options as $i => $option) {
+			$option->selected = false;
+
+			if($i === $value) {
+				$option->selected = true;
+			}
+		}
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/selectedOptions
+	 */
+	protected function __prop_get_selectedOptions():HTMLCollection {
+		if($this->multiple) {
+			return HTMLCollectionFactory::create(
+				fn() => $this->querySelectorAll("option[selected]")
+			);
+		}
+		else {
+			return HTMLCollectionFactory::create(
+				fn() => ($this->selectedIndex === -1)
+					? []
+					: [$this->options[$this->selectedIndex]]
+			);
 		}
 	}
 }
