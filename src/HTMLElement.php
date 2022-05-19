@@ -111,7 +111,7 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property-read ValidityState $validity Is a ValidityState representing the validity states that this button is in.
  * @property string $value Is a DOMString representing the current form control value of the HTMLUIElement.
  * @property-read ?Element $control Is a HTMLElement representing the control with which the label is associated.
- * @property string $htmlFor Is a string containing the ID of the labeled control. This reflects the for attribute.
+ * @property string|DOMTokenList $htmlFor Is a string containing the ID of the labeled control. This reflects the for attribute.
  * @property int $height The height HTML attribute of the <canvas> element is a positive integer reflecting the number of logical pixels (or RGBA values) going down one column of the canvas. When the attribute is not specified, or if it is set to an invalid value, like a negative, the default value of 150 is used. If no [separate] CSS height is assigned to the <canvas>, then this value will also be used as the height of the canvas in the length-unit CSS Pixel.
  * @property int $width The width HTML attribute of the <canvas> element is a positive integer reflecting the number of logical pixels (or RGBA values) going across one row of the canvas. When the attribute is not specified, or if it is set to an invalid value, like a negative, the default value of 300 is used. If no [separate] CSS width is assigned to the <canvas>, then this value will also be used as the width of the canvas in the length-unit CSS Pixel.
  * @property-read HTMLCollection $options Is a HTMLCollection representing a collection of the contained option elements.
@@ -711,6 +711,7 @@ trait HTMLElement {
 			ElementType::HTMLTextAreaElement,
 			ElementType::HTMLLiElement,
 			ElementType::HTMLMeterElement,
+			ElementType::HTMLOutputElement,
 		);
 		$value = $this->getAttribute("value");
 		if(!is_null($value)) {
@@ -746,6 +747,7 @@ trait HTMLElement {
 			ElementType::HTMLTextAreaElement,
 			ElementType::HTMLLiElement,
 			ElementType::HTMLMeterElement,
+			ElementType::HTMLOutputElement,
 		);
 		$this->setAttribute("value", $value);
 	}
@@ -1881,15 +1883,35 @@ trait HTMLElement {
 		return $inputList[0] ?? null;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor */
-	protected function __prop_get_htmlFor():string {
-		$this->allowTypes(ElementType::HTMLLabelElement);
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOutputElement/htmlFor
+	 */
+	protected function __prop_get_htmlFor():string|DOMTokenList {
+		$this->allowTypes(
+			ElementType::HTMLLabelElement,
+			ElementType::HTMLOutputElement,
+		);
+
+		if($this->elementType === ElementType::HTMLOutputElement) {
+			return DOMTokenListFactory::create(
+				fn() => explode(" ", $this->getAttribute("for") ?? ""),
+				fn(string...$forValues) => $this->setAttribute("for", implode(" ", $forValues)),
+			);
+		}
+
 		return $this->getAttribute("for") ?? "";
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLabelElement/htmlFor
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOutputElement/htmlFor
+	 */
 	protected function __prop_set_htmlFor(string $value):void {
-		$this->allowTypes(ElementType::HTMLLabelElement);
+		$this->allowTypes(
+			ElementType::HTMLLabelElement,
+			ElementType::HTMLOutputElement,
+		);
 		$this->setAttribute("for", $value);
 	}
 
@@ -2159,15 +2181,27 @@ trait HTMLElement {
 		$this->setAttribute("cols", (string)$value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/defaultValue */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/defaultValue
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOutputElement/defaultValue
+	 */
 	protected function __prop_get_defaultValue():string {
-		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->allowTypes(
+			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLOutputElement,
+		);
 		return $this->value;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/defaultValue */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/defaultValue
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOutputElement/defaultValue
+	 */
 	protected function __prop_set_defaultValue(string $value):void {
-		$this->allowTypes(ElementType::HTMLTextAreaElement);
+		$this->allowTypes(
+			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLOutputElement,
+		);
 		$this->value = $value;
 	}
 
