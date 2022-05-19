@@ -202,6 +202,9 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property bool $selected Is a Boolean that indicates whether the option is currently selected.
  * @property-read DOMStringMap $dataset The dataset read-only property of the HTMLOrForeignElement mixin provides read/write access to custom data attributes (data-*) on elements.
  * @property-read float $position Returns a double value returning the result of dividing the current value (value) by the maximum value (max); if the progress bar is an indeterminate progress bar, it returns -1.
+ * @property bool $async The async and defer attributes are Boolean attributes that control how the script should be executed. The defer and async attributes must not be specified if the src attribute is absent.
+ * @property bool $defer The async and defer attributes are Boolean attributes that control how the script should be executed. The defer and async attributes must not be specified if the src attribute is absent.
+ * @property bool $noModule Is a Boolean that if true, stops the script's execution in browsers that support ES2015 modules — used to run fallback scripts in older browsers that do not support JavaScript modules.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -580,11 +583,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/text
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/text
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/text
 	 */
 	protected function __prop_get_text():string {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLOptionElement,
+			ElementType::HTMLScriptElement,
 		);
 		return $this->textContent;
 	}
@@ -592,11 +597,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/text
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/text
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/text
 	 */
 	protected function __prop_set_text(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLOptionElement,
+			ElementType::HTMLScriptElement,
 		);
 		$this->textContent = $value;
 	}
@@ -609,6 +616,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/type
 	 */
 	protected function __prop_get_type():string {
 		$this->allowTypes(
@@ -620,6 +628,7 @@ trait HTMLElement {
 			ElementType::HTMLLinkElement,
 			ElementType::HTMLObjectElement,
 			ElementType::HTMLOListElement,
+			ElementType::HTMLScriptElement,
 		);
 
 		if($this->elementType === ElementType::HTMLFieldSetElement) {
@@ -637,6 +646,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/type
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/type
 	 */
 	protected function __prop_set_type(string $value):void {
 		$this->allowTypes(
@@ -648,6 +658,7 @@ trait HTMLElement {
 			ElementType::HTMLLinkElement,
 			ElementType::HTMLObjectElement,
 			ElementType::HTMLOListElement,
+			ElementType::HTMLScriptElement,
 		);
 		$this->setAttribute("type", $value);
 	}
@@ -1073,6 +1084,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/referrerPolicy
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/referrerPolicy
 	 */
 	protected function __prop_get_referrerPolicy():string {
 		$this->allowTypes(
@@ -1081,6 +1093,7 @@ trait HTMLElement {
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
 			ElementType::HTMLLinkElement,
+			ElementType::HTMLScriptElement,
 		);
 		return $this->getAttribute("referrerpolicy") ?? "";
 	}
@@ -1091,6 +1104,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/referrerPolicy
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/referrerPolicy
 	 */
 	protected function __prop_set_referrerPolicy(string $value):void {
 		$this->allowTypes(
@@ -1099,6 +1113,7 @@ trait HTMLElement {
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
 			ElementType::HTMLLinkElement,
+			ElementType::HTMLScriptElement,
 		);
 		$this->setAttribute("referrerpolicy", $value);
 	}
@@ -1358,11 +1373,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/crossOrigin
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/crossOrigin
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/crossOrigin
 	 */
 	protected function __prop_get_crossOrigin():string {
 		$this->allowTypes(
 			ElementType::HTMLAudioElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLScriptElement,
 		);
 		return $this->getAttribute("crossorigin") ?? "";
 	}
@@ -1370,11 +1387,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/crossOrigin
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/crossOrigin
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/crossOrigin
 	 */
 	protected function __prop_set_crossOrigin(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAudioElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLScriptElement,
 		);
 		$this->setAttribute("crossorigin", $value);
 	}
@@ -1575,6 +1594,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/src
 	 */
 	protected function __prop_get_src():string {
 		$this->allowTypes(
@@ -1583,6 +1603,7 @@ trait HTMLElement {
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLScriptElement,
 		);
 		return $this->getAttribute("src") ?? "";
 	}
@@ -1593,6 +1614,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/src
 	 */
 	protected function __prop_set_src(string $value):void {
 		$this->allowTypes(
@@ -1601,6 +1623,7 @@ trait HTMLElement {
 			ElementType::HTMLIFrameElement,
 			ElementType::HTMLImageElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLScriptElement,
 		);
 		$this->setAttribute("src", $value);
 	}
@@ -3253,5 +3276,68 @@ trait HTMLElement {
 		}
 
 		return min($this->value / $this->max, 1);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/async */
+	protected function __prop_get_async():bool {
+		$this->allowTypes(
+			ElementType::HTMLScriptElement,
+		);
+		return $this->hasAttribute("async");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/async */
+	protected function __prop_set_async(bool $value):void {
+		$this->allowTypes(
+			ElementType::HTMLScriptElement,
+		);
+		if($value) {
+			$this->setAttribute("async", "");
+		}
+		else {
+			$this->removeAttribute("async");
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/defer */
+	protected function __prop_get_defer():bool {
+		$this->allowTypes(
+			ElementType::HTMLScriptElement,
+		);
+		return $this->hasAttribute("defer");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/defer */
+	protected function __prop_set_defer(bool $value):void {
+		$this->allowTypes(
+			ElementType::HTMLScriptElement,
+		);
+		if($value) {
+			$this->setAttribute("defer", "");
+		}
+		else {
+			$this->removeAttribute("defer");
+		}
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/noModule */
+	protected function __prop_get_noModule():bool {
+		$this->allowTypes(
+			ElementType::HTMLScriptElement,
+		);
+		return $this->hasAttribute("nomodule");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/noModule */
+	protected function __prop_set_noModule(bool $value):void {
+		$this->allowTypes(
+			ElementType::HTMLScriptElement,
+		);
+		if($value) {
+			$this->setAttribute("nomodule", "");
+		}
+		else {
+			$this->removeAttribute("nomodule");
+		}
 	}
 }

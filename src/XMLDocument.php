@@ -15,7 +15,7 @@ class XMLDocument extends Document {
 			"application/xml",
 		);
 
-		$this->loadXML($xml);
+		$this->loadXML($xml, LIBXML_SCHEMA_CREATE);
 		if(is_null($this->documentElement)) {
 			$this->appendChild($this->createElement("xml"));
 		}
