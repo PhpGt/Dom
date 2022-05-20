@@ -213,6 +213,7 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property string $headers Is a DOMSettableTokenList describing a list of id of <th> elements that represents headers associated with the cell. It reflects the headers attribute.
  * @property int $rowSpan An unsigned long integer indicating the number of rows this cell must span; this lets a cell occupy space across multiple rows of the table. It reflects the rowspan attribute.
  * @property string $scope A DOMString indicating the scope of a <th> cell. Header cells can be configured, using the scope property, the apply to a specified row or column, or to the not-yet-scoped cells within the current row group (that is, the same ancestor <thead>, <tbody>, or <tfoot> element). If no value is specified for scope, the header is not associated directly with cells in this way.
+ * @property int $span Is an unsigned long that reflects the span HTML attribute, indicating the number of columns to apply this object's attributes to. Must be a positive integer.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -3607,5 +3608,29 @@ trait HTMLElement {
 			ElementType::HTMLTableCellElement,
 		);
 		$this->setAttribute("scope", $value);
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableColElement/abbr
+	 */
+	protected function __prop_get_span():int {
+		$this->allowTypes(
+			ElementType::HTMLTableColElement,
+		);
+		if($this->hasAttribute("span")) {
+			return (int)$this->getAttribute("span");
+		}
+
+		return 1;
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableColElement/abbr
+	 */
+	protected function __prop_set_span(int $value):void {
+		$this->allowTypes(
+			ElementType::HTMLTableColElement,
+		);
+		$this->setAttribute("span", (string)$value);
 	}
 }

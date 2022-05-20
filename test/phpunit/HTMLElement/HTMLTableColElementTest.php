@@ -1,13 +1,12 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLTableColElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLTableColElementTest extends HTMLElementTestCase {
-//	public function testSpan():void {
-//		/** @var HTMLTableColElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("col");
-//		self::assertPropertyAttributeCorrelateNumber($sut, "int:1", "span");
-//	}
+	public function testSpan():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("col");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int:1", "span");
+	}
 }
