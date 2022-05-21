@@ -2383,7 +2383,7 @@ trait HTMLElement {
 				/** @var Element $row */
 				foreach($trCollection as $row) {
 					$closestTable = $row->parentNode;
-					while($closestTable->elementType !== ElementType::HTMLTableElement) {
+					while($closestTable->elementType !== $this->elementType) {
 						$closestTable = $closestTable->parentNode;
 					}
 					if($closestTable !== $this) {
@@ -4156,6 +4156,7 @@ trait HTMLElement {
 	public function deleteRow(int $index):void {
 		$this->allowTypes(
 			ElementType::HTMLTableElement,
+			ElementType::HTMLTableSectionElement,
 		);
 // note: for the order of statements @see https://html.spec.whatwg.org/multipage/tables.html#dom-table-rows
 		$numRow = $this->rows->length;
