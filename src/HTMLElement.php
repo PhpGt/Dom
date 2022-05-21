@@ -188,7 +188,7 @@ use TypeError;
  * @property string $media Is a DOMString representing a list of one or more media formats to which the resource applies.
  * @property-read StyleSheet $sheet Returns the StyleSheet object associated with the given element, or null if there is none.
  * @property-read HTMLCollection $areas Is a live HTMLCollection representing the <area> elements associated to this <map>.
- * @property string $content Gets or sets the value of meta-data property.
+ * @property string|DocumentFragment $content Gets or sets the value of meta-data property, or returns the content of a <template> in a DocumentFragment.
  * @property string $httpEquiv Gets or sets the name of an HTTP response header to define for a document.
  * @property ?float $high A double representing the value of the high boundary, reflecting the high attribute.
  * @property ?float $low A double representing the value of the low boundary, reflecting the lowattribute.
@@ -3078,12 +3078,24 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMapElement/content
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMetaElement/content
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTemplateElement/content
 	 */
-	protected function __prop_get_content():string {
+	protected function __prop_get_content():string|DocumentFragment {
 		$this->allowTypes(
 			ElementType::HTMLMapElement,
 			ElementType::HTMLMetaElement,
+			ElementType::HTMLTemplateElement,
 		);
+
+		if($this->elementType === ElementType::HTMLTemplateElement) {
+			$fragment = $this->ownerDocument->createDocumentFragment();
+			foreach($this->childNodes as $childNode) {
+				$fragment->appendChild($childNode->cloneNode(true));
+			}
+
+			return $fragment;
+		}
+
 		return $this->getAttribute("content") ?? "";
 	}
 
