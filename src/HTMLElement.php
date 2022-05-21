@@ -18,7 +18,10 @@ use Gt\Dom\ClientSide\VideoTrackList;
 use Gt\Dom\Exception\ArrayAccessReadOnlyException;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\EnumeratedValueException;
+use Gt\Dom\Exception\HierarchyRequestError;
 use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
+use Gt\Dom\Exception\IndexSizeException;
+use TypeError;
 
 /**
  * The DOM object model is a strange design, made even stranger by the libxml
@@ -145,7 +148,7 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property string $defaultValue Returns / Sets the control's default value, which behaves like the Node.textContent property.
  * @property int $maxLength Returns / Sets the element's maxlength attribute, indicating the maximum number of characters the user can enter. This constraint is evaluated only when the value changes.
  * @property int $minLength Returns / Sets the element's minlength attribute, indicating the minimum number of characters the user can enter. This constraint is evaluated only when the value changes.
- * @property int $rows Returns / Sets the element's rows attribute, indicating the number of visible text lines for the control.
+ * @property int|HTMLCollection $rows Returns / Sets the element's rows attribute, indicating the number of visible text lines for the control, or if a table, returns an HTMLCollection of all <tr> elements.
  * @property string $wrap Returns / Sets the wrap HTML attribute, indicating how the control wraps text.
  * @property-read Document $contentDocument Returns a Document, the active document in the inline frame's nested browsing context.
  * @property-read Node $contentWindow Returns a WindowProxy, the window proxy for the nested browsing context.
@@ -214,6 +217,10 @@ use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
  * @property int $rowSpan An unsigned long integer indicating the number of rows this cell must span; this lets a cell occupy space across multiple rows of the table. It reflects the rowspan attribute.
  * @property string $scope A DOMString indicating the scope of a <th> cell. Header cells can be configured, using the scope property, the apply to a specified row or column, or to the not-yet-scoped cells within the current row group (that is, the same ancestor <thead>, <tbody>, or <tfoot> element). If no value is specified for scope, the header is not associated directly with cells in this way.
  * @property int $span Is an unsigned long that reflects the span HTML attribute, indicating the number of columns to apply this object's attributes to. Must be a positive integer.
+ * @property ?Element $caption Is a HTMLTableCaptionElement representing the first <caption> that is a child of the element, or null if none is found. When set, if the object doesn't represent a <caption>, a DOMException with the HierarchyRequestError name is thrown. If a correct object is given, it is inserted in the tree as the first child of this element and the first <caption> that is a child of this element is removed from the tree, if any.
+ * @property ?Element $tHead Is a HTMLTableSectionElement representing the first <thead> that is a child of the element, or null if none is found. When set, if the object doesn't represent a <thead>, a DOMException with the HierarchyRequestError name is thrown. If a correct object is given, it is inserted in the tree immediately before the first element that is neither a <caption>, nor a <colgroup>, or as the last child if there is no such element, and the first <thead> that is a child of this element is removed from the tree, if any.
+ * @property ?Element $tFoot Is a HTMLTableSectionElement representing the first <tfoot> that is a child of the element, or null if none is found. When set, if the object doesn't represent a <tfoot>, a DOMException with the HierarchyRequestError name is thrown. If a correct object is given, it is inserted in the tree immediately before the first element that is neither a <caption>, a <colgroup>, nor a <thead>, or as the last child if there is no such element, and the first <tfoot> that is a child of this element is removed from the tree, if any.
+ * @property-read HTMLCollection $tBodies Returns a live HTMLCollection containing all the <tbody> of the element. The HTMLCollection is live and is automatically updated when the HTMLTableElement changes.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -2351,9 +2358,55 @@ trait HTMLElement {
 		$this->setAttribute("minlength", (string)$value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/rows */
-	protected function __prop_get_rows():int {
-		$this->allowTypes(ElementType::HTMLTextAreaElement);
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement/rows
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/rows
+	 */
+	protected function __prop_get_rows():int|HTMLCollection {
+		$this->allowTypes(
+			ElementType::HTMLTextAreaElement,
+			ElementType::HTMLTableElement,
+		);
+
+		if($this->elementType === ElementType::HTMLTableElement) {
+			return HTMLCollectionFactory::create(function() {
+				$rowsHead = [];
+				$rowsBody = [];
+				$rowsFoot = [];
+				$rows = [];
+				$trCollection = $this->getElementsByTagName('tr');
+				/** @var Element $row */
+				foreach($trCollection as $row) {
+					$closestTable = $row->parentNode;
+					while($closestTable->elementType !== ElementType::HTMLTableElement) {
+						$closestTable = $closestTable->parentNode;
+					}
+					if($closestTable !== $this) {
+						continue;
+					}
+
+					switch(strtolower($row->parentNode->nodeName)) {
+					case 'thead':
+						array_push($rowsHead, $row);
+						break;
+					case 'table':
+					case 'tbody':
+						array_push($rowsBody, $row);
+						break;
+					case 'tfoot':
+						array_push($rowsFoot, $row);
+						break;
+					}
+				}
+
+				array_push($rows, ...$rowsHead);
+				array_push($rows, ...$rowsBody);
+				array_push($rows, ...$rowsFoot);
+
+				return NodeListFactory::create(...$rows);
+			});
+		}
+
 		if($this->hasAttribute("rows")) {
 			return (int)$this->getAttribute("rows");
 		}
@@ -3632,5 +3685,425 @@ trait HTMLElement {
 			ElementType::HTMLTableColElement,
 		);
 		$this->setAttribute("span", (string)$value);
+	}
+
+	protected function __prop_get_caption():?Element {
+		/**
+		 * The caption IDL attribute must return, on getting, the first <caption> element child
+		 * of the <table> element, if any, or null otherwise.
+		 * @see https://www.w3.org/TR/html52/tabular-data.html#dom-htmltableelement-caption
+		 */
+		return $this->hasChildFirst('caption');
+	}
+
+	protected function __prop_set_caption(?Element $value):void {
+		if($value && $value->elementType !== ElementType::HTMLTableCaptionElement) {
+			throw new TypeError("Element::caption must be of type HTMLTableCaptionElement");
+		}
+		/**
+		 * On setting, the first <caption> element child of the <table> element, if any, must be removed,
+		 * and the new value, if not null, must be inserted as the first node of the <table> element.
+		 * @see https://www.w3.org/TR/html52/tabular-data.html#dom-htmltableelement-caption
+		 */
+		$this->delChild('caption');
+		$this->placeCaption($value);
+	}
+
+	protected function __prop_get_tHead():?Element {
+		/**
+		 * The tHead IDL attribute must return, on getting, the first <thead> element child of the <table> element,
+		 * if any, or null otherwise.
+		 * @see https://www.w3.org/TR/html52/tabular-data.html#dom-htmltableelement-thead
+		 */
+		return $this->hasChildFirst('thead');
+	}
+
+	protected function __prop_set_tHead(?Element $value):void {
+		if($value && $value->elementType !== ElementType::HTMLTableSectionElement) {
+			throw new TypeError("Element::tHead must be of type HTMLTableSectionElement");
+		}
+		if($value && $value->tagName !== "thead") {
+			throw new HierarchyRequestError("Element::thead must be an HTMLTableSectionElement of type <thead>");
+		}
+		/**
+		 * On setting, if the new value is null or a <thead> element,
+		 * the first <thead> element child of the <table> element, if any, must be removed, and the new value,
+		 * if not null, must be inserted immediately before the first element in the <table> element
+		 * that is neither a <caption> element nor a <colgroup> element, if any,
+		 * or at the end of the <table> if there are no such elements.
+		 * If the new value is neither null nor a <thead> element, then a HierarchyRequestError DOM exception
+		 * must be thrown instead.
+		 * @see https://www.w3.org/TR/html52/tabular-data.html#dom-htmltableelement-thead
+		 */
+		if($value !== null && strtolower($value->nodeName) !== 'thead') {
+			throw new HierarchyRequestError();
+		}
+		$this->delChild('thead');
+		$this->placeThead($value);
+	}
+
+	protected function __prop_get_tFoot():?Element {
+		/**
+		 * The tFoot IDL attribute must return, on getting, the first tfoot element child of the table element,
+		 * if any, or null otherwise.
+		 * @see https://www.w3.org/TR/html52/tabular-data.html#dom-htmltableelement-tfoot
+		 */
+		return $this->hasChildFirst('tfoot');
+	}
+
+	protected function __prop_set_tFoot(?Element $value):void {
+		/**
+		 * On setting, if the new value is null or a tfoot element, the first tfoot element child of the table element,
+		 * if any, must be removed, and the new value, if not null, must be inserted at the end of the table.
+		 * If the new value is neither null nor a tfoot element,
+		 * then a HierarchyRequestError DOM exception must be thrown instead.
+		 * @see https://www.w3.org/TR/html52/tabular-data.html#dom-htmltableelement-tfoot
+		 */
+		if($value !== null && strtolower($value->nodeName) !== 'tfoot') {
+			throw new HierarchyRequestError();
+		}
+		$this->delChild('tfoot');
+		$this->placeTFoot($value);
+	}
+
+	protected function __prop_get_tBodies():HTMLCollection {
+		return HTMLCollectionFactory::create(function() {
+			$tbodies = [];
+			for($i = 0, $len = $this->childNodes->length; $i < $len; $i++) {
+				$child = $this->childNodes->item($i);
+				if($child !== null && strtolower($child->nodeName) === 'tbody') {
+					array_push($tbodies, $child);
+				}
+			}
+
+			return NodeListFactory::create(...$tbodies);
+		});
+	}
+
+	/**
+	 * Return existing child or create it first if it does not exist.
+	 * If the child already exists it is simply returned. If not, it will be created first
+	 * and inserted at the correct place before being returned.
+	 * @param string $name element name
+	 * @return null|Element
+	 */
+	private function getCreateChild(
+		string $name
+	):null|Element {
+		$child = $this->hasChildFirst($name);
+		if($child === null) {
+			$child = $this->ownerDocument->createElement($name);
+			$this->placeChild($name, $child);
+		}
+
+		return $child;
+	}
+
+	/**
+	 * Remove the child element from the table.
+	 * @param string $name element name
+	 */
+	private function delChild(string $name):void {
+		$node = $this->hasChildFirst($name);
+		if($node !== null) {
+			$this->removeChild($node);
+		}
+	}
+
+	/**
+	 * Check if the table already has the specified child element.
+	 * Returns the first occurrence of the child or null if child was not found.
+	 * @param string $name element name
+	 * @return null|Node|Element
+	 */
+	private function hasChildFirst(string $name):null|Node|Element {
+		for($i = 0, $len = $this->childNodes->length; $i < $len; $i++) {
+			$child = $this->childNodes->item($i);
+			if($child !== null && strtolower($child->nodeName) === $name) {
+				return $child;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Check if the table already has the specified child element.
+	 * Returns the last occurrence of the child or null if child was not found.
+	 * @param string $name element name
+	 * @return null|Node|Element
+	 */
+	private function hasChildLast(string $name):null|Node|Element {
+		$lastChild = null;
+		for($i = 0, $len = $this->childNodes->length; $i < $len; $i++) {
+			$child = $this->childNodes->item($i);
+			if($child !== null && strtolower($child->nodeName) === $name) {
+				$lastChild = $child;
+			}
+		}
+
+		return $lastChild;
+	}
+
+	/**
+	 * Insert the section element after the specified nodes.
+	 * @param Element $newNode
+	 * @param string[] $refNames names of nodes to insert after
+	 */
+	private function insertChildAfter(Element $newNode, array $refNames):void {
+		if($newNode->elementType !== ElementType::HTMLTableSectionElement) {
+			throw new IncorrectHTMLElementUsageException("Must be of type HTMLTableSectionElement");
+		}
+
+		$child = $this->firstElementChild;
+		while($child && in_array($child->nodeName, $refNames, true)) {
+			$child = $child->nextElementSibling;
+		}
+		$this->insertBefore($newNode, $child);
+	}
+
+	/**
+	 * Place the child at the correct location.
+	 * @param string $name
+	 * @param HTMLTableCaptionElement|HTMLTableSectionElement|null $node
+	 */
+	private function placeChild(string $name, ?Element $node):void {
+		switch($name) {
+		case 'caption':
+			$this->placeCaption($node);
+			break;
+		case 'thead':
+			$this->placeThead($node);
+			break;
+		case 'tfoot':
+			$this->placeTFoot($node);
+			break;
+		}
+	}
+
+	private function placeCaption(?Element $caption):void {
+		if($caption && $caption->elementType !== ElementType::HTMLTableCaptionElement) {
+			throw new IncorrectHTMLElementUsageException("Only an HTMLTableCaptionElement can be placed as a <caption>");
+		}
+		if($caption !== null) {
+			$this->insertBefore($caption, $this->firstChild);
+		}
+	}
+
+	private function placeThead(?Element $thead):void {
+		if($thead && $thead->elementType !== ElementType::HTMLTableSectionElement) {
+			throw new IncorrectHTMLElementUsageException("Only an HTMLTableSectionElement can be placed as a <thead>");
+		}
+		if($thead !== null) {
+			$this->insertChildAfter($thead, ['caption', 'colgroup']);
+		}
+	}
+
+	private function placeTBody(?Element $tbody):void {
+		if($tbody->elementType !== ElementType::HTMLTableSectionElement) {
+			throw new IncorrectHTMLElementUsageException("Only an HTMLTableSectionElement can be placed as a <tbody>");
+		}
+		if($tbody !== null) {
+			$this->insertChildAfter($tbody, ['caption', 'colgroup', 'thead', 'tbody']);
+		}
+	}
+
+	private function placeTFoot(?Element $tfoot):void {
+		if($tfoot && $tfoot->elementType !== ElementType::HTMLTableSectionElement) {
+			throw new IncorrectHTMLElementUsageException("Only an HTMLTableSectionElement can be placed as a <tfoot>");
+		}
+		if($tfoot && $tfoot->tagName !== "tfoot") {
+			throw new HierarchyRequestError("Element::tfoot must be an HTMLTableSectionElement of type <tfoot>");
+		}
+		if($tfoot !== null) {
+			$this->appendChild($tfoot);
+		}
+	}
+
+	/**
+	 * Returns an HTMLTableSectionElement representing the first <thead>
+	 * that is a child of the element. If none is found, a new one is
+	 * created and inserted in the tree immediately before the first element
+	 * that is neither a <caption>, nor a <colgroup>, or as the last child
+	 * if there is no such element.
+	 *
+	 * Note: If no header exists, createTHead() inserts a new header
+	 * directly into the table. The header does not need to be added
+	 * separately as would be the case if Document.createElement() had been
+	 * used to create the new <thead> element.
+	 *
+	 * @return HTMLTableSectionElement
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/createTHead
+	 */
+	public function createTHead():Element {
+		return $this->getCreateChild('thead');
+	}
+
+	/**
+	 * The HTMLTableElement.deleteTHead() removes the <thead> element from a given <table>.
+	 * The deleteTHead() method must remove the first thead element child of the table element, if any.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/deleteTHead
+	 * @link https://html.spec.whatwg.org/multipage/tables.html#dom-table-deletethead
+	 */
+	public function deleteTHead():void {
+		$this->delChild('thead');
+	}
+
+	/**
+	 * The createTFoot() method of HTMLTableElement objects returns the
+	 * <tfoot> element associated with a given <table>. If no footer exists
+	 * in the table, this method creates it, and then returns it.
+	 *
+	 * Note: If no footer exists, createTFoot() inserts a new footer
+	 * directly into the table. The footer does not need to be added
+	 * separately as would be the case if Document.createElement() had been
+	 * used to create the new <tfoot> element.
+	 *
+	 * @return Element
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/createTFoot
+	 *
+	 * For the order of elements @see https://www.w3.org/TR/html51/tabular-data.html#tabular-data
+	 */
+	public function createTFoot():Element {
+		return $this->getCreateChild('tfoot');
+	}
+
+	/**
+	 * The HTMLTableElement.deleteTFoot() method removes the <tfoot> element
+	 * from a given <table>.
+	 *
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/deleteTFoot
+	 */
+	public function deleteTFoot():void {
+		$this->delChild('tfoot');
+	}
+
+	/**
+	 * The createTBody() method of HTMLTableElement objects creates and
+	 * returns a new <tbody> element associated with a given <table>.
+	 *
+	 * Note: Unlike HTMLTableElement.createTHead() and
+	 * HTMLTableElement.createTFoot(), createTBody() systematically creates
+	 * a new <tbody> element, even if the table already contains one or more
+	 * bodies. If so, the new one is inserted after the existing ones.
+	 *
+	 * @return Element
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/createTBody
+	 * For the order of elements @see https://www.w3.org/TR/html51/tabular-data.html#tabular-data
+	 */
+	public function createTBody():Element {
+		$tbody = $this->ownerDocument->createElement('tbody');
+		$this->placeTBody($tbody);
+		return $tbody;
+	}
+
+	/**
+	 * The HTMLTableElement.createCaption() method returns the <caption>
+	 * element associated with a given <table>. If no <caption> element
+	 * exists on the table, this method creates it, and then returns it.
+	 *
+	 * Note: If no caption exists, createCaption() inserts a new caption
+	 * directly into the table. The caption does not need to be added
+	 * separately as would be the case if Document.createElement() had been
+	 * used to create the new <caption> element.
+	 *
+	 * @return Element
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/createCaption
+	 */
+	public function createCaption():Element {
+		return $this->getCreateChild('caption');
+	}
+
+	/**
+	 * The HTMLTableElement.deleteCaption() method removes the <caption>
+	 * element from a given <table>. If there is no <caption> element
+	 * associated with the table, this method does nothing.
+	 *
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/deleteCaption
+	 */
+	public function deleteCaption():void {
+		$this->delChild('caption');
+	}
+
+	/**
+	 * The HTMLTableElement.insertRow() method inserts a new row (<tr>) in
+	 * a given <table>, and returns a reference to the new row.
+	 *
+	 * If a table has multiple <tbody> elements, by default, the new row is
+	 * inserted into the last <tbody>.
+	 *
+	 * Note: insertRow() inserts the row directly into the table. The row
+	 * does not need to be appended separately as would be the case if
+	 * Document.createElement() had been used to create the new <tr>
+	 * element.
+	 *
+	 * @param ?int $index The row index of the new row. If index is -1 or
+	 * equal to the number of rows, the row is appended as the last row.
+	 * If index is greater than the number of rows, an IndexSizeError
+	 * exception will result. If index is omitted it defaults to -1.
+	 * @return Element an HTMLTableRowElement that references
+	 * the new row.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/insertRow
+	 * @link https://html.spec.whatwg.org/multipage/#htmltableelement
+	 */
+	public function insertRow(int $index = null):Element {
+		$lastTBody = $this->hasChildLast('tbody');
+		$numRow = $this->rows->length;
+		$row = $this->ownerDocument->createElement('tr');
+		if($index === null) {
+			$index = -1;
+		}
+
+// note: for the order of statements @see https://www.w3.org/TR/html52/tabular-data.html#dom-htmltableelement-insertrow
+		if($index < -1 || $index > $numRow) {
+			throw new IndexSizeException('Row index is outside bounds.');
+		}
+		elseif($numRow === 0 && $lastTBody === null) {
+// note: can't use HTMLTableElement::createTBody() because we need to append row before inserting
+			$tbody = $this->ownerDocument->createElement('tbody');
+			$tbody->appendChild($row);
+			$this->insertChildAfter($tbody, ['caption', 'colgroup']);
+		}
+		elseif($numRow === 0) {
+			$lastTBody->appendChild($row);
+		}
+		elseif($index === -1 || $index === $numRow) {
+			$lastRow = $this->rows->item($numRow - 1);
+			$lastRow->parentNode->appendChild($row);
+		}
+		else {
+			$refNode = $this->rows->item($index);
+			$refNode->parentNode->insertBefore($row, $refNode);
+		}
+
+		return $row;
+	}
+
+	/**
+	 * The HTMLTableElement.deleteRow() method removes a specific row (<tr>)
+	 * from a given <table>.
+	 *
+	 * @param int $index index is an integer representing the row that
+	 * should be deleted. However, the special index -1 can be used to
+	 * remove the very last row of a table.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/deleteRow
+	 * @link https://html.spec.whatwg.org/multipage/tables.html#dom-table-deleterow
+	 */
+	public function deleteRow(int $index):void {
+// note: for the order of statements @see https://html.spec.whatwg.org/multipage/tables.html#dom-table-rows
+		$numRow = $this->rows->length;
+		if($index < -1 || $index >= $numRow) {
+			throw new IndexSizeException('Row index is outside bounds.');
+		}
+		elseif($index === -1) {
+			if($numRow > 0) {
+				$lastRow = $this->rows->item($numRow - 1);
+				$lastRow->parentNode->removeChild($lastRow);
+			}
+		}
+		else {
+			$row = $this->rows->item($index);
+			$row->parentNode->removeChild($row);
+		}
 	}
 }
