@@ -407,4 +407,18 @@ class HTMLTableElementTest extends HTMLElementTestCase {
 			self::assertSame($table, $tbody->parentNode);
 		}
 	}
+
+	public function testHeadBodyFootOrder():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("table");
+		$thead = $sut->createTHead();
+		$tfoot = $sut->createTFoot();
+		$tbody = $sut->createTBody();
+
+		$expectedOrder = [$thead, $tbody, $tfoot];
+
+		foreach($sut->children as $i => $childElement) {
+			self::assertSame($expectedOrder[$i], $childElement);
+		}
+	}
 }

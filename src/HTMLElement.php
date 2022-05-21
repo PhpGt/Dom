@@ -221,6 +221,9 @@ use TypeError;
  * @property ?Element $tHead Is a HTMLTableSectionElement representing the first <thead> that is a child of the element, or null if none is found. When set, if the object doesn't represent a <thead>, a DOMException with the HierarchyRequestError name is thrown. If a correct object is given, it is inserted in the tree immediately before the first element that is neither a <caption>, nor a <colgroup>, or as the last child if there is no such element, and the first <thead> that is a child of this element is removed from the tree, if any.
  * @property ?Element $tFoot Is a HTMLTableSectionElement representing the first <tfoot> that is a child of the element, or null if none is found. When set, if the object doesn't represent a <tfoot>, a DOMException with the HierarchyRequestError name is thrown. If a correct object is given, it is inserted in the tree immediately before the first element that is neither a <caption>, a <colgroup>, nor a <thead>, or as the last child if there is no such element, and the first <tfoot> that is a child of this element is removed from the tree, if any.
  * @property-read HTMLCollection $tBodies Returns a live HTMLCollection containing all the <tbody> of the element. The HTMLCollection is live and is automatically updated when the HTMLTableElement changes.
+ * @property-read HTMLCollection $cells Returns a live HTMLCollection containing the cells in the row. The HTMLCollection is live and is automatically updated when cells are added or removed.
+ * @property-read int $rowIndex Returns a long value which gives the logical position of the row within the entire table. If the row is not part of a table, returns -1.
+ * @property-read int $sectionRowIndex Returns a long value which gives the logical position of the row within the table section it belongs to. If the row is not part of a section, returns -1.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -2366,9 +2369,11 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLTextAreaElement,
 			ElementType::HTMLTableElement,
+			ElementType::HTMLTableSectionElement,
 		);
 
-		if($this->elementType === ElementType::HTMLTableElement) {
+		if($this->elementType === ElementType::HTMLTableElement
+		|| $this->elementType === ElementType::HTMLTableSectionElement) {
 			return HTMLCollectionFactory::create(function() {
 				$rowsHead = [];
 				$rowsBody = [];
@@ -3697,6 +3702,9 @@ trait HTMLElement {
 	}
 
 	protected function __prop_set_caption(?Element $value):void {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		if($value && $value->elementType !== ElementType::HTMLTableCaptionElement) {
 			throw new TypeError("Element::caption must be of type HTMLTableCaptionElement");
 		}
@@ -3710,6 +3718,9 @@ trait HTMLElement {
 	}
 
 	protected function __prop_get_tHead():?Element {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		/**
 		 * The tHead IDL attribute must return, on getting, the first <thead> element child of the <table> element,
 		 * if any, or null otherwise.
@@ -3719,6 +3730,9 @@ trait HTMLElement {
 	}
 
 	protected function __prop_set_tHead(?Element $value):void {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		if($value && $value->elementType !== ElementType::HTMLTableSectionElement) {
 			throw new TypeError("Element::tHead must be of type HTMLTableSectionElement");
 		}
@@ -3743,6 +3757,9 @@ trait HTMLElement {
 	}
 
 	protected function __prop_get_tFoot():?Element {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		/**
 		 * The tFoot IDL attribute must return, on getting, the first tfoot element child of the table element,
 		 * if any, or null otherwise.
@@ -3752,6 +3769,9 @@ trait HTMLElement {
 	}
 
 	protected function __prop_set_tFoot(?Element $value):void {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		/**
 		 * On setting, if the new value is null or a tfoot element, the first tfoot element child of the table element,
 		 * if any, must be removed, and the new value, if not null, must be inserted at the end of the table.
@@ -3767,6 +3787,9 @@ trait HTMLElement {
 	}
 
 	protected function __prop_get_tBodies():HTMLCollection {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		return HTMLCollectionFactory::create(function() {
 			$tbodies = [];
 			for($i = 0, $len = $this->childNodes->length; $i < $len; $i++) {
@@ -3865,7 +3888,7 @@ trait HTMLElement {
 	/**
 	 * Place the child at the correct location.
 	 * @param string $name
-	 * @param HTMLTableCaptionElement|HTMLTableSectionElement|null $node
+	 * @param ?Element $node
 	 */
 	private function placeChild(string $name, ?Element $node):void {
 		switch($name) {
@@ -3932,10 +3955,13 @@ trait HTMLElement {
 	 * separately as would be the case if Document.createElement() had been
 	 * used to create the new <thead> element.
 	 *
-	 * @return HTMLTableSectionElement
+	 * @return Element
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/createTHead
 	 */
 	public function createTHead():Element {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		return $this->getCreateChild('thead');
 	}
 
@@ -3946,6 +3972,9 @@ trait HTMLElement {
 	 * @link https://html.spec.whatwg.org/multipage/tables.html#dom-table-deletethead
 	 */
 	public function deleteTHead():void {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		$this->delChild('thead');
 	}
 
@@ -3965,6 +3994,9 @@ trait HTMLElement {
 	 * For the order of elements @see https://www.w3.org/TR/html51/tabular-data.html#tabular-data
 	 */
 	public function createTFoot():Element {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		return $this->getCreateChild('tfoot');
 	}
 
@@ -3975,6 +4007,9 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/deleteTFoot
 	 */
 	public function deleteTFoot():void {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		$this->delChild('tfoot');
 	}
 
@@ -3992,6 +4027,9 @@ trait HTMLElement {
 	 * For the order of elements @see https://www.w3.org/TR/html51/tabular-data.html#tabular-data
 	 */
 	public function createTBody():Element {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		$tbody = $this->ownerDocument->createElement('tbody');
 		$this->placeTBody($tbody);
 		return $tbody;
@@ -4011,6 +4049,9 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/createCaption
 	 */
 	public function createCaption():Element {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		return $this->getCreateChild('caption');
 	}
 
@@ -4022,6 +4063,9 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/deleteCaption
 	 */
 	public function deleteCaption():void {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 		$this->delChild('caption');
 	}
 
@@ -4047,6 +4091,26 @@ trait HTMLElement {
 	 * @link https://html.spec.whatwg.org/multipage/#htmltableelement
 	 */
 	public function insertRow(int $index = null):Element {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+			ElementType::HTMLTableSectionElement,
+		);
+
+		if($this->elementType === ElementType::HTMLTableSectionElement) {
+			if(is_null($index)) {
+				$index = $this->rows->length;
+			}
+
+			if($index < 0) {
+				throw new IndexSizeException("Index or size is negative or greater than the allowed amount");
+			}
+
+			$insertAfter = $this->rows[$index - 1] ?? null;
+			$tr = $this->ownerDocument->createElement("tr");
+			$this->insertBefore($tr, $insertAfter?->nextSibling);
+			return $tr;
+		}
+
 		$lastTBody = $this->hasChildLast('tbody');
 		$numRow = $this->rows->length;
 		$row = $this->ownerDocument->createElement('tr');
@@ -4090,6 +4154,9 @@ trait HTMLElement {
 	 * @link https://html.spec.whatwg.org/multipage/tables.html#dom-table-deleterow
 	 */
 	public function deleteRow(int $index):void {
+		$this->allowTypes(
+			ElementType::HTMLTableElement,
+		);
 // note: for the order of statements @see https://html.spec.whatwg.org/multipage/tables.html#dom-table-rows
 		$numRow = $this->rows->length;
 		if($index < -1 || $index >= $numRow) {
@@ -4105,5 +4172,135 @@ trait HTMLElement {
 			$row = $this->rows->item($index);
 			$row->parentNode->removeChild($row);
 		}
+	}
+
+	/**
+	 * Removes the cell at the given position in the row. If the given
+	 * position is greater (or equal as it starts at zero) than the amount
+	 * of cells in the row, or is smaller than 0, it raises a DOMException
+	 * with the IndexSizeError value.
+	 *
+	 * @param int $index
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/deleteCell
+	 */
+	public function deleteCell(int $index):void {
+		$this->allowTypes(
+			ElementType::HTMLTableRowElement,
+		);
+		if($index < 0 || $index >= $this->children->length) {
+			throw new IndexSizeException("Index or size is negative or greater than the allowed amount");
+		}
+
+		$td = $this->getElementsByTagName("td")->item($index);
+		$td->remove();
+	}
+
+	/**
+	 * The HTMLTableRowElement.insertCell() method inserts a new cell (<td>)
+	 * into a table row (<tr>) and returns a reference to the cell.
+	 *
+	 * @param ?int $index index is the cell index of the new cell. If index
+	 * is -1 or equal to the number of cells, the cell is appended as the
+	 * last cell in the row. If index is greater than the number of cells,
+	 * an IndexSizeError exception will result. If index is omitted it
+	 * defaults to -1.
+	 * @return Element an HTMLTableCellElement that references
+	 * the new cell.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/insertCell
+	 */
+	public function insertCell(int $index = null):Element {
+		$this->allowTypes(
+			ElementType::HTMLTableRowElement,
+		);
+		if(is_null($index)) {
+			$index = $this->cells->length;
+		}
+
+		if($index < 0) {
+			throw new IndexSizeException("Index or size is negative or greater than the allowed amount");
+		}
+
+		$insertAfter = $this->cells[$index - 1] ?? null;
+		$td = $this->ownerDocument->createElement("td");
+		$this->insertBefore($td, $insertAfter?->nextSibling);
+
+		return $td;
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/cells
+	 */
+	protected function __prop_get_cells():HTMLCollection {
+		$this->allowTypes(
+			ElementType::HTMLTableRowElement,
+		);
+		return HTMLCollectionFactory::create(
+			fn() => $this->querySelectorAll("td, th")
+		);
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/rowIndex
+	 */
+	protected function __prop_get_rowIndex():int {
+		$this->allowTypes(
+			ElementType::HTMLTableRowElement,
+		);
+		$table = $this;
+		while($table = $table->parentElement) {
+			if($table->elementType === ElementType::HTMLTableElement) {
+				break;
+			}
+		}
+
+		if($this->parentElement === $table) {
+			foreach($table?->children ?? [] as $i => $child) {
+				if($child === $this) {
+					return $i;
+				}
+			}
+		}
+
+		$headCount = 0;
+		foreach($table?->querySelectorAll("thead>tr") ?? [] as $headIndex => $headChild) {
+			$headCount ++;
+			if($headChild === $this) {
+				return $headIndex;
+			}
+		}
+
+		$bodyCount = 0;
+		foreach($table?->querySelectorAll("tbody>tr") ?? [] as $bodyIndex => $headChild) {
+			$bodyCount ++;
+			if($headChild === $this) {
+				return $headCount + $bodyIndex;
+			}
+		}
+
+		foreach($table?->querySelectorAll("tfoot>tr") ?? [] as $footIndex => $headChild) {
+			if($headChild === $this) {
+				return $headCount + $bodyCount + $footIndex;
+			}
+		}
+
+		return -1;
+	}
+
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/sectionRowIndex
+	 */
+	protected function __prop_get_sectionRowIndex():int {
+		$this->allowTypes(
+			ElementType::HTMLTableRowElement,
+		);
+		$parent = $this->parentElement;
+
+		foreach($parent?->children ?? [] as $i => $child) {
+			if($child === $this) {
+				return $i;
+			}
+		}
+
+		return -1;
 	}
 }
