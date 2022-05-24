@@ -637,7 +637,6 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/type
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLStyleElement/type
 	 */
 	protected function __prop_get_type():string {
 		$this->allowTypes(
@@ -651,7 +650,6 @@ trait HTMLElement {
 			ElementType::HTMLOListElement,
 			ElementType::HTMLScriptElement,
 			ElementType::HTMLSourceElement,
-			ElementType::HTMLStyleElement,
 		);
 
 		if($this->elementType === ElementType::HTMLFieldSetElement) {
@@ -671,7 +669,6 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOListElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/type
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/type
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLStyleElement/type
 	 */
 	protected function __prop_set_type(string $value):void {
 		$this->allowTypes(
@@ -685,7 +682,6 @@ trait HTMLElement {
 			ElementType::HTMLOListElement,
 			ElementType::HTMLScriptElement,
 			ElementType::HTMLSourceElement,
-			ElementType::HTMLStyleElement,
 		);
 		$this->setAttribute("type", $value);
 	}
@@ -3026,13 +3022,11 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/media
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/media
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLStyleElement/media
 	 */
 	protected function __prop_get_media():string {
 		$this->allowTypes(
 			ElementType::HTMLLinkElement,
 			ElementType::HTMLSourceElement,
-			ElementType::HTMLStyleElement,
 		);
 		return $this->getAttribute("media") ?? "";
 	}
@@ -3040,13 +3034,11 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/media
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/media
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLStyleElement/media
 	 */
 	protected function __prop_set_media(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLLinkElement,
 			ElementType::HTMLSourceElement,
-			ElementType::HTMLStyleElement,
 		);
 		$this->setAttribute("media", $value);
 	}
