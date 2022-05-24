@@ -8,10 +8,10 @@ use DOMNode;
  * specification and PHP implementation. This trait allows definition of
  * functions shared over all Node types.
  *
- * @property-read null|Node|Element $nextSibling Returns a Node representing the next node in the tree, or null if there isn't such node.
- * @property-read null|Node|Element $firstChild
- * @property-read null|Node|Element $lastChild
- * @property-read null|Node|Element $previousSibling Returns a Node representing the previous node in the tree, or null if there isn't such node.
+ * @property-read null|Node|Element|Text $nextSibling Returns a Node representing the next node in the tree, or null if there isn't such node.
+ * @property-read null|Node|Element|Text $firstChild
+ * @property-read null|Node|Element|Text $lastChild
+ * @property-read null|Node|Element|Text $previousSibling Returns a Node representing the previous node in the tree, or null if there isn't such node.
  *
  * @method Node|Element cloneNode(bool $deep = false)
  */

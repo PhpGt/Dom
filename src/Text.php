@@ -5,4 +5,5 @@ use DOMText;
 
 class Text extends DOMText {
 	use RegisteredNodeClass;
+	use ChildNode;
 }

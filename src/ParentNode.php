@@ -238,36 +238,6 @@ trait ParentNode {
 	}
 
 	/**
-	 * The Document method getElementById() returns an Element object
-	 * representing the element whose id property matches the specified
-	 * string. Since element IDs are required to be unique if specified,
-	 * they're a useful way to get access to a specific element quickly.
-	 *
-	 * If you need to get access to an element which doesn't have an ID,
-	 * you can use querySelector() to find the element using any selector.
-	 *
-	 * @param string $elementId The ID of the element to locate. The ID is
-	 * case-sensitive string which is unique within the document; only one
-	 * element may have any given ID.
-	 * @return ?Element An Element object describing the DOM element object
-	 * matching the specified ID, or null if no matching element was found
-	 * in the document.
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById
-	 */
-	public function getElementById(string $elementId):?Element {
-		/** @var ?Element $element */
-		$element = parent::getElementById($elementId);
-
-		if(is_null($element) && $this instanceof XMLDocument) {
-// Known limitation in XML documents: IDs are not always registered.
-// Try using XPath instead.
-			$element = $this->evaluate("//*[@id='$elementId']")->current();
-		}
-
-		return $element;
-	}
-
-	/**
 	 * The getElementsByName() method of the Document object returns a
 	 * NodeList Collection of elements with a given name in the document.
 	 *
@@ -298,7 +268,7 @@ trait ParentNode {
 	#[ReturnTypeWillChange]
 	public function getElementsByTagName(string $qualifiedName):HTMLCollection {
 		return HTMLCollectionFactory::create(function() use($qualifiedName) {
-			return parent::getElementsByTagName($qualifiedName);
+			return $this->querySelector($qualifiedName);
 		});
 	}
 }

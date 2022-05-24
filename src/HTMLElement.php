@@ -397,7 +397,6 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/dataset */
 	protected function __prop_get_dataset():DOMStringMap {
-		/** @var HTMLElement $this */
 		return DOMStringMapFactory::createDataset($this);
 	}
 
@@ -3461,7 +3460,7 @@ trait HTMLElement {
 			return -1;
 		}
 
-		return min($this->value / $this->max, 1);
+		return min((float)$this->value / (float)$this->max, 1);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/async */
@@ -3851,11 +3850,11 @@ trait HTMLElement {
 	 * If the child already exists it is simply returned. If not, it will be created first
 	 * and inserted at the correct place before being returned.
 	 * @param string $name element name
-	 * @return null|Element
+	 * @return Element
 	 */
 	private function getCreateChild(
 		string $name
-	):null|Element {
+	):Element {
 		$child = $this->hasChildFirst($name);
 		if($child === null) {
 			$child = $this->ownerDocument->createElement($name);

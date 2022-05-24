@@ -172,12 +172,14 @@ trait Traversal {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/previousNode
 	 */
 	public function previousNode():null|Node|Element|Text {
+		/** @var null|Node|Element|Text $node */
 		$node = $this->pCurrentNode;
 
 		while($node !== $this->pRoot) {
 			$sibling = $node->previousSibling;
 
 			while(!is_null($sibling)) {
+				/** @var null|Node|Element|Text $node */
 				$node = $sibling;
 				$result = $this->filter->acceptNode($node);
 
@@ -187,7 +189,7 @@ trait Traversal {
 					$result = $this->filter->acceptNode($node);
 				}
 				if($result === NodeFilter::FILTER_ACCEPT) {
-					/** @var Node $node */
+					/** @var null|Node|Element|Text $node */
 					$this->pCurrentNode = $node;
 					return $node;
 				}
@@ -199,6 +201,7 @@ trait Traversal {
 // the parentNode here, but as far as I can tell, this logic never be hit.
 // See: https://github.com/Krinkle/dom-TreeWalker-polyfill/blob/master/src/TreeWalker-polyfill.js#L336-L338
 
+			/** @var null|Element|Node|Text $node */
 			$node = $node->parentNode;
 			if($this->filter->acceptNode($node) === NodeFilter::FILTER_ACCEPT) {
 				/** @var Node $node */
@@ -350,19 +353,24 @@ trait Traversal {
 	}
 
 	private function matchChild(Node|Element|Text $node, string $direction):null|Node|Element|Text {
-		return match($direction) {
+		/** @var null|Node|Element|Text $result */
+		$result = match($direction) {
 			"first" => $node->firstChild,
 			"last", "next", "previous" => $node->lastChild,
 			default => null,
 		};
+		return $result;
 	}
 
 	private function matchSibling(Node|Element|Text $node, string $direction):null|Node|Element|Text {
-		return match($direction) {
+		/** @var null|Node|Element|Text $result */
+		$result = match($direction) {
 			"next" => $node->nextSibling,
 			"previous" => $node->previousSibling,
 			default => null,
 		};
+
+		return $result;
 	}
 
 	private function nextSkippingChildren(
@@ -377,12 +385,15 @@ trait Traversal {
 		}
 
 		while(!is_null($node->parentNode)) {
+			/** @var Element $node */
 			$node = $node->parentNode;
 			if($node === $stayWithin) {
 				break;
 			}
 			if(!is_null($node->nextSibling)) {
-				return $node->nextSibling;
+				/** @var Element $nextSibling */
+				$nextSibling = $node->nextSibling;
+				return $nextSibling;
 			}
 		}
 

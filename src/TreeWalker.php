@@ -16,14 +16,11 @@ use Iterator;
  * @property-read NodeFilter $filter Returns a NodeFilter used to select the relevant nodes.
  * @property-read Node $currentNode Is the Node on which the TreeWalker is currently pointing at.
  *
- * @implements Iterator<Node>
+ * @implements Iterator<int, Node>
  *
  * Many thanks to Timo Tijhof for their dom-TreeWalker-polyfill project which
  * helped as reference while implementing this functionality:
  * https://github.com/Krinkle/dom-TreeWalker-polyfill
- *
- * TODO: Currently there is no difference between a TreeWalker and a NodeIterator.
- * What is the difference?
  */
 class TreeWalker implements Iterator {
 	use Traversal;

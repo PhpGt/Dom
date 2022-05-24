@@ -29,6 +29,8 @@ use ReturnTypeWillChange;
  * @property string $outerHTML Is a DOMString representing the markup of the element including its content. When used as a setter, replaces the element with nodes parsed from the given string.
  * @property-read string $prefix A DOMString representing the namespace prefix of the element, or null if no prefix is specified.
  * @property-read string $tagName Returns a String with the name of the tag for the given element.
+ *
+ * @implements ArrayAccess<string|int, Element>
  */
 class Element extends DOMElement implements ArrayAccess, Countable {
 	use MagicProp;
