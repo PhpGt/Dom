@@ -603,12 +603,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/text
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/text
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/text
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTitleElement/text
 	 */
 	protected function __prop_get_text():string {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLOptionElement,
 			ElementType::HTMLScriptElement,
+			ElementType::HTMLTitleElement,
 		);
 		return $this->textContent;
 	}
@@ -617,12 +619,14 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement/text
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/text
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/text
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTitleElement/text
 	 */
 	protected function __prop_set_text(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLOptionElement,
 			ElementType::HTMLScriptElement,
+			ElementType::HTMLTitleElement,
 		);
 		$this->textContent = $value;
 	}

@@ -1,19 +1,18 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLTitleElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLTitleElementTest extends HTMLElementTestCase {
-//	public function testText():void {
-//		/** @var HTMLTitleElement $sut */
-//		$sut = NodeTestFactory::createHTMLElement("title");
-//		self::assertSame("", $sut->text);
-//
-//		for($i = 0; $i < 10; $i++) {
-//			$t = uniqid();
-//			$sut->text = $t;
-//			self::assertSame($t, $sut->innerText);
-//		}
-//	}
+	public function testText():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("title");
+		self::assertSame("", $sut->text);
+
+		for($i = 0; $i < 10; $i++) {
+			$t = uniqid();
+			$sut->text = $t;
+			self::assertSame($t, $sut->innerText);
+		}
+	}
 }
