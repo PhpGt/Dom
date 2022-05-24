@@ -11,6 +11,7 @@ use Gt\Dom\ClientSide\MediaController;
 use Gt\Dom\ClientSide\MediaError;
 use Gt\Dom\ClientSide\MediaStream;
 use Gt\Dom\ClientSide\StyleSheet;
+use Gt\Dom\ClientSide\TextTrack;
 use Gt\Dom\ClientSide\TextTrackList;
 use Gt\Dom\ClientSide\TimeRanges;
 use Gt\Dom\ClientSide\ValidityState;
@@ -224,6 +225,10 @@ use TypeError;
  * @property-read HTMLCollection $cells Returns a live HTMLCollection containing the cells in the row. The HTMLCollection is live and is automatically updated when cells are added or removed.
  * @property-read int $rowIndex Returns a long value which gives the logical position of the row within the entire table. If the row is not part of a table, returns -1.
  * @property-read int $sectionRowIndex Returns a long value which gives the logical position of the row within the table section it belongs to. If the row is not part of a section, returns -1.
+ * @property string $kind Is a DOMString that reflects the kind HTML attribute, indicating how the text track is meant to be used. Possible values are: subtitles, captions, descriptions, chapters, or metadata.
+ * @property string $srclang Is a DOMString that reflects the srclang HTML attribute, indicating the language of the text track data.
+ * @property bool $default A Boolean reflecting the default  attribute, indicating that the track is to be enabled if the user's preferences do not indicate that another track would be more appropriate.
+ * @property-read TextTrack $track Returns TextTrack is the track element's text track data.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -1609,9 +1614,15 @@ trait HTMLElement {
 		$this->setAttribute("preload", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTrackElement/readyState
+	 */
 	protected function __prop_get_readyState():int {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLTrackElement,
+		);
 		return 0;
 	}
 
@@ -1641,6 +1652,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTrackElement/src
 	 */
 	protected function __prop_get_src():string {
 		$this->allowTypes(
@@ -1651,6 +1663,7 @@ trait HTMLElement {
 			ElementType::HTMLInputElement,
 			ElementType::HTMLScriptElement,
 			ElementType::HTMLSourceElement,
+			ElementType::HTMLTrackElement,
 		);
 		return $this->getAttribute("src") ?? "";
 	}
@@ -1663,6 +1676,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/src
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSourceElement/src
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTrackElement/src
 	 */
 	protected function __prop_set_src(string $value):void {
 		$this->allowTypes(
@@ -1673,6 +1687,7 @@ trait HTMLElement {
 			ElementType::HTMLInputElement,
 			ElementType::HTMLScriptElement,
 			ElementType::HTMLSourceElement,
+			ElementType::HTMLTrackElement,
 		);
 		$this->setAttribute("src", $value);
 	}
@@ -3328,11 +3343,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/label
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/label
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTrackElement/label
 	 */
 	protected function __prop_get_label():string {
 		$this->allowTypes(
 			ElementType::HTMLOptGroupElement,
 			ElementType::HTMLOptionElement,
+			ElementType::HTMLTrackElement,
 		);
 		if($label = $this->getAttribute("label")) {
 			return $label;
@@ -3348,11 +3365,13 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptGroupElement/label
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/label
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTrackElement/label
 	 */
 	protected function __prop_set_label(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLOptGroupElement,
 			ElementType::HTMLOptionElement,
+			ElementType::HTMLTrackElement,
 		);
 		$this->setAttribute("label", $value);
 	}
@@ -4327,5 +4346,38 @@ trait HTMLElement {
 		}
 
 		return -1;
+	}
+
+	protected function __prop_get_kind():string {
+		return $this->getAttribute("kind") ?? "";
+	}
+
+	protected function __prop_set_kind(string $value):void {
+		$this->setAttribute("kind", $value);
+	}
+
+	protected function __prop_get_srclang():string {
+		return $this->getAttribute("srclang") ?? "";
+	}
+
+	protected function __prop_set_srclang(string $value):void {
+		$this->setAttribute("srclang", $value);
+	}
+
+	protected function __prop_get_default():bool {
+		return $this->hasAttribute("default");
+	}
+
+	protected function __prop_set_default(bool $value):void {
+		if($value) {
+			$this->setAttribute("default", "");
+		}
+		else {
+			$this->removeAttribute("default");
+		}
+	}
+
+	protected function __prop_get_track():TextTrack {
+		return new TextTrack();
 	}
 }
