@@ -3219,18 +3219,26 @@ trait HTMLElement {
 		$this->setAttribute("cite", $value);
 	}
 
-	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/dateTime */
+	/**
+	 * https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/dateTime
+	 * https://developer.mozilla.org/en-US/docs/Web/API/HTMLTimeElement/dateTime
+	 */
 	public function __prop_get_dateTime():string {
 		$this->allowTypes(
 			ElementType::HTMLModElement,
+			ElementType::HTMLTimeElement,
 		);
 		return $this->getAttribute("datetime") ?? "";
 	}
 
-	/** https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/dateTime */
+	/**
+	 * https://developer.mozilla.org/en-US/docs/Web/API/HTMLModElement/dateTime
+	 * https://developer.mozilla.org/en-US/docs/Web/API/HTMLTimeElement/dateTime
+	 */
 	public function __prop_set_dateTime(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLModElement,
+			ElementType::HTMLTimeElement,
 		);
 		$this->setAttribute("datetime", $value);
 	}
