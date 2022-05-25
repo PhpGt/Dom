@@ -61,8 +61,8 @@ jobs:
         run: tar -xvf /tmp/github-actions/build.tar ./
 
       - name: PHP Static Analysis
-        uses: php-actions/phpstan@v3
+        uses: php-actions/phpstan@debug
         with:
           php_version: '8.1'
           path: src/
-          level: 4
+          level: 6
