@@ -66,3 +66,4 @@ jobs:
           php_version: '8.1'
           path: src/
           level: 6
+          memory_limit: 1G
