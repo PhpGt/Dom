@@ -267,8 +267,6 @@ trait ParentNode {
 	 */
 	#[ReturnTypeWillChange]
 	public function getElementsByTagName(string $qualifiedName):HTMLCollection {
-		return HTMLCollectionFactory::create(function() use($qualifiedName) {
-			return $this->querySelector($qualifiedName);
-		});
+		return HTMLCollectionFactory::create(fn() => $this->querySelectorAll($qualifiedName));
 	}
 }
