@@ -2,43 +2,39 @@
 namespace Gt\Dom\Test;
 
 use Gt\Dom\Document;
+use Gt\Dom\HTMLDocument;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
+use Gt\Dom\XMLDocument;
 use PHPUnit\Framework\TestCase;
 
 class DocumentTypeTest extends TestCase {
-//	public function testTextContentHTML():void {
-//		$sut = DocumentTestFactory::createHTMLDocument()->doctype;
-//		self::assertNull($sut->textContent);
-//	}
-//
-//	public function testTextContentXML():void {
-//		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_BOOK)->doctype;
-//		self::assertNull($sut->textContent);
-//	}
-//
-//	public function testIsEqualNode():void {
-//		$sut = DocumentTestFactory::createHTMLDocument()->doctype;
-//		$xmlType = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::XML_BOOK)->doctype;
-//		self::assertFalse($sut->isEqualNode($xmlType));
-//	}
-//
-//	public function testNameHTML():void {
-//		$sut = DocumentTestFactory::createHTMLDocument()->doctype;
-//		self::assertEquals("html", $sut->name);
-//	}
-//
-//	public function testNameXML():void {
-//		$sut = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_BOOK)->doctype;
-//		self::assertEquals("book", $sut->name);
-//	}
-//
-//	public function testPublicId():void {
-//		$sut = DocumentTestFactory::createHTMLDocument()->doctype;
-//		self::assertEquals("", $sut->publicId);
-//	}
-//
-//	public function testSystemId():void {
-//		$sut = DocumentTestFactory::createHTMLDocument()->doctype;
-//		self::assertEquals("", $sut->systemId);
-//	}
+	public function testName_HTML():void {
+		$document = new HTMLDocument();
+		$sut = $document->doctype;
+		self::assertSame("html", $sut->name);
+	}
+
+	public function testName_XML():void {
+		$document = new XMLDocument(DocumentTestFactory::XML_BOOK);
+		$sut = $document->doctype;
+		self::assertSame("book", $sut->name);
+	}
+
+	public function testIsEqualNode():void {
+		$htmlDocument = new HTMLDocument(DocumentTestFactory::HTML_PAGE);
+		$sut = $htmlDocument->doctype;
+		$xmlDocument = new XMLDocument(DocumentTestFactory::XML_BOOK);
+		$xmlType = $xmlDocument->doctype;
+		self::assertFalse($sut->isEqualNode($xmlType));
+	}
+
+	public function testPublicId():void {
+		$sut = (new HTMLDocument())->doctype;
+		self::assertEquals("", $sut->publicId);
+	}
+
+	public function testSystemId():void {
+		$sut = (new HTMLDocument())->doctype;
+		self::assertEquals("", $sut->systemId);
+	}
 }
