@@ -33,7 +33,16 @@ trait ChildNode {
 		}
 	}
 
-	/** @param Element|Node|string...$nodes */
+	/**
+	 * The ChildNode.before() method inserts a set of Node or DOMString
+	 * objects in the children list of this ChildNode's parent, just before
+	 * this ChildNode. DOMString objects are inserted as equivalent Text
+	 * nodes.
+	 *
+	 * @param Element|Node|string...$nodes A set of Node or DOMString
+	 * objects to insert.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/before
+	 */
 	public function before(...$nodes):void {
 		$parent = $this->parentElement;
 		if(!$parent) {
@@ -48,7 +57,15 @@ trait ChildNode {
 		}
 	}
 
-	/** @param Element|Node|string...$nodes */
+	/**
+	 * The ChildNode.after() method inserts a set of Node or DOMString
+	 * objects in the children list of this ChildNode's parent, just after
+	 * this ChildNode. DOMString objects are inserted as equivalent Text
+	 * nodes.
+	 *
+	 * @param Element|Node|string...$nodes
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/after
+	 */
 	public function after(...$nodes):void {
 		$parent = $this->parentElement;
 		$nextSibling = $this->nextSibling;
@@ -64,7 +81,14 @@ trait ChildNode {
 		}
 	}
 
-	/** @param Node|Element|string Node|Element|string */
+	/**
+	 * The ChildNode.replaceWith() method replaces this ChildNode in the
+	 * children list of its parent with a set of Node or DOMString objects.
+	 * DOMString objects are inserted as equivalent Text nodes.
+	 *
+	 * @param Node|Element|string Node|Element|string
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/replaceWith
+	 */
 	public function replaceWith(...$nodes):void {
 		$parent = $this->parentElement;
 		if(!$parent) {
