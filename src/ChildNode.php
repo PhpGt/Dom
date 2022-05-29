@@ -10,10 +10,6 @@ namespace Gt\Dom;
  *
  * @property-read null|Element $parentElement
  * @property-read null|Node|Element $parentNode
- *
- * @method void before(Node|Element|string...$nodes) Inserts a set of Node objects or strings in the children list of the Element's parent, just before the Element.
- * @method void after(Node|Element|string...$nodes) Inserts a set of Node objects or strings in the children list of the Element's parent, just after the Element.
- * @method void replaceWith(Node|Element|string...$nodes) Replaces the element in the children list of its parent with a set of Node objects or strings.
  */
 trait ChildNode {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/parentElement */
@@ -35,5 +31,54 @@ trait ChildNode {
 		if($parentNode = $this->parentNode) {
 			$parentNode->removeChild($this);
 		}
+	}
+
+	/** @param Element|Node|string...$nodes */
+	public function before(...$nodes):void {
+		$parent = $this->parentElement;
+		if(!$parent) {
+			return;
+		}
+
+		foreach($nodes as $node) {
+			if(is_string($node)) {
+				$node = $this->ownerDocument->createTextNode($node);
+			}
+			$parent->insertBefore($node, $this);
+		}
+	}
+
+	/** @param Element|Node|string...$nodes */
+	public function after(...$nodes):void {
+		$parent = $this->parentElement;
+		$nextSibling = $this->nextSibling;
+		if(!$parent) {
+			return;
+		}
+
+		foreach($nodes as $node) {
+			if(is_string($node)) {
+				$node = $this->ownerDocument->createTextNode($node);
+			}
+			$parent->insertBefore($node, $nextSibling);
+		}
+	}
+
+	/** @param Node|Element|string Node|Element|string */
+	public function replaceWith(...$nodes):void {
+		$parent = $this->parentElement;
+		if(!$parent) {
+			return;
+		}
+
+		$fragment = $this->ownerDocument->createDocumentFragment();
+		foreach($nodes as $node) {
+			if(is_string($node)) {
+				$node = $this->ownerDocument->createTextNode($node);
+			}
+			$fragment->appendChild($node);
+		}
+
+		$parent->replaceChild($fragment, $this);
 	}
 }
