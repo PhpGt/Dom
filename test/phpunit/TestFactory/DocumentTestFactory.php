@@ -283,7 +283,6 @@ XML;
 </body>
 HTML;
 
-
 	public static function createHTMLDocument(
 		string $html = self::HTML_DEFAULT
 	):HTMLDocument {
