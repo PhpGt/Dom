@@ -283,7 +283,8 @@ trait ParentNode {
 			$removed = parent::removeChild($child);
 			return $removed;
 		}
-		catch(DOMException $exception) {
+		/** @noinspection PhpRedundantCatchClauseInspection */
+		catch(DOMException) {
 			throw new NotFoundErrorException("Child to be removed is not a child of this node");
 		}
 	}
@@ -302,7 +303,7 @@ trait ParentNode {
 			}
 			return $replaced;
 		}
-		catch(DOMException $exception) {
+		catch(DOMException) {
 			throw new NotFoundErrorException("Child to be replaced is not a child of this node");
 		}
 	}
