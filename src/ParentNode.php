@@ -5,6 +5,7 @@ use DOMException;
 use DOMNode;
 use Gt\CssXPath\Translator;
 use Gt\Dom\Exception\DocumentHasMoreThanOneElementChildException;
+use Gt\Dom\Exception\NotFoundErrorException;
 use Gt\Dom\Exception\TextNodeCanNotBeRootNodeException;
 use Gt\Dom\Exception\WrongDocumentErrorException;
 use ReturnTypeWillChange;
@@ -28,8 +29,8 @@ use ReturnTypeWillChange;
  * @property-read ?Element $lastElementChild The Element that is the last
  *  child of this ParentNode.
  *
- * @method void append(string|Node|Element...$nodes) Inserts a set of Node objects or strings after the last child of the element.
- * @method void prepend(string|Node|Element...$nodes) Inserts a set of Node objects or strings before the first child of the element.
+ * @method void append(string|Node|Element|ProcessingInstruction...$nodes) Inserts a set of Node objects or strings after the last child of the element.
+ * @method void prepend(string|Node|Element|ProcessingInstruction...$nodes) Inserts a set of Node objects or strings before the first child of the element.
  */
 trait ParentNode {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/childElementCount */
@@ -268,5 +269,41 @@ trait ParentNode {
 	#[ReturnTypeWillChange]
 	public function getElementsByTagName(string $qualifiedName):HTMLCollection {
 		return HTMLCollectionFactory::create(fn() => $this->querySelectorAll($qualifiedName));
+	}
+
+	/**
+	 * The removeChild() method of the Node interface removes a child node
+	 * from the DOM and returns the removed node.
+	 *
+	 * @param Node|Element $child
+	 */
+	public function removeChild(Node|Element|DOMNode $child):Node|Element|Text {
+		try {
+			/** @var Node|Element|Text $removed */
+			$removed = parent::removeChild($child);
+			return $removed;
+		}
+		catch(DOMException $exception) {
+			throw new NotFoundErrorException("Child to be removed is not a child of this node");
+		}
+	}
+
+	/**
+	 * The replaceChild() method of the Node element replaces a child node
+	 * within the given (parent) node.
+	 * @return Node|Element|Text the replaced node
+	 */
+	public function replaceChild(Node|Element|DOMNode $node, Node|Element|DOMNode $child):Node|Element|Text {
+		try {
+			/** @var Node|Element|Text|false $replaced */
+			$replaced = parent::replaceChild($node, $child);
+			if(!$replaced) {
+				throw new DOMException();
+			}
+			return $replaced;
+		}
+		catch(DOMException $exception) {
+			throw new NotFoundErrorException("Child to be replaced is not a child of this node");
+		}
 	}
 }

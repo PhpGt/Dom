@@ -12,6 +12,7 @@ use DOMNode;
  * @property-read null|Node|Element|Text $firstChild
  * @property-read null|Node|Element|Text $lastChild
  * @property-read null|Node|Element|Text $previousSibling Returns a Node representing the previous node in the tree, or null if there isn't such node.
+ * @property-read bool $isConnected A boolean indicating whether the Node is connected (directly or indirectly) to the Document object.
  *
  * @method Node|Element cloneNode(bool $deep = false)
  */
@@ -91,6 +92,87 @@ trait RegisteredNodeClass {
 			/** @var Text|Comment $this */
 			/** @var Text|Comment $otherNode */
 			return $this->data === $otherNode->data;
+		}
+
+		return false;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected */
+	public function __prop_get_isConnected():bool {
+		$context = $this;
+		while($context = $context->parentNode) {
+			if($context instanceof Document) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Compares the position of the current node against another node in
+	 * any other document.
+	 *
+	 * @param Node|Element $otherNode The other Node with which to compare
+	 * the first node’s document position.
+	 * @return int An integer value whose bits represent the otherNode's
+	 * relationship to the calling node. More than one bit is set if
+	 * multiple scenarios apply. For example, if otherNode is located
+	 * earlier in the document and contains the node on which
+	 * compareDocumentPosition() was called, then both the
+	 * DOCUMENT_POSITION_CONTAINS and DOCUMENT_POSITION_PRECEDING bits would
+	 * be set, producing a value of 10 (0x0A).
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
+	 */
+	public function compareDocumentPosition(Node|Element $otherNode):int {
+		$bits = 0b000000;
+		if($otherNode->ownerDocument !== $this->ownerDocument) {
+			$bits |= Node::DOCUMENT_POSITION_DISCONNECTED;
+		}
+
+		$thisNodePath = $this->getNodePath();
+		$otherNodePath = $otherNode->getNodePath();
+// A union of the two node paths are used to query the document, which will
+// return a NodeList in document order.
+		$unionPath = "$thisNodePath | $otherNodePath";
+		$xpathResult = $this->ownerDocument->evaluate($unionPath);
+
+		foreach($xpathResult as $node) {
+			if($node === $this) {
+				$bits |= Node::DOCUMENT_POSITION_FOLLOWING;
+				break;
+			}
+			if($node === $otherNode) {
+				$bits |= Node::DOCUMENT_POSITION_PRECEDING;
+				break;
+			}
+		}
+
+		if($this->contains($otherNode)) {
+			$bits |= Node::DOCUMENT_POSITION_CONTAINED_BY;
+		}
+		elseif($otherNode->contains($this)) {
+			$bits |= Node::DOCUMENT_POSITION_CONTAINS;
+		}
+
+		return $bits;
+	}
+
+	/**
+	 * Returns a Boolean value indicating whether or not a node is a
+	 * descendant of the calling node.
+	 *
+	 * @param Node $otherNode
+	 * @return bool
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/contains
+	 */
+	public function contains(Node|Element $otherNode):bool {
+		$context = $otherNode;
+
+		while($context = $context->parentNode) {
+			if($context === $this) {
+				return true;
+			}
 		}
 
 		return false;
