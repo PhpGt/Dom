@@ -4,6 +4,8 @@ namespace Gt\Dom;
 enum ElementType {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element */
 	case Element;
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement */
+	case HTMLElement;
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ElementCSSInlineStyle */
 	case ElementCSSInlineStyle;
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement */

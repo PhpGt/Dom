@@ -40,7 +40,9 @@ class Element extends DOMElement implements ArrayAccess, Countable {
 	use RegisteredNodeClass;
 	use HTMLElement;
 
-	private function __construct() {}
+	private function __construct(string $qualifiedName) {
+		parent::__construct($qualifiedName);
+	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/classList */
 	protected function __prop_get_classList():DOMTokenList {
@@ -82,7 +84,8 @@ class Element extends DOMElement implements ArrayAccess, Countable {
 			"fieldset" => ElementType::HTMLFieldSetElement,
 			"form" => ElementType::HTMLFormElement,
 			"head" => ElementType::HTMLHeadElement,
-			"heading" => ElementType::HTMLHeadingElement,
+			"header", "footer" => ElementType::HTMLElement,
+			"h1", "h2", "h3", "h4", "h5", "h6" => ElementType::HTMLHeadingElement,
 			"hr" => ElementType::HTMLHRElement,
 			"html" => ElementType::HTMLHtmlElement,
 			"iframe" => ElementType::HTMLIFrameElement,

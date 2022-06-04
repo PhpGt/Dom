@@ -6,15 +6,15 @@ use Gt\PropFunc\MagicProp;
 trait Traversal {
 	use MagicProp;
 
-	private Node|Element|Text $pRoot;
+	private Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $pRoot;
 	private int $pWhatToShow;
-	private Node|Element|Text $pCurrentNode;
+	private Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $pCurrentNode;
 	private NodeFilter $pFilter;
 	private int $iteratorIndex;
-	private null|Node|Element|Text $validity;
+	private null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $validity;
 
 	protected function __construct(
-		Node|Element|Text $root,
+		Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $root,
 		int $whatToShow = NodeFilter::SHOW_ALL,
 		NodeFilter|callable $filter = null
 	) {
@@ -26,11 +26,11 @@ trait Traversal {
 		$this->validity = null;
 
 		if(!$filter) {
-			$filter = fn(Node|Element|Text $node) => $this->filterFunction($node);
+			$filter = fn(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node) => $this->filterFunction($node);
 		}
 
 		if(is_callable($filter)) {
-			$filter = new class($filter, fn(Node|Element|Text $node) => $this->filterFunction($node)) extends NodeFilter {
+			$filter = new class($filter, fn(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node) => $this->filterFunction($node)) extends NodeFilter {
 				/** @var callable */
 				private $callback;
 				/** @var callable */
@@ -44,7 +44,7 @@ trait Traversal {
 					$this->defaultCallback = $defaultFilterFunction;
 				}
 
-				public function acceptNode(Node|Element|Text $node):int {
+				public function acceptNode(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node):int {
 					$showFilter = call_user_func(
 						$this->defaultCallback,
 						$node
@@ -66,7 +66,7 @@ trait Traversal {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/root */
-	protected function __prop_get_root():Node|Element|Text {
+	protected function __prop_get_root():Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->pRoot;
 	}
 
@@ -81,7 +81,7 @@ trait Traversal {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/currentNode */
-	protected function __prop_get_currentNode():Node|Element|Text {
+	protected function __prop_get_currentNode():Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->pCurrentNode;
 	}
 
@@ -92,10 +92,10 @@ trait Traversal {
 	 * TreeWalker's root node, returns null and the current node is not
 	 * changed.
 	 *
-	 * @return null|Node|Element|Text
+	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/parentNode
 	 */
-	public function parentNode():null|Node|Element|Text {
+	public function parentNode():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		$node = $this->pCurrentNode;
 
 		while($node && $node !== $this->pRoot) {
@@ -116,10 +116,10 @@ trait Traversal {
 	 * It also moves the current node to this child. If no such child
 	 * exists, returns null and the current node is not changed.
 	 *
-	 * @return null|Node|Element|Text
+	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/firstChild
 	 */
-	public function firstChild():null|Node|Element|Text {
+	public function firstChild():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->traverseChildren("first");
 	}
 
@@ -129,10 +129,10 @@ trait Traversal {
 	 * also moves the current node to this child. If no such child exists,
 	 * returns null and the current node is not changed.
 	 *
-	 * @return null|Node|Element|Text
+	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/lastChild
 	 */
-	public function lastChild():null|Node|Element|Text {
+	public function lastChild():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->traverseChildren("last");
 	}
 
@@ -142,10 +142,10 @@ trait Traversal {
 	 * there is no such node, return null and the current node is not
 	 * changed.
 	 *
-	 * @return null|Node|Element|Text
+	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/previousSibling
 	 */
-	public function previousSibling():null|Node|Element|Text {
+	public function previousSibling():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->traverseSiblings("previous");
 	}
 
@@ -154,10 +154,10 @@ trait Traversal {
 	 * next sibling, if any, and returns the found sibling. If there is no
 	 * such node, return null and the current node is not changed.
 	 *
-	 * @return null|Node|Element|Text
+	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/nextSibling
 	 */
-	public function nextSibling():null|Node|Element|Text {
+	public function nextSibling():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->traverseSiblings("next");
 	}
 
@@ -168,18 +168,18 @@ trait Traversal {
 	 * exists,or if it is before that the root node defined at the object
 	 * construction, returns null and the current node is not changed.
 	 *
-	 * @return null|Node|Element|Text
+	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/previousNode
 	 */
-	public function previousNode():null|Node|Element|Text {
-		/** @var null|Node|Element|Text $node */
+	public function previousNode():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+		/** @var null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node */
 		$node = $this->pCurrentNode;
 
 		while($node !== $this->pRoot) {
 			$sibling = $node->previousSibling;
 
 			while(!is_null($sibling)) {
-				/** @var null|Node|Element|Text $node */
+				/** @var null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node */
 				$node = $sibling;
 				$result = $this->filter->acceptNode($node);
 
@@ -189,7 +189,7 @@ trait Traversal {
 					$result = $this->filter->acceptNode($node);
 				}
 				if($result === NodeFilter::FILTER_ACCEPT) {
-					/** @var null|Node|Element|Text $node */
+					/** @var null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node */
 					$this->pCurrentNode = $node;
 					return $node;
 				}
@@ -219,10 +219,10 @@ trait Traversal {
 	 * also moves the current node to this one. If no such node exists,
 	 * returns null and the current node is not changed.
 	 *
-	 * @return null|Node|Element|Text
+	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/nextNode
 	 */
-	public function nextNode():null|Node|Element|Text {
+	public function nextNode():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		if($node = $this->getNextNode($this->pCurrentNode)) {
 			/** @var Node $node */
 			$this->pCurrentNode = $node;
@@ -232,7 +232,7 @@ trait Traversal {
 		return null;
 	}
 
-	private function getNextNode(Node|Element|Text $node):null|Node|Element|Text {
+	private function getNextNode(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		$result = NodeFilter::FILTER_ACCEPT;
 
 		while(true) {
@@ -269,7 +269,7 @@ trait Traversal {
 		return null;
 	}
 
-	public function current():Node|Element|Text {
+	public function current():Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->pCurrentNode;
 	}
 
@@ -293,7 +293,7 @@ trait Traversal {
 		$this->pCurrentNode = $this->pRoot;
 	}
 
-	private function traverseChildren(string $direction):null|Node|Element|Text {
+	private function traverseChildren(string $direction):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		$node = $this->matchChild($this->pCurrentNode, $direction);
 		if(!$node) {
 			return null;
@@ -302,9 +302,9 @@ trait Traversal {
 	}
 
 	private function recurseTraverseChildren(
-		Node|Element|Text $node,
+		Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node,
 		string $direction
-	):null|Node|Element|Text {
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		$overrideNode = null;
 
 		while($node) {
@@ -329,7 +329,7 @@ trait Traversal {
 		return $node;
 	}
 
-	private function traverseSiblings(string $direction):null|Node|Element|Text {
+	private function traverseSiblings(string $direction):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		$node = $this->pCurrentNode;
 
 		if($node === $this->pRoot) {
@@ -352,8 +352,8 @@ trait Traversal {
 		return $node;
 	}
 
-	private function matchChild(Node|Element|Text $node, string $direction):null|Node|Element|Text {
-		/** @var null|Node|Element|Text $result */
+	private function matchChild(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node, string $direction):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+		/** @var null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $result */
 		$result = match($direction) {
 			"first" => $node->firstChild,
 			"last", "next", "previous" => $node->lastChild,
@@ -362,8 +362,8 @@ trait Traversal {
 		return $result;
 	}
 
-	private function matchSibling(Node|Element|Text $node, string $direction):null|Node|Element|Text {
-		/** @var null|Node|Element|Text $result */
+	private function matchSibling(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node, string $direction):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+		/** @var null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $result */
 		$result = match($direction) {
 			"next" => $node->nextSibling,
 			"previous" => $node->previousSibling,
@@ -374,9 +374,9 @@ trait Traversal {
 	}
 
 	private function nextSkippingChildren(
-		Node|Element|Text $node,
-		Node|Element|Text $stayWithin
-	):null|Node|Element|Text {
+		Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node,
+		Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $stayWithin
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		if($node === $stayWithin) {
 			return null;
 		}
