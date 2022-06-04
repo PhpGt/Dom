@@ -303,9 +303,9 @@ trait ParentNode {
 	 * The removeChild() method of the Node interface removes a child node
 	 * from the DOM and returns the removed node.
 	 *
-	 * @param Node|Element $child
+	 * @param Node|Element|Text $child
 	 */
-	public function removeChild(Node|Element|DOMNode $child):Node|Element|Text {
+	public function removeChild(Node|Element|Text|DOMNode $child):Node|Element|Text {
 		try {
 			/** @var Node|Element|Text $removed */
 			$removed = parent::removeChild($child);

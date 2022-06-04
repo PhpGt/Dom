@@ -99,6 +99,7 @@ trait Traversal {
 		$node = $this->pCurrentNode;
 
 		while($node && $node !== $this->pRoot) {
+			/** @var Element $node */
 			$node = $node->parentNode;
 
 			if($node && $this->filter->acceptNode($node) === NodeFilter::FILTER_ACCEPT) {

@@ -86,7 +86,7 @@ trait ChildNode {
 	 * children list of its parent with a set of Node or DOMString objects.
 	 * DOMString objects are inserted as equivalent Text nodes.
 	 *
-	 * @param Node|Element|string Node|Element|string
+	 * @param Node|Element|string...$nodes
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/replaceWith
 	 */
 	public function replaceWith(...$nodes):void {
