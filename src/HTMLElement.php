@@ -229,6 +229,9 @@ use TypeError;
  * @property string $srclang Is a DOMString that reflects the srclang HTML attribute, indicating the language of the text track data.
  * @property bool $default A Boolean reflecting the default  attribute, indicating that the track is to be enabled if the user's preferences do not indicate that another track would be more appropriate.
  * @property-read TextTrack $track Returns TextTrack is the track element's text track data.
+ * @property string $poster Is a DOMString that reflects the poster HTML attribute, which specifies an image to show while no video data is available.
+ * @property-read int $videoHeight Returns an unsigned integer value indicating the intrinsic height of the resource in CSS pixels, or 0 if no media is available yet.
+ * @property-read int $videoWidth Returns an unsigned integer value indicating the intrinsic width of the resource in CSS pixels, or 0 if no media is available yet.
  */
 trait HTMLElement {
 	private function allowTypes(ElementType...$typeList):void {
@@ -1353,21 +1356,32 @@ trait HTMLElement {
 		$this->setAttribute("shape", $value);
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/audioTracks */
+	/**
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/audioTracks
+	 */
 	protected function __prop_get_audioTracks():AudioTrackList {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return new AudioTrackList();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/autoplay */
 	protected function __prop_get_autoplay():bool {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return $this->hasAttribute("autoplay");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/autplay */
 	protected function __prop_set_autoplay(bool $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		if($value) {
 			$this->setAttribute("autoplay", "");
 		}
@@ -1378,25 +1392,37 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/buffered */
 	protected function __prop_get_buffered():TimeRanges {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return new TimeRanges();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controller */
 	protected function __prop_get_controller():?MediaController {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controls */
 	protected function __prop_get_controls():bool {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return $this->hasAttribute("controls");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controls */
 	protected function __prop_set_controls(bool $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		if($value) {
 			$this->setAttribute("controls", "");
 		}
@@ -1407,7 +1433,10 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/controlsList */
 	protected function __prop_get_controlsList():DOMTokenList {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return DOMTokenListFactory::create(
 			fn() => explode(
 				" ",
@@ -1430,6 +1459,7 @@ trait HTMLElement {
 			ElementType::HTMLAudioElement,
 			ElementType::HTMLImageElement,
 			ElementType::HTMLScriptElement,
+			ElementType::HTMLVideoElement,
 		);
 		return $this->getAttribute("crossorigin") ?? "";
 	}
@@ -1444,6 +1474,7 @@ trait HTMLElement {
 			ElementType::HTMLAudioElement,
 			ElementType::HTMLImageElement,
 			ElementType::HTMLScriptElement,
+			ElementType::HTMLVideoElement,
 		);
 		$this->setAttribute("crossorigin", $value);
 	}
@@ -1456,31 +1487,44 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLAudioElement,
 			ElementType::HTMLImageElement,
+			ElementType::HTMLVideoElement,
 		);
 		return "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime */
 	protected function __prop_get_currentTime():float {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime */
 	protected function __prop_set_currentTime(float $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultMuted */
 	protected function __prop_get_defaultMuted():bool {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return $this->hasAttribute("muted");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultMuted */
 	protected function __prop_set_defaultMuted(bool $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		if($value) {
 			$this->setAttribute("muted", "");
 		}
@@ -1491,55 +1535,82 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultPlaybackRate */
 	protected function __prop_get_defaultPlaybackRate():float {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/defaultPlaybackRate */
 	protected function __prop_set_defaultPlaybackRate(float $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/disableRemotePlayback */
 	protected function __prop_get_disableRemotePlayback():bool {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/disableRemotePlayback */
 	protected function __prop_set_disableRemotePlayback(bool $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/duration */
 	protected function __prop_get_duration():?float {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/ended */
 	protected function __prop_get_ended():bool {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return false;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/error */
 	protected function __prop_get_error():?MediaError {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/loop */
 	protected function __prop_get_loop():bool {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return $this->hasAttribute("loop");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/loop */
 	protected function __prop_set_loop(bool $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		if($value) {
 			$this->setAttribute("loop", "");
 		}
@@ -1550,67 +1621,100 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/mediaGroup */
 	protected function __prop_get_mediaGroup():string {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return $this->getAttribute("mediagroup") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/mediaGroup */
 	protected function __prop_set_mediaGroup(string $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		$this->setAttribute("mediagroup", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/muted */
 	protected function __prop_get_muted():bool {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException("Use defaultMuted for server-side use");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/muted */
 	protected function __prop_set_muted(bool $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException("Use defaultMuted for server-side use");
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/networkState */
 	protected function __prop_get_networkState():int {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/paused */
 	protected function __prop_get_paused():bool {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/playbackRate */
 	protected function __prop_get_playbackRate():float {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/playbackRate */
 	protected function __prop_set_playbackRate(float $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/played */
 	protected function __prop_get_played():TimeRanges {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return new TimeRanges();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/preload */
 	protected function __prop_get_preload():string {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return $this->getAttribute("preload") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/preload */
 	protected function __prop_set_preload(string $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		$this->setAttribute("preload", $value);
 	}
 
@@ -1622,25 +1726,35 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLAudioElement,
 			ElementType::HTMLTrackElement,
+			ElementType::HTMLVideoElement,
 		);
 		return 0;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/seekable */
 	protected function __prop_get_seekable():TimeRanges {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return new TimeRanges();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/seeking */
 	protected function __prop_get_seeking():bool {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return false;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/sinkId */
 	protected function __prop_get_sinkId():string {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return "";
 	}
 
@@ -1664,6 +1778,7 @@ trait HTMLElement {
 			ElementType::HTMLScriptElement,
 			ElementType::HTMLSourceElement,
 			ElementType::HTMLTrackElement,
+			ElementType::HTMLVideoElement,
 		);
 		return $this->getAttribute("src") ?? "";
 	}
@@ -1688,43 +1803,62 @@ trait HTMLElement {
 			ElementType::HTMLScriptElement,
 			ElementType::HTMLSourceElement,
 			ElementType::HTMLTrackElement,
+			ElementType::HTMLVideoElement,
 		);
 		$this->setAttribute("src", $value);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/srcObject */
 	protected function __prop_get_srcObject():MediaStream {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return new MediaStream();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/srcObject */
 	protected function __prop_set_srcObject(MediaStream $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/textTracks */
 	protected function __prop_get_textTracks():TextTrackList {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return new TextTrackList();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/videoTracks */
 	protected function __prop_get_videoTracks():VideoTrackList {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		return new VideoTrackList();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/volume */
 	protected function __prop_get_volume():float {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/volume */
 	protected function __prop_set_volume(float $value):void {
-		$this->allowTypes(ElementType::HTMLAudioElement);
+		$this->allowTypes(
+			ElementType::HTMLAudioElement,
+			ElementType::HTMLVideoElement,
+		);
 		throw new ClientSideOnlyFunctionalityException();
 	}
 
@@ -2046,6 +2180,7 @@ trait HTMLElement {
 			ElementType::HTMLImageElement,
 			ElementType::HTMLInputElement,
 			ElementType::HTMLObjectElement,
+			ElementType::HTMLVideoElement,
 		);
 		return (int)$this->getAttribute("height");
 	}
@@ -2066,6 +2201,7 @@ trait HTMLElement {
 			ElementType::HTMLImageElement,
 			ElementType::HTMLInputElement,
 			ElementType::HTMLObjectElement,
+			ElementType::HTMLVideoElement,
 		);
 		$this->setAttribute("height", (string)$value);
 	}
@@ -2086,6 +2222,7 @@ trait HTMLElement {
 			ElementType::HTMLImageElement,
 			ElementType::HTMLInputElement,
 			ElementType::HTMLObjectElement,
+			ElementType::HTMLVideoElement,
 		);
 		return (int)$this->getAttribute("width");
 	}
@@ -2106,6 +2243,7 @@ trait HTMLElement {
 			ElementType::HTMLImageElement,
 			ElementType::HTMLInputElement,
 			ElementType::HTMLObjectElement,
+			ElementType::HTMLVideoElement,
 		);
 		$this->setAttribute("width", (string)$value);
 	}
@@ -4384,5 +4522,31 @@ trait HTMLElement {
 
 	protected function __prop_get_track():TextTrack {
 		return new TextTrack();
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/poster */
+	protected function __prop_get_poster():string {
+		$this->allowTypes(
+			ElementType::HTMLVideoElement,
+		);
+		return $this->getAttribute("poster") ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/poster */
+	protected function __prop_set_poster(string $src):void {
+		$this->allowTypes(
+			ElementType::HTMLVideoElement,
+		);
+		$this->setAttribute("poster", $src);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/videoHeight */
+	protected function __prop_get_videoHeight():int {
+		return 0;
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/videoWidth */
+	protected function __prop_get_videoWidth():int {
+		return 0;
 	}
 }
