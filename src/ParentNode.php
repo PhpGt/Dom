@@ -28,9 +28,6 @@ use ReturnTypeWillChange;
  *  child of this ParentNode.
  * @property-read ?Element $lastElementChild The Element that is the last
  *  child of this ParentNode.
- *
- * @method void append(string|Node|Element|ProcessingInstruction...$nodes) Inserts a set of Node objects or strings after the last child of the element.
- * @method void prepend(string|Node|Element|ProcessingInstruction...$nodes) Inserts a set of Node objects or strings before the first child of the element.
  */
 trait ParentNode {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/childElementCount */
@@ -95,6 +92,37 @@ trait ParentNode {
 	}
 
 	/**
+	 *  The Element.append() method inserts a set of Node objects or string
+	 * objects after the last child of the Element. String objects are
+	 * inserted as equivalent Text nodes.
+	 *
+	 * Differences from Node.appendChild():
+	 * + Element.append() allows you to also append string objects,
+	 * 	whereas Node.appendChild() only accepts Node objects.
+	 * + Element.append() has no return value, whereas Node.appendChild()
+	 * 	returns the appended Node object.
+	 * + Element.append() can append several nodes and strings, whereas
+	 * 	Node.appendChild() can only append one node.
+	 * @param Node|Element|Text|string...$nodes
+	 */
+	public function append(...$nodes):void {
+// Without this clumsy iteration, PHP 8.1 throws "free(): double free detected in tcache 2"
+		foreach($nodes as $node) {
+			parent::append($node);
+		}
+	}
+
+	/**
+	 * The Element.prepend() method inserts a set of Node objects or string
+	 * objects before the first child of the Element. String objects are
+	 * inserted as equivalent Text nodes.
+	 * @param Node|Element|Text|string...$nodes
+	 */
+	public function prepend(...$nodes):void {
+		parent::prepend(...$nodes);
+	}
+
+	/**
 	 * Adds the specified childNode argument as the last child to the
 	 * current node. If the argument referenced an existing node on the
 	 * DOM tree, the node will be detached from its current position and
@@ -144,7 +172,7 @@ trait ParentNode {
 	 * all child nodes.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/replaceChildren
 	 */
-	public function replaceChildren(string|Node...$nodesOrDOMStrings):void {
+	public function replaceChildren(...$nodesOrDOMStrings):void {
 		while($this->firstChild) {
 			$this->removeChild($this->firstChild);
 		}

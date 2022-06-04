@@ -19,6 +19,7 @@ use DOMText;
 use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Exception\NotSupportedException;
+use JetBrains\PhpStorm\Internal\LanguageLevelTypeAware;
 use Psr\Http\Message\StreamInterface;
 use ReturnTypeWillChange;
 use Stringable;
@@ -29,6 +30,7 @@ use Stringable;
  *
  * @method Element importNode(Node|Element $node, bool $deep = false)
  * @method DocumentFragment createDocumentFragment()
+ * @method Text createTextNode(string $data)
  */
 abstract class Document extends DOMDocument implements Stringable, StreamInterface {
 	use DocumentStream;

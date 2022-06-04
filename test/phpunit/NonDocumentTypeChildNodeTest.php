@@ -3,7 +3,6 @@
 namespace Gt\Dom\Test;
 
 use Gt\Dom\HTMLDocument;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
 
 

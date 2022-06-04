@@ -255,6 +255,7 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLAnchorElement,
 			ElementType::HTMLAreaElement,
+			ElementType::HTMLUnknownElement,
 		);
 
 		if($this->elementType === ElementType::HTMLAnchorElement
