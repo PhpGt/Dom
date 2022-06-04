@@ -48,13 +48,13 @@ class XPathResult implements Iterator {
 	 * @return ?Node The next Node within the node set of the XPathResult.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/XPathResult/iterateNext
 	 */
-	public function iterateNext():?Node {
+	public function iterateNext():null|Node|Element {
 		$current = $this->current();
 		$this->next();
 		return $current;
 	}
 
-	public function current():null|Element|Node {
+	public function current():null|Node|Element {
 		return $this->nodeList->item($this->iteratorKey);
 	}
 
