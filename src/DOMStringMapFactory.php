@@ -7,13 +7,17 @@ class DOMStringMapFactory extends DOMStringMap {
 			function() use($element) {
 				$keyValuePairs = [];
 
-				foreach($element->attributes as $key => $value) {
+				/**
+				 * @var string $key
+				 * @var Attr $attr
+				 */
+				foreach($element->attributes as $key => $attr) {
 					if(!str_starts_with($key, "data-")) {
 						continue;
 					}
 
 					$trimmedKey = substr($key, strlen("data-"));
-					$keyValuePairs[$trimmedKey] = $value;
+					$keyValuePairs[$trimmedKey] = $attr->value;
 				}
 
 				return $keyValuePairs;
