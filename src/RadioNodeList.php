@@ -8,10 +8,6 @@ class RadioNodeList extends NodeList {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/RadioNodeList/value */
 	public function __prop_get_value():string {
 		foreach($this as $node) {
-			if(!$node instanceof Element) {
-				continue;
-			}
-
 			if($node->type !== "radio") {
 				return "";
 			}

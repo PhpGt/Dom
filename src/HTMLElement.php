@@ -270,7 +270,7 @@ trait HTMLElement {
 		return !is_null($match);
 	}
 
-	public function offsetGet(mixed $offset):?Element {
+	public function offsetGet(mixed $offset):null|Element|RadioNodeList {
 		$this->allowTypes(ElementType::HTMLFormElement);
 		return $this->elements->namedItem($offset);
 	}

@@ -82,6 +82,35 @@ HTML;
 </main>
 HTML;
 
+	const HTML_RADIO_BUTTONS = <<<HTML
+<!doctype html>
+<form method="post">
+	<h1>What is your favourite bean?</h1>
+	
+	<label>
+		<input type="radio" name="bean" value="black-eyed-pea" />
+		<span>Black eyed pea</span>
+	</label>
+	<label>
+		<input type="radio" name="bean" value="cannellini" />
+		<span>Cannellini</span>
+	</label>
+	<label>
+		<input type="radio" name="bean" value="kidney" />
+		<span>Kidney</span>
+	</label>
+	<label>
+		<input type="radio" name="bean" value="fava" />
+		<span>Fava</span>
+	</label>
+	<label>
+		<input type="radio" name="bean" value="edamame" />
+		<span>Edamame</span>
+	</label>
+</form>
+HTML;
+
+
 	const HTML_IMAGES = <<<HTML
 <!doctype html>
 <html>
