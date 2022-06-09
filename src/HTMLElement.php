@@ -4042,39 +4042,24 @@ trait HTMLElement {
 	}
 
 	private function placeCaption(?Element $caption):void {
-		if($caption && $caption->elementType !== ElementType::HTMLTableCaptionElement) {
-			throw new IncorrectHTMLElementUsageException("Only an HTMLTableCaptionElement can be placed as a <caption>");
-		}
 		if($caption !== null) {
 			$this->insertBefore($caption, $this->firstChild);
 		}
 	}
 
 	private function placeThead(?Element $thead):void {
-		if($thead && $thead->elementType !== ElementType::HTMLTableSectionElement) {
-			throw new IncorrectHTMLElementUsageException("Only an HTMLTableSectionElement can be placed as a <thead>");
-		}
 		if($thead !== null) {
 			$this->tableInsertChildAfter($thead, ['caption', 'colgroup']);
 		}
 	}
 
 	private function placeTBody(?Element $tbody):void {
-		if($tbody->elementType !== ElementType::HTMLTableSectionElement) {
-			throw new IncorrectHTMLElementUsageException("Only an HTMLTableSectionElement can be placed as a <tbody>");
-		}
 		if($tbody !== null) {
 			$this->tableInsertChildAfter($tbody, ['caption', 'colgroup', 'thead', 'tbody']);
 		}
 	}
 
 	private function placeTFoot(?Element $tfoot):void {
-		if($tfoot && $tfoot->elementType !== ElementType::HTMLTableSectionElement) {
-			throw new IncorrectHTMLElementUsageException("Only an HTMLTableSectionElement can be placed as a <tfoot>");
-		}
-		if($tfoot && $tfoot->tagName !== "tfoot") {
-			throw new HierarchyRequestError("Element::tfoot must be an HTMLTableSectionElement of type <tfoot>");
-		}
 		if($tfoot !== null) {
 			$this->appendChild($tfoot);
 		}

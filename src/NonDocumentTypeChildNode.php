@@ -15,27 +15,4 @@ namespace Gt\Dom;
  * @property-read ?Element $previousElementSibling Is a Element, the element immediately preceding the given one in the tree, or null if there is no sibling element.
  */
 trait NonDocumentTypeChildNode {
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NonDocumentTypeChildNode/nextElementSibling */
-	protected function __prop_get_nextElementSibling():?Element {
-		$context = $this;
-		while($context = $context->nextSibling) {
-			if($context instanceof Element) {
-				return $context;
-			}
-		}
-
-		return null;
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/NonDocumentTypeChildNode/previousElementSibling */
-	protected function __prop_get_previousElementSibling():?Element {
-		$context = $this;
-		while($context = $context->previousSibling) {
-			if($context instanceof Element) {
-				return $context;
-			}
-		}
-
-		return null;
-	}
 }
