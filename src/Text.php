@@ -33,29 +33,6 @@ class Text extends DOMText {
 		return strlen(trim($this->textContent)) === 0;
 	}
 
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Text/wholeText */
-	protected function __prop_get_wholeText():string {
-		$text = $this->textContent;
-
-		$context = $this;
-		while($context = $context->previousSibling) {
-			if(!$context instanceof Text) {
-				break;
-			}
-			$text = $context->textContent . $text;
-		}
-
-		$context = $this;
-		while($context = $context->nextSibling) {
-			if(!$context instanceof Text) {
-				break;
-			}
-			$text = $text . $context->textContent;
-		}
-
-		return $text;
-	}
-
 	/**
 	 * The Text.splitText() method breaks the Text node into two nodes at
 	 * the specified offset, keeping both nodes in the tree as siblings.
