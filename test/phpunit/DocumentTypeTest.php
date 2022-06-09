@@ -23,7 +23,7 @@ class DocumentTypeTest extends TestCase {
 	public function testIsEqualNode():void {
 		$htmlDocument = new HTMLDocument(DocumentTestFactory::HTML_PAGE);
 		$sut = $htmlDocument->doctype;
-		$xmlDocument = new XMLDocument(DocumentTestFactory::XML_BOOK);
+		$xmlDocument = new XMLDocument(DocumentTestFactory::XML_SHAPE);
 		$xmlType = $xmlDocument->doctype;
 		self::assertFalse($sut->isEqualNode($xmlType));
 	}

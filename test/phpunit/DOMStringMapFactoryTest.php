@@ -71,4 +71,21 @@ class DOMStringMapFactoryTest extends TestCase {
 		$domStringMap->set("language", "python");
 		self::assertSame("python", $domStringMap->get("language"));
 	}
+
+	public function testSettingSameValue():void {
+		$attributeArray = [
+			"id" => "example",
+			"data-language" => "php",
+			"class" => "phpunit",
+		];
+		$document = new HTMLDocument();
+		$element = $document->createElement("example-element");
+		foreach($attributeArray as $key => $value) {
+			$element->setAttribute($key, $value);
+		}
+
+		$domStringMap = DOMStringMapFactory::createDataset($element);
+		$domStringMap->set("language", "php");
+		self::assertSame("php", $domStringMap->get("language"));
+	}
 }

@@ -4,6 +4,7 @@ namespace Gt\Dom\Test\HTMLElement;
 use Gt\Dom\ClientSide\CSSStyleDeclaration;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\EnumeratedValueException;
+use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
 use Gt\Dom\HTMLDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -316,5 +317,19 @@ class HTMLElementTest extends HTMLElementTestCase {
 		$sut = $document->createElement("div");
 		$sut->dataset->set("example", "something");
 		self::assertEquals("something", $sut->getAttribute("data-example"));
+	}
+
+	public function testPropertyNotAvailable():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
+		self::expectException(IncorrectHTMLElementUsageException::class);
+		$sut->disabled = true;
+	}
+
+	public function testToString():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example-element");
+		$sut->textContent = uniqid();
+		self::assertSame("", (string)$sut);
 	}
 }

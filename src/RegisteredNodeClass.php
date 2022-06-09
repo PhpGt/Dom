@@ -88,13 +88,9 @@ trait RegisteredNodeClass {
 				&& $this->data === $otherNode->data;
 		}
 
-		if(isset($this->data)) {
-			/** @var Text|Comment $this */
-			/** @var Text|Comment $otherNode */
-			return $this->data === $otherNode->data;
-		}
-
-		return false;
+		/** @var Text|Comment $this */
+		/** @var Text|Comment $otherNode */
+		return $this->data === $otherNode->data;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected */

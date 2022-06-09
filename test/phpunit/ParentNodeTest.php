@@ -26,6 +26,17 @@ class ParentNodeTest extends TestCase {
 		self::assertEquals($count, $sut->childElementCount);
 	}
 
+	public function testChildElementCountMixed():void {
+		$document = new HTMLDocument();
+		$document->body->append(
+			$document->createElement("div"),
+			$document->createElement("div"),
+			"test",
+			$document->createElement("div"),
+		);
+		self::assertSame($document->body->children->length, $document->body->childElementCount);
+	}
+
 	public function testChildElementCountNonElement():void {
 		$document = new HTMLDocument();
 		$sut = $document->createElement("example");

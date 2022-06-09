@@ -238,19 +238,12 @@ trait HTMLElement {
 		if(!in_array($this->elementType, $typeList)) {
 			$debug = debug_backtrace(limit: 2);
 			$function = $debug[1]["function"];
-			if(str_starts_with($function, "__prop")) {
-				$funcProp = "Property";
-				$funcPropName = substr($function, strlen("__prop_get_"));
-			}
-			else {
-				$funcProp = "Function";
-				$funcPropName = $function;
-			}
+			$propName = substr($function, strlen("__prop_get_"));
 
 			/** @var Element $object */
 			$object = $debug[1]["object"];
 			$actualType = $object->elementType->name;
-			throw new IncorrectHTMLElementUsageException("$funcProp '$funcPropName' is not available on '$actualType'");
+			throw new IncorrectHTMLElementUsageException("Property '$propName' is not available on '$actualType'");
 		}
 	}
 
@@ -1973,21 +1966,6 @@ trait HTMLElement {
 		return null;
 	}
 
-//	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/labels */
-//	protected function __prop_get_labels():NodeList {
-//		return NodeListFactory::createLive(function():array {
-//			$labelsArray = [];
-//			foreach($this->ownerDocument->getElementsByTagName("label") as $label) {
-//				/** @var HTMLLabelElement $label */
-//				if($label->htmlFor === $this->id) {
-//					array_push($labelsArray, $label);
-//				}
-//			}
-//
-//			return $labelsArray;
-//		});
-//	}
-
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/readOnly
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/readOnly
@@ -2038,28 +2016,7 @@ trait HTMLElement {
 			ElementType::HTMLObjectElement,
 			ElementType::HTMLInputElement,
 		);
-		if($this->elementType === ElementType::HTMLButtonElement
-		|| $this->elementType === ElementType::HTMLObjectElement) {
-			return false;
-		}
-
-		if($this->disabled) {
-			return false;
-		}
-
-		if(in_array($this->type, ["hidden", "reset", "button"])) {
-			return false;
-		}
-
-		$context = $this;
-		while($context->parentElement) {
-			$context = $context->parentElement;
-			if($context->elementType === ElementType::HTMLDataListElement) {
-				return false;
-			}
-		}
-
-		return true;
+		return false;
 	}
 
 	/**
@@ -3922,9 +3879,6 @@ trait HTMLElement {
 		if($value && $value->elementType !== ElementType::HTMLTableSectionElement) {
 			throw new TypeError("Element::tHead must be of type HTMLTableSectionElement");
 		}
-		if($value && $value->tagName !== "thead") {
-			throw new HierarchyRequestError("Element::thead must be an HTMLTableSectionElement of type <thead>");
-		}
 		/**
 		 * On setting, if the new value is null or a <thead> element,
 		 * the first <thead> element child of the <table> element, if any, must be removed, and the new value,
@@ -3935,9 +3889,10 @@ trait HTMLElement {
 		 * must be thrown instead.
 		 * @see https://www.w3.org/TR/html52/tabular-data.html#dom-htmltableelement-thead
 		 */
-		if($value !== null && strtolower($value->nodeName) !== 'thead') {
-			throw new HierarchyRequestError();
+		if($value && $value->tagName !== "thead") {
+			throw new HierarchyRequestError("Element::thead must be an HTMLTableSectionElement of type <thead>");
 		}
+
 		$this->delChild('thead');
 		$this->placeThead($value);
 	}
@@ -4059,11 +4014,7 @@ trait HTMLElement {
 	 * @param Element $newNode
 	 * @param string[] $refNames names of nodes to insert after
 	 */
-	private function insertChildAfter(Element $newNode, array $refNames):void {
-		if($newNode->elementType !== ElementType::HTMLTableSectionElement) {
-			throw new IncorrectHTMLElementUsageException("Must be of type HTMLTableSectionElement");
-		}
-
+	private function tableInsertChildAfter(Element $newNode, array $refNames):void {
 		$child = $this->firstElementChild;
 		while($child && in_array($child->nodeName, $refNames, true)) {
 			$child = $child->nextElementSibling;
@@ -4104,7 +4055,7 @@ trait HTMLElement {
 			throw new IncorrectHTMLElementUsageException("Only an HTMLTableSectionElement can be placed as a <thead>");
 		}
 		if($thead !== null) {
-			$this->insertChildAfter($thead, ['caption', 'colgroup']);
+			$this->tableInsertChildAfter($thead, ['caption', 'colgroup']);
 		}
 	}
 
@@ -4113,7 +4064,7 @@ trait HTMLElement {
 			throw new IncorrectHTMLElementUsageException("Only an HTMLTableSectionElement can be placed as a <tbody>");
 		}
 		if($tbody !== null) {
-			$this->insertChildAfter($tbody, ['caption', 'colgroup', 'thead', 'tbody']);
+			$this->tableInsertChildAfter($tbody, ['caption', 'colgroup', 'thead', 'tbody']);
 		}
 	}
 
@@ -4312,7 +4263,7 @@ trait HTMLElement {
 // note: can't use HTMLTableElement::createTBody() because we need to append row before inserting
 			$tbody = $this->ownerDocument->createElement('tbody');
 			$tbody->appendChild($row);
-			$this->insertChildAfter($tbody, ['caption', 'colgroup']);
+			$this->tableInsertChildAfter($tbody, ['caption', 'colgroup']);
 		}
 		elseif($numRow === 0) {
 			$lastTBody->appendChild($row);

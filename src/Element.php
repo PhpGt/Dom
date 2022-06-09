@@ -40,10 +40,6 @@ class Element extends DOMElement implements ArrayAccess, Countable {
 	use RegisteredNodeClass;
 	use HTMLElement;
 
-	private function __construct(string $qualifiedName) {
-		parent::__construct($qualifiedName);
-	}
-
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/classList */
 	protected function __prop_get_classList():DOMTokenList {
 		return DOMTokenListFactory::create(

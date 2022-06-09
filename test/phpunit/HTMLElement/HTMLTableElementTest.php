@@ -421,4 +421,12 @@ class HTMLTableElementTest extends HTMLElementTestCase {
 			self::assertSame($expectedOrder[$i], $childElement);
 		}
 	}
+
+	public function testSetThead_nonThead():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("table");
+		self::expectException(TypeError::class);
+		self::expectExceptionMessage("tHead must be of type HTMLTableSectionElement");
+		$sut->tHead = $document->createElement("head");
+	}
 }

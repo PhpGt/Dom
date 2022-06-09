@@ -30,21 +30,6 @@ use ReturnTypeWillChange;
  *  child of this ParentNode.
  */
 trait ParentNode {
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/childElementCount */
-	protected function __prop_get_childElementCount():int {
-		$count = 0;
-
-		$childNodes = $this->childNodes;
-		for($i = 0, $len = $childNodes->length; $i < $len; $i++) {
-			$nativeChild = $childNodes->item($i);
-			if($nativeChild instanceof Element) {
-				$count++;
-			}
-		}
-
-		return $count;
-	}
-
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children */
 	protected function __prop_get_children():HTMLCollection {
 		return HTMLCollectionFactory::create(function() {
@@ -61,34 +46,6 @@ trait ParentNode {
 
 			return NodeListFactory::create(...$elementArray);
 		});
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/firstElementChild */
-	protected function __prop_get_firstElementChild():?Element {
-		for($i = 0, $len = $this->childNodes->length; $i < $len; $i++) {
-			$child = $this->childNodes->item($i);
-			if(!$child instanceof Element) {
-				continue;
-			}
-
-			return $child;
-		}
-
-		return null;
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/lastElementChild */
-	protected function __prop_get_lastElementChild():?Element {
-		for($i = $this->childNodes->length - 1; $i >= 0; $i--) {
-			$child = $this->childNodes->item($i);
-			if(!$child instanceof Element) {
-				continue;
-			}
-
-			return $child;
-		}
-
-		return null;
 	}
 
 	/**
@@ -153,11 +110,7 @@ trait ParentNode {
 		}
 		/** @noinspection PhpRedundantCatchClauseInspection */
 		catch(DOMException $exception) {
-			if(strstr("Wrong Document Error", $exception->getMessage())) {
-				throw new WrongDocumentErrorException();
-			}
-
-			throw $exception;
+			throw new WrongDocumentErrorException();
 		}
 	}
 
