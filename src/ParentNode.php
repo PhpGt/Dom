@@ -60,7 +60,7 @@ trait ParentNode {
 	 * 	returns the appended Node object.
 	 * + Element.append() can append several nodes and strings, whereas
 	 * 	Node.appendChild() can only append one node.
-	 * @param Node|Element|Text|string...$nodes
+	 * @param Node|Element|Text|Comment|string...$nodes
 	 */
 	public function append(...$nodes):void {
 // Without this clumsy iteration, PHP 8.1 throws "free(): double free detected in tcache 2"
@@ -73,7 +73,7 @@ trait ParentNode {
 	 * The Element.prepend() method inserts a set of Node objects or string
 	 * objects before the first child of the Element. String objects are
 	 * inserted as equivalent Text nodes.
-	 * @param Node|Element|Text|string...$nodes
+	 * @param Node|Element|Text|Comment|string...$nodes
 	 */
 	public function prepend(...$nodes):void {
 		parent::prepend(...$nodes);
@@ -85,14 +85,14 @@ trait ParentNode {
 	 * DOM tree, the node will be detached from its current position and
 	 * attached at the new position.
 	 *
-	 * @param Node|Element|Text $aChild The node to append to the given parent
-	 * node (commonly an element).
+	 * @param Node|Element|Text|Comment $aChild The node to append to the
+	 * given parent node (commonly an element).
 	 * @return Node|Element The returned value is the appended
 	 * child (aChild), except when aChild is a DocumentFragment, in which
 	 * case the empty DocumentFragment is returned.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
 	 */
-	public function appendChild(Node|Element|Text|DOMNode $aChild):Node|Element|Text {
+	public function appendChild(Node|Element|Text|Comment|DOMNode $aChild):Node|Element|Text|Comment {
 		if($this instanceof Document) {
 			if($aChild instanceof Text) {
 				throw new TextNodeCanNotBeRootNodeException("Cannot insert a Text as a child of a Document");
@@ -104,7 +104,7 @@ trait ParentNode {
 		}
 
 		try {
-			/** @var Element|Node $appended */
+			/** @var Element|Node|Comment $appended */
 			$appended = parent::appendChild($aChild);
 			return $appended;
 		}
@@ -256,11 +256,11 @@ trait ParentNode {
 	 * The removeChild() method of the Node interface removes a child node
 	 * from the DOM and returns the removed node.
 	 *
-	 * @param Node|Element|Text $child
+	 * @param Node|Element|Text|Comment $child
 	 */
-	public function removeChild(Node|Element|Text|DOMNode $child):Node|Element|Text {
+	public function removeChild(Node|Element|Text|Comment|DOMNode $child):Node|Element|Text|Comment {
 		try {
-			/** @var Node|Element|Text $removed */
+			/** @var Node|Element|Text|Comment $removed */
 			$removed = parent::removeChild($child);
 			return $removed;
 		}
@@ -273,11 +273,11 @@ trait ParentNode {
 	/**
 	 * The replaceChild() method of the Node element replaces a child node
 	 * within the given (parent) node.
-	 * @return Node|Element|Text the replaced node
+	 * @return Node|Element|Text|Comment the replaced node
 	 */
-	public function replaceChild(Node|Element|DOMNode $node, Node|Element|DOMNode $child):Node|Element|Text {
+	public function replaceChild(Node|Element|DOMNode $node, Node|Element|DOMNode $child):Node|Element|Text|Comment {
 		try {
-			/** @var Node|Element|Text|false $replaced */
+			/** @var Node|Element|Text|Comment|false $replaced */
 			$replaced = parent::replaceChild($node, $child);
 			if(!$replaced) {
 				throw new DOMException();

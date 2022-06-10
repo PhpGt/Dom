@@ -33,6 +33,15 @@ class HTMLDocument extends Document {
 		);
 		$this->loadHTML($html, LIBXML_SCHEMA_CREATE | LIBXML_COMPACT);
 
+		$nonElementChildNodes = [];
+		foreach($this->childNodes as $child) {
+			if($child instanceof DocumentType
+			|| $child instanceof Element) {
+				continue;
+			}
+			array_push($nonElementChildNodes, $child);
+		}
+
 		if(is_null($this->documentElement)) {
 			$this->appendChild($this->createElement("html"));
 		}
@@ -41,6 +50,10 @@ class HTMLDocument extends Document {
 		}
 		if(is_null($this->body)) {
 			$this->documentElement->append($this->createElement("body"));
+		}
+
+		if($nonElementChildNodes) {
+			$this->documentElement->prepend(...$nonElementChildNodes);
 		}
 	}
 

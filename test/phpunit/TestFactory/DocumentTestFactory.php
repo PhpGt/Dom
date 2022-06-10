@@ -41,6 +41,11 @@ HTML;
 </html>
 HTML;
 
+	const HTML_COMMENT_FIRST_CHILD = <<<HTML
+<!--this is a comment-->
+<h1>Hello, PHP.Gt!</h1>
+HTML;
+
 	const HTML_COMMENT_MULTILINE = <<<HTML
 <!doctype html>
 <html>

@@ -413,6 +413,22 @@ class TreeWalkerTest extends TestCase {
 		self::assertSame(3, $count);
 	}
 
+	public function testComment_firstChild():void {
+		$document = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_COMMENT_FIRST_CHILD);
+		$sut = $document->createTreeWalker(
+			$document->documentElement,
+			NodeFilter::SHOW_COMMENT
+		);
+		$count = 0;
+		foreach($sut as $node) {
+			if(!$node instanceof Comment) {
+				continue;
+			}
+			$count++;
+		}
+		self::assertSame(1, $count);
+	}
+
 	public function testDocument():void {
 		$document = DocumentTestFactory::createHTMLDocument();
 		$sut = TreeWalkerFactory::create(
