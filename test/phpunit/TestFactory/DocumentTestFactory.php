@@ -60,6 +60,26 @@ HTML;
 </html>
 HTML;
 
+	const HTML_COMMENT_NESTED = <<<HTML
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Comment test</title>
+</head>
+<body>
+	<h1>Hello, PHP.Gt!</h1>
+	<!--this is a comment-->
+	<h2>There are three comments in this document</h2>
+	<div>
+		<h3>This DIV contains another comment.</h3>
+		<!--this is another comment-->	
+		<!--and another!-->	
+	</div>
+</body>
+</html>
+HTML;
+
 	const HTML_FORMS = <<<HTML
 <!doctype html>
 <main>

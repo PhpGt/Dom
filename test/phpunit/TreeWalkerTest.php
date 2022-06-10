@@ -397,6 +397,22 @@ class TreeWalkerTest extends TestCase {
 		}
 	}
 
+	public function testComment_nested():void {
+		$document = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_COMMENT_NESTED);
+		$sut = $document->createTreeWalker(
+			$document->documentElement,
+			NodeFilter::SHOW_COMMENT
+		);
+		$count = 0;
+		foreach($sut as $node) {
+			if(!$node instanceof Comment) {
+				continue;
+			}
+			$count++;
+		}
+		self::assertSame(3, $count);
+	}
+
 	public function testDocument():void {
 		$document = DocumentTestFactory::createHTMLDocument();
 		$sut = TreeWalkerFactory::create(
