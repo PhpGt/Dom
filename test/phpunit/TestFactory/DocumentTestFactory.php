@@ -35,12 +35,30 @@ HTML;
 </head>
 <body>
 	<h1>Hello, PHP.Gt!</h1>
-	<!-- this is a comment -->
+	<!--this is a comment-->
 	<h2>There is a comment in this document</h2>
 </body>
 </html>
 HTML;
 
+	const HTML_COMMENT_MULTILINE = <<<HTML
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Multi-line comment test</title>
+</head>
+<body>
+	<h1>Hello, PHP.Gt!</h1>
+	<!--
+	this is a comment
+	it spans multiple lines
+	thank you, have a nice day
+	-->
+	<h2>There is a multi-line comment in this document</h2>
+</body>
+</html>
+HTML;
 
 	const HTML_FORMS = <<<HTML
 <!doctype html>

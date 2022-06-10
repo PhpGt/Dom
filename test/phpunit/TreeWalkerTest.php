@@ -361,6 +361,42 @@ class TreeWalkerTest extends TestCase {
 		self::assertEquals(NodeFilter::FILTER_REJECT, $sut->filter->acceptNode($element));
 	}
 
+	public function testComment_walk():void {
+		$document = new HTMLDocument(DocumentTestFactory::HTML_COMMENT);
+		$sut = TreeWalkerFactory::create(
+			$document->body,
+			NodeFilter::SHOW_COMMENT
+		);
+		foreach($sut as $i => $node) {
+			if($i === 0) {
+				self::assertSame(ElementType::HTMLBodyElement, $node->elementType);
+			}
+			else {
+				self::assertInstanceOf(Comment::class, $node);
+				self::assertSame("this is a comment", $node->data);
+			}
+		}
+	}
+
+	public function testComment_multiLineWalk():void {
+		$document = new HTMLDocument(DocumentTestFactory::HTML_COMMENT_MULTILINE);
+		$sut = TreeWalkerFactory::create(
+			$document->body,
+			NodeFilter::SHOW_COMMENT
+		);
+		foreach($sut as $i => $node) {
+			if($i === 0) {
+				self::assertSame(ElementType::HTMLBodyElement, $node->elementType);
+			}
+			else {
+				self::assertInstanceOf(Comment::class, $node);
+				self::assertStringContainsString("this is a comment\n", $node->data);
+				self::assertStringContainsString("it spans multiple lines\n", $node->data);
+				self::assertStringContainsString("thank you, have a nice day\n", $node->data);
+			}
+		}
+	}
+
 	public function testDocument():void {
 		$document = DocumentTestFactory::createHTMLDocument();
 		$sut = TreeWalkerFactory::create(
