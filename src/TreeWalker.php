@@ -16,7 +16,7 @@ use Iterator;
  * @property-read NodeFilter $filter Returns a NodeFilter used to select the relevant nodes.
  * @property-read Node|Element $currentNode Is the Node on which the TreeWalker is currently pointing at.
  *
- * @implements Iterator<int, Node|Element>
+ * @implements Iterator<int, Node|Element|Attr|Comment|Text|ProcessingInstruction>
  *
  * Many thanks to Timo Tijhof for their dom-TreeWalker-polyfill project which
  * helped as reference while implementing this functionality:

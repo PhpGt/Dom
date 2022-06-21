@@ -821,6 +821,9 @@ trait HTMLElement {
 				if($option->value === $value) {
 					$option->selected = true;
 				}
+				else {
+					$option->selected = false;
+				}
 			}
 		}
 		else {

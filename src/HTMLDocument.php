@@ -11,6 +11,7 @@ use Gt\PropFunc\MagicProp;
  * @property-read HTMLCollection $images Returns a list of the images in the current document.
  * @property-read HTMLCollection $links Returns a list of all the hyperlinks in the document.
  * @property-read HTMLCollection $scripts Returns all the script elements on the document.
+ * @property string $title Sets or gets the title of the current document.
  *
 // * @method getElementsByTagName(string $tagName)
  */
@@ -110,5 +111,21 @@ class HTMLDocument extends Document {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/scripts */
 	public function __prop_get_scripts():HTMLCollection {
 		return $this->getElementsByTagName("script");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/title */
+	protected function __prop_get_title():string {
+		$titleElement = $this->head?->getElementsByTagName("title")?->item(0);
+		return $titleElement?->text ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/title */
+	protected function __prop_set_title(string $value):void {
+		if(!$titleElement = $this->head?->getElementsByTagName("title")?->item(0)) {
+			$titleElement = $this->createElement("title");
+			$this->head->appendChild($titleElement);
+		}
+
+		$titleElement->text = $value;
 	}
 }

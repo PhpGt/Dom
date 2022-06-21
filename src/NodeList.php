@@ -39,7 +39,7 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * behaves similarly to HTMLCollection (which is ALWAYS live).
 	 * @see HTMLCollection
 	 */
-	public function __construct(Node|Element|callable...$representation) {
+	public function __construct(Node|Element|Attr|Text|callable...$representation) {
 		if(isset($representation[0]) && is_callable($representation[0])) {
 			$this->callback = $representation[0];
 		}
@@ -66,7 +66,7 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 		return isset($nodeArray[$offset]);
 	}
 
-	public function offsetGet(mixed $offset):null|Node|Element {
+	public function offsetGet(mixed $offset):null|Node|Element|Attr|Text {
 		if(isset($this->nodeList)) {
 			return $this->nodeList[$offset] ?? null;
 		}
@@ -125,7 +125,7 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 		return $this->iteratorKey;
 	}
 
-	public function current():null|Node|Element {
+	public function current():null|Node|Element|Attr|Text {
 // TODO: Duplicated code with NodeList::valid() - refactor.
 		if(isset($this->nodeList)) {
 			return $this->nodeList[$this->iteratorKey];
@@ -160,7 +160,7 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * @return null|Node
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/item
 	 */
-	public function item(int $index):null|Node|Element {
+	public function item(int $index):null|Node|Element|Attr|Text {
 		if(isset($this->nodeList)) {
 			if(isset($this->nodeList[$index])) {
 				return $this->nodeList[$index];
