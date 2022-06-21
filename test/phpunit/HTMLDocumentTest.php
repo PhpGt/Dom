@@ -232,7 +232,6 @@ class HTMLDocumentTest extends TestCase {
 		self::assertCount(2, $sut->scripts);
 	}
 
-
 	public function testStreamClosedByDefault():void {
 		$sut = new HTMLDocument();
 		self::assertFalse($sut->isWritable());
@@ -558,5 +557,19 @@ class HTMLDocumentTest extends TestCase {
 		$sut = new HTMLDocument();
 		self::expectException(XPathQueryException::class);
 		$sut->evaluate("la la la 123@456 [#]");
+	}
+
+	public function testTitle_defaultEmptyString():void {
+		$sut = new HTMLDocument();
+		self::assertSame("", $sut->title);
+	}
+
+	public function testTitle_set():void {
+		$sut = new HTMLDocument();
+		$string = "Test Title";
+		$sut->title = $string;
+		self::assertSame($string, $sut->title);
+		$titleEl = $sut->head->querySelector("title");
+		self::assertSame($string, $titleEl->textContent);
 	}
 }
