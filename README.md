@@ -4,7 +4,7 @@
 
 Built on top of PHP's native [DOMDocument](http://php.net/manual/en/book.dom.php), this project provides access to modern DOM APIs, as you would expect working with client-side code in the browser.
 
-Performing DOM manipulation in your server-side code enhances the way dynamic pages can be built. Utilising a standardised object-oriented interface means the page can be ready-processed, benefitting browsers, webservers and content delivery networks.
+Performing DOM manipulation in your server-side code enhances the way dynamic pages can be built. Utilising a standardised object-oriented interface means the page can be ready-processed, benefiting browsers, webservers and content delivery networks.
 
 ***
 
@@ -58,7 +58,6 @@ $html = file_get_contents("name.html");
 $document = new HTMLDocument($html);
 
 if(isset($_GET["name"])) {
-	/** @var HTMLSpanElement $span */
 	$span = $document->querySelector(".name-output");
 	$span->innerText = $_GET["name"];
 }
@@ -69,7 +68,7 @@ echo $document;
 ## Features at a glance
 
 + Compatible with W3C's DOM Living Standard:
-	+ Classes for all types of `HTMLElement`, such as `HTMLAnchorElement` (`<a>`), `HTMLButtonElement` (`<button>`), `HTMLInputElement` (`<input>`), `HTMLTableSectionElement` (`<thead>`, `<tbody>`, `<tfoot>`), etc.
+	+ The `Element` type represents all `HTMLElement` specifications, such as `HTMLAnchorElement` (`<a>`), `HTMLButtonElement` (`<button>`), `HTMLInputElement` (`<input>`), `HTMLTableSectionElement` (`<thead>`, `<tbody>`, `<tfoot>`), etc. The particular type can be detected with `Element::getElementType()`, which returns one of the `ElementType` enum values. 
 	+ `DOMException` extensions for catching different types of exception, such as `EnumeratedValueException`, `HierarchyRequestError`, `IndexSizeException`, etc.
 	+ Client-side functionality stubbed including classes for `FileList`, `StyleSheet`, `VideoTrackList`, `WindowProxy`, etc.
 + DOM level 4+ functionality:
@@ -87,29 +86,15 @@ echo $document;
 
 ### Known limitations / W3C spec compliance
 
-This repository aims to be as accurate as possible to the DOM specification at https://dom.spec.whatwg.org/ - as of v3.0.0 there are no known inconsistencies.
+This repository aims to be as accurate as possible to the DOM specification at https://dom.spec.whatwg.org/ - as of v4.0.0 all functionality is implemented with the following minor but unavoidable deviations from the standard:
 
-The DOM specification does however define functionality that is only possible to implement on the client-side. For example, `HTMLInputElement::files` returns a `FileList` that enumerates all files that are selected by the user through the browser's interface. This kind of functionality is impossible to implement server-side, but has been stubbed out for consistency with the specification. Attempting to use client-side functionality within this library throws a `ClientSideOnlyFunctionalityException`. 
-
-The following classes extend the `ClientSideOnly` base class:
-
-+ `AudioTrackList`
-+ `CSSStyleDeclaration`
-+ `FileList`
-+ `MediaController`
-+ `MediaError`
-+ `MediaStream`
-+ `StyleSheet`
-+ `TextTrack`
-+ `TextTrackList`
-+ `TimeRanges`
-+ `ValidityState`
-+ `VideoTrackList`
-+ `WindowProxy`
++ Elements' `tagName` property is uppercase.
++ To check the `HTMLElement` type, `Element::getElementType()` must be called - no subclasses of `Element` are available for usage with `instanceof`, for example.
++ The DOM specification defines functionality that is only possible to implement on the client-side. For example, `HTMLInputElement::files` returns a `FileList` that enumerates all files that are selected by the user through the browser's interface. This kind of functionality is impossible to implement server-side, but has been stubbed out for consistency with the specification. Attempting to use client-side functionality within this library throws a `ClientSideOnlyFunctionalityException`. 
 
 ### Data binding and page template features
 
-This repository is intended to be as accurate to the DOM specification as possible. An extension to the repository is available at https://php.gt/domtemplate which adds page templating and data binding through custom elements and template attributes, introducing serverside functionality similar to that of WebComponents.
+This repository is intended to be as accurate to the DOM specification as possible. An extension to the repository is available at https://php.gt/domtemplate which adds page templating and data binding through custom elements and template attributes, introducing serverside functionality like that of WebComponents.
 
 [mdn-HTMLDocument]: https://developer.mozilla.org/docs/Web/API/HTMLDocument
 [mdn-Element]: https://developer.mozilla.org/docs/Web/API/Element
