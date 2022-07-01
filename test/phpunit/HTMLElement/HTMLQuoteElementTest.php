@@ -1,27 +1,29 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLQuoteElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\ElementType;
+use Gt\Dom\HTMLDocument;
 
 class HTMLQuoteElementTest extends HTMLElementTestCase {
 	public function testCite():void {
-		/** @var HTMLQuoteElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("blockquote");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("blockquote");
 		self::assertPropertyAttributeCorrelate($sut, "cite");
 	}
 
 	public function testBlockquote():void {
-		self::assertInstanceOf(
-			HTMLQuoteElement::class,
-			NodeTestFactory::createHTMLElement("blockquote")
+		$document = new HTMLDocument();
+		self::assertSame(
+			ElementType::HTMLQuoteElement,
+			$document->createElement("blockquote")->elementType
 		);
 	}
 
 	public function testQ():void {
-		self::assertInstanceOf(
-			HTMLQuoteElement::class,
-			NodeTestFactory::createHTMLElement("q")
+		$document = new HTMLDocument();
+		self::assertSame(
+			ElementType::HTMLQuoteElement,
+			$document->createElement("q")->elementType
 		);
 	}
 }

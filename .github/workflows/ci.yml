@@ -15,7 +15,10 @@ jobs:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
-      - uses: php-actions/composer@v5
+      - name: Composer install
+        uses: php-actions/composer@v6
+        with:
+          php_version: '8.1'
 
       - name: Archive build
         run: mkdir /tmp/github-actions/ && tar -cvf /tmp/github-actions/build.tar ./
@@ -40,28 +43,9 @@ jobs:
         run: tar -xvf /tmp/github-actions/build.tar ./
 
       - name: PHP Unit tests
-        uses: php-actions/phpunit@v2
+        uses: php-actions/phpunit@v3
         with:
-          php_version: 8.0
+          php_version: '8.1'
           php_extensions: xdebug
           configuration: test/phpunit/phpunit.xml
           bootstrap: vendor/autoload.php
-
-  phpstan:
-    runs-on: ubuntu-latest
-    needs: [composer]
-
-    steps:
-      - uses: actions/download-artifact@v2
-        with:
-          name: build-artifact
-          path: /tmp/github-actions
-
-      - name: Extract build archive
-        run: tar -xvf /tmp/github-actions/build.tar ./
-
-      - name: PHP Static Analysis
-        uses: php-actions/phpstan@v2
-        with:
-          path: src/
-          level: 6

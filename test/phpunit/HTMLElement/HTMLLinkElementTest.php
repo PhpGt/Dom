@@ -2,55 +2,54 @@
 namespace Gt\Dom\Test\HTMLElement;
 
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
-use Gt\Dom\HTMLElement\HTMLLinkElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLLinkElementTest extends HTMLElementTestCase {
 	public function testAs():void {
-		/** @var HTMLLinkElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("link");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("link");
 		self::assertPropertyAttributeCorrelate($sut, "as");
 	}
 
 	public function testDisabled():void {
-		/** @var HTMLLinkElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("link");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("link");
 		self::assertPropertyAttributeCorrelateBool($sut, "disabled");
 	}
 
 	public function testHref():void {
-		/** @var HTMLLinkElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("link");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("link");
 		self::assertPropertyAttributeCorrelate($sut, "href");
 	}
 
 	public function testHreflang():void {
-		/** @var HTMLLinkElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("link");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("link");
 		self::assertPropertyAttributeCorrelate($sut, "hreflang");
 	}
 
 	public function testMedia():void {
-		/** @var HTMLLinkElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("link");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("link");
 		self::assertPropertyAttributeCorrelate($sut, "media");
 	}
 
 	public function testReferrerPolicy():void {
-		/** @var HTMLLinkElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("link");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("link");
 		self::assertPropertyAttributeCorrelate($sut, "referrerpolicy", "referrerPolicy");
 	}
 
 	public function testRel():void {
-		/** @var HTMLLinkElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("link");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("link");
 		self::assertPropertyAttributeCorrelate($sut, "rel");
 	}
 
 	public function testRelList():void {
-		/** @var HTMLLinkElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("link");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("link");
 		$sut->rel = "one";
 		$relList = $sut->relList;
 		self::assertCount(1, $relList);
@@ -64,22 +63,22 @@ class HTMLLinkElementTest extends HTMLElementTestCase {
 	}
 
 	public function testSizes():void {
-		/** @var HTMLLinkElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("link");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("link");
 		self::assertPropertyAttributeCorrelate($sut, "sizes");
 	}
 
 	public function testSheet():void {
-		/** @var HTMLLinkElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("link");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("link");
 		self::expectException(ClientSideOnlyFunctionalityException::class);
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$value = $sut->sheet;
 	}
 
 	public function testType():void {
-		/** @var HTMLLinkElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("link");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("link");
 		self::assertPropertyAttributeCorrelate($sut, "type");
 	}
 }

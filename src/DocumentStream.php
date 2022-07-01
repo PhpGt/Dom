@@ -1,13 +1,11 @@
 <?php
+
 namespace Gt\Dom;
 
 use Gt\Dom\Exception\DocumentStreamIsClosedException;
 use Gt\Dom\Exception\DocumentStreamNotWritableException;
 use Gt\Dom\Exception\DocumentStreamSeekFailureException;
-use Gt\Dom\Exception\DOMException;
 use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
-use Gt\Dom\HTMLElement\HTMLBodyElement;
-use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 use TypeError;
 
@@ -83,7 +81,6 @@ trait DocumentStream {
 	 * @throws RuntimeException on failure.
 	 */
 	public function seek($offset, $whence = SEEK_SET):void {
-		/** @noinspection PhpUnusedLocalVariableInspection */
 		$result = null;
 		$this->fillStream();
 
@@ -145,12 +142,8 @@ trait DocumentStream {
 	 * @throws RuntimeException on failure.
 	 */
 	public function write($string):int {
-		if(!$this->isWritable()) {
+		if(!$this->isWritable() || !$this instanceof HTMLDocument) {
 			throw new DocumentStreamNotWritableException();
-		}
-
-		if(!$this instanceof HTMLDocument) {
-			throw new WriteOnNonHTMLDocumentException("Operation is not supported");
 		}
 
 		$this->body?->append($string);
@@ -163,7 +156,7 @@ trait DocumentStream {
 	 * @return bool
 	 */
 	public function isReadable():bool {
-		$mode = $this->getMetadata("mode");
+		$mode = $this->getMetadata("mode") ?? "";
 		$readable = false;
 
 		if(strstr($mode, "r")
@@ -175,7 +168,10 @@ trait DocumentStream {
 	}
 
 	public function open():Document {
-		/** @var Document $this */
+		if(!$this instanceof HTMLDocument) {
+			throw new WriteOnNonHTMLDocumentException();
+		}
+		/** @var HTMLDocument $this */
 		$this->stream = fopen("php://memory", "r+");
 		return $this;
 	}

@@ -1,25 +1,24 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLProgressElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLProgressElementTest extends HTMLElementTestCase {
 	public function testMax():void {
-		/** @var HTMLProgressElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("progress");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("progress");
 		self::assertPropertyAttributeCorrelateNumber($sut, "?float", "max");
 	}
 
 	public function testPositionNoValueOrMax():void {
-		/** @var HTMLProgressElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("progress");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("progress");
 		self::assertSame(-1.0, $sut->position);
 	}
 
 	public function testPositionNoMax():void {
-		/** @var HTMLProgressElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("progress");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("progress");
 		for($i = 0; $i < 10; $i++) {
 			$sut->value = rand(-999, 999);
 			self::assertSame(-1.0, $sut->position);
@@ -27,8 +26,8 @@ class HTMLProgressElementTest extends HTMLElementTestCase {
 	}
 
 	public function testPosition():void {
-		/** @var HTMLProgressElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("progress");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("progress");
 		for($i = 0; $i < 10; $i++) {
 			do {
 				$sut->value = (string)rand(-999, 999);
@@ -49,8 +48,8 @@ class HTMLProgressElementTest extends HTMLElementTestCase {
 	}
 
 	public function testValue():void {
-		/** @var HTMLProgressElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("progress");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("progress");
 		self::assertPropertyAttributeCorrelateNumber($sut, "?float", "value");
 	}
 }

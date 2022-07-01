@@ -1,31 +1,30 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLEmbedElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLEmbedElementTest extends HTMLElementTestCase {
 	public function testHeight():void {
-		/** @var HTMLEmbedElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("embed");
-		self::assertPropertyAttributeCorrelate($sut, "height");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("embed");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int", "height");
 	}
 
 	public function testSrc():void {
-		/** @var HTMLEmbedElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("embed");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("embed");
 		self::assertPropertyAttributeCorrelate($sut, "src");
 	}
 
 	public function testType():void {
-		/** @var HTMLEmbedElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("embed");
-		self::assertPropertyAttributeCorrelate($sut, "type");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("embed");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int", "type");
 	}
 
 	public function testWidth():void {
-		/** @var HTMLEmbedElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("embed");
-		self::assertPropertyAttributeCorrelate($sut, "width");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("embed");
+		self::assertPropertyAttributeCorrelateNumber($sut, "int", "width");
 	}
 }

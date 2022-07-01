@@ -1,66 +1,131 @@
 <?php
 namespace Gt\Dom;
 
-use Gt\Dom\HTMLElement\HTMLElement;
+use Gt\PropFunc\MagicProp;
 
 /**
- * @method HTMLElement createElement(string $tagName)
+ * @property-read ?Element $body The Document.body property represents the <body> or <frameset> node of the current document, or null if no such element exists.
+ * @property-read ?Element $head Returns the <head> element of the current document.
+ * @property-read HTMLCollection $embeds Returns a list of the embedded <embed> elements within the current document.
+ * @property-read HTMLCollection $forms Returns a list of the <form> elements within the current document.
+ * @property-read HTMLCollection $images Returns a list of the images in the current document.
+ * @property-read HTMLCollection $links Returns a list of all the hyperlinks in the document.
+ * @property-read HTMLCollection $scripts Returns all the script elements on the document.
+ * @property string $title Sets or gets the title of the current document.
+ *
+// * @method getElementsByTagName(string $tagName)
  */
 class HTMLDocument extends Document {
-	const DEFAULT_DOCTYPE = "<!doctype html>";
-	const EMPTY_DOCUMENT_STRING = self::DEFAULT_DOCTYPE . "<html><head></head><body></body></html>";
-	const W3_NAMESPACE = "http://www.w3.org/1999/xhtml";
+	use MagicProp;
 
-	public function __construct(string $html = "") {
-		parent::__construct();
-
-		if(strlen($html) === 0) {
-			$html = self::EMPTY_DOCUMENT_STRING;
-		}
-
-// Default the doctype to HTML5's doctype.
-		$posDoctype = stripos($html, "<!doctype");
-		$posFirstAngleBracket = strpos($html, "<");
-		if(false === $posDoctype
-		|| $posDoctype > $posFirstAngleBracket) {
-			$html = self::DEFAULT_DOCTYPE . $html;
-		}
-
-		$this->open();
-		$html = preg_replace_callback(
-			'/[\x{80}-\x{10FFFF}]/u',
-			function($match) {
-				return mb_convert_encoding(
-					$match[0],
-					"HTML-ENTITIES",
-					"UTF-8"
-				);
-			},
-			$html
+	public function __construct(
+		string $html = "<!doctype html>",
+		string $characterSet = "UTF-8"
+	) {
+		parent::__construct(
+			$characterSet,
+			"text/html",
 		);
-		$this->domDocument->loadHTML($html, LIBXML_SCHEMA_CREATE);
 
-		if(!$this->domDocument->documentElement) {
-			$html = $this->domDocument->createElement("html");
-			$this->domDocument->appendChild($html);
+		$html = mb_convert_encoding(
+			$html,
+			"HTML-ENTITIES",
+			$this->characterSet,
+		);
+		$this->loadHTML($html, LIBXML_SCHEMA_CREATE | LIBXML_COMPACT);
+
+		$nonElementChildNodes = [];
+		foreach($this->childNodes as $child) {
+			if($child instanceof DocumentType
+			|| $child instanceof Element) {
+				continue;
+			}
+			array_push($nonElementChildNodes, $child);
 		}
 
-		if(!$this->domDocument->getElementsByTagName("head")->item(0)
-		) {
-			$head = $this->domDocument->createElement("head");
-			$this->domDocument->documentElement->insertBefore(
-				$head,
-				$this->domDocument->documentElement->firstChild
-			);
+		if(is_null($this->documentElement)) {
+			$this->appendChild($this->createElement("html"));
 		}
-		if(!$this->domDocument->getElementsByTagName("body")->item(0)
-		) {
-			$body = $this->domDocument->createElement("body");
-			$this->domDocument->documentElement->appendChild($body);
+		if(is_null($this->head)) {
+			$this->documentElement->prepend($this->createElement("head"));
+		}
+		if(is_null($this->body)) {
+			$this->documentElement->append($this->createElement("body"));
+		}
+
+		if($nonElementChildNodes) {
+			$this->documentElement->prepend(...$nonElementChildNodes);
 		}
 	}
 
-	protected function __prop_get_contentType():string {
-		return "text/html";
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/body */
+	public function __prop_get_body():null|Element {
+		return $this->getElementsByTagName("body")->item(0);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/head */
+	public function __prop_get_head():null|Element {
+		return $this->getElementsByTagName("head")->item(0);
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/embeds */
+	public function __prop_get_embeds():HTMLCollection {
+		return $this->getElementsByTagName("embed");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/forms */
+	public function __prop_get_forms():HTMLCollection {
+		return $this->getElementsByTagName("form");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/images */
+	public function __prop_get_images():HTMLCollection {
+		return $this->getElementsByTagName("img");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/links */
+	public function __prop_get_links():HTMLCollection {
+		return HTMLCollectionFactory::create(function() {
+			$elementList = [];
+
+			$areaList = $this->getElementsByTagName("area");
+			for($i = 0, $len = $areaList->length; $i < $len; $i++) {
+				array_push($elementList, $areaList->item($i));
+			}
+			$aList = $this->getElementsByTagName("a");
+			for($i = 0, $len = $aList->length; $i < $len; $i++) {
+				$domNode = $aList->item($i);
+				$hrefAttr = $domNode->attributes->getNamedItem(
+					"href"
+				);
+				if(!$hrefAttr) {
+					continue;
+				}
+				array_push($elementList, $domNode);
+			}
+
+			return NodeListFactory::create(...$elementList);
+		});
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/scripts */
+	public function __prop_get_scripts():HTMLCollection {
+		return $this->getElementsByTagName("script");
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/title */
+	protected function __prop_get_title():string {
+		$titleElement = $this->head?->getElementsByTagName("title")?->item(0);
+		return $titleElement?->text ?? "";
+	}
+
+	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Document/title */
+	protected function __prop_set_title(string $value):void {
+		if(!$titleElement = $this->head?->getElementsByTagName("title")?->item(0)) {
+			$titleElement = $this->createElement("title");
+			$this->head->appendChild($titleElement);
+		}
+
+		$titleElement->text = $value;
 	}
 }

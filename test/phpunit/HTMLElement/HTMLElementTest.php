@@ -4,18 +4,20 @@ namespace Gt\Dom\Test\HTMLElement;
 use Gt\Dom\ClientSide\CSSStyleDeclaration;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\EnumeratedValueException;
-use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
-use Gt\Dom\Test\TestFactory\HTMLElementTestFactory;
+use Gt\Dom\Exception\IncorrectHTMLElementUsageException;
+use Gt\Dom\HTMLDocument;
 use PHPUnit\Framework\TestCase;
 
-class HTMLElementTest extends TestCase {
+class HTMLElementTest extends HTMLElementTestCase {
 	public function testAccessKeyNone():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::assertEquals("", $sut->accessKey);
 	}
 
 	public function testAccessKeySetGet():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->accessKey = "a";
 		self::assertEquals("a", $sut->accessKey);
 		self::assertEquals(
@@ -25,18 +27,21 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testAccessKeyLabelThrows():void {
-		$sut = HTMLElementTestFactory::create();
-		self::expectException(FunctionalityNotAvailableOnServerException::class);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
 		$test = $sut->accessKeyLabel;
 	}
 
 	public function testContentEditableInherit():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::assertEquals("inherit", $sut->contentEditable);
 	}
 
 	public function testContentEditable():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->contentEditable = "true";
 		self::assertEquals("true", $sut->contentEditable);
 		$sut->contentEditable = "false";
@@ -46,18 +51,21 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testContentEditableEnum():void {
-		$sut = HTMLElementTestFactory::create("div");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::expectException(EnumeratedValueException::class);
 		$sut->contentEditable = "truthy";
 	}
 
 	public function testIsContentEditableDefault():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::assertFalse($sut->isContentEditable);
 	}
 
 	public function testIsContentEditableTrueFalse():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->contentEditable = "true";
 		self::assertTrue($sut->isContentEditable);
 		$sut->contentEditable = "false";
@@ -65,13 +73,15 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testIsContentEditableInheritNoParent():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->contentEditable = "inherit";
 		self::assertFalse($sut->isContentEditable);
 	}
 
 	public function testIsContentEditableInheritParentWithFalse():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->contentEditable = "inherit";
 		$falseContentEditable = $sut->ownerDocument->createElement("div");
 		$falseContentEditable->contentEditable = "false";
@@ -80,7 +90,8 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testIsContentEditableInheritParentWithTrue():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->contentEditable = "inherit";
 		$falseContentEditable = $sut->ownerDocument->createElement("div");
 		$falseContentEditable->contentEditable = "true";
@@ -89,7 +100,8 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testIsContentEditableInheritAncestor():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->contentEditable = "inherit";
 		$falseContentEditable = $sut->ownerDocument->createElement("div");
 		$falseContentEditable->contentEditable = "true";
@@ -102,23 +114,27 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testDirNone():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::assertEquals("", $sut->dir);
 	}
 
 	public function testDirGetSet():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->dir = "ltr";
 		self::assertEquals("ltr", $sut->dir);
 	}
 
 	public function testDraggableNone():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::assertFalse($sut->draggable);
 	}
 
 	public function testDraggable():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->draggable = true;
 		self::assertTrue($sut->draggable);
 		self::assertEquals("true", $sut->getAttribute("draggable"));
@@ -128,12 +144,14 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testEnterKeyHintNone():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::assertEquals("", $sut->enterKeyHint);
 	}
 
 	public function testEnterKeyHint():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->enterKeyHint = "go";
 		self::assertEquals("go", $sut->enterKeyHint);
 		self::assertEquals("go", $sut->getAttribute("enterkeyhint"));
@@ -143,18 +161,21 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testEnterKeyHintBadEnum():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::expectException(EnumeratedValueException::class);
 		$sut->enterKeyHint = "lalala";
 	}
 
 	public function testHiddenDefault():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::assertFalse($sut->hidden);
 	}
 
 	public function testHidden():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->hidden = true;
 		self::assertTrue($sut->hidden);
 		self::assertTrue($sut->hasAttribute("hidden"));
@@ -165,12 +186,14 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testInertDefault():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::assertFalse($sut->inert);
 	}
 
 	public function testInert():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->inert = true;
 		self::assertTrue($sut->inert);
 		self::assertTrue($sut->hasAttribute("inert"));
@@ -181,18 +204,21 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testInnerTextEmpty():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::assertEquals("", $sut->innerText);
 	}
 
 	public function testInnerText():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->innerText = "Hello, PHPUnit!";
 		self::assertEquals("Hello, PHPUnit!", $sut->innerText);
 	}
 
 	public function testInnerTextRemovesAllChildren():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->append(
 			$sut->ownerDocument->createElement("child"),
 			$sut->ownerDocument->createElement("child"),
@@ -203,7 +229,8 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testInnerTextDoesNotShowHidden():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$child1 = $sut->ownerDocument->createElement("child");
 		$child1->textContent = "Child 1";
 		$child2 = $sut->ownerDocument->createElement("child");
@@ -217,24 +244,28 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testLangDefault():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::assertEquals("", $sut->lang);
 	}
 
 	public function testLang():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->lang = "en";
 		self::assertEquals("en", $sut->lang);
 		self::assertEquals("en", $sut->getAttribute("lang"));
 	}
 
 	public function testTabIndexDefault():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::assertEquals(-1, $sut->tabIndex);
 	}
 
 	public function testTabIndex():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->tabIndex = 1;
 		self::assertEquals(1, $sut->tabIndex);
 		self::assertEquals("1", $sut->getAttribute("tabindex"));
@@ -244,28 +275,61 @@ class HTMLElementTest extends TestCase {
 	}
 
 	public function testTitleDefault():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::assertEquals("", $sut->title);
 	}
 
 	public function testTitle():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->title = "Example";
 		self::assertEquals("Example", $sut->title);
 		self::assertEquals("Example", $sut->getAttribute("title"));
 	}
 
 	public function testStyleGet():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		self::expectException(ClientSideOnlyFunctionalityException::class);
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$value = $sut->style;
 	}
 
 	public function testStyleSet():void {
-		$sut = HTMLElementTestFactory::create();
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$style = self::createMock(CSSStyleDeclaration::class);
 		self::expectException(ClientSideOnlyFunctionalityException::class);
 		$sut->style = $style;
+	}
+
+	public function testDatasetEmpty():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
+		self::assertEmpty($sut->dataset);
+		self::assertCount(0, $sut->dataset);
+		self::assertNull($sut->dataset->get("nothing"));
+	}
+
+	public function testDatasetSetsDataAttribute():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
+		$sut->dataset->set("example", "something");
+		self::assertEquals("something", $sut->getAttribute("data-example"));
+	}
+
+	public function testPropertyNotAvailable():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
+		self::expectException(IncorrectHTMLElementUsageException::class);
+		$sut->disabled = true;
+	}
+
+	public function testToString():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example-element");
+		$sut->textContent = uniqid();
+		self::assertSame("", (string)$sut);
 	}
 }

@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class DocumentStreamIsClosedException extends DOMException {
-
-}
+class DocumentStreamIsClosedException extends DomException {}

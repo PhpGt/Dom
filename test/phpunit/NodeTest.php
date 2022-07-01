@@ -1,48 +1,47 @@
 <?php
 namespace Gt\Dom\Test;
 
-use Error;
-use Gt\Dom\Element;
 use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\NotFoundErrorException;
-use Gt\Dom\Facade\DOMDocumentFacade;
+use Gt\Dom\HTMLDocument;
 use Gt\Dom\Node;
-use Gt\Dom\ProcessingInstruction;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use Gt\Dom\Text;
+use Gt\Dom\XMLDocument;
 use PHPUnit\Framework\TestCase;
 
 class NodeTest extends TestCase {
 	public function testCanNotConstruct():void {
-		self::expectException(Error::class);
-		self::expectExceptionMessage("Cannot instantiate abstract class Gt\Dom\Node");
+		self::expectException(\Error::class);
+		self::expectExceptionMessage("Call to private Gt\Dom\Node::__construct()");
 		$className = Node::class;
 		/** @phpstan-ignore-next-line */
 		new $className();
 	}
 
 	public function testBaseURIClientSideOnly():void {
-		$sut = NodeTestFactory::createNode("example");
-		self::expectException(ClientSideOnlyFunctionalityException::class);
-		/** @phpstan-ignore-next-line */
-		$sut->baseURI;
+		$document = new XMLDocument();
+		$sut = $document->createElement("example");
+		self::assertNull($sut->baseURI);
 	}
 
 	public function testChildNodesEmpty():void {
-		$sut = NodeTestFactory::createNode("example");
+		$sut = (new HTMLDocument())->createElement("example");
 		self::assertEmpty($sut->childNodes);
 		self::assertCount(0, $sut->childNodes);
 	}
 
 	public function testChildNodes():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child = $sut->ownerDocument->createElement("example-child");
 		$sut->appendChild($child);
 		self::assertCount(1, $sut->childNodes);
 	}
 
 	public function testChildNodesManyLive():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 
 		$nodeList = $sut->childNodes;
 		self::assertCount(0, $nodeList);
@@ -58,12 +57,14 @@ class NodeTest extends TestCase {
 	}
 
 	public function testFirstChildNone():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertNull($sut->firstChild);
 	}
 
 	public function testFirstChild():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$c1 = $sut->ownerDocument->createElement("child-one");
 		$c2 = $sut->ownerDocument->createElement("child-two");
 		$c3 = $sut->ownerDocument->createElement("child-three");
@@ -72,12 +73,14 @@ class NodeTest extends TestCase {
 	}
 
 	public function testLastChildNone():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertNull($sut->lastChild);
 	}
 
 	public function testLastChild():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$c1 = $sut->ownerDocument->createElement("child-one");
 		$c2 = $sut->ownerDocument->createElement("child-two");
 		$c3 = $sut->ownerDocument->createElement("child-three");
@@ -86,7 +89,8 @@ class NodeTest extends TestCase {
 	}
 
 	public function testFirstChildAfterInsertBefore():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$c1 = $sut->ownerDocument->createElement("child-one");
 		$c2 = $sut->ownerDocument->createElement("child-two");
 		$c3 = $sut->ownerDocument->createElement("child-three");
@@ -96,14 +100,16 @@ class NodeTest extends TestCase {
 	}
 
 	public function testIsConnected():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertFalse($sut->isConnected);
 		$sut->ownerDocument->append($sut);
 		self::assertTrue($sut->isConnected);
 	}
 
 	public function testIsConnectedNo():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertFalse($sut->isConnected);
 		$sut->ownerDocument->append($sut);
 		$sut->ownerDocument->removeChild($sut);
@@ -111,30 +117,34 @@ class NodeTest extends TestCase {
 	}
 
 	public function testNextSiblingNone():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertNull($sut->nextSibling);
 	}
 
 	public function testNextSibling():void {
-		$parent = NodeTestFactory::createNode("parent");
-		$c1 = NodeTestFactory::createNode("child", $parent->ownerDocument);
-		$sut = NodeTestFactory::createNode("child", $parent->ownerDocument);
-		$c2 = NodeTestFactory::createNode("child", $parent->ownerDocument);
+		$document = new HTMLDocument();
+		$parent = $document->createElement("parent");
+		$c1 = $document->createElement("child");
+		$sut = $document->createElement("child");
+		$c2 = $document->createElement("child");
 
 		$parent->append($c1, $sut, $c2);
 		self::assertSame($c2, $sut->nextSibling);
 	}
 
 	public function testPreviousSiblingNone():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertNull($sut->previousSibling);
 	}
 
 	public function testPreviousSibling():void {
-		$parent = NodeTestFactory::createNode("parent");
-		$c1 = NodeTestFactory::createNode("child", $parent->ownerDocument);
-		$sut = NodeTestFactory::createNode("child", $parent->ownerDocument);
-		$c2 = NodeTestFactory::createNode("child", $parent->ownerDocument);
+		$document = new HTMLDocument();
+		$parent = $document->createElement("parent");
+		$c1 = $document->createElement("child");
+		$sut = $document->createElement("child");
+		$c2 = $document->createElement("child");
 
 		$parent->append($c1, $sut, $c2);
 		self::assertSame($c1, $sut->previousSibling);
@@ -144,30 +154,33 @@ class NodeTest extends TestCase {
 // TODO: Test other types of nodes (Attr, CDATASection, Comment, Document,
 // DocumentFragment, DocumentType, Notation, ProcessingInstruction, Text) as
 // each node type has a different expectation for this value.
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertEquals("example", $sut->nodeName);
 	}
 
 	public function testNodeType():void {
 // TODO: Test the other types of nodes, make sure they return the expected
 // values in accordance to the Node::TYPE* constants.
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertEquals(
-			Node::TYPE_ELEMENT_NODE,
+			Node::TYPE_ELEMENT,
 			$sut->nodeType
 		);
 	}
 
 	public function testNodeValueGetNone():void {
-		$sut = NodeTestFactory::createNode("example");
-		self::assertNull($sut->nodeValue);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		self::assertSame("", $sut->nodeValue);
 	}
 
 	public function testNodeValueGetEmptyWithChildTextContent():void {
 		$message = "This is a test message.";
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$sut->innerHTML = $message;
-		self::assertNull($sut->nodeValue);
 		$textNode = $sut->childNodes[0];
 		self::assertInstanceOf(Text::class, $textNode);
 		self::assertEquals($message, $textNode->nodeValue);
@@ -176,41 +189,37 @@ class NodeTest extends TestCase {
 	public function testNode_textContent_ignoreProcessingInstruction():void {
 		$message1 = "123";
 		$message2 = "321";
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$processingInstruction = $sut->ownerDocument->createProcessingInstruction("example-target", "example-data");
 		$sut->append($message1, $processingInstruction, $message2);
 
 		self::assertEquals("123321", $sut->textContent);
 	}
 
-	public function testNodeValueSetNoEffectOnElement():void {
-// TODO: Test nodeValue on other types of node.
-		$sut = NodeTestFactory::createNode("example");
-		$sut->nodeValue = "Example value.";
-		self::assertNull($sut->nodeValue);
-	}
-
 	public function testOwnerDocument():void {
-		$sut = NodeTestFactory::createNode("example");
-		$doc = $sut->ownerDocument;
-		$docDoc = $doc->ownerDocument;
-		self::assertSame($doc, $docDoc);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		self::assertSame($document, $sut->ownerDocument);
 	}
 
 	public function testParentElementNone():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertNull($sut->parentElement);
 	}
 
 	public function testParentElement():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$parent = NodeTestFactory::createNode("parent", $sut->ownerDocument);
 		$parent->appendChild($sut);
 		self::assertSame($parent, $sut->parentElement);
 	}
 
 	public function testParentElementNode():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$fragment = $sut->ownerDocument->createDocumentFragment();
 		$fragment->appendChild($sut);
 		$parent = NodeTestFactory::createNode("parent", $sut->ownerDocument);
@@ -222,17 +231,18 @@ class NodeTest extends TestCase {
 	}
 
 	public function testCloneNode():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$sut->innerHTML = "<p><a href='https://phpunit.de'>PHPUnit is amazing!</a>";
-		/** @var Element $clone */
 		$clone = $sut->cloneNode();
 		self::assertNotSame($sut, $clone);
-		self::assertEquals("EXAMPLE", $clone->tagName);
+		self::assertEquals("example", $clone->tagName);
 		self::assertCount(0, $clone->childNodes);
 	}
 
 	public function testCloneNodeDeep():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$sut->innerHTML = "<p><a href='https://phpunit.de'>PHPUnit is amazing!</a>";
 		/** @var Element $clone */
 		$clone = $sut->cloneNode(true);
@@ -245,20 +255,23 @@ class NodeTest extends TestCase {
 	}
 
 	public function testCompareDocumentPositionNowhere():void {
-		$sut = NodeTestFactory::createNode("example");
-		$anotherNodeInAnotherDoc = NodeTestFactory::createNode("other");
-		self::assertGreaterThan(
-			0,
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$otherDocument = new HTMLDocument();
+		$anotherNodeInAnotherDoc = $otherDocument->createElement("other");
+		self::assertSame(
+			Node::DOCUMENT_POSITION_DISCONNECTED,
 			$sut->compareDocumentPosition($anotherNodeInAnotherDoc)
 		);
 	}
 
 	public function testCompareDocumentPositionPreceding():void {
-		$sut = NodeTestFactory::createNode("example");
-		$root = NodeTestFactory::createNode("root", $sut->ownerDocument);
-		$compareTo = NodeTestFactory::createNode("compare-to", $sut->ownerDocument);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$root = $document->createElement("root");
+		$compareTo = $document->createElement("compare-to");
 
-		$sut->ownerDocument->appendChild($root);
+		$document->body->appendChild($root);
 		$root->appendChild($sut);
 		$root->appendChild($compareTo);
 
@@ -285,11 +298,12 @@ class NodeTest extends TestCase {
 	}
 
 	public function testCompareDocumentPositionFollowing():void {
-		$sut = NodeTestFactory::createNode("example");
-		$root = NodeTestFactory::createNode("root", $sut->ownerDocument);
-		$compareTo = NodeTestFactory::createNode("compare-to", $sut->ownerDocument);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$root = $document->createElement("root");
+		$compareTo = $document->createElement("compare-to");
 
-		$sut->ownerDocument->appendChild($root);
+		$document->body->appendChild($root);
 		$root->appendChild($compareTo);
 		$root->appendChild($sut);
 
@@ -316,11 +330,12 @@ class NodeTest extends TestCase {
 	}
 
 	public function testCompareDocumentPositionContainedBy():void {
-		$sut = NodeTestFactory::createNode("example");
-		$root = NodeTestFactory::createNode("root", $sut->ownerDocument);
-		$compareTo = NodeTestFactory::createNode("compare-to", $sut->ownerDocument);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$root = $document->createElement("root");
+		$compareTo = $document->createElement("compare-to");
 
-		$sut->ownerDocument->appendChild($root);
+		$document->body->appendChild($root);
 		$root->appendChild($sut);
 		$sut->appendChild($compareTo);
 
@@ -337,11 +352,12 @@ class NodeTest extends TestCase {
 	}
 
 	public function testCompareDocumentPositionContainedByFlipped():void {
-		$sut = NodeTestFactory::createNode("example");
-		$root = NodeTestFactory::createNode("root", $sut->ownerDocument);
-		$compareTo = NodeTestFactory::createNode("compare-to", $sut->ownerDocument);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$root = $document->createElement("root");
+		$compareTo = $document->createElement("compare-to");
 
-		$sut->ownerDocument->appendChild($root);
+		$document->body->appendChild($root);
 		$root->appendChild($compareTo);
 		$compareTo->appendChild($sut);
 
@@ -358,43 +374,49 @@ class NodeTest extends TestCase {
 	}
 
 	public function testContainsOtherDocumentNode():void {
-		$sut = NodeTestFactory::createNode("example");
-		$otherNode = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$otherNode = $document->createElement("example");
 		self::assertFalse($sut->contains($otherNode));
 	}
 
 	public function testContainsNegativeWhenNotChild():void {
-		$sut = NodeTestFactory::createNode("example");
-		$otherNode = NodeTestFactory::createNode("example", $sut->ownerDocument);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$otherNode = $document->createElement("example");
 		self::assertFalse($sut->contains($otherNode));
 	}
 
 	public function testContainsPositiveWhenChild():void {
-		$sut = NodeTestFactory::createNode("parent");
-		$otherNode = NodeTestFactory::createNode("child", $sut->ownerDocument);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("parent");
+		$otherNode = $document->createElement("child");
 		$sut->appendChild($otherNode);
 		self::assertTrue($sut->contains($otherNode));
 	}
 
 	public function testHasChildNodesEmpty():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertFalse($sut->hasChildNodes());
 	}
 
 	public function testHasChildNodes():void {
-		$sut = NodeTestFactory::createNode("example");
-		$child = NodeTestFactory::createNode("example", $sut->ownerDocument);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$child = $document->createElement("example");
 		$sut->appendChild($child);
 		self::assertTrue($sut->hasChildNodes());
 		self::assertFalse($child->hasChildNodes());
 	}
 
 	public function testInsertBefore():void {
-		$sut = NodeTestFactory::createNode("example");
-		$one = NodeTestFactory::createNode("one", $sut->ownerDocument);
-		$two = NodeTestFactory::createNode("two", $sut->ownerDocument);
-		$three = NodeTestFactory::createNode("three", $sut->ownerDocument);
-		$four = NodeTestFactory::createNode("four", $sut->ownerDocument);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$one = $document->createElement("one");
+		$two = $document->createElement("two");
+		$three = $document->createElement("three");
+		$four = $document->createElement("four");
 		$sut->append($one, $two, $four);
 		$sut->insertBefore($three, $four);
 
@@ -403,11 +425,12 @@ class NodeTest extends TestCase {
 			$tagsFound .= $child->nodeName;
 		}
 
-		self::assertEquals("one"."two"."three"."four", $tagsFound);
+		self::assertEquals("one" . "two" . "three" . "four", $tagsFound);
 	}
 
 	public function testInsertBeforeNullRef():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$one = NodeTestFactory::createNode("one", $sut->ownerDocument);
 		$two = NodeTestFactory::createNode("two", $sut->ownerDocument);
 		$sut->insertBefore($one, null);
@@ -418,28 +441,32 @@ class NodeTest extends TestCase {
 			$tagsFound .= $child->nodeName;
 		}
 
-		self::assertEquals("one"."two", $tagsFound);
+		self::assertEquals("one" . "two", $tagsFound);
 	}
 
 	public function testIsDefaultNamespace():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertFalse($sut->isDefaultNamespace("not-in-namespace"));
 	}
 
 	public function testIsEqualNodeClone():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$clone = $sut->cloneNode(true);
 		self::assertTrue($clone->isEqualNode($sut));
 	}
 
 	public function testIsEqualNode():void {
-		$sut = NodeTestFactory::createNode("example");
-		$inserted = $sut->ownerDocument->appendChild($sut);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$inserted = $document->body->appendChild($sut);
 		self::assertTrue($sut->isEqualNode($inserted));
 	}
 
 	public function testIsEqualNodeDifferent():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$other = $sut->ownerDocument->createElement("example");
 		$other->innerHTML = "different";
 		self::assertFalse($sut->isEqualNode($other));
@@ -447,49 +474,56 @@ class NodeTest extends TestCase {
 
 	public function testIsEqualNodeDifferentType():void {
 // TODO: Test equality of different node types.
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$attr = $sut->ownerDocument->createAttribute("example");
 		self::assertFalse($sut->isEqualNode($attr));
 	}
 
 	public function testIsSameNodeDifferentDocument():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$other = NodeTestFactory::createNode("example");
 		self::assertFalse($sut->isSameNode($other));
 	}
 
 	public function testIsSameNodeSameDocumentDifferentNode():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$other = NodeTestFactory::createNode("example", $sut->ownerDocument);
 		self::assertFalse($sut->isSameNode($other));
 	}
 
 	public function testIsSameNode():void {
-		$sut = NodeTestFactory::createNode("example");
-		$same = $sut->ownerDocument->appendChild($sut);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$same = $document->body->appendChild($sut);
 		self::assertTrue($sut->isSameNode($same));
 	}
 
 	public function testLookupPrefix():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertNull($sut->lookupPrefix("nothing"));
 	}
 
 	public function testLookupNamespaceURI():void {
-		$sut = NodeTestFactory::createNode("example");
-		self::assertNull($sut->lookupNamespaceURI());
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		self::assertNull($sut->lookupNamespaceURI("test"));
 	}
 
 	public function testNormalize():void {
-		$sut = NodeTestFactory::createNode("example");
-		/** @var Element $clone */
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$clone = $sut->cloneNode(true);
 		$sut->normalize();
 		self::assertEquals($sut->outerHTML, $clone->outerHTML);
 	}
 
 	public function testNormalizeWhitespaceOnly():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$sut->appendChild($sut->ownerDocument->createTextNode("Part 1 "));
 		$sut->appendChild($sut->ownerDocument->createTextNode("Part 2 "));
 		$sut->appendChild($sut->ownerDocument->createTextNode("Part 3 "));
@@ -500,7 +534,8 @@ class NodeTest extends TestCase {
 	}
 
 	public function testNormalizeManyChildren():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$sut->appendChild($sut->ownerDocument->createElement("test"));
 		$sut->appendChild($sut->ownerDocument->createTextNode("Part 1 "));
 		$sut->appendChild($sut->ownerDocument->createTextNode("Part 2 "));
@@ -514,13 +549,15 @@ class NodeTest extends TestCase {
 	}
 
 	public function testRemoveChildNotChild():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::expectException(NotFoundErrorException::class);
 		$sut->ownerDocument->removeChild($sut);
 	}
 
 	public function testRemoveChild():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child = $sut->ownerDocument->createElement("child");
 		$sut->appendChild($child);
 		self::assertCount(1, $sut->childNodes);
@@ -529,16 +566,18 @@ class NodeTest extends TestCase {
 	}
 
 	public function testReplaceChildNotChild():void {
-		$sut = NodeTestFactory::createNode("example");
-		$new = $sut->ownerDocument->createElement("new");
-		$old = $sut->ownerDocument->createElement("old");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$new = $document->createElement("new");
+		$old = $document->createElement("old");
 		self::expectException(NotFoundErrorException::class);
 		self::expectExceptionMessage("Child to be replaced is not a child of this node");
 		$sut->replaceChild($new, $old);
 	}
 
 	public function testReplaceChild():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$new = $sut->ownerDocument->createElement("new");
 		$old = $sut->ownerDocument->createElement("old");
 		$sut->appendChild($old);
@@ -548,13 +587,15 @@ class NodeTest extends TestCase {
 	}
 
 	public function testTextContentEmpty():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertEquals("", $sut->textContent);
 	}
 
 	public function testTextContentSingleTextNode():void {
 		$message = "Here is some content!";
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$sut->innerHTML = "<p>$message</p>";
 		self::assertEquals($message, $sut->textContent);
 	}
@@ -563,14 +604,16 @@ class NodeTest extends TestCase {
 		$message1 = "ONE";
 		$message2 = "TWO";
 		$message3 = "THREE";
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$sut->innerHTML = "<ul><li>$message1</li><li>$message2</li><li>$message3</li></ul>";
-		self::assertEquals("ONE"."TWO"."THREE", $sut->textContent);
+		self::assertEquals("ONE" . "TWO" . "THREE", $sut->textContent);
 	}
 
 	public function testTextContentSetFromEmpty():void {
 		$message = "A test message";
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$sut->textContent = $message;
 		self::assertEquals($message, $sut->textContent);
 		self::assertCount(1, $sut->childNodes);
@@ -578,7 +621,8 @@ class NodeTest extends TestCase {
 
 	public function testTextContentSetFromNonEmpty():void {
 		$message = "A test message";
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$sut->innerHTML = "<h1>This node has existing content!</h1>";
 		$sut->textContent = $message;
 		self::assertEquals($message, $sut->textContent);

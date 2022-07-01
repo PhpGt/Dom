@@ -1,20 +1,19 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\Exception\FunctionalityNotAvailableOnServerException;
-use Gt\Dom\HTMLElement\HTMLDialogElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
+use Gt\Dom\HTMLDocument;
 
 class HTMLDialogElementTest extends HTMLElementTestCase {
 	public function testOpenDefault():void {
-		/** @var HTMLDialogElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("dialog");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("dialog");
 		self::assertFalse($sut->open);
 	}
 
 	public function testOpen():void {
-		/** @var HTMLDialogElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("dialog");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("dialog");
 		$sut->open = true;
 		self::assertTrue($sut->open);
 		self::assertTrue($sut->hasAttribute("open"));
@@ -25,17 +24,17 @@ class HTMLDialogElementTest extends HTMLElementTestCase {
 	}
 
 	public function testReturnValueGetter():void {
-		/** @var HTMLDialogElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("dialog");
-		self::expectException(FunctionalityNotAvailableOnServerException::class);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("dialog");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$something = $sut->returnValue;
 	}
 
 	public function testReturnValueSetter():void {
-		/** @var HTMLDialogElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("dialog");
-		self::expectException(FunctionalityNotAvailableOnServerException::class);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("dialog");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
 		$sut->returnValue = "something";
 	}
 }

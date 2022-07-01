@@ -2,27 +2,26 @@
 namespace Gt\Dom\Test\HTMLElement;
 
 use Gt\Dom\HTMLCollection;
-use Gt\Dom\HTMLElement\HTMLFieldSetElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLFieldSetElementTest extends HTMLElementTestCase {
 	public function testDisabled():void {
-		/** @var HTMLFieldSetElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("fieldset");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("fieldset");
 		self::assertPropertyAttributeCorrelateBool($sut, "disabled");
 	}
 
 	public function testElementsEmpty():void {
-		/** @var HTMLFieldSetElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("fieldset");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("fieldset");
 		$elements = $sut->elements;
 		self::assertInstanceOf(HTMLCollection::class, $elements);
 		self::assertCount(0, $elements);
 	}
 
 	public function testElements():void {
-		/** @var HTMLFieldSetElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("fieldset");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("fieldset");
 		$elements = $sut->elements;
 		$button = $sut->ownerDocument->createElement("button");
 		$input = $sut->ownerDocument->createElement("input");
@@ -42,8 +41,8 @@ class HTMLFieldSetElementTest extends HTMLElementTestCase {
 	}
 
 	public function testType():void {
-		/** @var HTMLFieldSetElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("fieldset");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("fieldset");
 		self::assertEquals("fieldset", $sut->type);
 	}
 }

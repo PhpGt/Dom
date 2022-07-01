@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class WriteOnNonHTMLDocumentException extends DOMException {
-
-}
+class WriteOnNonHTMLDocumentException extends DomException {}

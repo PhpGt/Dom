@@ -1,13 +1,12 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLTemplateElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLTemplateElementTest extends HTMLElementTestCase {
 	public function testContent():void {
-		/** @var HTMLTemplateElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("template");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("template");
 		$sut->appendChild($sut->ownerDocument->createElement("example-element"));
 		$content1 = $sut->content->cloneNode(true);
 		$content2 = $sut->content->cloneNode(true);

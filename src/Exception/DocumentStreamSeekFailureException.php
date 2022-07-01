@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class DocumentStreamSeekFailureException extends DOMException {
-
-}
+class DocumentStreamSeekFailureException extends DomException {}

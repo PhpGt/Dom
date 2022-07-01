@@ -1,4 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class MimeTypeNotSupportedException extends DOMException {}
+class MimeTypeNotSupportedException extends DomException {}

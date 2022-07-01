@@ -1,52 +1,44 @@
 <?php
 namespace Gt\Dom;
 
-use DateTime;
-use DOMAttr;
-use DOMDocument;
+use ArrayAccess;
+use Countable;
 use DOMElement;
-use Gt\CssXPath\Translator;
+use DOMNamedNodeMap;
 use Gt\Dom\Exception\InvalidAdjacentPositionException;
 use Gt\Dom\Exception\XPathQueryException;
-use Gt\Dom\Facade\DOMTokenListFactory;
-use Gt\Dom\Facade\HTMLCollectionFactory;
-use Gt\Dom\Facade\NamedNodeMapFactory;
-use Gt\Dom\Facade\NodeClass\DOMElementFacade;
-use Gt\Dom\Facade\NodeListFactory;
+use Gt\PropFunc\MagicProp;
+use ReturnTypeWillChange;
 
 /**
- * Element is the most general base class from which all element objects (i.e.
- * objects that represent elements) in a Document inherit. It only has methods
- * and properties common to all kinds of elements. More specific classes inherit
- * from Element. For example, the HTMLElement interface is the base interface
- * for HTML elements, while the SVGElement interface is the basis for all SVG
- * elements. Most functionality is specified further down the class hierarchy.
+ * @property-read HTMLDocument|XMLDocument $document
+ * @property-read HTMLDocument|XMLDocument $ownerDocument
  *
- * @link https://developer.mozilla.org/en-US/docs/Web/API/Element
- *
- * @property-read NamedNodeMap<Attr> $attributes Returns a NamedNodeMap object containing the assigned attributes of the corresponding HTML element.
+ * @property-read DOMNamedNodeMap<Attr> $attributes Returns a NamedNodeMap object containing the assigned attributes of the corresponding HTML element.
+ * @property-read NodeList<Node|Element> $childNodes
  * @property-read DOMTokenList $classList Returns a DOMTokenList containing the list of class attributes.
  * @property string $className Is a DOMString representing the class of the element.
+ * @property-read ElementType $elementType
+ * @property-read null|Element $firstElementChild
+ * @property-read null|Element $lastElementChild
  * @property string $id Is a DOMString representing the id of the element.
  * @property string $innerHTML Is a DOMString representing the markup of the element's content.
- * @property-read string $localName A DOMString representing the local part of the qualified name of the element.
  * @property-read ?string $namespaceURI The namespace URI of the element, or null if it is no namespace.
+ * @property-read null|Element $nextElementSibling An Element, the element immediately following the given one in the tree, or null if there's no sibling node.
+ * @property-read null|Element $previousElementSibling Returns a Node representing the previous node in the tree, or null if there isn't such node.
  * @property string $outerHTML Is a DOMString representing the markup of the element including its content. When used as a setter, replaces the element with nodes parsed from the given string.
  * @property-read string $prefix A DOMString representing the namespace prefix of the element, or null if no prefix is specified.
  * @property-read string $tagName Returns a String with the name of the tag for the given element.
+ *
+ * @implements ArrayAccess<string|int, Element>
  */
-class Element extends Node {
+class Element extends DOMElement implements ArrayAccess, Countable {
+	use MagicProp;
 	use NonDocumentTypeChildNode;
 	use ChildNode;
 	use ParentNode;
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/attributes */
-	protected function __prop_get_attributes():NamedNodeMap {
-		return NamedNodeMapFactory::create(
-			fn() => $this->domNode->attributes,
-			$this
-		);
-	}
+	use RegisteredNodeClass;
+	use HTMLElement;
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/classList */
 	protected function __prop_get_classList():DOMTokenList {
@@ -65,32 +57,98 @@ class Element extends Node {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/className */
 	protected function __prop_set_className(string $className):void {
-		$domElement = $this->getNativeElement();
-		$domElement->setAttribute("class", $className);
+		$this->setAttribute("class", $className);
+	}
+
+	public function __prop_get_elementType():ElementType {
+		return match($this->tagName) {
+			"a" => ElementType::HTMLAnchorElement,
+			"area" => ElementType::HTMLAreaElement,
+			"audio" => ElementType::HTMLAudioElement,
+			"base" => ElementType::HTMLBaseElement,
+			"body" => ElementType::HTMLBodyElement,
+			"br" => ElementType::HTMLBRElement,
+			"button" => ElementType::HTMLButtonElement,
+			"canvas" => ElementType::HTMLCanvasElement,
+			"data" => ElementType::HTMLDataElement,
+			"datalist" => ElementType::HTMLDataListElement,
+			"details" => ElementType::HTMLDetailsElement,
+			"dialog" => ElementType::HTMLDialogElement,
+			"div" => ElementType::HTMLDivElement,
+			"dl" => ElementType::HTMLDListElement,
+			"embed" => ElementType::HTMLEmbedElement,
+			"fieldset" => ElementType::HTMLFieldSetElement,
+			"form" => ElementType::HTMLFormElement,
+			"head" => ElementType::HTMLHeadElement,
+			"header", "footer" => ElementType::HTMLElement,
+			"h1", "h2", "h3", "h4", "h5", "h6" => ElementType::HTMLHeadingElement,
+			"hr" => ElementType::HTMLHRElement,
+			"html" => ElementType::HTMLHtmlElement,
+			"iframe" => ElementType::HTMLIFrameElement,
+			"img" => ElementType::HTMLImageElement,
+			"input" => ElementType::HTMLInputElement,
+			"label" => ElementType::HTMLLabelElement,
+			"legend" => ElementType::HTMLLegendElement,
+			"li" => ElementType::HTMLLiElement,
+			"link" => ElementType::HTMLLinkElement,
+			"map" => ElementType::HTMLMapElement,
+			"media" => ElementType::HTMLMediaElement,
+			"menu" => ElementType::HTMLMenuElement,
+			"meta" => ElementType::HTMLMetaElement,
+			"meter" => ElementType::HTMLMeterElement,
+			"del", "ins" => ElementType::HTMLModElement,
+			"object" => ElementType::HTMLObjectElement,
+			"ol" => ElementType::HTMLOListElement,
+			"optgroup" => ElementType::HTMLOptGroupElement,
+			"option" => ElementType::HTMLOptionElement,
+			"output" => ElementType::HTMLOutputElement,
+			"p" => ElementType::HTMLParagraphElement,
+			"param" => ElementType::HTMLParamElement,
+			"picture" => ElementType::HTMLPictureElement,
+			"pre" => ElementType::HTMLPreElement,
+			"progress" => ElementType::HTMLProgressElement,
+			"blockquote", "q", "cite" => ElementType::HTMLQuoteElement,
+			"script" => ElementType::HTMLScriptElement,
+			"select" => ElementType::HTMLSelectElement,
+			"source" => ElementType::HTMLSourceElement,
+			"span" => ElementType::HTMLSpanElement,
+			"style" => ElementType::HTMLStyleElement,
+			"caption" => ElementType::HTMLTableCaptionElement,
+			"th", "td" => ElementType::HTMLTableCellElement,
+			"col", "colgroup" => ElementType::HTMLTableColElement,
+			"table" => ElementType::HTMLTableElement,
+			"tr" => ElementType::HTMLTableRowElement,
+			"tfoot", "thead", "tbody" => ElementType::HTMLTableSectionElement,
+			"template" => ElementType::HTMLTemplateElement,
+			"textarea" => ElementType::HTMLTextAreaElement,
+			"time" => ElementType::HTMLTimeElement,
+			"title" => ElementType::HTMLTitleElement,
+			"track" => ElementType::HTMLTrackElement,
+			"ul" => ElementType::HTMLUListElement,
+			"video" => ElementType::HTMLVideoElement,
+
+			default => isset($this->ownerDocument) && $this->ownerDocument instanceof HTMLDocument
+				? ElementType::HTMLUnknownElement
+				: ElementType::Element,
+		};
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */
 	protected function __prop_get_id():string {
-		$nativeElement = $this->getNativeElement();
-		return $nativeElement->getAttribute("id");
+		return $this->getAttribute("id") ?? "";
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/id */
 	protected function __prop_set_id(string $id):void {
-		$element = $this->getNativeElement();
-		$element->setAttribute("id", $id);
+		$this->setAttribute("id", $id);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML */
-	protected function __prop_get_innerHTML():string {
+	public function __prop_get_innerHTML():string {
 		$html = "";
 
-		/** @var DOMDocument $nativeDocument */
-		$nativeDocument = $this->ownerDocument->domNode;
-
 		foreach($this->childNodes as $child) {
-			$nativeChild = $this->ownerDocument->getNativeDomNode($child);
-			$html .= $nativeDocument->saveHTML($nativeChild);
+			$html .= $this->ownerDocument->saveHTML($child);
 		}
 
 		return $html;
@@ -109,86 +167,51 @@ class Element extends Node {
 			"utf-8"
 		);
 
-		$tempDocument = new Document();
-		/** @var DOMDocument $nativeTempDocument */
-		$nativeTempDocument = $tempDocument->domNode;
-		$nativeTempDocument->loadHTML(
+		$tempDocument = new HTMLDocument();
+		$tempDocument->loadHTML(
 			"<html-fragment>$innerHTML</html-fragment>"
 		);
-		$innerFragmentNode = $nativeTempDocument->getElementsByTagName(
-			"html-fragment")->item(0);
+		$innerFragmentNode = $tempDocument->getElementsByTagName(
+			"html-fragment"
+		)->item(0);
 
-		/** @var DOMDocument $nativeDocument */
-		$nativeDocument = $this->ownerDocument->domNode;
-		$imported = $nativeDocument->importNode(
+		$imported = $this->ownerDocument->importNode(
 			$innerFragmentNode,
 			true
 		);
 
-		$nativeDomNode = $this->ownerDocument->getNativeDomNode($this);
 		while($imported->firstChild) {
-			$nativeDomNode->appendChild($imported->firstChild);
+			$this->appendChild($imported->firstChild);
 		}
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/localName */
-	protected function __prop_get_localName():string {
-		return $this->domNode->localName;
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/namespaceURI */
-	protected function __prop_get_namespaceURI():?string {
-		if(isset($this->domNode->namespaceURI)) {
-			return $this->domNode->namespaceURI;
-		}
-
-		return null;
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
 	protected function __prop_get_outerHTML():string {
-		/** @var DOMDocument $nativeDocument */
-		$nativeDocument = $this->ownerDocument->domNode;
-		return $nativeDocument->saveHTML($this->domNode);
+		return $this->ownerDocument->saveHTML($this);
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML */
 	protected function __prop_set_outerHTML(string $outerHTML):void {
-		if(!$this->parentNode) {
+		$parentNode = $this->parentNode;
+		if(!$parentNode) {
 			return;
 		}
 
-		$tempDocument = new Document();
-		/** @var DOMDocument $nativeTempDocument */
-		$nativeTempDocument = $tempDocument->domNode;
-		$nativeTempDocument->loadHTML($outerHTML);
-		$body = $nativeTempDocument->getElementsByTagName("body")->item(0);
-		/** @var DOMDocument $nativeThisDocument */
-		$nativeThisDocument = $this->ownerDocument->domNode;
-		$nativeNextSibling = $this->domNode->nextSibling;
-		$nativeParent = $this->domNode->parentNode;
+		$tempDocument = new HTMLDocument();
+		$tempDocument->loadHTML($outerHTML);
+		$body = $tempDocument->getElementsByTagName("body")->item(0);
 
-		$nativeParent->removeChild($this->domNode);
+		$parentNode->removeChild($this);
 		for($i = 0, $len = $body->childNodes->length; $i < $len; $i++) {
-			$imported = $nativeThisDocument->importNode(
+			$imported = $this->ownerDocument->importNode(
 				$body->childNodes->item($i),
 				true
 			);
-			$nativeParent->insertBefore(
+			$parentNode->insertBefore(
 				$imported,
-				$nativeNextSibling
+				$this->nextSibling
 			);
 		}
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/prefix */
-	protected function __prop_get_prefix():string {
-		return $this->domNode->prefix;
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Element/tagName */
-	protected function __prop_get_tagName():string {
-		return strtoupper($this->domNode->localName);
 	}
 
 	/**
@@ -232,18 +255,42 @@ class Element extends Node {
 	 * of a specified attribute on the element. If the given attribute does
 	 * not exist, the value returned will be null.
 	 *
-	 * @param string $attributeName The name of the attribute whose value
+	 * @param string $qualifiedName The name of the attribute whose value
 	 * you want to get.
 	 * @return ?string A string containing the value of attributeName.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute
 	 */
-	public function getAttribute(string $attributeName):?string {
-		$nativeElement = $this->getNativeElement();
-		if(!$nativeElement->hasAttribute($attributeName)) {
+	#[ReturnTypeWillChange]
+	public function getAttribute(string $qualifiedName):?string {
+		if($this->hasAttribute($qualifiedName)) {
+			return parent::getAttribute($qualifiedName);
+		}
+
+		return null;
+	}
+
+	/**
+	 * The getAttributeNS() method of the Element interface returns the
+	 * string value of the attribute with the specified namespace and name.
+	 * If the named attribute does not exist, the value returned will be
+	 * null.
+	 *
+	 * @param ?string $namespace The namespace in which to look for the
+	 * specified attribute.
+	 * @param string $name The name of the attribute to look for.
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttributeNS
+	 */
+	#[ReturnTypeWillChange]
+	public function getAttributeNS(?string $namespace, string $name):?string {
+		if(!call_user_func([$this, "hasAttributeNS"], $namespace, $name)) {
 			return null;
 		}
 
-		return $nativeElement->getAttribute($attributeName);
+		return call_user_func(
+			"parent::getAttributeNS",
+			$namespace,
+			$name
+		);
 	}
 
 	/**
@@ -255,182 +302,12 @@ class Element extends Node {
 	 * memory-efficient and performant alternative to accessing
 	 * Element.attributes.
 	 *
-	 * @return string[]
+	 * @return array<string>
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttributeNames
 	 */
 	public function getAttributeNames():array {
 		$attributeArray = iterator_to_array($this->attributes);
 		return array_keys($attributeArray);
-	}
-
-	/**
-	 * The getAttributeNS() method of the Element interface returns the
-	 * string value of the attribute with the specified namespace and name.
-	 * If the named attribute does not exist, the value returned will be
-	 * null.
-	 *
-	 * @param string $namespace The namespace in which to look for the
-	 * specified attribute.
-	 * @param string $name The name of the attribute to look for.
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttributeNS
-	 */
-	public function getAttributeNS(string $namespace, string $name):?string {
-		if(!$this->hasAttributeNS($namespace, $name)) {
-			return null;
-		}
-
-		return $this->getNativeElement()->getAttributeNS(
-			$namespace,
-			$name
-		);
-	}
-
-	/**
-	 * The Element method getElementsByClassName() returns a live
-	 * HTMLCollection which contains every descendant element which has the
-	 * specified class name or names.
-	 *
-	 * The method getElementsByClassName() on the Document interface works
-	 * essentially the same way, except it acts on the entire document,
-	 * starting at the document root.
-	 *
-	 * @param string $names A DOMString containing one or more class names to match on, separated by whitespace.
-	 * @return HTMLCollection An HTMLCollection providing a live-updating list of every element which is a member of every class in names.
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByClassName
-	 */
-	public function getElementsByClassName(string $names):HTMLCollection {
-		$querySelector = "";
-		foreach(explode(" ", $names) as $name) {
-			if(strlen($querySelector) > 0) {
-				$querySelector .= " ";
-			}
-
-			$querySelector .= ".$name";
-		}
-
-		return HTMLCollectionFactory::create(
-			fn() => $this->querySelectorAll($querySelector)
-		);
-	}
-
-	/**
-	 * The Element.getElementsByTagName() method returns a live
-	 * HTMLCollection of elements with the given tag name. All descendants
-	 * of the specified element are searched, but not the element itself.
-	 * The returned list is live, which means it updates itself with the
-	 * DOM tree automatically. Therefore, there is no need to call
-	 * Element.getElementsByTagName() with the same element and arguments
-	 * repeatedly if the DOM changes in between calls.
-	 *
-	 * When called on an HTML element in an HTML document,
-	 * getElementsByTagName lower-cases the argument before searching for
-	 * it. This is undesirable when trying to match camel-cased SVG
-	 * elements (such as <linearGradient>) in an HTML document. Instead,
-	 * use Element.getElementsByTagNameNS(), which preserves the
-	 * capitalization of the tag name.
-	 *
-	 * Element.getElementsByTagName is similar to
-	 * Document.getElementsByTagName(), except that it only searches for
-	 * elements that are descendants of the specified element.
-	 *
-	 * @param string $tagName the qualified name to look for. The special
-	 * string "*" represents all elements. For compatibility with XHTML,
-	 * lower-case should be used.
-	 * @return HTMLCollection a live HTMLCollection of elements with a
-	 * matching tag name, in the order they appear. If no elements are
-	 * found, the HTMLCollection is empty.
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
-	 */
-	public function getElementsByTagName(string $tagName):HTMLCollection {
-		return HTMLCollectionFactory::create(
-			function() use($tagName) {
-				$nodeArray = [];
-				foreach($this->getNativeElement()->getElementsByTagName($tagName) as $nativeElement) {
-					$element = $this->ownerDocument->getGtDomNode($nativeElement);
-					array_push($nodeArray, $element);
-				}
-
-				return NodeListFactory::create(...$nodeArray);
-			}
-		);
-	}
-
-	/**
-	 * The Element.getElementsByTagNameNS() method returns a live
-	 * HTMLCollection of elements with the given tag name belonging to the
-	 * given namespace. It is similar to Document.getElementsByTagNameNS,
-	 * except that its search is restricted to descendants of the specified
-	 * element.
-	 *
-	 * @param string $namespaceURI the namespace URI of elements to look for
-	 * (see Element.namespaceURI and Attr.namespaceURI). For example, if you
-	 * need to look for XHTML elements, use the XHTML namespace URI,
-	 * http://www.w3.org/1999/xhtml.
-	 * @param string $localName either the local name of elements to look
-	 * for or the special value "*", which matches all elements (see
-	 * Element.localName and Attr.localName).
-	 * @return HTMLCollection a live HTMLCollection of found elements in
-	 * the order they appear in the tree.
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagNameNS
-	 */
-	public function getElementsByTagNameNS(
-		string $namespaceURI,
-		string $localName
-	):HTMLCollection {
-		return HTMLCollectionFactory::create(
-			function() use($namespaceURI, $localName) {
-				$nodeArray = [];
-				foreach($this->getNativeElement()->getElementsByTagNameNS($namespaceURI, $localName) as $nativeElement) {
-					$element = $this->ownerDocument->getGtDomNode($nativeElement);
-					array_push($nodeArray, $element);
-				}
-
-				return NodeListFactory::create(...$nodeArray);
-			}
-		);
-	}
-
-	/**
-	 * The Element.hasAttribute() method returns a Boolean value indicating
-	 * whether the specified element has the specified attribute or not.
-	 *
-	 * @param string $name a string representing the name of the attribute.
-	 * @return bool
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/hasAttribute
-	 */
-	public function hasAttribute(string $name):bool {
-		return $this->getNativeElement()->hasAttribute($name);
-	}
-
-	/**
-	 * hasAttributeNS returns a boolean value indicating whether the current
-	 * element has the specified attribute.
-	 *
-	 * @param string $namespace a string specifying the namespace of the
-	 * attribute.
-	 * @param string $localName the name of the attribute.
-	 * @return bool
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/hasAttributeNS
-	 */
-	public function hasAttributeNS(
-		string $namespace,
-		string $localName
-	):bool {
-		return $this->getNativeElement()->hasAttributeNS(
-			$namespace,
-			$localName
-		);
-	}
-
-	/**
-	 * The hasAttributes() method of the Element interface returns a Boolean
-	 * indicating whether the current element has any attributes or not.
-	 *
-	 * @return bool
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/hasAttributes
-	 */
-	public function hasAttributes():bool {
-		return $this->getNativeElement()->hasAttributes();
 	}
 
 	/**
@@ -446,18 +323,15 @@ class Element extends Node {
 	 * 'beforeend': Just inside the targetElement, after its last child.
 	 * 'afterend': After the targetElement itself.
 	 *
-	 * @param Node $element The element to be inserted into the tree.
+	 * @param Node|Element $element The element to be inserted into the tree.
 	 * @return ?Element The element that was inserted, or null, if the
 	 * insertion failed.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
 	 */
 	public function insertAdjacentElement(
 		string $position,
-		Node $element
+		Node|Element|DocumentFragment|Text $element
 	):?Element {
-		$context = null;
-		$before = null;
-
 		switch($position) {
 		case "beforebegin":
 			$context = $this->parentNode;
@@ -582,82 +456,6 @@ class Element extends Node {
 	}
 
 	/**
-	 * The Element method removeAttribute() removes the attribute with the
-	 * specified name from the element.
-	 *
-	 * @param string $attrName A DOMString specifying the name of the
-	 * attribute to remove from the element. If the specified attribute does
-	 * not exist, removeAttribute() returns without generating an error.
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/removeAttribute
-	 */
-	public function removeAttribute(string $attrName):void {
-		$this->getNativeElement()->removeAttribute($attrName);
-	}
-
-	/**
-	 * The removeAttributeNS() method of the Element interface removes the
-	 * specified attribute from an element.
-	 *
-	 * @param string $namespace
-	 * @param string $attrName
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/removeAttributeNS
-	 */
-	public function removeAttributeNS(
-		string $namespace,
-		string $attrName
-	):void {
-		$this->getNativeElement()->removeAttributeNS(
-			$namespace,
-			$attrName
-		);
-	}
-
-	/**
-	 * Sets the value of an attribute on the specified element. If the
-	 * attribute already exists, the value is updated; otherwise a new
-	 * attribute is added with the specified name and value.
-	 *
-	 * To get the current value of an attribute, use getAttribute(); to
-	 * remove an attribute, call removeAttribute().
-	 *
-	 * @param string $name A DOMString specifying the name of the attribute
-	 * whose value is to be set. The attribute name is automatically
-	 * converted to all lower-case when setAttribute() is called on an HTML
-	 * element in an HTML document.
-	 * @param string $value A DOMString containing the value to assign to
-	 * the attribute. Any non-string value specified is converted
-	 * automatically into a string.
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute
-	 */
-	public function setAttribute(string $name, string $value):void {
-		$this->getNativeElement()->setAttribute($name, $value);
-	}
-
-	/**
-	 * setAttributeNS adds a new attribute or changes the value of an
-	 * attribute with the given namespace and name.
-	 *
-	 * @param string $namespace a string specifying the namespace of the
-	 * attribute.
-	 * @param string $name a string identifying the attribute by its
-	 * qualified name; that is, a namespace prefix followed by a colon
-	 * followed by a local name.
-	 * @param string $value the desired string value of the new attribute.
-	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttributeNS
-	 */
-	public function setAttributeNS(
-		string $namespace,
-		string $name,
-		string $value
-	):void {
-		$this->getNativeElement()->setAttributeNS(
-			$namespace,
-			$name,
-			$value
-		);
-	}
-
-	/**
 	 * The toggleAttribute() method of the Element interface toggles a
 	 * Boolean attribute (removing it if it is present and adding it if it
 	 * is not present) on the given element.
@@ -695,11 +493,5 @@ class Element extends Node {
 			$this->removeAttribute($name);
 			return false;
 		}
-	}
-
-	private function getNativeElement():DOMElementFacade {
-		/** @var DOMElementFacade $native */
-		$native = $this->domNode;
-		return $native;
 	}
 }

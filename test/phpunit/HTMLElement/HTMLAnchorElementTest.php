@@ -1,19 +1,18 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLAnchorElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLAnchorElementTest extends HTMLElementTestCase {
 	public function testHrefLang():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		self::assertPropertyAttributeCorrelate($sut, "hreflang");
 	}
 
 	public function testText():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		self::assertEmpty($sut->text);
 
 		$randomValue = "";
@@ -27,29 +26,29 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	}
 
 	public function testType():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+$sut = $document->createElement("a");
 		self::assertPropertyAttributeCorrelate($sut, "type");
 	}
 
 	public function testToStringEmpty():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+ 		$sut = $document->createElement("a");
 		self::assertEmpty((string)$sut);
 	}
 
 	public function testToString():void {
 		$url = "https://php.gt";
 
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+ 		$sut = $document->createElement("a");
 		$sut->href = $url;
 		self::assertEquals($url, (string)$sut);
 	}
 
 	public function testDownload():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		self::assertPropertyAttributeCorrelate(
 			$sut,
 			"download"
@@ -57,31 +56,31 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	}
 
 	public function testHashEmpty():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		self::assertEmpty($sut->hash);
 	}
 
 	public function testHashNone():void {
 		$url = "https://php.gt";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		self::assertEmpty($sut->hash);
 	}
 
 	public function testHash():void {
 		$url = "https://php.gt#hash";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		self::assertEquals("#hash", $sut->hash);
 	}
 
 	public function testHashSet():void {
 		$url = "https://php.gt";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		$sut->hash = "test";
 		self::assertEquals("#test", $sut->hash);
@@ -90,8 +89,8 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 
 	public function testHashSetWithHash():void {
 		$url = "https://php.gt";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		$sut->hash = "#test";
 		self::assertEquals("#test", $sut->hash);
@@ -100,8 +99,8 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 
 	public function testHashSetExistingHash():void {
 		$url = "https://php.gt#something";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		$sut->hash = "#test";
 		self::assertEquals("#test", $sut->hash);
@@ -110,24 +109,24 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 
 	public function testHost():void {
 		$url = "https://php.gt";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		self::assertEquals("php.gt", $sut->host);
 	}
 
 	public function testHostPort():void {
 		$url = "http://localhost:8080";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		self::assertEquals("localhost:8080", $sut->host);
 	}
 
 	public function testHostRelative():void {
 		$url = "/this-is-relative";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		self::assertEquals("", $sut->host);
 	}
@@ -135,8 +134,8 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	public function testHostSet():void {
 		$url = "https://php.gt/dom";
 		$host = "somewhere.else";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		$sut->host = $host;
 		self::assertEquals($host, $sut->host);
@@ -146,8 +145,8 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	public function testHostSetRetainUser():void {
 		$url = "https://g105b@php.gt/dom";
 		$host = "somewhere.else";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		$sut->host = $host;
 		self::assertEquals($host, $sut->host);
@@ -157,8 +156,8 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	public function testHostSetRetainUserPass():void {
 		$url = "https://g105b:cody123@php.gt/dom";
 		$host = "somewhere.else";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		$sut->host = $host;
 		self::assertEquals($host, $sut->host);
@@ -168,8 +167,8 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	public function testHostSetRetainPort():void {
 		$url = "http://localhost:8080/something";
 		$host = "somewhere.else";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		$sut->host = $host;
 		self::assertEquals("$host:8080", $sut->host);
@@ -179,8 +178,8 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	public function testHostSetNewPort():void {
 		$url = "http://localhost:8080/something";
 		$host = "somewhere.else:8081";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		$sut->host = $host;
 		self::assertEquals($host, $sut->host);
@@ -190,8 +189,8 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	public function testHostSetRetainQuery():void {
 		$url = "https://php.gt/dom?search=HTMLElement";
 		$host = "somewhere.else";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		$sut->host = $host;
 		self::assertEquals($host, $sut->host);
@@ -201,8 +200,8 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	public function testHostSetRetainHash():void {
 		$url = "https://php.gt/dom#about";
 		$host = "somewhere.else";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		$sut->host = $host;
 		self::assertEquals($host, $sut->host);
@@ -211,16 +210,16 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 
 	public function testHostname():void {
 		$url = "http://localhost:8080/example";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		self::assertEquals("localhost", $sut->hostname);
 	}
 
 	public function testHostnameSet():void {
 		$url = "http://localhost:8080/example";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		$sut->hostname = "somewhere.else";
 		self::assertEquals("somewhere.else", $sut->hostname);
@@ -228,8 +227,8 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	}
 
 	public function testOrigin():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "http://localhost:8080/example";
 		self::assertEquals("http://localhost:8080", $sut->origin);
 		$sut->href = "https://user:pass@example.com/example?key=value#nothing";
@@ -237,22 +236,22 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	}
 
 	public function testPasswordNone():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "http://localhost:8080/example";
 		self::assertEmpty($sut->password);
 	}
 
 	public function testPassword():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "http://g105b:cody123@localhost:8080/example";
 		self::assertEquals("cody123", $sut->password);
 	}
 
 	public function testPasswordSet():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "http://g105b:cody123@localhost:8080/example";
 		$sut->password = "changeme77";
 		self::assertEquals("changeme77", $sut->password);
@@ -260,15 +259,15 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	}
 
 	public function testPathname():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "http://g105b:cody123@localhost:8080/example";
 		self::assertEquals("/example", $sut->pathname);
 	}
 
 	public function testPathnameSet():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "https://example.com/example?key=value#test";
 		$sut->pathname = "/changed";
 		self::assertEquals("/changed", $sut->pathname);
@@ -276,22 +275,22 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	}
 
 	public function testPortNone():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "https://example.com/example?key=value#test";
 		self::assertEmpty($sut->port);
 	}
 
 	public function testPort():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "https://example.com:8080/example?key=value#test";
 		self::assertEquals(8080, $sut->port);
 	}
 
 	public function testPortSet():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "https://example.com:8080/example?key=value#test";
 		$sut->port = 1234;
 		self::assertEquals(1234, $sut->port);
@@ -299,22 +298,22 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	}
 
 	public function testProtocolNone():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "/example?key=value#test";
 		self::assertEmpty($sut->protocol);
 	}
 
 	public function testProtocol():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "https://example.com/example?key=value#test";
 		self::assertEquals("https:", $sut->protocol);
 	}
 
 	public function testProtocolSet():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "https://example.com/example?key=value#test";
 		$sut->protocol = "http";
 		self::assertEquals("http:", $sut->protocol);
@@ -322,20 +321,20 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	}
 
 	public function testReferrerPolicy():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		self::assertPropertyAttributeCorrelate($sut, "referrerpolicy", "referrerPolicy");
 	}
 
 	public function testRel():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		self::assertPropertyAttributeCorrelate($sut, "rel");
 	}
 
 	public function testRelList():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->rel = "one";
 		$relList = $sut->relList;
 		self::assertCount(1, $relList);
@@ -350,24 +349,24 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 
 	public function testSearchNone():void {
 		$url = "http://localhost:8080/example";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		self::assertEmpty($sut->search);
 	}
 
 	public function testSearch():void {
 		$url = "http://localhost:8080/example?key=value&another=something";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		self::assertEquals("?key=value&another=something", $sut->search);
 	}
 
 	public function testSearchSet():void {
 		$url = "http://localhost:8080/example?key=value&another=something";
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = $url;
 		$sut->search = "one=two";
 		self::assertEquals("?one=two", $sut->search);
@@ -378,28 +377,28 @@ class HTMLAnchorElementTest extends HTMLElementTestCase {
 	}
 
 	public function testTarget():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		self::assertPropertyAttributeCorrelate($sut, "target");
 	}
 
 	public function testUsernameNone():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "http://localhost:8080/example";
 		self::assertEmpty($sut->username);
 	}
 
 	public function testUsername():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "http://g105b:cody123@localhost:8080/example";
 		self::assertEquals("g105b", $sut->username);
 	}
 
 	public function testUsernameSet():void {
-		/** @var HTMLAnchorElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("a");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("a");
 		$sut->href = "http://g105b:cody123@localhost:8080/example";
 		$sut->username = "nobody";
 		self::assertEquals("nobody", $sut->username);

@@ -34,6 +34,14 @@ class DOMStringMap implements Countable {
 		call_user_func($this->setterCallback, $keyValuePairs);
 	}
 
+	public function get(string $name):?string {
+		return $this->__get($name);
+	}
+
+	public function set(string $name, string $value):void {
+		$this->__set($name, $value);
+	}
+
 	public function count():int {
 		$keyValuePairs = call_user_func($this->getterCallback);
 		return count($keyValuePairs);

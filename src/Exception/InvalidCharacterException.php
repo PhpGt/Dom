@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class InvalidCharacterException extends DOMException {
-
-}
+class InvalidCharacterException extends NotSupportedException {}

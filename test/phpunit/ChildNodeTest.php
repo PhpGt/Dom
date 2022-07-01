@@ -1,16 +1,15 @@
 <?php
 namespace Gt\Dom\Test;
 
-use Exception;
-use Gt\Dom\HTMLElement\HTMLDivElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 use Gt\Dom\Text;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
 class ChildNodeTest extends TestCase {
 	public function testRemoveNoParent():void {
-		$sut = NodeTestFactory::createHTMLElement("div");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$exception = null;
 		try {
 			$sut->remove();
@@ -20,7 +19,8 @@ class ChildNodeTest extends TestCase {
 	}
 
 	public function testRemove():void {
-		$sut = NodeTestFactory::createHTMLElement("div");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$parent = $sut->ownerDocument->createElement("example-parent");
 		$parent->appendChild($sut);
 		self::assertSame($parent, $sut->parentElement);
@@ -29,7 +29,8 @@ class ChildNodeTest extends TestCase {
 	}
 
 	public function testBeforeNoParent():void {
-		$sut = NodeTestFactory::createHTMLElement("div");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$exception = null;
 		try {
 			$sut->before("something");
@@ -39,7 +40,8 @@ class ChildNodeTest extends TestCase {
 	}
 
 	public function testBefore():void {
-		$sut = NodeTestFactory::createHTMLElement("div");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$parent = $sut->ownerDocument->createElement("example-parent");
 		$parent->appendChild($sut);
 
@@ -49,7 +51,8 @@ class ChildNodeTest extends TestCase {
 	}
 
 	public function testAfterNoParent():void {
-		$sut = NodeTestFactory::createHTMLElement("div");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$exception = null;
 		try {
 			$sut->after("something");
@@ -59,7 +62,8 @@ class ChildNodeTest extends TestCase {
 	}
 
 	public function testAfter():void {
-		$sut = NodeTestFactory::createHTMLElement("div");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$parent = $sut->ownerDocument->createElement("example-parent");
 		$parent->appendChild($sut);
 
@@ -69,7 +73,8 @@ class ChildNodeTest extends TestCase {
 	}
 
 	public function testReplaceWithNoParent():void {
-		$sut = NodeTestFactory::createHTMLElement("div");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$exception = null;
 
 		try {
@@ -81,7 +86,8 @@ class ChildNodeTest extends TestCase {
 	}
 
 	public function testReplaceWith():void {
-		$sut = NodeTestFactory::createHTMLElement("div");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("div");
 		$sut->innerHTML = "one";
 		$parent = $sut->ownerDocument->createElement("example-parent");
 		$parent->appendChild($sut);

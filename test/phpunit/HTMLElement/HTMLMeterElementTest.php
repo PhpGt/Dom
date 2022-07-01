@@ -1,60 +1,57 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLLabelElement;
-use Gt\Dom\HTMLElement\HTMLMeterElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLMeterElementTest extends HTMLElementTestCase {
 	public function testHigh():void {
-		/** @var HTMLMeterElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("meter");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("meter");
 		self::assertPropertyAttributeCorrelateNumber($sut, "?float", "high");
 	}
 
 	public function testLow():void {
-		/** @var HTMLMeterElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("meter");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("meter");
 		self::assertPropertyAttributeCorrelateNumber($sut, "?float", "low");
 	}
 
 	public function testMax():void {
-		/** @var HTMLMeterElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("meter");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("meter");
 		self::assertPropertyAttributeCorrelateNumber($sut, "?float", "max");
 	}
 
 	public function testMin():void {
-		/** @var HTMLMeterElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("meter");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("meter");
 		self::assertPropertyAttributeCorrelateNumber($sut, "?float", "min");
 	}
 
 	public function testOptimum():void {
-		/** @var HTMLMeterElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("meter");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("meter");
 		self::assertPropertyAttributeCorrelateNumber($sut, "?float", "optimum");
 	}
 
 	public function testValue():void {
-		/** @var HTMLMeterElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("meter");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("meter");
 		self::assertPropertyAttributeCorrelateNumber($sut, "?float", "value");
 	}
 
 	public function testLabelsNested():void {
-		/** @var HTMLMeterElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("meter");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("meter");
 		$label = $sut->ownerDocument->createElement("label");
 		$label->appendChild($sut);
 		self::assertSame($label, $sut->labels[0]);
 	}
 
 	public function testLabelsFor():void {
-		/** @var HTMLMeterElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("meter");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("meter");
 		$sut->id = "test-input";
-		/** @var HTMLLabelElement $label */
 		$label = $sut->ownerDocument->createElement("label");
 		$label->htmlFor = "test-input";
 
@@ -65,10 +62,9 @@ class HTMLMeterElementTest extends HTMLElementTestCase {
 	}
 
 	public function testLabelsMixedNestedFor():void {
-		/** @var HTMLMeterElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("meter");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("meter");
 		$sut->id = "test-input";
-		/** @var HTMLLabelElement $label1 */
 		$label1 = $sut->ownerDocument->createElement("label");
 		$label1->htmlFor = "test-input";
 		$label2 = $sut->ownerDocument->createElement("label");

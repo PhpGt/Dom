@@ -1,19 +1,18 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLDataElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLDataElementTest extends HTMLElementTestCase {
 	public function testValueNone():void {
-		/** @var HTMLDataElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("data");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("data");
 		self::assertSame("", $sut->value);
 	}
 
 	public function testValue():void {
-		/** @var HTMLDataElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("data");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("data");
 		$sut->value = "test value";
 		self::assertEquals("test value", $sut->value);
 		self::assertEquals("test value", $sut->getAttribute("value"));

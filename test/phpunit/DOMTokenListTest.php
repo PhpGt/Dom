@@ -1,7 +1,7 @@
 <?php
 namespace Gt\Dom\Test;
 
-use Gt\Dom\Facade\DOMTokenListFactory;
+use Gt\Dom\DOMTokenListFactory;
 use PHPUnit\Framework\TestCase;
 
 class DOMTokenListTest extends TestCase {

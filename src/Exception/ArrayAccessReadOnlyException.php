@@ -1,6 +1,6 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class ArrayAccessReadOnlyException extends DOMException {
+class ArrayAccessReadOnlyException extends DomException {
 
 }

@@ -1,19 +1,18 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLParamElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLParamElementTest extends HTMLElementTestCase {
 	public function testName():void {
-		/** @var HTMLParamElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("param");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("param");
 		self::assertPropertyAttributeCorrelate($sut, "name");
 	}
 
 	public function testValue():void {
-		/** @var HTMLParamElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("param");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("param");
 		self::assertPropertyAttributeCorrelate($sut, "value");
 	}
 }

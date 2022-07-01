@@ -4,8 +4,6 @@ namespace Gt\Dom;
 use ArrayAccess;
 use Countable;
 use Gt\Dom\Exception\HTMLCollectionImmutableException;
-use Gt\Dom\Facade\HTMLCollectionFactory;
-use Gt\Dom\Facade\NodeListFactory;
 use Gt\PropFunc\MagicProp;
 use Iterator;
 
@@ -24,15 +22,14 @@ use Iterator;
  * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection
  * @see HTMLCollectionFactory
  *
- * @property-read int $length Returns the number of items in the collection.
- * @implements ArrayAccess<string|int, Element|RadioNodeList|null>
+ * @property-read int $length
+ * @implements ArrayAccess<int, Element>
  * @implements Iterator<int, Element>
  */
 class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
 
-	/** @var callable():NodeList $callback Returns a NodeList, called
-	 * multiple times, allowing the HTMLCollection to be "live" */
+	/** @var callable */
 	private $callback;
 	private int $iteratorIndex;
 
@@ -42,14 +39,59 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/length */
-	protected function __prop_get_length():int {
+	public function __prop_get_length():int {
+		return $this->count();
+	}
+
+// ArrayAccess functions:
+
+	/** @param int $offset */
+	public function offsetExists(mixed $offset):bool {
+		return !is_null($this->item($offset));
+	}
+
+	/** @param int $offset */
+	public function offsetGet(mixed $offset):?Element {
+		return $this->item($offset);
+	}
+
+	public function offsetSet(mixed $offset, mixed $value):void {
+		throw new HTMLCollectionImmutableException();
+	}
+
+	public function offsetUnset(mixed $offset):void {
+		throw new HTMLCollectionImmutableException();
+	}
+// End of ArrayAccess functions.
+
+// Countable functions:
+	public function count():int {
 		$nodeList = call_user_func($this->callback);
 		return count($nodeList);
 	}
+// End of Countable functions.
 
-	public function count():int {
-		return $this->length;
+// Iterator functions:
+	public function rewind():void {
+		$this->iteratorIndex = 0;
 	}
+
+	public function valid():bool {
+		return $this->offsetExists($this->iteratorIndex);
+	}
+
+	public function key():int {
+		return $this->iteratorIndex;
+	}
+
+	public function current():?Element {
+		return $this->offsetGet($this->iteratorIndex);
+	}
+
+	public function next():void {
+		$this->iteratorIndex++;
+	}
+// End of Iterator functions.
 
 	/**
 	 * The HTMLCollection method item() returns the node located at the
@@ -118,56 +160,5 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 				fn() => $matches["name"]
 			);
 		}
-	}
-
-	/**
-	 * @param int $offset
-	 */
-	public function offsetExists($offset):bool {
-		$element = $this->item($offset);
-		return !is_null($element);
-
-	}
-
-	/**
-	 * @param string|int $offset
-	 */
-	public function offsetGet($offset):Element|RadioNodeList|null {
-		return $this->item($offset);
-	}
-
-	/**
-	 * @param string|int $offset
-	 */
-	public function offsetSet($offset, $value):void {
-		throw new HTMLCollectionImmutableException();
-	}
-
-	/**
-	 * @param int $offset
-	 */
-	public function offsetUnset($offset):void {
-		throw new HTMLCollectionImmutableException();
-	}
-
-	public function current():Element {
-		return $this->item($this->iteratorIndex);
-	}
-
-	public function next():void {
-		$this->iteratorIndex++;
-	}
-
-	public function key():int {
-		return $this->iteratorIndex;
-	}
-
-	public function valid():bool {
-		$item = $this->item($this->iteratorIndex);
-		return !is_null($item);
-	}
-
-	public function rewind():void {
-		$this->iteratorIndex = 0;
 	}
 }

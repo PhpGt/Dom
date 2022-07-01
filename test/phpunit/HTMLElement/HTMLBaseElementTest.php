@@ -1,19 +1,18 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLBaseElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLBaseElementTest extends HTMLElementTestCase {
 	public function testHref():void {
-		/** @var HTMLBaseElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("base");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("base");
 		self::assertPropertyAttributeCorrelate($sut, "href");
 	}
 
 	public function testTarget():void {
-		/** @var HTMLBaseElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("base");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("base");
 		self::assertPropertyAttributeCorrelate($sut, "target");
 	}
 }

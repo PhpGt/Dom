@@ -1,7 +1,9 @@
 <?php
 namespace Gt\Dom;
 
+use DOMText;
 use Gt\Dom\Exception\IndexSizeException;
+use Gt\PropFunc\MagicProp;
 
 /**
  * The Text interface represents the textual content of Element or Attr.
@@ -21,33 +23,14 @@ use Gt\Dom\Exception\IndexSizeException;
  * @property-read bool $isElementContentWhitespace Returns a Boolean flag indicating whether or not the text node contains only whitespace.
  * @property-read string $wholeText Returns a DOMString containing the text of all Text nodes logically adjacent to this Node, concatenated in document order.
  */
-class Text extends CharacterData {
+class Text extends DOMText {
+	use MagicProp;
+	use RegisteredNodeClass;
+	use ChildNode;
+
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Text/isElementContentWhitespace */
 	protected function __prop_get_isElementContentWhitespace():bool {
 		return strlen(trim($this->textContent)) === 0;
-	}
-
-	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Text/wholeText */
-	protected function __prop_get_wholeText():string {
-		$text = $this->textContent;
-
-		$context = $this;
-		while($context = $context->previousSibling) {
-			if(!$context instanceof Text) {
-				break;
-			}
-			$text = $context->textContent . $text;
-		}
-
-		$context = $this;
-		while($context = $context->nextSibling) {
-			if(!$context instanceof Text) {
-				break;
-			}
-			$text = $text . $context->textContent;
-		}
-
-		return $text;
 	}
 
 	/**

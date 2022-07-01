@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class XPathQueryException extends DOMException {
-
-}
+class XPathQueryException extends DomException {}

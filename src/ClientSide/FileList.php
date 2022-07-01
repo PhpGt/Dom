@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\ClientSide;
 
-class FileList extends ClientSideOnly {
-
-}
+class FileList extends ClientSideOnly {}

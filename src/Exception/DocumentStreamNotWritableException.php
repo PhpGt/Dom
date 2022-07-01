@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class DocumentStreamNotWritableException extends DOMException {
-
-}
+class DocumentStreamNotWritableException extends DomException {}

@@ -2,39 +2,45 @@
 namespace Gt\Dom\Test;
 
 use Gt\Dom\Exception\IndexSizeException;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 use PHPUnit\Framework\TestCase;
 
 class TextTest extends TestCase {
 	public function testIsElementContentWhitespaceEmptyContent():void {
-		$sut = NodeTestFactory::createTextNode("");
+		$document = new HTMLDocument();
+		$sut = $document->createTextNode("");
 		self::assertTrue($sut->isElementContentWhitespace);
 	}
 
 	public function testIsElementContentWhitespaceNonEmptyContent():void {
-		$sut = NodeTestFactory::createTextNode("Hello, World");
+		$document = new HTMLDocument();
+		$sut = $document->createTextNode("Hello, World");
 		self::assertFalse($sut->isElementContentWhitespace);
 	}
 
 	public function testIsElementContentWhitespaceJustSpacesAndTabsContent():void {
-		$sut = NodeTestFactory::createTextNode("   		  
-			          
+		$document = new HTMLDocument();
+		$sut = $document->createTextNode("
+
   	                ");
 		self::assertTrue($sut->isElementContentWhitespace);
 	}
 
 	public function testWholeTextEmpty():void {
-		$sut = NodeTestFactory::createTextNode();
+		$document = new HTMLDocument();
+		$sut = $document->createTextNode("");
 		self::assertSame("", $sut->wholeText);
 	}
 
 	public function testWholeTextSingle():void {
-		$sut = NodeTestFactory::createTextNode("test");
+		$document = new HTMLDocument();
+		$sut = $document->createTextNode("test");
 		self::assertSame("test", $sut->wholeText);
 	}
 
 	public function testWholeTextSiblings():void {
-		$sut = NodeTestFactory::createTextNode("test");
+		$document = new HTMLDocument();
+		$sut = $document->createTextNode("test");
 		$test1 = $sut->ownerDocument->createTextNode("one");
 		$test2 = $sut->ownerDocument->createTextNode("two");
 		$parent = $sut->ownerDocument->createElement("test-parent");
@@ -43,7 +49,8 @@ class TextTest extends TestCase {
 	}
 
 	public function testWholeTextNonTextSiblings():void {
-		$sut = NodeTestFactory::createTextNode("test");
+		$document = new HTMLDocument();
+		$sut = $document->createTextNode("test");
 		$test1 = $sut->ownerDocument->createElement("test-one");
 		$test2 = $sut->ownerDocument->createTextNode("two");
 		$test3 = $sut->ownerDocument->createTextNode("three");
@@ -54,24 +61,28 @@ class TextTest extends TestCase {
 	}
 
 	public function testSplitTextZero():void {
-		$sut = NodeTestFactory::createTextNode("test");
+		$document = new HTMLDocument();
+		$sut = $document->createTextNode("test");
 		self::assertSame("test", $sut->splitText(0)->textContent);
 	}
 
 	public function testSplitTextIndex():void {
-		$sut = NodeTestFactory::createTextNode("test");
+		$document = new HTMLDocument();
+		$sut = $document->createTextNode("test");
 		self::assertSame("st", $sut->splitText(2)->textContent);
 	}
 
 	public function testSplitTextOutOfBounds():void {
-		$sut = NodeTestFactory::createTextNode("test");
+		$document = new HTMLDocument();
+		$sut = $document->createTextNode("test");
 		self::expectException(IndexSizeException::class);
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$value = $sut->splitText(200);
 	}
 
 	public function testSplitTextInsertsNewNode():void {
-		$sut = NodeTestFactory::createTextNode("Hello, {{name}}!");
+		$document = new HTMLDocument();
+		$sut = $document->createTextNode("Hello, {{name}}!");
 		$parent = $sut->ownerDocument->createElement("div");
 		$parent->appendChild($sut);
 		self::assertCount(1, $parent->childNodes);

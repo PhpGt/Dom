@@ -2,7 +2,6 @@
 namespace Gt\Dom;
 
 use Countable;
-use Generator;
 use Gt\PropFunc\MagicProp;
 use Iterator;
 
@@ -263,8 +262,7 @@ class DOMTokenList implements Countable, Iterator {
 	/** @return string[] */
 	private function callAccessor():array {
 		$values = call_user_func($this->accessCallback);
-		$values = array_filter($values);
-		return $values;
+		return array_filter($values);
 	}
 
 	private function callMutator(string...$values):void {

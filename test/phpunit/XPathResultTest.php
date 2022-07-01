@@ -2,11 +2,12 @@
 namespace Gt\Dom\Test;
 
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
+use Gt\Dom\XMLDocument;
 use PHPUnit\Framework\TestCase;
 
 class XPathResultTest extends TestCase {
 	public function testIterateNext():void {
-		$document = DocumentTestFactory::createXMLDocument(DocumentTestFactory::XML_BREAKFAST_MENU);
+		$document = new XMLDocument(DocumentTestFactory::XML_BREAKFAST_MENU);
 		$sut = $document->evaluate("//food//name");
 		$counter = 0;
 		while($node = $sut->iterateNext()) {

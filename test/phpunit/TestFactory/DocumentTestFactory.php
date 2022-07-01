@@ -35,12 +35,55 @@ HTML;
 </head>
 <body>
 	<h1>Hello, PHP.Gt!</h1>
-	<!-- this is a comment -->
+	<!--this is a comment-->
 	<h2>There is a comment in this document</h2>
 </body>
 </html>
 HTML;
 
+	const HTML_COMMENT_FIRST_CHILD = <<<HTML
+<!--this is a comment-->
+<h1>Hello, PHP.Gt!</h1>
+HTML;
+
+	const HTML_COMMENT_MULTILINE = <<<HTML
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Multi-line comment test</title>
+</head>
+<body>
+	<h1>Hello, PHP.Gt!</h1>
+	<!--
+	this is a comment
+	it spans multiple lines
+	thank you, have a nice day
+	-->
+	<h2>There is a multi-line comment in this document</h2>
+</body>
+</html>
+HTML;
+
+	const HTML_COMMENT_NESTED = <<<HTML
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Comment test</title>
+</head>
+<body>
+	<h1>Hello, PHP.Gt!</h1>
+	<!--this is a comment-->
+	<h2>There are three comments in this document</h2>
+	<div>
+		<h3>This DIV contains another comment.</h3>
+		<!--this is another comment-->	
+		<!--and another!-->	
+	</div>
+</body>
+</html>
+HTML;
 
 	const HTML_FORMS = <<<HTML
 <!doctype html>
@@ -81,6 +124,35 @@ HTML;
 	</form>
 </main>
 HTML;
+
+	const HTML_RADIO_BUTTONS = <<<HTML
+<!doctype html>
+<form method="post">
+	<h1>What is your favourite bean?</h1>
+	
+	<label>
+		<input type="radio" name="bean" value="black-eyed-pea" />
+		<span>Black eyed pea</span>
+	</label>
+	<label>
+		<input type="radio" name="bean" value="cannellini" />
+		<span>Cannellini</span>
+	</label>
+	<label>
+		<input type="radio" name="bean" value="kidney" />
+		<span>Kidney</span>
+	</label>
+	<label>
+		<input type="radio" name="bean" value="fava" />
+		<span>Fava</span>
+	</label>
+	<label>
+		<input type="radio" name="bean" value="edamame" />
+		<span>Edamame</span>
+	</label>
+</form>
+HTML;
+
 
 	const HTML_IMAGES = <<<HTML
 <!doctype html>
@@ -282,7 +354,6 @@ XML;
 	</script>
 </body>
 HTML;
-
 
 	public static function createHTMLDocument(
 		string $html = self::HTML_DEFAULT

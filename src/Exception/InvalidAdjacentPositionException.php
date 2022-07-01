@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class InvalidAdjacentPositionException extends DOMException {
-
-}
+class InvalidAdjacentPositionException extends DomException {}

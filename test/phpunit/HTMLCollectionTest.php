@@ -3,9 +3,8 @@ namespace Gt\Dom\Test;
 
 use Gt\Dom\Element;
 use Gt\Dom\Exception\HTMLCollectionImmutableException;
-use Gt\Dom\Facade\HTMLCollectionFactory;
-use Gt\Dom\Facade\NodeListFactory;
-use Gt\Dom\HTMLElement\HTMLInputElement;
+use Gt\Dom\HTMLCollectionFactory;
+use Gt\Dom\NodeListFactory;
 use Gt\Dom\RadioNodeList;
 use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use PHPUnit\Framework\TestCase;
@@ -67,11 +66,9 @@ class HTMLCollectionTest extends TestCase {
 	}
 
 	public function testNamedItemRadio():void {
-		/** @var array<HTMLInputElement> $radioElementList */
 		$radioElementList = [];
 
 		for($i = 0; $i < 10; $i++) {
-			/** @var HTMLInputElement $radio */
 			$radio = NodeTestFactory::createHTMLElement("input");
 			$radio->type = "radio";
 			$radio->name = "example";
@@ -91,11 +88,9 @@ class HTMLCollectionTest extends TestCase {
 	}
 
 	public function testNamedItemRadio_noChecked():void {
-		/** @var array<HTMLInputElement> $radioElementList */
 		$radioElementList = [];
 
 		for($i = 0; $i < 10; $i++) {
-			/** @var HTMLInputElement $radio */
 			$radio = NodeTestFactory::createHTMLElement("input");
 			$radio->type = "radio";
 			$radio->name = "example";
@@ -113,11 +108,9 @@ class HTMLCollectionTest extends TestCase {
 	}
 
 	public function testNamedItemRadio_checkbox():void {
-		/** @var array<HTMLInputElement> $radioElementList */
 		$radioElementList = [];
 
 		for($i = 0; $i < 10; $i++) {
-			/** @var HTMLInputElement $radio */
 			$radio = NodeTestFactory::createHTMLElement("input");
 			$radio->type = "checkbox";
 			$radio->name = "example";
@@ -137,11 +130,9 @@ class HTMLCollectionTest extends TestCase {
 	}
 
 	public function testNamedItemRadio_setValue():void {
-		/** @var array<HTMLInputElement> $radioElementList */
 		$radioElementList = [];
 
 		for($i = 0; $i < 10; $i++) {
-			/** @var HTMLInputElement $radio */
 			$radio = NodeTestFactory::createHTMLElement("input");
 			$radio->type = "radio";
 			$radio->name = "example";
@@ -167,11 +158,9 @@ class HTMLCollectionTest extends TestCase {
 	}
 
 	public function testNamedItemRadio_setValue_checkbox():void {
-		/** @var array<HTMLInputElement> $radioElementList */
 		$radioElementList = [];
 
 		for($i = 0; $i < 10; $i++) {
-			/** @var HTMLInputElement $radio */
 			$radio = NodeTestFactory::createHTMLElement("input");
 			$radio->type = "checkbox";
 			$radio->name = "example";

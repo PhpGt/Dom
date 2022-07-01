@@ -1,31 +1,33 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLStyleElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
+use Gt\Dom\HTMLDocument;
 
 class HTMLStyleElementTest extends HTMLElementTestCase {
 	public function testMedia():void {
-		/** @var HTMLStyleElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("style");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("style");
 		self::assertPropertyAttributeCorrelate($sut, "media");
 	}
 
 	public function testType():void {
-		/** @var HTMLStyleElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("style");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("style");
 		self::assertPropertyAttributeCorrelate($sut, "type");
 	}
 
 	public function testDisabled():void {
-		/** @var HTMLStyleElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("style");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("style");
 		self::assertPropertyAttributeCorrelateBool($sut, "disabled");
 	}
 
 	public function testSheet():void {
-		/** @var HTMLStyleElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("style");
-		self::assertNull($sut->sheet);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("style");
+		self::expectException(ClientSideOnlyFunctionalityException::class);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$sheet = $sut->sheet;
 	}
 }

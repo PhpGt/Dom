@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class ClientSideOnlyFunctionalityException extends DOMException {
-
-}
+class ClientSideOnlyFunctionalityException extends DomException {}

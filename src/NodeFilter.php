@@ -1,6 +1,5 @@
 <?php
 namespace Gt\Dom;
-
 /**
  * A NodeFilter interface represents an object used to filter the nodes in a
  * NodeIterator or TreeWalker. A NodeFilter knows nothing about the document or
@@ -43,5 +42,5 @@ abstract class NodeFilter {
 	 * @return int
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeFilter/acceptNode
 	 */
-	abstract public function acceptNode(Node $node):int;
+	abstract public function acceptNode(Node|Element $node):int;
 }

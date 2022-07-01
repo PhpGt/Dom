@@ -2,8 +2,8 @@
 namespace Gt\Dom\Test;
 
 use Gt\Dom\Exception\NodeListImmutableException;
-use Gt\Dom\Facade\NodeListFactory;
 use Gt\Dom\Node;
+use Gt\Dom\NodeListFactory;
 use PHPUnit\Framework\TestCase;
 
 class NodeListTest extends TestCase {

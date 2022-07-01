@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class HTMLCollectionImmutableException extends DOMException {
-
-}
+class HTMLCollectionImmutableException extends DomException {}

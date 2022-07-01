@@ -7,18 +7,15 @@ use Gt\Dom\Document;
 use Gt\Dom\DocumentFragment;
 use Gt\Dom\DocumentType;
 use Gt\Dom\Element;
-use Gt\Dom\Facade\TreeWalkerFactory;
-use Gt\Dom\HTMLElement\HTMLBodyElement;
-use Gt\Dom\HTMLElement\HTMLHeadingElement;
-use Gt\Dom\HTMLElement\HTMLImageElement;
-use Gt\Dom\HTMLElement\HTMLLiElement;
-use Gt\Dom\HTMLElement\HTMLUListElement;
+use Gt\Dom\ElementType;
+use Gt\Dom\HTMLDocument;
 use Gt\Dom\Node;
 use Gt\Dom\NodeFilter;
 use Gt\Dom\ProcessingInstruction;
 use Gt\Dom\Test\TestFactory\DocumentTestFactory;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
 use Gt\Dom\Text;
+use Gt\Dom\TreeWalkerFactory;
+use Gt\Dom\XMLDocument;
 use PHPUnit\Framework\TestCase;
 
 class TreeWalkerTest extends TestCase {
@@ -39,7 +36,7 @@ class TreeWalkerTest extends TestCase {
 
 	public function testFilterFromCallable():void {
 		$callCount = 0;
-		$callable = function(Node $node) use(&$callCount) {
+		$callable = function(Node $node) use (&$callCount) {
 			$callCount++;
 			return $callCount;
 		};
@@ -56,14 +53,16 @@ class TreeWalkerTest extends TestCase {
 	}
 
 	public function testParentNode():void {
-		$root = NodeTestFactory::createNode("root");
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
 		$sut = TreeWalkerFactory::create($root);
 		self::assertNull($sut->parentNode());
 		self::assertSame($root, $sut->currentNode);
 	}
 
 	public function testParentNodeDeep():void {
-		$root = NodeTestFactory::createNode("root");
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
 		$trunk = $root->ownerDocument->createElement("trunk");
 		$branch = $root->ownerDocument->createElement("branch");
 		$leaf1 = $root->ownerDocument->createElement("leaf");
@@ -73,7 +72,8 @@ class TreeWalkerTest extends TestCase {
 		$trunk->appendChild($branch);
 		$branch->append($leaf1, $leaf2, $leaf3);
 		$sut = $root->ownerDocument->createTreeWalker($root);
-		while($node = $sut->nextNode()) {}
+		while($node = $sut->nextNode()) {
+		}
 		self::assertSame($branch, $sut->parentNode());
 		self::assertSame($trunk, $sut->parentNode());
 		self::assertSame($root, $sut->parentNode());
@@ -81,14 +81,16 @@ class TreeWalkerTest extends TestCase {
 	}
 
 	public function testFirstChildNone():void {
-		$root = NodeTestFactory::createNode("root");
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
 		$sut = TreeWalkerFactory::create($root);
 		self::assertNull($sut->firstChild());
 		self::assertSame($root, $sut->currentNode);
 	}
 
 	public function testFirstChild():void {
-		$root = NodeTestFactory::createNode("root");
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
 		$child1 = $root->ownerDocument->createElement("child");
 		$child2 = $root->ownerDocument->createElement("child");
 		$child3 = $root->ownerDocument->createElement("child");
@@ -99,14 +101,16 @@ class TreeWalkerTest extends TestCase {
 	}
 
 	public function testLastChildNone():void {
-		$root = NodeTestFactory::createNode("root");
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
 		$sut = TreeWalkerFactory::create($root);
 		self::assertNull($sut->lastChild());
 		self::assertSame($root, $sut->currentNode);
 	}
 
 	public function testLastChild():void {
-		$root = NodeTestFactory::createNode("root");
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
 		$child1 = $root->ownerDocument->createElement("child");
 		$child2 = $root->ownerDocument->createElement("child");
 		$child3 = $root->ownerDocument->createElement("child");
@@ -117,16 +121,18 @@ class TreeWalkerTest extends TestCase {
 	}
 
 	public function testPreviousSiblingNone():void {
-		$root = NodeTestFactory::createNode("root");
-		$root->ownerDocument->appendChild($root);
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
+		$document->documentElement->appendChild($root);
 		$sut = TreeWalkerFactory::create($root);
 		self::assertNull($sut->previousSibling());
 		self::assertSame($root, $sut->currentNode);
 	}
 
 	public function testPreviousSibling():void {
-		$root = NodeTestFactory::createNode("root");
-		$root->ownerDocument->appendChild($root);
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
+		$document->documentElement->appendChild($root);
 		$other1 = $root->ownerDocument->createElement("other");
 		$other2 = $root->ownerDocument->createElement("other");
 		$other3 = $root->ownerDocument->createElement("other");
@@ -139,16 +145,18 @@ class TreeWalkerTest extends TestCase {
 	}
 
 	public function testNextSiblingNone():void {
-		$root = NodeTestFactory::createNode("root");
-		$root->ownerDocument->appendChild($root);
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
+		$document->documentElement->appendChild($root);
 		$sut = TreeWalkerFactory::create($root);
 		self::assertNull($sut->nextSibling());
 		self::assertSame($root, $sut->currentNode);
 	}
 
 	public function testNextSibling():void {
-		$root = NodeTestFactory::createNode("root");
-		$root->ownerDocument->appendChild($root);
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
+		$document->documentElement->appendChild($root);
 		$other1 = $root->ownerDocument->createElement("other");
 		$other2 = $root->ownerDocument->createElement("other");
 		$other3 = $root->ownerDocument->createElement("other");
@@ -161,14 +169,16 @@ class TreeWalkerTest extends TestCase {
 	}
 
 	public function testPreviousNodeNone():void {
-		$root = NodeTestFactory::createNode("root");
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
 		$sut = TreeWalkerFactory::create($root);
 		self::assertNull($sut->previousNode());
 		self::assertSame($root, $sut->currentNode);
 	}
 
 	public function testPreviousNodeDeep():void {
-		$root = NodeTestFactory::createNode("root");
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
 		$sibling = $root->ownerDocument->createElement("sibling");
 		$trunk = $root->ownerDocument->createElement("trunk");
 		$branch = $root->ownerDocument->createElement("branch");
@@ -176,14 +186,17 @@ class TreeWalkerTest extends TestCase {
 		$leaf2 = $root->ownerDocument->createElement("leaf");
 		$leaf3 = $root->ownerDocument->createElement("leaf");
 		$docRoot = $root->ownerDocument->createElement("doc-root");
-		$root->ownerDocument->appendChild($docRoot);
+		$document->documentElement->appendChild($docRoot);
 		$docRoot->appendChild($sibling);
 		$docRoot->appendChild($root);
 		$root->appendChild($trunk);
 		$trunk->appendChild($branch);
 		$branch->append($leaf1, $leaf2, $leaf3);
 		$sut = $root->ownerDocument->createTreeWalker($root);
-		while($node = $sut->nextNode()) {}
+		/** @noinspection PhpStatementHasEmptyBodyInspection */
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		while($node = $sut->nextNode()) {
+		}
 		self::assertSame($leaf3, $sut->currentNode);
 		self::assertSame($leaf2, $sut->previousNode());
 		self::assertSame($leaf1, $sut->previousNode());
@@ -194,8 +207,9 @@ class TreeWalkerTest extends TestCase {
 	}
 
 	public function testPreviousNode():void {
-		$root = NodeTestFactory::createNode("root");
-		$root->ownerDocument->appendChild($root);
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
+		$document->documentElement->appendChild($root);
 		$other1 = $root->ownerDocument->createElement("other");
 		$other2 = $root->ownerDocument->createElement("other");
 		$other3 = $root->ownerDocument->createElement("other");
@@ -212,15 +226,17 @@ class TreeWalkerTest extends TestCase {
 	}
 
 	public function testNextNodeNode():void {
-		$root = NodeTestFactory::createNode("root");
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
 		$sut = TreeWalkerFactory::create($root);
 		self::assertNull($sut->nextNode());
 		self::assertSame($root, $sut->currentNode);
 	}
 
 	public function testNextNode():void {
-		$root = NodeTestFactory::createNode("root");
-		$root->ownerDocument->appendChild($root);
+		$document = new XMLDocument();
+		$root = $document->createElement("root");
+		$document->documentElement->appendChild($root);
 		$other1 = $root->ownerDocument->createElement("other");
 		$other2 = $root->ownerDocument->createElement("other");
 		$other3 = $root->ownerDocument->createElement("other");
@@ -234,7 +250,7 @@ class TreeWalkerTest extends TestCase {
 	}
 
 	public function testIteration():void {
-		$document = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_IMAGES);
+		$document = new HTMLDocument(DocumentTestFactory::HTML_IMAGES);
 		$sut = TreeWalkerFactory::create($document->body);
 		$collectedNodes = [];
 		foreach($sut as $node) {
@@ -252,21 +268,21 @@ class TreeWalkerTest extends TestCase {
 			NodeFilter::SHOW_ELEMENT,
 		);
 		$collectedNodes = [];
-		foreach($sut as $i => $node) {
+		foreach($sut as $node) {
 			array_push($collectedNodes, $node);
 		}
 
-		self::assertInstanceOf(HTMLBodyElement::class, $collectedNodes[0]);
-		self::assertInstanceOf(HTMLHeadingElement::class, $collectedNodes[1]);
-		self::assertInstanceOf(HTMLUListElement::class, $collectedNodes[2]);
-		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[3]);
-		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[4]);
-		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[5]);
-		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[6]);
-		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[7]);
-		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[8]);
-		self::assertInstanceOf(HTMLLiElement::class, $collectedNodes[9]);
-		self::assertInstanceOf(HTMLImageElement::class, $collectedNodes[10]);
+		self::assertSame(ElementType::HTMLBodyElement, $collectedNodes[0]->elementType);
+		self::assertSame(ElementType::HTMLHeadingElement, $collectedNodes[1]->elementType);
+		self::assertSame(ElementType::HTMLUListElement, $collectedNodes[2]->elementType);
+		self::assertSame(ElementType::HTMLLiElement, $collectedNodes[3]->elementType);
+		self::assertSame(ElementType::HTMLImageElement, $collectedNodes[4]->elementType);
+		self::assertSame(ElementType::HTMLLiElement, $collectedNodes[5]->elementType);
+		self::assertSame(ElementType::HTMLImageElement, $collectedNodes[6]->elementType);
+		self::assertSame(ElementType::HTMLLiElement, $collectedNodes[7]->elementType);
+		self::assertSame(ElementType::HTMLImageElement, $collectedNodes[8]->elementType);
+		self::assertSame(ElementType::HTMLLiElement, $collectedNodes[9]->elementType);
+		self::assertSame(ElementType::HTMLImageElement, $collectedNodes[10]->elementType);
 	}
 
 	public function testPreviousNodeWhatToShow():void {
@@ -275,19 +291,21 @@ class TreeWalkerTest extends TestCase {
 			$document->body,
 			NodeFilter::SHOW_ELEMENT,
 		);
-		while($sut->nextNode()){}
+		/** @noinspection PhpStatementHasEmptyBodyInspection */
+		while($sut->nextNode()) {
+		}
 
-		self::assertInstanceOf(HTMLImageElement::class, $sut->currentNode);
-		self::assertInstanceOf(HTMLLiElement::class, $sut->previousNode());
-		self::assertInstanceOf(HTMLImageElement::class, $sut->previousNode());
-		self::assertInstanceOf(HTMLLiElement::class, $sut->previousNode());
-		self::assertInstanceOf(HTMLImageElement::class, $sut->previousNode());
-		self::assertInstanceOf(HTMLLiElement::class, $sut->previousNode());
-		self::assertInstanceOf(HTMLImageElement::class, $sut->previousNode());
-		self::assertInstanceOf(HTMLLiElement::class, $sut->previousNode());
-		self::assertInstanceOf(HTMLUListElement::class, $sut->previousNode());
-		self::assertInstanceOf(HTMLHeadingElement::class, $sut->previousNode());
-		self::assertInstanceOf(HTMLBodyElement::class, $sut->previousNode());
+		self::assertSame(ElementType::HTMLImageElement, $sut->currentNode->elementType);
+		self::assertSame(ElementType::HTMLLiElement, $sut->previousNode()->elementType);
+		self::assertSame(ElementType::HTMLImageElement, $sut->previousNode()->elementType);
+		self::assertSame(ElementType::HTMLLiElement, $sut->previousNode()->elementType);
+		self::assertSame(ElementType::HTMLImageElement, $sut->previousNode()->elementType);
+		self::assertSame(ElementType::HTMLLiElement, $sut->previousNode()->elementType);
+		self::assertSame(ElementType::HTMLImageElement, $sut->previousNode()->elementType);
+		self::assertSame(ElementType::HTMLLiElement, $sut->previousNode()->elementType);
+		self::assertSame(ElementType::HTMLUListElement, $sut->previousNode()->elementType);
+		self::assertSame(ElementType::HTMLHeadingElement, $sut->previousNode()->elementType);
+		self::assertSame(ElementType::HTMLBodyElement, $sut->previousNode()->elementType);
 		self::assertNull($sut->previousNode());
 	}
 
@@ -341,6 +359,74 @@ class TreeWalkerTest extends TestCase {
 		$element = self::createMock(Element::class);
 		self::assertEquals(NodeFilter::FILTER_ACCEPT, $sut->filter->acceptNode($comment));
 		self::assertEquals(NodeFilter::FILTER_REJECT, $sut->filter->acceptNode($element));
+	}
+
+	public function testComment_walk():void {
+		$document = new HTMLDocument(DocumentTestFactory::HTML_COMMENT);
+		$sut = TreeWalkerFactory::create(
+			$document->body,
+			NodeFilter::SHOW_COMMENT
+		);
+		foreach($sut as $i => $node) {
+			if($i === 0) {
+				self::assertSame(ElementType::HTMLBodyElement, $node->elementType);
+			}
+			else {
+				self::assertInstanceOf(Comment::class, $node);
+				self::assertSame("this is a comment", $node->data);
+			}
+		}
+	}
+
+	public function testComment_multiLineWalk():void {
+		$document = new HTMLDocument(DocumentTestFactory::HTML_COMMENT_MULTILINE);
+		$sut = TreeWalkerFactory::create(
+			$document->body,
+			NodeFilter::SHOW_COMMENT
+		);
+		foreach($sut as $i => $node) {
+			if($i === 0) {
+				self::assertSame(ElementType::HTMLBodyElement, $node->elementType);
+			}
+			else {
+				self::assertInstanceOf(Comment::class, $node);
+				self::assertStringContainsString("this is a comment\n", $node->data);
+				self::assertStringContainsString("it spans multiple lines\n", $node->data);
+				self::assertStringContainsString("thank you, have a nice day\n", $node->data);
+			}
+		}
+	}
+
+	public function testComment_nested():void {
+		$document = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_COMMENT_NESTED);
+		$sut = $document->createTreeWalker(
+			$document->documentElement,
+			NodeFilter::SHOW_COMMENT
+		);
+		$count = 0;
+		foreach($sut as $node) {
+			if(!$node instanceof Comment) {
+				continue;
+			}
+			$count++;
+		}
+		self::assertSame(3, $count);
+	}
+
+	public function testComment_firstChild():void {
+		$document = DocumentTestFactory::createHTMLDocument(DocumentTestFactory::HTML_COMMENT_FIRST_CHILD);
+		$sut = $document->createTreeWalker(
+			$document->documentElement,
+			NodeFilter::SHOW_COMMENT
+		);
+		$count = 0;
+		foreach($sut as $node) {
+			if(!$node instanceof Comment) {
+				continue;
+			}
+			$count++;
+		}
+		self::assertSame(1, $count);
 	}
 
 	public function testDocument():void {
@@ -410,12 +496,12 @@ class TreeWalkerTest extends TestCase {
 			NodeFilter::SHOW_ELEMENT,
 // Skip heading elements (of which there are two, surrounding the comment).
 			new class extends NodeFilter {
-				public function acceptNode(Node $node):int {
-					if($node instanceof HTMLHeadingElement) {
-						return NodeFilter::FILTER_SKIP;
-					}
+				public function acceptNode($node):int {
 					if($node instanceof Comment) {
 						return NodeFilter::FILTER_ACCEPT;
+					}
+					elseif($node instanceof Element && $node->elementType === ElementType::HTMLHeadingElement) {
+						return NodeFilter::FILTER_SKIP;
 					}
 
 					return NodeFilter::FILTER_REJECT;

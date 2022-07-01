@@ -2,21 +2,19 @@
 namespace Gt\Dom\Test\HTMLElement;
 
 use Gt\Dom\Exception\IndexSizeException;
-use Gt\Dom\HTMLElement\HTMLTableElement;
-use Gt\Dom\HTMLElement\HTMLTableRowElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLTableRowElementTest extends HTMLElementTestCase {
 	public function testDeleteCellEmpty():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		self::expectException(IndexSizeException::class);
 		$sut->deleteCell(0);
 	}
 
 	public function testDeleteCell():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		$tdArray = [];
 		for($i = 0; $i < 10; $i++) {
 			$td = $sut->ownerDocument->createElement("td");
@@ -41,8 +39,8 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 	}
 
 	public function testInsertCell():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 
 		$td1 = $sut->insertCell();
 		$td2 = $sut->insertCell();
@@ -54,8 +52,8 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 	}
 
 	public function testInsertCellIndex():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 
 		$td1 = $sut->insertCell();
 		$td1->id = "td1";
@@ -74,15 +72,15 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 	}
 
 	public function testInsertCellOutOfBounds():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		self::expectException(IndexSizeException::class);
 		$sut->insertCell(-1);
 	}
 
 	public function testCells():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		$cells = $sut->cells;
 
 		self::assertCount(0, $cells);
@@ -93,8 +91,8 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 	}
 
 	public function testCells_returnsTdAndTh():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		$cells = $sut->cells;
 		$sut->innerHTML = "<td>One</td><td>Two</td><td>Three</td>";
 		self::assertCount(3, $cells);
@@ -105,14 +103,14 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 	}
 
 	public function testRowIndexNotInTable():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		self::assertSame(-1, $sut->rowIndex);
 	}
 
 	public function testRowIndex():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		$table = $sut->ownerDocument->createElement("table");
 		$table->appendChild($sut);
 		self::assertSame(0, $sut->rowIndex);
@@ -125,9 +123,8 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 	}
 
 	public function testRowIndexSectionsBody():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
-		/** @var HTMLTableElement $table */
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		$table = $sut->ownerDocument->createElement("table");
 		$thead = $table->createTHead();
 		$thead->insertRow();
@@ -146,9 +143,8 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 	}
 
 	public function testRowIndexSectionsHead():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
-		/** @var HTMLTableElement $table */
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		$table = $sut->ownerDocument->createElement("table");
 		$thead = $table->createTHead();
 		$thead->insertRow();
@@ -170,9 +166,8 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 	}
 
 	public function testRowIndexSectionsFoot():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
-		/** @var HTMLTableElement $table */
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		$table = $sut->ownerDocument->createElement("table");
 		$thead = $table->createTHead();
 		$thead->insertRow();
@@ -195,9 +190,8 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 	}
 
 	public function testRowIndexSectionsFootWithSectionsInOrder():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
-		/** @var HTMLTableElement $table */
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		$table = $sut->ownerDocument->createElement("table");
 		$thead = $table->createTHead();
 		$thead->insertRow();
@@ -211,9 +205,8 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 	}
 
 	public function testRowIndexSectionsFootWithEmptySections():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
-		/** @var HTMLTableElement $table */
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		$table = $sut->ownerDocument->createElement("table");
 		$thead = $table->createTHead();
 		$tbody = $table->createTBody();
@@ -224,14 +217,14 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 	}
 
 	public function testSectionRowIndexEmpty():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		self::assertSame(-1, $sut->sectionRowIndex);
 	}
 
 	public function testSectionRowIndexFirst():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		$tbody = $sut->ownerDocument->createElement("tbody");
 		$tbody->appendChild($sut);
 		self::assertSame(0, $sut->sectionRowIndex);
@@ -243,8 +236,8 @@ class HTMLTableRowElementTest extends HTMLElementTestCase {
 	}
 
 	public function testSectionRowIndex():void {
-		/** @var HTMLTableRowElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tr");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tr");
 		$tbody = $sut->ownerDocument->createElement("tbody");
 		$tbody->appendChild($sut->cloneNode());
 		$tbody->appendChild($sut->cloneNode());

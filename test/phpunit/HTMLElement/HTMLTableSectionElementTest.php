@@ -2,20 +2,19 @@
 namespace Gt\Dom\Test\HTMLElement;
 
 use Gt\Dom\Exception\IndexSizeException;
-use Gt\Dom\HTMLElement\HTMLTableSectionElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLTableSectionElementTest extends HTMLElementTestCase {
 	public function testDeleteRowNone():void {
-		/** @var HTMLTableSectionElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tbody");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tbody");
 		self::expectException(IndexSizeException::class);
 		$sut->deleteRow(0);
 	}
 
 	public function testDeleteRow():void {
-		/** @var HTMLTableSectionElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tbody");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tbody");
 		$sut->appendChild($sut->ownerDocument->createElement("tr"));
 		self::assertCount(1, $sut->rows);
 		$sut->deleteRow(0);
@@ -23,15 +22,15 @@ class HTMLTableSectionElementTest extends HTMLElementTestCase {
 	}
 
 	public function testInsertRow():void {
-		/** @var HTMLTableSectionElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tbody");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tbody");
 		$sut->insertRow();
 		self::assertCount(1, $sut->rows);
 	}
 
 	public function testInsertRowIndex():void {
-		/** @var HTMLTableSectionElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tbody");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tbody");
 		$sut->insertRow();
 		$sut->insertRow();
 		$inBetween = $sut->insertRow(1);
@@ -40,15 +39,15 @@ class HTMLTableSectionElementTest extends HTMLElementTestCase {
 	}
 
 	public function testInsertRowOutOfBounds():void {
-		/** @var HTMLTableSectionElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tbody");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tbody");
 		self::expectException(IndexSizeException::class);
 		$sut->insertRow(-1);
 	}
 
 	public function testRows():void {
-		/** @var HTMLTableSectionElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("tbody");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("tbody");
 		$rows = $sut->rows;
 
 		self::assertCount(0, $rows);

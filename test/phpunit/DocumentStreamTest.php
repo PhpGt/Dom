@@ -5,24 +5,27 @@ use Gt\Dom\Document;
 use Gt\Dom\Exception\DocumentStreamIsClosedException;
 use Gt\Dom\Exception\DocumentStreamNotWritableException;
 use Gt\Dom\Exception\DocumentStreamSeekFailureException;
+use Gt\Dom\Exception\WriteOnNonHTMLDocumentException;
+use Gt\Dom\HTMLDocument;
+use Gt\Dom\XMLDocument;
 use PHPUnit\Framework\TestCase;
 
 class DocumentStreamTest extends TestCase {
 	public function testDetachBeforeOpen():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		self::expectException(DocumentStreamIsClosedException::class);
 		$sut->detach();
 	}
 
 	public function testDetach():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		$sut->open();
 		$stream = $sut->detach();
 		self::assertIsResource($stream);
 	}
 
 	public function testDetachNonWritable():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		$sut->open();
 		$sut->detach();
 		self::expectException(DocumentStreamNotWritableException::class);
@@ -30,74 +33,77 @@ class DocumentStreamTest extends TestCase {
 	}
 
 	public function testGetSize():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		$sut->open();
-		self::assertEquals(strlen("\n"), $sut->getSize());
+		self::assertEquals(
+			strlen("<!doctype html>\n<html><head></head><body></body></html>\n"),
+			$sut->getSize()
+		);
 	}
 
 	public function testGetSizeAfterWriting():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		$sut->open();
-		$sut->appendChild($sut->ownerDocument->createElement("example"));
-		self::assertEquals(strlen("<example></example>\n"), $sut->getSize());
+		$sut->body->appendChild($sut->createElement("example"));
+		self::assertEquals(strlen("<!doctype html>\n<html><head></head><body><example></example></body></html>\n"), $sut->getSize());
 	}
 
 	public function testTell():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		$sut->open();
 		self::assertEquals(0, $sut->tell());
 	}
 
 	public function testWritableBeforeOpen():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		self::assertFalse($sut->isWritable());
 	}
 
 	public function testWritable():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		$sut->open();
 		self::assertTrue($sut->isWritable());
 	}
 
 	public function testEof():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		$sut->open();
-		$sut->appendChild($sut->ownerDocument->createElement("example"));
+		$sut->body->appendChild($sut->createElement("example"));
 		$bytes = "";
 		while(!$sut->eof()) {
 			$bytes .= $sut->read(10);
 		}
-		self::assertEquals("<example></example>\n", $bytes);
+		self::assertEquals("<!DOCTYPE html>\n<html><head></head><body><example></example></body></html>\n", $bytes);
 	}
 
 	public function testIsSeekableBeforeOpen():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		self::assertFalse($sut->isSeekable());
 	}
 
 	public function testIsSeekable():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		$sut->open();
 		self::assertTrue($sut->isSeekable());
 	}
 
 	public function testSeekBeforeOpen():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		self::expectException(DocumentStreamIsClosedException::class);
 		$sut->seek(1);
 	}
 
 	public function testSeek():void {
-		$sut = new Document();
-		$sut->appendChild($sut->ownerDocument->createElement("example"));
+		$sut = new HTMLDocument();
+		$sut->body->appendChild($sut->createElement("example"));
 		$sut->open();
 		$sut->seek(10);
 		self::assertEquals(10, $sut->tell());
 	}
 
 	public function testRewind():void {
-		$sut = new Document();
-		$sut->appendChild($sut->ownerDocument->createElement("example"));
+		$sut = new HTMLDocument();
+		$sut->body->appendChild($sut->createElement("example"));
 		$sut->open();
 		$sut->seek(10);
 		$sut->rewind();
@@ -105,32 +111,32 @@ class DocumentStreamTest extends TestCase {
 	}
 
 	public function testIsReadableBeforeOpen():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		self::assertFalse($sut->isReadable());
 	}
 
 	public function testIsReadable():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		$sut->open();
 		self::assertTrue($sut->isReadable());
 	}
 
 	public function testGetContentsBeforeOpen():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		self::expectException(DocumentStreamIsClosedException::class);
 		$sut->getContents();
 	}
 
 	public function testGetContents():void {
-		$sut = new Document();
-		$sut->appendChild($sut->ownerDocument->createElement("example"));
+		$sut = new HTMLDocument();
+		$sut->body->appendChild($sut->createElement("example"));
 		$sut->open();
 		$contents = $sut->getContents();
-		self::assertEquals("<example></example>\n", $contents);
+		self::assertEquals("<!DOCTYPE html>\n<html><head></head><body><example></example></body></html>\n", $contents);
 	}
 
 	public function testGetMetaData():void {
-		$sut = new Document();
+		$sut = new HTMLDocument();
 		$sut->open();
 		$meta = $sut->getMetadata();
 		self::assertArrayHasKey("timed_out", $meta);
@@ -142,5 +148,11 @@ class DocumentStreamTest extends TestCase {
 		self::assertArrayHasKey("mode", $meta);
 		self::assertArrayHasKey("seekable", $meta);
 		self::assertArrayHasKey("uri", $meta);
+	}
+
+	public function testXMLDocumentNonWritable():void {
+		$sut = new XMLDocument();
+		self::expectException(DocumentStreamNotWritableException::class);
+		$sut->write("test");
 	}
 }

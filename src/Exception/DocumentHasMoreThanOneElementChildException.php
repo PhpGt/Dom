@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class DocumentHasMoreThanOneElementChildException extends DOMException {
-
-}
+class DocumentHasMoreThanOneElementChildException extends DomException {}

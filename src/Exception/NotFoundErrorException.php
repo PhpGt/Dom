@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class NotFoundErrorException extends DOMException {
-
-}
+class NotFoundErrorException extends DomException {}

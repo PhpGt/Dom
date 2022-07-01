@@ -2,27 +2,24 @@
 namespace Gt\Dom\Test\HTMLElement;
 
 use Gt\Dom\HTMLCollection;
-use Gt\Dom\HTMLElement\HTMLDataListElement;
-use Gt\Dom\HTMLElement\HTMLOptionElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLDataListElementTest extends HTMLElementTestCase {
 	public function testOptionsNone():void {
-		/** @var HTMLDataListElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("datalist");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("datalist");
 		$options = $sut->options;
 		self::assertInstanceOf(HTMLCollection::class, $options);
 		self::assertCount(0, $options);
 	}
 
 	public function testOptions():void {
-		/** @var HTMLDataListElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("datalist");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("datalist");
 		$options = $sut->options;
 
 		$appendedOptions = [];
 		for($i = 1; $i <= 10; $i++) {
-			/** @var HTMLOptionElement $option */
 			$option = $sut->ownerDocument->createElement("option");
 			$option->textContent = "Option $i";
 			$option->value = (string)$i;

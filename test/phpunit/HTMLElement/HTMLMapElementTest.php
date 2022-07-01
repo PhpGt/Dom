@@ -1,25 +1,24 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLMapElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLMapElementTest extends HTMLElementTestCase {
 	public function testName():void {
-		/** @var HTMLMapElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("map");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("map");
 		self::assertPropertyAttributeCorrelate($sut, "name");
 	}
 
 	public function testAreasNone():void {
-		/** @var HTMLMapElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("map");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("map");
 		self::assertCount(0, $sut->areas);
 	}
 
 	public function testAreas():void {
-		/** @var HTMLMapElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("map");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("map");
 		$sut->appendChild($sut->ownerDocument->createElement("area"));
 		$sut->appendChild($sut->ownerDocument->createElement("area"));
 		$sut->appendChild($sut->ownerDocument->createElement("area"));

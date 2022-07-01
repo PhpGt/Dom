@@ -1,14 +1,12 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLElement;
-use Gt\Dom\HTMLElement\HTMLImageElement;
-use Gt\Dom\HTMLElement\HTMLInputElement;
+use Gt\Dom\Element;
 use PHPUnit\Framework\TestCase;
 
 abstract class HTMLElementTestCase extends TestCase {
 	protected function assertPropertyAttributeCorrelate(
-		HTMLElement $element,
+		Element $element,
 		string $attribute,
 		string $property = null
 	):void {
@@ -49,7 +47,7 @@ abstract class HTMLElementTestCase extends TestCase {
 	}
 
 	protected static function assertPropertyAttributeCorrelateBool(
-		HTMLElement $sut,
+		Element $sut,
 		string $attribute,
 		string $property = null
 	):void {
@@ -87,7 +85,7 @@ abstract class HTMLElementTestCase extends TestCase {
 	 * value is not null-ish.
 	 */
 	protected static function assertPropertyAttributeCorrelateNumber(
-		HTMLElement $sut,
+		Element $sut,
 		string $type,
 		string $attribute,
 		string $property = null
@@ -100,7 +98,7 @@ abstract class HTMLElementTestCase extends TestCase {
 
 		$attributeValue = $sut->getAttribute("attribute");
 
-		if(strstr($type, ":")) {
+		if(str_contains($type, ":")) {
 			$default = substr($type, strpos($type, ":") + 1);
 			self::assertEquals($current, $default);
 		}
@@ -114,7 +112,7 @@ abstract class HTMLElementTestCase extends TestCase {
 
 		for($i = 0; $i < 10; $i++) {
 			$value = rand(1, 999999);
-			if(strstr($type, "float")) {
+			if(str_contains($type, "float")) {
 				$value /= (rand(9, 99) / 10);
 			}
 
@@ -129,7 +127,7 @@ abstract class HTMLElementTestCase extends TestCase {
 
 		for($i = 0; $i < 10; $i++) {
 			$value = rand(1, 999999);
-			if(strstr($type, "float")) {
+			if(str_contains($type, "float")) {
 				$value /= (rand(9, 99) / 10);
 			}
 

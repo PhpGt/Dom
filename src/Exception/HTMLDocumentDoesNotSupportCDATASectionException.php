@@ -1,6 +1,4 @@
 <?php
 namespace Gt\Dom\Exception;
 
-class HTMLDocumentDoesNotSupportCDATASectionException extends NotSupportedException {
-
-}
+class HTMLDocumentDoesNotSupportCDATASectionException extends NotSupportedException {}

@@ -1,25 +1,24 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLMetaElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLMetaElementTest extends HTMLElementTestCase {
 	public function testContent():void {
-		/** @var HTMLMetaElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("meta");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("meta");
 		self::assertPropertyAttributeCorrelate($sut, "content");
 	}
 
 	public function testHttpEquiv():void {
-		/** @var HTMLMetaElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("meta");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("meta");
 		self::assertPropertyAttributeCorrelate($sut, "http-equiv", "httpEquiv");
 	}
 
 	public function testName():void {
-		/** @var HTMLMetaElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("meta");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("meta");
 		self::assertPropertyAttributeCorrelate($sut, "name");
 	}
 }

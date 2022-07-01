@@ -2,19 +2,21 @@
 namespace Gt\Dom\Test;
 
 use Gt\Dom\Element;
-use Gt\Dom\HTMLElement\HTMLDivElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\ElementType;
+use Gt\Dom\HTMLDocument;
 use Gt\Dom\Text;
 use PHPUnit\Framework\TestCase;
 
 class ParentNodeTest extends TestCase {
 	public function testChildElementCountEmpty():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertEquals(0, $sut->childElementCount);
 	}
 
 	public function testChildElementCount():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$count = rand(50, 500);
 		for($i = 0; $i < $count; $i++) {
 			$child = $sut->ownerDocument->createElement("child");
@@ -24,8 +26,20 @@ class ParentNodeTest extends TestCase {
 		self::assertEquals($count, $sut->childElementCount);
 	}
 
+	public function testChildElementCountMixed():void {
+		$document = new HTMLDocument();
+		$document->body->append(
+			$document->createElement("div"),
+			$document->createElement("div"),
+			"test",
+			$document->createElement("div"),
+		);
+		self::assertSame($document->body->children->length, $document->body->childElementCount);
+	}
+
 	public function testChildElementCountNonElement():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$count = rand(50, 500);
 		$textCount = 0;
 		for($i = 0; $i < $count; $i++) {
@@ -43,13 +57,15 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testChildrenEmpty():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertCount(0, $sut->children);
 		self::assertEquals(0, $sut->children->length);
 	}
 
 	public function testChildren():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 
 		$count = rand(10, 50);
 		for($i = 0; $i < $count; $i++) {
@@ -62,7 +78,8 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testChildrenNonElement():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$count = rand(10, 50);
 		$textCount = 0;
 		for($i = 0; $i < $count; $i++) {
@@ -81,12 +98,14 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testFirstElementChildEmpty():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertNull($sut->firstElementChild);
 	}
 
 	public function testFirstElementChild():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child1 = $sut->ownerDocument->createElement("child");
 		$child2 = $sut->ownerDocument->createElement("child");
 		$sut->append($child1, $child2);
@@ -94,7 +113,8 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testFirstElementChildTextNode():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child1 = $sut->ownerDocument->createElement("child");
 		$child2 = $sut->ownerDocument->createElement("child");
 		$text = $sut->ownerDocument->createTextNode("Some text");
@@ -103,7 +123,8 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testFirstElementChildAllTextNodes():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child1 = $sut->ownerDocument->createTextNode("Some text");
 		$child2 = $sut->ownerDocument->createTextNode("Some more text");
 		$sut->append($child1, $child2);
@@ -111,12 +132,14 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testLastElementChildEmpty():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		self::assertNull($sut->lastElementChild);
 	}
 
 	public function testLastElementChild():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child1 = $sut->ownerDocument->createElement("child");
 		$child2 = $sut->ownerDocument->createElement("child");
 		$sut->append($child1, $child2);
@@ -124,7 +147,8 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testLastElementChildAllTextNodes():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child1 = $sut->ownerDocument->createTextNode("Some text");
 		$child2 = $sut->ownerDocument->createTextNode("Some more text");
 		$sut->append($child1, $child2);
@@ -132,7 +156,8 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testLastElementChildAllTextNodesAfterFirst():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child1 = $sut->ownerDocument->createElement("child");
 		$child2 = $sut->ownerDocument->createTextNode("Some text");
 		$child3 = $sut->ownerDocument->createTextNode("Some more text");
@@ -141,7 +166,8 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testPrependString():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child = $sut->ownerDocument->createElement("child");
 		$sut->appendChild($child);
 		$sut->prepend("Some text");
@@ -149,7 +175,8 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testPrependNode():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child = $sut->ownerDocument->createElement("child");
 		$toPrepend = $sut->ownerDocument->createElement("prepend-me");
 		$sut->appendChild($child);
@@ -158,7 +185,8 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testPrependMixed():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child = $sut->ownerDocument->createElement("child");
 		$sut->appendChild($child);
 
@@ -193,7 +221,8 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testAppendElement():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child = $sut->ownerDocument->createElement("child");
 		$sut->appendChild($child);
 		$toAppend = $sut->ownerDocument->createElement("to-append");
@@ -202,7 +231,8 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testAppendText():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child = $sut->ownerDocument->createElement("child");
 		$sut->append($child, "One", "Two");
 		self::assertCount(3, $sut->childNodes);
@@ -211,7 +241,8 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testReplaceChildren():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$child = $sut->ownerDocument->createElement("child");
 		$sut->appendChild($child->cloneNode());
 		$sut->appendChild($child->cloneNode());
@@ -224,27 +255,30 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testReplaceChildrenMultiple():void {
-		$sut = NodeTestFactory::createNode("example");
-		$child = $sut->ownerDocument->createElement("child");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("test-parent");
+		$child = $document->createElement("test-child");
 		$sut->appendChild($child->cloneNode());
 		$sut->appendChild($child->cloneNode());
 		$sut->appendChild($child->cloneNode());
 		self::assertCount(3, $sut->childNodes);
+		self::assertCount(3, $sut->children);
 		$sut->replaceChildren(
 			"Hello!",
-			$sut->ownerDocument->createElement("replacer"),
+			$document->createElement("test-replacement"),
 			"PHPUnit!",
 		);
 		self::assertCount(3, $sut->childNodes);
 		self::assertCount(1, $sut->children);
 		self::assertEquals("Hello!", $sut->firstChild->nodeValue);
 		self::assertEquals("PHPUnit!", $sut->lastChild->nodeValue);
-		self::assertEquals("REPLACER", $sut->firstElementChild->tagName);
+		self::assertEquals("test-replacement", $sut->firstElementChild->tagName);
 	}
 
 	public function testQuerySelector():void {
-		$sut = NodeTestFactory::createNode("example");
-		$sut->ownerDocument->appendChild($sut);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$document->body->appendChild($sut);
 
 		$child1 = $sut->ownerDocument->createElement("child");
 		$child2 = $sut->ownerDocument->createElement("child");
@@ -260,8 +294,9 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testQuerySelectorAll():void {
-		$sut = NodeTestFactory::createNode("example");
-		$sut->ownerDocument->appendChild($sut);
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
+		$document->body->appendChild($sut);
 
 		$child1 = $sut->ownerDocument->createElement("child");
 		$child2 = $sut->ownerDocument->createElement("child");
@@ -277,12 +312,13 @@ class ParentNodeTest extends TestCase {
 	}
 
 	public function testQuerySelectorAttributeWithoutValue():void {
-		$sut = NodeTestFactory::createNode("example");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("example");
 		$sut->innerHTML = "<div data-test></div>";
-		$sut->ownerDocument->appendChild($sut);
+		$document->body->appendChild($sut);
 
 		$div = $sut->querySelector("div");
-		self::assertInstanceOf(HTMLDivElement::class, $div);
+		self::assertSame(ElementType::HTMLDivElement, $div->elementType);
 
 		self::assertSame($div, $sut->ownerDocument->querySelector("[data-test='']"));
 	}

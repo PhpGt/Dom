@@ -4,9 +4,8 @@ namespace Gt\Dom;
 use ArrayAccess;
 use Countable;
 use Gt\Dom\Exception\NodeListImmutableException;
-use Gt\Dom\Facade\NodeListFactory;
-use Gt\PropFunc\MagicProp;
 use Iterator;
+use Gt\PropFunc\MagicProp;
 use Traversable;
 
 /**
@@ -14,18 +13,19 @@ use Traversable;
  * such as Node.childNodes and methods such as document.querySelectorAll().
  *
  * Although NodeList is not an Array, it is possible to iterate over it with
- * forEach(). It can also be converted to a real Array using Array.from().
+ * forEach().
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList
  *
  * @property-read int $length The number of nodes in the NodeList.
- * @implements Iterator<int, Node|Element>
+ *
  * @implements ArrayAccess<int, Node|Element>
+ * @implements Iterator<int, Node|Element>
  */
 class NodeList implements ArrayAccess, Countable, Iterator {
 	use MagicProp;
 
-	/** @var Node[] */
+	/** @var array<Node|Element> */
 	private array $nodeList;
 	/** @var callable():NodeList */
 	private $callback;
@@ -39,7 +39,7 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * behaves similarly to HTMLCollection (which is ALWAYS live).
 	 * @see HTMLCollection
 	 */
-	protected function __construct(Node|callable...$representation) {
+	public function __construct(Node|Element|Attr|Text|callable...$representation) {
 		if(isset($representation[0]) && is_callable($representation[0])) {
 			$this->callback = $representation[0];
 		}
@@ -55,6 +55,101 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 		return $this->count();
 	}
 
+// ArrayAccess functions:
+	public function offsetExists(mixed $offset):bool {
+		if(isset($this->nodeList)) {
+			return isset($this->nodeList[$offset]);
+		}
+
+		/** @var NodeList $nodeArray */
+		$nodeArray = call_user_func($this->callback);
+		return isset($nodeArray[$offset]);
+	}
+
+	public function offsetGet(mixed $offset):null|Node|Element|Attr|Text {
+		if(isset($this->nodeList)) {
+			return $this->nodeList[$offset] ?? null;
+		}
+
+		/** @var NodeList $nodeList */
+		$nodeList = call_user_func($this->callback);
+		return $nodeList[$offset];
+	}
+
+	public function offsetSet(mixed $offset, mixed $value):void {
+		throw new NodeListImmutableException();
+	}
+
+	public function offsetUnset(mixed $offset):void {
+		throw new NodeListImmutableException();
+	}
+// End ArrayAccess functions.
+
+// Countable functions:
+	public function count():int {
+		if(isset($this->nodeList)) {
+			return count($this->nodeList);
+		}
+
+		/** @var NodeList $nodeArray */
+		$nodeArray = call_user_func($this->callback);
+		return count($nodeArray);
+	}
+// End Countable functions.
+
+// Iterator functions:
+	public function rewind():void {
+		$this->iteratorKey = 0;
+	}
+
+	public function valid():bool {
+		if(isset($this->nodeList)) {
+			return isset($this->nodeList[$this->iteratorKey]);
+		}
+
+		/** @var NodeList|array<int, Node> $nodeList */
+		$nodeList = call_user_func($this->callback);
+
+		if(is_array($nodeList)) {
+			$nodeList = NodeListFactory::create(...$nodeList);
+		}
+
+		while($nodeList->key() < $this->iteratorKey) {
+			$nodeList->next();
+		}
+
+		return $nodeList->valid();
+	}
+
+	public function key():int {
+		return $this->iteratorKey;
+	}
+
+	public function current():null|Node|Element|Attr|Text {
+// TODO: Duplicated code with NodeList::valid() - refactor.
+		if(isset($this->nodeList)) {
+			return $this->nodeList[$this->iteratorKey];
+		}
+
+		/** @var NodeList|array<int, Node> $nodeList */
+		$nodeList = call_user_func($this->callback);
+
+		if(is_array($nodeList)) {
+			$nodeList = NodeListFactory::create(...$nodeList);
+		}
+
+		while($nodeList->key() < $this->iteratorKey) {
+			$nodeList->next();
+		}
+
+		return $nodeList->current();
+	}
+
+	public function next():void {
+		$this->iteratorKey++;
+	}
+// End Iterator functions.
+
 	/**
 	 * Returns a node from a NodeList by index. This method doesn't throw
 	 * exceptions as long as you provide arguments. A value of null is
@@ -62,10 +157,10 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * no argument is provided.
 	 *
 	 * @param int $index
-	 * @return ?Node
+	 * @return null|Node
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/item
 	 */
-	public function item(int $index):Node|Element|null {
+	public function item(int $index):null|Node|Element|Attr|Text {
 		if(isset($this->nodeList)) {
 			if(isset($this->nodeList[$index])) {
 				return $this->nodeList[$index];
@@ -133,93 +228,5 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 		foreach($this as $node) {
 			yield $node;
 		}
-	}
-
-	public function count():int {
-		if(isset($this->nodeList)) {
-			return count($this->nodeList);
-		}
-
-		/** @var NodeList $nodeArray */
-		$nodeArray = call_user_func($this->callback);
-		return count($nodeArray);
-	}
-
-	public function offsetExists($offset):bool {
-		if(isset($this->nodeList)) {
-			return isset($this->nodeList[$offset]);
-		}
-
-		/** @var NodeList $nodeArray */
-		$nodeArray = call_user_func($this->callback);
-		return isset($nodeArray[$offset]);
-	}
-
-	public function offsetGet($offset):Node|Element|null {
-		if(isset($this->nodeList)) {
-			return $this->nodeList[$offset] ?? null;
-		}
-
-		/** @var NodeList $nodeList */
-		$nodeList = call_user_func($this->callback);
-		return $nodeList[$offset];
-	}
-
-	public function offsetSet($offset, $value):void {
-		throw new NodeListImmutableException();
-	}
-
-	public function offsetUnset($offset):void {
-		throw new NodeListImmutableException();
-	}
-
-	public function current():Node|Element {
-		if(isset($this->nodeList)) {
-			return $this->nodeList[$this->iteratorKey];
-		}
-
-		/** @var NodeList|array<int, Node> $nodeList */
-		$nodeList = call_user_func($this->callback);
-
-		if(is_array($nodeList)) {
-			$nodeList = NodeListFactory::create(...$nodeList);
-		}
-
-		while($nodeList->key() < $this->iteratorKey) {
-			$nodeList->next();
-		}
-
-		return $nodeList->current();
-	}
-
-	public function next():void {
-		$this->iteratorKey++;
-	}
-
-	public function key():int {
-		return $this->iteratorKey;
-	}
-
-	public function valid():bool {
-		if(isset($this->nodeList)) {
-			return isset($this->nodeList[$this->iteratorKey]);
-		}
-
-		/** @var NodeList|array<int, Node> $nodeList */
-		$nodeList = call_user_func($this->callback);
-
-		if(is_array($nodeList)) {
-			$nodeList = NodeListFactory::create(...$nodeList);
-		}
-
-		while($nodeList->key() < $this->iteratorKey) {
-			$nodeList->next();
-		}
-
-		return $nodeList->valid();
-	}
-
-	public function rewind():void {
-		$this->iteratorKey = 0;
 	}
 }

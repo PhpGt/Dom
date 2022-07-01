@@ -1,20 +1,18 @@
 <?php
 namespace Gt\Dom\Test\HTMLElement;
 
-use Gt\Dom\HTMLElement\HTMLInputElement;
-use Gt\Dom\HTMLElement\HTMLLabelElement;
-use Gt\Dom\Test\TestFactory\NodeTestFactory;
+use Gt\Dom\HTMLDocument;
 
 class HTMLLabelElementTest extends HTMLElementTestCase {
 	public function testControlNone():void {
-		/** @var HTMLLabelElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("label");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("label");
 		self::assertNull($sut->control);
 	}
 
 	public function testControlChild():void {
-		/** @var HTMLLabelElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("label");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("label");
 		$input = $sut->ownerDocument->createElement("input");
 		$sut->appendChild($sut->ownerDocument->createElement("div"));
 		$sut->appendChild($input);
@@ -22,8 +20,8 @@ class HTMLLabelElementTest extends HTMLElementTestCase {
 	}
 
 	public function testControlFor():void {
-		/** @var HTMLLabelElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("label");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("label");
 		$sut->htmlFor = "example";
 		$input = $sut->ownerDocument->createElement("input");
 		$input->id = "example";
@@ -32,35 +30,35 @@ class HTMLLabelElementTest extends HTMLElementTestCase {
 	}
 
 	public function testFormNone():void {
-		/** @var HTMLLabelElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("label");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("label");
 		self::assertNull($sut->form);
 	}
 
 	public function testFormParent():void {
-		/** @var HTMLLabelElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("label");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("label");
 		$form = $sut->ownerDocument->createElement("form");
 		$form->appendChild($sut);
 		self::assertSame($form, $sut->form);
 	}
 
 	public function testFormForInput():void {
-		/** @var HTMLLabelElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("label");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("label");
 		$sut->htmlFor = "example";
-		$input = $sut->ownerDocument->createElement("input");
+		$input = $document->createElement("input");
 		$input->id = "example";
-		$form = $sut->ownerDocument->createElement("form");
+		$form = $document->createElement("form");
 		$form->appendChild($input);
-		$sut->ownerDocument->body->append($sut, $form);
+		$document->body->append($sut, $form);
 
 		self::assertSame($form, $sut->form);
 	}
 
 	public function testFor():void {
-		/** @var HTMLLabelElement $sut */
-		$sut = NodeTestFactory::createHTMLElement("label");
+		$document = new HTMLDocument();
+		$sut = $document->createElement("label");
 		self::assertPropertyAttributeCorrelate($sut, "for", "htmlFor");
 	}
 }
