@@ -15,7 +15,10 @@ jobs:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
-      - uses: php-actions/composer@v6
+      - name: Composer install
+        uses: php-actions/composer@v6
+        with:
+          php_version: '8.1'
 
       - name: Archive build
         run: mkdir /tmp/github-actions/ && tar -cvf /tmp/github-actions/build.tar ./
