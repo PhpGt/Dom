@@ -413,6 +413,29 @@ class HTMLDocumentTest extends TestCase {
 		self::assertSame($child2, $selected);
 	}
 
+	public function testGetElementById_createdId():void {
+		$sut = new HTMLDocument();
+		$child = $sut->createElement("child");
+		$child->id = "id-{{replace}}";
+		$sut->body->appendChild($child);
+		$xpathResult = $sut->evaluate(
+			".//@*[contains(.,'{{')]",
+			$sut->body,
+		);
+		/** @var Attr $attribute */
+		foreach($xpathResult as $attribute) {
+			$text = $attribute->lastChild;
+			$placeholder = $text->splitText(strpos($text->data, "{{"));
+			$placeholder->splitText(
+				strpos($placeholder->data, "}}") + 2
+			);
+			$placeholder->data = "123";
+		}
+
+		self::assertSame("id-123", $child->getAttribute("id"));
+		self::assertSame($child, $sut->getElementById("id-123"));
+	}
+
 	public function testGetElementsByClassNameEmpty():void {
 		$sut = new HTMLDocument();
 		$htmlCollection = $sut->getElementsByClassName("nothing here");
