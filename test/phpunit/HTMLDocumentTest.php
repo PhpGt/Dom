@@ -430,6 +430,10 @@ class HTMLDocumentTest extends TestCase {
 				strpos($placeholder->data, "}}") + 2
 			);
 			$placeholder->data = "123";
+
+			/** @var Attr $parentAttr */
+			$parentAttr = $placeholder->parentNode;
+			$parentAttr->ownerElement->setAttribute($parentAttr->name, $placeholder->wholeText);
 		}
 
 		self::assertSame("id-123", $child->getAttribute("id"));
