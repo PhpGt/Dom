@@ -599,4 +599,26 @@ class HTMLDocumentTest extends TestCase {
 		$titleEl = $sut->head->querySelector("title");
 		self::assertSame($string, $titleEl->textContent);
 	}
+
+	public function testGetElementById_afterIdChangedViaNode():void {
+		$sut = new HTMLDocument();
+		$child = $sut->createElement("child");
+		$child->id = "test";
+		$sut->body->appendChild($child);
+		self::assertSame($child, $sut->getElementById("test"));
+		/**
+		 * @var string $attrName
+		 * @var Attr $attr
+		 */
+		foreach($child->attributes as $attrName => $attr) {
+			if($attrName !== "id") {
+				continue;
+			}
+
+			$attr->firstChild->data = "changed";
+		}
+
+		self::assertSame("changed", $child->getAttribute("id"));
+		self::assertSame($child, $sut->getElementById("changed"));
+	}
 }
