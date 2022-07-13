@@ -14,7 +14,7 @@
 	},
 
 	"require-dev": {
-		"phpstan/phpstan": "v1.8.0",
+		"phpstan/phpstan": "v1.8.1",
 		"phpunit/phpunit": "v9.5.21"
 	},
 
