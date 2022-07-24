@@ -1866,7 +1866,10 @@ trait HTMLElement {
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/autofocus */
 	protected function __prop_set_autofocus(bool $value):void {
-		$this->allowTypes(ElementType::HTMLButtonElement);
+		$this->allowTypes(
+			ElementType::HTMLButtonElement,
+			ElementType::HTMLInputElement,
+		);
 		if($value) {
 			$this->setAttribute("autofocus", "");
 		}
