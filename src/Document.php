@@ -327,7 +327,7 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 		/** @var ?Element $element */
 		$element = parent::getElementById($elementId);
 
-		if(is_null($element) && $this instanceof XMLDocument) {
+		if(is_null($element)) {
 // Known limitation in XML documents: IDs are not always registered.
 // Try using XPath instead.
 			$element = $this->evaluate("//*[@id='$elementId']")->current();
