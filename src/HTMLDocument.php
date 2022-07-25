@@ -34,6 +34,7 @@ class HTMLDocument extends Document {
 		);
 		$this->loadHTML($html, LIBXML_SCHEMA_CREATE | LIBXML_COMPACT);
 
+		/** @var array<Node> $nonElementChildNodes */
 		$nonElementChildNodes = [];
 		foreach($this->childNodes as $child) {
 			if($child instanceof DocumentType

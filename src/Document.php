@@ -71,11 +71,6 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 			$string = $this->saveXML();
 		}
 
-		$string = mb_convert_encoding(
-			$string,
-			"UTF-8",
-			"HTML-ENTITIES"
-		);
 		return trim($string) . "\n";
 	}
 
@@ -361,6 +356,50 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 	private function registerNodeClasses():void {
 		foreach(self::NodeClassLookup as $nativeClass => $gtClass) {
 			$this->registerNodeClass($nativeClass, $gtClass);
+		}
+	}
+
+	/**
+	 * Due to the way HTML is rendered, non-ASCII characters are converted
+	 * into their HTML-encoded counterparts, but this behaviour breaks
+	 * script tags that have inline JavaScript. This function extracts the
+	 * raw innerHTML of each script, so injectScriptHTML can be called after
+	 * page render, retaining the original characters.
+	 *
+	 * @return array<string, string> Key = a unique string of characters
+	 * that the script tag's innerHTML is replaced with, before rendering
+	 * the document. This key will be replaced with the value of the array
+	 * item after render.
+	 */
+	private function extractScriptHTML():array {
+		$scriptHtmlList = [];
+
+		foreach($this->querySelectorAll("script") as $script) {
+			if(strlen($script->textContent) === 0) {
+				continue;
+			}
+			$html = html_entity_decode($script->innerHTML);
+			$key = str_repeat("@", 16)
+				. uniqid("---script-") . "---"
+				. str_repeat("@", 16);
+			$scriptHtmlList[$key] = $html;
+			$script->innerHTML = $key;
+		}
+
+		return $scriptHtmlList;
+	}
+
+	public function saveHTML(DOMNode $node = null):string {
+		if($node) {
+			return parent::saveHTML($node);
+		}
+		else {
+			$scriptHtmlList = $this->extractScriptHTML();
+			$html = parent::saveHTML($node);
+			foreach($scriptHtmlList as $key => $js) {
+				$html = str_replace($key, $js, $html);
+			}
+			return $html;
 		}
 	}
 }

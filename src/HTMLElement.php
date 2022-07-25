@@ -1436,7 +1436,7 @@ trait HTMLElement {
 		return DOMTokenListFactory::create(
 			fn() => explode(
 				" ",
-				$this->getAttribute("controlsList")
+				$this->getAttribute("controlsList") ?? ""
 			),
 			fn(string...$tokens) => $this->setAttribute(
 				"controlsList",

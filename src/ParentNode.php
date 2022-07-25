@@ -258,7 +258,7 @@ trait ParentNode {
 	 *
 	 * @param Node|Element|Text|Comment $child
 	 */
-	public function removeChild(Node|Element|Text|Comment|DOMNode $child):Node|Element|Text|Comment {
+	public function removeChild(Node|Element|Text|Comment|DOMNode $child):Node|Element|Text|Comment|CdataSection {
 		try {
 			/** @var Node|Element|Text|Comment $removed */
 			$removed = parent::removeChild($child);

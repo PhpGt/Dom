@@ -59,7 +59,7 @@ class HTMLDocumentTest extends TestCase {
 	public function testToString_emojiEncoding():void {
 		$html = "<h1>I ❤️ my 🐈</h1>";
 		$sut = new HTMLDocument($html);
-		self::assertStringContainsString("$html", (string)$sut);
+		self::assertStringContainsString("<h1>I &#10084;&#65039; my &#128008;</h1>", (string)$sut);
 	}
 
 	public function testPropBody_readOnly():void {
@@ -620,5 +620,49 @@ class HTMLDocumentTest extends TestCase {
 
 		self::assertSame("changed", $child->getAttribute("id"));
 		self::assertSame($child, $sut->getElementById("changed"));
+	}
+
+	public function testSaveHTML_XSS():void {
+		$html = <<<HTML
+		<!doctype html>
+		
+		<h1>Hello, <span>you</span>!</h1>
+		HTML;
+
+// Create a new document with the above HTML.
+		$document = new HTMLDocument($html);
+		$document->loadHTML($html);
+
+// Get reference to span tag.
+		$span = $document->getElementsByTagName("span")->item(0);
+
+// Set the span's tag to user-supplied $name (malicious user can enter JavaScript!)
+		$name = "<script>alert('XSS');</script>";
+		$span->textContent = $name;
+
+		$script = $document->querySelector("script");
+		self::assertNull($script);
+
+		$documentString = (string)$document;
+		self::assertStringNotContainsString("<script>", $documentString);
+	}
+
+	public function testEscapedCharacters():void {
+		$content = <<<HTML
+		<!doctype html>
+		<script>
+		p.append(" są ");
+		</script>
+		<h1 id="pageTitle">This is the page title</h1>
+		HTML;
+
+		$sut = new HTMLDocument($content);
+		$h1 = $sut->querySelector("#pageTitle");
+		$div = $sut->createElement("div");
+		$div->innerHTML = "lorem";
+		$h1->after($div);
+
+		$htmlString = (string)$sut;
+		self::assertStringContainsString("<script>\np.append(\" są \");\n</script>", $htmlString);
 	}
 }
