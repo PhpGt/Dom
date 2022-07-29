@@ -701,8 +701,10 @@ class HTMLDocumentTest extends TestCase {
 		$renderedHTML = (string)$sut;
 		echo $renderedHTML;
 
-		self::assertStringContainsString("p.append(\" są \");", $renderedHTML);
-		self::assertStringContainsString("document.createTextNode(\"fajne\");", $renderedHTML);
-		self::assertStringContainsString("word1.textContent = \"Koty też\";", $renderedHTML);
+		self::assertStringContainsString('p.append(" są ");', $renderedHTML);
+		self::assertStringNotContainsString('p.append(" s&#261; ");', $renderedHTML);
+		self::assertStringContainsString('document.createTextNode("fajne");', $renderedHTML);
+		self::assertStringContainsString('word1.textContent = "Koty też";', $renderedHTML);
+		self::assertStringNotContainsString('word1.textContent = "Koty te&#380;";', $renderedHTML);
 	}
 }
