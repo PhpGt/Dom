@@ -709,6 +709,7 @@ trait HTMLElement {
 	protected function __prop_get_name():string {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLSelectElement,
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFormElement,
 			ElementType::HTMLTextAreaElement,
@@ -735,6 +736,7 @@ trait HTMLElement {
 	protected function __prop_set_name(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLSelectElement,
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFormElement,
 			ElementType::HTMLTextAreaElement,
