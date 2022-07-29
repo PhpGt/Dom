@@ -665,4 +665,44 @@ class HTMLDocumentTest extends TestCase {
 		$htmlString = (string)$sut;
 		self::assertStringContainsString("<script>\np.append(\" są \");\n</script>", $htmlString);
 	}
+
+	public function testEscapedCharacters_insideScriptTag():void {
+		$content = <<<HTML
+		<div>
+			<p id="testNodeText">
+				Hello, Marcin!
+			</p>
+			<button class="btn-textNodeTest">Button</button>
+		</div>
+		<script>
+		{
+			const p = document.querySelector("#testNodeText");
+			const btn = document.querySelector(".btn-textNodeTest");
+			
+			const word1 = document.createTextNode("Psy");
+			p.append(word1);
+			
+			p.append(" są ");
+			
+			const word2 = document.createTextNode("fajne");
+			p.append(word2);
+			
+			btn.addEventListener("click", () => {
+				console.dir(word1);
+				
+				word1.textContent = "Koty też";
+				word2.textContent = "super!";
+			});
+		}
+		</script>
+		HTML;
+
+		$sut = new HTMLDocument($content);
+		$renderedHTML = (string)$sut;
+		echo $renderedHTML;
+
+		self::assertStringContainsString("p.append(\" są \");", $renderedHTML);
+		self::assertStringContainsString("document.createTextNode(\"fajne\");", $renderedHTML);
+		self::assertStringContainsString("word1.textContent = \"Koty też\";", $renderedHTML);
+	}
 }
