@@ -699,7 +699,6 @@ class HTMLDocumentTest extends TestCase {
 
 		$sut = new HTMLDocument($content);
 		$renderedHTML = (string)$sut;
-		echo $renderedHTML;
 
 		self::assertStringContainsString('p.append(" są ");', $renderedHTML);
 		self::assertStringNotContainsString('p.append(" s&#261; ");', $renderedHTML);
