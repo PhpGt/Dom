@@ -2004,12 +2004,18 @@ trait HTMLElement {
 	}
 
 	protected function __prop_get_required():bool {
-		$this->allowTypes(ElementType::HTMLButtonElement);
+		$this->allowTypes(
+			ElementType::HTMLButtonElement,
+			ElementType::HTMLInputElement,
+		);
 		return $this->hasAttribute("required");
 	}
 
 	protected function __prop_set_required(bool $value):void {
-		$this->allowTypes(ElementType::HTMLButtonElement);
+		$this->allowTypes(
+			ElementType::HTMLButtonElement,
+			ElementType::HTMLInputElement,
+		);
 		if($value) {
 			$this->setAttribute("required", "");
 		}
