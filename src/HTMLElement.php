@@ -1982,6 +1982,7 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLSelectElement,
 		);
 		return $this->hasAttribute("readonly");
 	}
@@ -1994,6 +1995,7 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLSelectElement,
 		);
 		if($value) {
 			$this->setAttribute("readonly", "");
