@@ -710,7 +710,6 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLSelectElement,
-			ElementType::HTMLOptionElement,
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFormElement,
 			ElementType::HTMLTextAreaElement,
@@ -738,7 +737,6 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLSelectElement,
-			ElementType::HTMLOptionElement,
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFormElement,
 			ElementType::HTMLTextAreaElement,
