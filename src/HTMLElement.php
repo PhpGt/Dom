@@ -710,7 +710,6 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLSelectElement,
-			ElementType::HTMLOptionElement,
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFormElement,
 			ElementType::HTMLTextAreaElement,
@@ -738,7 +737,6 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
 			ElementType::HTMLSelectElement,
-			ElementType::HTMLOptionElement,
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLFormElement,
 			ElementType::HTMLTextAreaElement,
@@ -2974,6 +2972,7 @@ trait HTMLElement {
 	protected function __prop_get_placeholder():string {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLTextAreaElement,
 		);
 		return $this->getAttribute("placeholder") ?? "";
 	}
@@ -2982,6 +2981,7 @@ trait HTMLElement {
 	protected function __prop_set_placeholder(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLTextAreaElement,
 		);
 		$this->setAttribute("placeholder", $value);
 	}
