@@ -59,7 +59,7 @@ class HTMLDocumentTest extends TestCase {
 	public function testToString_emojiEncoding():void {
 		$html = "<h1>I ❤️ my 🐈</h1>";
 		$sut = new HTMLDocument($html);
-		self::assertStringContainsString("<h1>I &#10084;&#65039; my &#128008;</h1>", (string)$sut);
+		self::assertStringContainsString("<h1>I ❤️ my 🐈</h1>", (string)$sut);
 	}
 
 	public function testPropBody_readOnly():void {
@@ -83,13 +83,13 @@ class HTMLDocumentTest extends TestCase {
 	public function testToString_emptyHTML():void {
 		$sut = new HTMLDocument();
 		/** @noinspection HtmlRequiredLangAttribute */
-		self::assertEquals("<!DOCTYPE html>\n<html><head></head><body></body></html>\n", (string)$sut);
+		self::assertEquals("<!doctype html>\n<html><head></head><body></body></html>\n", (string)$sut);
 	}
 
 	public function testToStringDefaultHTML():void {
 		$sut = new HTMLDocument(DocumentTestFactory::HTML_DEFAULT);
 		/** @noinspection HtmlRequiredLangAttribute */
-		self::assertEquals("<!DOCTYPE html>\n<html><head></head><body><h1>Hello, PHP.Gt!</h1></body></html>\n", (string)$sut);
+		self::assertEquals("<!doctype html>\n<html><head></head><body><h1>Hello, PHP.Gt!</h1></body></html>\n", (string)$sut);
 	}
 
 	public function testPropCharacter_default():void {
@@ -262,7 +262,7 @@ class HTMLDocumentTest extends TestCase {
 		$contents = stream_get_contents($stream);
 		/** @noinspection HtmlRequiredLangAttribute */
 		$expected = <<<HTML
-		<!DOCTYPE html>
+		<!doctype html>
 		<html><head></head><body><h1>Hello, PHP.Gt!</h1>$message</body></html>
 
 		HTML;
@@ -281,7 +281,7 @@ class HTMLDocumentTest extends TestCase {
 		$contents = stream_get_contents($stream);
 		/** @noinspection HtmlRequiredLangAttribute */
 		$expected = <<<HTML
-		<!DOCTYPE html>
+		<!doctype html>
 		<html><head></head><body><h1>Hello, PHP.Gt!</h1>$message1
 		$message2
 		</body></html>
@@ -705,5 +705,37 @@ class HTMLDocumentTest extends TestCase {
 		self::assertStringContainsString('document.createTextNode("fajne");', $renderedHTML);
 		self::assertStringContainsString('word1.textContent = "Koty też";', $renderedHTML);
 		self::assertStringNotContainsString('word1.textContent = "Koty te&#380;";', $renderedHTML);
+	}
+
+	public function testEscapedCharacters_entireDom():void {
+		$content = <<<HTML
+		<h1>Tworzenie i usuwanie elementów</h1>
+		<pre class="line-numbers"><code class="language-js">
+		Koty też
+		</code></pre>
+		<script>
+		console.log("zobaczyć co możemy użyć");
+		</script>
+		HTML;
+
+		$stringsToExpect = [
+			"Tworzenie i usuwanie elementów", // within the h1
+			"Koty też", // within the pre
+			"zobaczyć co możemy użyć", // within the script tag
+		];
+		$stringsToNotExpect = [
+			"&oacute;",
+			"&#380;",
+		];
+
+		$sut = new HTMLDocument($content);
+		$domString = (string)$sut;
+
+		foreach($stringsToExpect as $needle) {
+			self::assertStringContainsString($needle, $domString);
+		}
+		foreach($stringsToNotExpect as $needle) {
+			self::assertStringNotContainsString($needle, $domString);
+		}
 	}
 }

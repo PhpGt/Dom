@@ -53,6 +53,7 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 		DOMText::class => Text::class,
 		DOMProcessingInstruction::class => ProcessingInstruction::class,
 	];
+	const DOCTYPE = "<!doctype html>";
 
 	public function __construct(
 		public readonly string $characterSet,
@@ -65,7 +66,8 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 
 	public function __toString():string {
 		if(get_class($this) === HTMLDocument::class) {
-			$string = $this->saveHTML();
+			$string = self::DOCTYPE . "\n";
+			$string .= $this->saveHTML($this->documentElement);
 		}
 		else {
 			$string = $this->saveXML();
@@ -378,7 +380,7 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 			if(strlen($script->textContent) === 0) {
 				continue;
 			}
-			$html = html_entity_decode($script->innerHTML);
+			$html = html_entity_decode($script->innerHTML ?? "");
 			$key = str_repeat("@", 16)
 				. uniqid("---script-") . "---"
 				. str_repeat("@", 16);
@@ -390,16 +392,11 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 	}
 
 	public function saveHTML(DOMNode $node = null):string {
-		if($node) {
-			return parent::saveHTML($node);
+		$scriptHtmlList = $this->extractScriptHTML();
+		$html = parent::saveHTML($node);
+		foreach($scriptHtmlList as $key => $js) {
+			$html = str_replace($key, $js, $html);
 		}
-		else {
-			$scriptHtmlList = $this->extractScriptHTML();
-			$html = parent::saveHTML($node);
-			foreach($scriptHtmlList as $key => $js) {
-				$html = str_replace($key, $js, $html);
-			}
-			return $html;
-		}
+		return $html;
 	}
 }

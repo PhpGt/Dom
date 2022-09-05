@@ -55,7 +55,7 @@ HTML;
 		$sut = new DOMParser();
 		$document = $sut->parseFromString($html, "text/html");
 		self::assertStringContainsString(
-			"<h1>&#9734; Hello &#9734; World &#9734;</h1>",
+			"<h1>☆ Hello ☆ World ☆</h1>",
 			$document
 		);
 	}
