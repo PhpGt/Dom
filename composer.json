@@ -8,14 +8,14 @@
 		"ext-dom": "*",
 		"ext-libxml": "*",
 		"ext-mbstring": "*",
-		"phpgt/cssxpath": "^1.1",
-		"phpgt/propfunc": "^1.0",
-		"psr/http-message": "^1.0"
+		"phpgt/cssxpath": "^v1.1",
+		"phpgt/propfunc": "^v1.0",
+		"psr/http-message": "^v1.0"
 	},
 
 	"require-dev": {
-		"phpstan/phpstan": "v1.8.2",
-		"phpunit/phpunit": "v9.5.21"
+		"phpstan/phpstan": "v1.8",
+		"phpunit/phpunit": "v9.5"
 	},
 
 	"license": "MIT",
