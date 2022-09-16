@@ -707,15 +707,58 @@ class HTMLDocumentTest extends TestCase {
 		self::assertStringNotContainsString('word1.textContent = "Koty te&#380;";', $renderedHTML);
 	}
 
+	public function testEscapedCharacters_multipleScriptTagsShouldNotBeSlow():void {
+		$content = <<<HTML
+		<!doctype html>
+		<html>
+		<head>
+			<meta charset="utf-8" />
+			<title>Speed test using lots of script tags</title>		
+		</head>
+		<body>
+			<h1>Speed test using lots of script tags</h1>
+		</body>
+		</html>
+		HTML;
+
+		$sut = new HTMLDocument($content);
+
+		for($i = 0; $i < 1000; $i++) {
+			$script = $sut->createElement("script");
+			$script->innerHTML = "console.log('Polski jest pięknym językiem');";
+			if($i % 2 === 0) {
+				$sut->head->appendChild($script);
+			}
+			else {
+				$sut->body->appendChild($script);
+			}
+		}
+
+		$timeStart = microtime(true);
+		$renderedHTML = (string)$sut;
+		$timeEnd = microtime(true);
+		self::assertLessThan(
+			1,
+			$timeEnd - $timeStart,
+			"It should never take a second to render the HTML, even with 1,000 script nodes"
+		);
+
+		self::assertStringContainsString("Polski jest pięknym językiem", $renderedHTML);
+		self::assertEquals(1000, substr_count($renderedHTML, "Polski jest pięknym językiem"));
+	}
+
 	public function testEscapedCharacters_entireDom():void {
 		$content = <<<HTML
-		<h1>Tworzenie i usuwanie elementów</h1>
-		<pre class="line-numbers"><code class="language-js">
-		Koty też
-		</code></pre>
-		<script>
-		console.log("zobaczyć co możemy użyć");
-		</script>
+		<!doctype html>
+		<body>
+			<h1>Tworzenie i usuwanie elementów</h1>
+			<pre class="line-numbers"><code class="language-js">
+			Koty też
+			</code></pre>
+			<script>
+			console.log("zobaczyć co możemy użyć");
+			</script>
+		</body>
 		HTML;
 
 		$stringsToExpect = [

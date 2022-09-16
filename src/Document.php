@@ -60,6 +60,8 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 		public readonly string $contentType,
 	) {
 		parent::__construct("1.0", $this->characterSet);
+		$this->encoding = $this->characterSet;
+		$this->substituteEntities = true;
 		$this->registerNodeClasses();
 		libxml_use_internal_errors(true);
 	}
@@ -391,12 +393,16 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 		return $scriptHtmlList;
 	}
 
-	public function saveHTML(DOMNode $node = null):string {
-		$scriptHtmlList = $this->extractScriptHTML();
-		$html = parent::saveHTML($node);
-		foreach($scriptHtmlList as $key => $js) {
-			$html = str_replace($key, $js, $html);
-		}
-		return $html;
-	}
+//	public function saveHTML(DOMNode $node = null):string {
+//		$scriptHtmlList = $this->extractScriptHTML();
+//		if(!$node) {
+//			$node = $this->documentElement;
+//		}
+//		$html = parent::saveHTML((new \DOMXPath($this))->query('/')->item(0));
+//		foreach($scriptHtmlList as $key => $js) {
+//			$html = str_replace($key, $js, $html);
+//		}
+//		var_Dump($this->encoding, $this->substituteEntities);die();
+//		return $html;
+//	}
 }
