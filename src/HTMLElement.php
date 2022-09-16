@@ -1440,7 +1440,7 @@ trait HTMLElement {
 		return DOMTokenListFactory::create(
 			fn() => explode(
 				" ",
-				$this->getAttribute("controlsList")
+				$this->getAttribute("controlsList") ?? ""
 			),
 			fn(string...$tokens) => $this->setAttribute(
 				"controlsList",
@@ -2009,6 +2009,7 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLTextAreaElement,
 		);
 		return $this->hasAttribute("required");
 	}
@@ -2017,6 +2018,7 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLTextAreaElement,
 		);
 		if($value) {
 			$this->setAttribute("required", "");
@@ -2974,6 +2976,7 @@ trait HTMLElement {
 	protected function __prop_get_placeholder():string {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLTextAreaElement,
 		);
 		return $this->getAttribute("placeholder") ?? "";
 	}
@@ -2982,6 +2985,7 @@ trait HTMLElement {
 	protected function __prop_set_placeholder(string $value):void {
 		$this->allowTypes(
 			ElementType::HTMLInputElement,
+			ElementType::HTMLTextAreaElement,
 		);
 		$this->setAttribute("placeholder", $value);
 	}
