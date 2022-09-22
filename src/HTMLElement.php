@@ -2009,6 +2009,7 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLSelectElement,
 			ElementType::HTMLTextAreaElement,
 		);
 		return $this->hasAttribute("required");
@@ -2018,6 +2019,7 @@ trait HTMLElement {
 		$this->allowTypes(
 			ElementType::HTMLButtonElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLSelectElement,
 			ElementType::HTMLTextAreaElement,
 		);
 		if($value) {
