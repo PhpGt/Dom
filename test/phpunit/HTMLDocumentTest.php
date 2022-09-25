@@ -59,7 +59,7 @@ class HTMLDocumentTest extends TestCase {
 	public function testToString_emojiEncoding():void {
 		$html = "<h1>I ❤️ my 🐈</h1>";
 		$sut = new HTMLDocument($html);
-		self::assertStringContainsString("$html", (string)$sut);
+		self::assertStringContainsString("<h1>I ❤️ my 🐈</h1>", (string)$sut);
 	}
 
 	public function testPropBody_readOnly():void {
@@ -83,13 +83,13 @@ class HTMLDocumentTest extends TestCase {
 	public function testToString_emptyHTML():void {
 		$sut = new HTMLDocument();
 		/** @noinspection HtmlRequiredLangAttribute */
-		self::assertEquals("<!DOCTYPE html>\n<html><head></head><body></body></html>\n", (string)$sut);
+		self::assertEquals("<!doctype html>\n<html><head></head><body></body></html>\n", (string)$sut);
 	}
 
 	public function testToStringDefaultHTML():void {
 		$sut = new HTMLDocument(DocumentTestFactory::HTML_DEFAULT);
 		/** @noinspection HtmlRequiredLangAttribute */
-		self::assertEquals("<!DOCTYPE html>\n<html><head></head><body><h1>Hello, PHP.Gt!</h1></body></html>\n", (string)$sut);
+		self::assertEquals("<!doctype html>\n<html><head></head><body><h1>Hello, PHP.Gt!</h1></body></html>\n", (string)$sut);
 	}
 
 	public function testPropCharacter_default():void {
@@ -262,7 +262,7 @@ class HTMLDocumentTest extends TestCase {
 		$contents = stream_get_contents($stream);
 		/** @noinspection HtmlRequiredLangAttribute */
 		$expected = <<<HTML
-		<!DOCTYPE html>
+		<!doctype html>
 		<html><head></head><body><h1>Hello, PHP.Gt!</h1>$message</body></html>
 
 		HTML;
@@ -281,7 +281,7 @@ class HTMLDocumentTest extends TestCase {
 		$contents = stream_get_contents($stream);
 		/** @noinspection HtmlRequiredLangAttribute */
 		$expected = <<<HTML
-		<!DOCTYPE html>
+		<!doctype html>
 		<html><head></head><body><h1>Hello, PHP.Gt!</h1>$message1
 		$message2
 		</body></html>
@@ -620,5 +620,165 @@ class HTMLDocumentTest extends TestCase {
 
 		self::assertSame("changed", $child->getAttribute("id"));
 		self::assertSame($child, $sut->getElementById("changed"));
+	}
+
+	public function testSaveHTML_XSS():void {
+		$html = <<<HTML
+		<!doctype html>
+		
+		<h1>Hello, <span>you</span>!</h1>
+		HTML;
+
+// Create a new document with the above HTML.
+		$document = new HTMLDocument($html);
+		$document->loadHTML($html);
+
+// Get reference to span tag.
+		$span = $document->getElementsByTagName("span")->item(0);
+
+// Set the span's tag to user-supplied $name (malicious user can enter JavaScript!)
+		$name = "<script>alert('XSS');</script>";
+		$span->textContent = $name;
+
+		$script = $document->querySelector("script");
+		self::assertNull($script);
+
+		$documentString = (string)$document;
+		self::assertStringNotContainsString("<script>", $documentString);
+	}
+
+	public function testEscapedCharacters():void {
+		$content = <<<HTML
+		<!doctype html>
+		<script>
+		p.append(" są ");
+		</script>
+		<h1 id="pageTitle">This is the page title</h1>
+		HTML;
+
+		$sut = new HTMLDocument($content);
+		$h1 = $sut->querySelector("#pageTitle");
+		$div = $sut->createElement("div");
+		$div->innerHTML = "lorem";
+		$h1->after($div);
+
+		$htmlString = (string)$sut;
+		self::assertStringContainsString("<script>\np.append(\" są \");\n</script>", $htmlString);
+	}
+
+	public function testEscapedCharacters_insideScriptTag():void {
+		$content = <<<HTML
+		<div>
+			<p id="testNodeText">
+				Hello, Marcin!
+			</p>
+			<button class="btn-textNodeTest">Button</button>
+		</div>
+		<script>
+		{
+			const p = document.querySelector("#testNodeText");
+			const btn = document.querySelector(".btn-textNodeTest");
+			
+			const word1 = document.createTextNode("Psy");
+			p.append(word1);
+			
+			p.append(" są ");
+			
+			const word2 = document.createTextNode("fajne");
+			p.append(word2);
+			
+			btn.addEventListener("click", () => {
+				console.dir(word1);
+				
+				word1.textContent = "Koty też";
+				word2.textContent = "super!";
+			});
+		}
+		</script>
+		HTML;
+
+		$sut = new HTMLDocument($content);
+		$renderedHTML = (string)$sut;
+
+		self::assertStringContainsString('p.append(" są ");', $renderedHTML);
+		self::assertStringNotContainsString('p.append(" s&#261; ");', $renderedHTML);
+		self::assertStringContainsString('document.createTextNode("fajne");', $renderedHTML);
+		self::assertStringContainsString('word1.textContent = "Koty też";', $renderedHTML);
+		self::assertStringNotContainsString('word1.textContent = "Koty te&#380;";', $renderedHTML);
+	}
+
+	public function testEscapedCharacters_multipleScriptTagsShouldNotBeSlow():void {
+		$content = <<<HTML
+		<!doctype html>
+		<html>
+		<head>
+			<meta charset="utf-8" />
+			<title>Speed test using lots of script tags</title>		
+		</head>
+		<body>
+			<h1>Speed test using lots of script tags</h1>
+		</body>
+		</html>
+		HTML;
+
+		$sut = new HTMLDocument($content);
+
+		for($i = 0; $i < 1000; $i++) {
+			$script = $sut->createElement("script");
+			$script->innerHTML = "console.log('Polski jest pięknym językiem');";
+			if($i % 2 === 0) {
+				$sut->head->appendChild($script);
+			}
+			else {
+				$sut->body->appendChild($script);
+			}
+		}
+
+		$timeStart = microtime(true);
+		$renderedHTML = (string)$sut;
+		$timeEnd = microtime(true);
+		self::assertLessThan(
+			1,
+			$timeEnd - $timeStart,
+			"It should never take a second to render the HTML, even with 1,000 script nodes"
+		);
+
+		self::assertStringContainsString("Polski jest pięknym językiem", $renderedHTML);
+		self::assertEquals(1000, substr_count($renderedHTML, "Polski jest pięknym językiem"));
+	}
+
+	public function testEscapedCharacters_entireDom():void {
+		$content = <<<HTML
+		<!doctype html>
+		<body>
+			<h1>Tworzenie i usuwanie elementów</h1>
+			<pre class="line-numbers"><code class="language-js">
+			Koty też
+			</code></pre>
+			<script>
+			console.log("zobaczyć co możemy użyć");
+			</script>
+		</body>
+		HTML;
+
+		$stringsToExpect = [
+			"Tworzenie i usuwanie elementów", // within the h1
+			"Koty też", // within the pre
+			"zobaczyć co możemy użyć", // within the script tag
+		];
+		$stringsToNotExpect = [
+			"&oacute;",
+			"&#380;",
+		];
+
+		$sut = new HTMLDocument($content);
+		$domString = (string)$sut;
+
+		foreach($stringsToExpect as $needle) {
+			self::assertStringContainsString($needle, $domString);
+		}
+		foreach($stringsToNotExpect as $needle) {
+			self::assertStringNotContainsString($needle, $domString);
+		}
 	}
 }

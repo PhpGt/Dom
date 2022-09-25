@@ -53,29 +53,28 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 		DOMText::class => Text::class,
 		DOMProcessingInstruction::class => ProcessingInstruction::class,
 	];
+	const DOCTYPE = "<!doctype html>";
 
 	public function __construct(
 		public readonly string $characterSet,
 		public readonly string $contentType,
 	) {
 		parent::__construct("1.0", $this->characterSet);
+		$this->encoding = $this->characterSet;
+		$this->substituteEntities = true;
 		$this->registerNodeClasses();
 		libxml_use_internal_errors(true);
 	}
 
 	public function __toString():string {
 		if(get_class($this) === HTMLDocument::class) {
-			$string = $this->saveHTML();
+			$string = self::DOCTYPE . "\n";
+			$string .= $this->saveHTML($this->documentElement);
 		}
 		else {
 			$string = $this->saveXML();
 		}
 
-		$string = mb_convert_encoding(
-			$string,
-			"UTF-8",
-			"HTML-ENTITIES"
-		);
 		return trim($string) . "\n";
 	}
 
@@ -363,4 +362,47 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 			$this->registerNodeClass($nativeClass, $gtClass);
 		}
 	}
+
+	/**
+	 * Due to the way HTML is rendered, non-ASCII characters are converted
+	 * into their HTML-encoded counterparts, but this behaviour breaks
+	 * script tags that have inline JavaScript. This function extracts the
+	 * raw innerHTML of each script, so injectScriptHTML can be called after
+	 * page render, retaining the original characters.
+	 *
+	 * @return array<string, string> Key = a unique string of characters
+	 * that the script tag's innerHTML is replaced with, before rendering
+	 * the document. This key will be replaced with the value of the array
+	 * item after render.
+	 */
+	private function extractScriptHTML():array {
+		$scriptHtmlList = [];
+
+		foreach($this->querySelectorAll("script") as $script) {
+			if(strlen($script->textContent) === 0) {
+				continue;
+			}
+			$html = html_entity_decode($script->innerHTML ?? "");
+			$key = str_repeat("@", 16)
+				. uniqid("---script-") . "---"
+				. str_repeat("@", 16);
+			$scriptHtmlList[$key] = $html;
+			$script->innerHTML = $key;
+		}
+
+		return $scriptHtmlList;
+	}
+
+//	public function saveHTML(DOMNode $node = null):string {
+//		$scriptHtmlList = $this->extractScriptHTML();
+//		if(!$node) {
+//			$node = $this->documentElement;
+//		}
+//		$html = parent::saveHTML((new \DOMXPath($this))->query('/')->item(0));
+//		foreach($scriptHtmlList as $key => $js) {
+//			$html = str_replace($key, $js, $html);
+//		}
+//		var_Dump($this->encoding, $this->substituteEntities);die();
+//		return $html;
+//	}
 }
