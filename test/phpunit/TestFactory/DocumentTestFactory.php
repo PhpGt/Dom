@@ -1,7 +1,6 @@
-<?php
+<?php /** @noinspection JSUnresolvedLibraryURL */
 namespace Gt\Dom\Test\TestFactory;
 
-use Gt\Dom\DOMImplementation;
 use Gt\Dom\DOMParser;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\XMLDocument;
