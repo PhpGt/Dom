@@ -168,6 +168,34 @@ class ElementTest extends TestCase {
 		self::assertEquals("And another", $sut->children[1]->innerHTML);
 	}
 
+	public function testInnerText():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("span");
+		$sut->innerText = "Hello, World!";
+		self::assertSame($sut->innerText, $sut->innerHTML);
+	}
+
+	public function testInnerText_containsHTML():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("span");
+		$textWithHTML = "Hello, <b>World</b>!";
+		$sut->innerText = $textWithHTML;
+		self::assertSame($textWithHTML, $sut->innerText);
+		self::assertSame("Hello, &lt;b&gt;World&lt;/b&gt;!", $sut->innerHTML);
+	}
+
+	public function testTextContent():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("span");
+		$document->body->appendChild($sut);
+
+		$textWithHTML = "Hello, <b>World</b>!";
+		$sut->textContent = $textWithHTML;
+		self::assertNotSame($textWithHTML, $sut->innerHTML);
+		self::assertSame($textWithHTML, $sut->innerText);
+		self::assertSame("Hello, &lt;b&gt;World&lt;/b&gt;!", $sut->innerHTML);
+	}
+
 	public function testOuterHTML():void {
 		$document = new HTMLDocument();
 		$sut = $document->createElement("example");

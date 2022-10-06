@@ -73,7 +73,7 @@ class DocumentStreamTest extends TestCase {
 		while(!$sut->eof()) {
 			$bytes .= $sut->read(10);
 		}
-		self::assertEquals("<!DOCTYPE html>\n<html><head></head><body><example></example></body></html>\n", $bytes);
+		self::assertEquals("<!doctype html>\n<html><head></head><body><example></example></body></html>\n", $bytes);
 	}
 
 	public function testIsSeekableBeforeOpen():void {
@@ -132,7 +132,7 @@ class DocumentStreamTest extends TestCase {
 		$sut->body->appendChild($sut->createElement("example"));
 		$sut->open();
 		$contents = $sut->getContents();
-		self::assertEquals("<!DOCTYPE html>\n<html><head></head><body><example></example></body></html>\n", $contents);
+		self::assertEquals("<!doctype html>\n<html><head></head><body><example></example></body></html>\n", $contents);
 	}
 
 	public function testGetMetaData():void {

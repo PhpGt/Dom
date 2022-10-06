@@ -27,13 +27,20 @@ class HTMLDocument extends Document {
 			"text/html",
 		);
 
-		$html = mb_convert_encoding(
-			$html,
-			"HTML-ENTITIES",
-			$this->characterSet,
-		);
+// Workaround for handling UTF-8 encoding correctly.
+// @link https://stackoverflow.com/questions/8218230/php-domdocument-loadhtml-not-encoding-utf-8-correctly
+		$html = '<?xml encoding="'
+			. strtolower($this->encoding)
+			. '" ?>'
+			. $html;
 		$this->loadHTML($html, LIBXML_SCHEMA_CREATE | LIBXML_COMPACT);
+		foreach($this->childNodes as $child) {
+			if($child instanceof ProcessingInstruction) {
+				$this->removeChild($child);
+			}
+		}
 
+		/** @var array<Node> $nonElementChildNodes */
 		$nonElementChildNodes = [];
 		foreach($this->childNodes as $child) {
 			if($child instanceof DocumentType
