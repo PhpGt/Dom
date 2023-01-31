@@ -32,11 +32,12 @@ class HTMLDocument extends Document {
 			else {
 // loadHTML expects an ISO-8859-1 encoded string.
 // http://stackoverflow.com/questions/11309194/php-domdocument-failing-to-handle-utf-8-characters
-				$document = mb_convert_encoding(
-					$document,
-					"HTML-ENTITIES",
-					"UTF-8"
-				);
+                $convmap = [0x80, 0x10FFFF, 0, 0x1FFFFF];
+                $document = mb_encode_numericentity(
+                    $document,
+                    $convmap,
+                    'UTF-8'
+                );
 				$this->loadHTML($document);
 			}
 		}
