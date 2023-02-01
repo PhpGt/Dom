@@ -274,11 +274,12 @@ class Element extends DOMElement {
 		);
 
 		$htmlWrapped = "<!doctype html><html><body>$html</body></html>";
-		$htmlWrapped = mb_convert_encoding(
-			$htmlWrapped,
-			"HTML-ENTITIES",
-			"UTF-8"
-		);
+        $convmap = [0x80, 0x10FFFF, 0, 0x1FFFFF];
+        $htmlWrapped = mb_encode_numericentity(
+            $htmlWrapped,
+            $convmap,
+            'UTF-8'
+        );
 
 		$importDocument->loadHTML($htmlWrapped);
 		$importBody = $importDocument->getElementsByTagName(
