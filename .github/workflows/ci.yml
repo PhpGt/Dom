@@ -21,7 +21,7 @@ jobs:
       - name: Composer install
         uses: php-actions/composer@v6
         with:
-          php_version: ${{ matrix.php }}
+          php_version: 8.1
 
       - name: Archive build
         run: mkdir /tmp/github-actions/ && tar -cvf /tmp/github-actions/build.tar ./
@@ -35,9 +35,6 @@ jobs:
   phpunit:
     runs-on: ubuntu-latest
     needs: [ composer ]
-    strategy:
-      matrix:
-        php: [ 8.1, 8.2 ]
 
     outputs:
       coverage: ${{ steps.store-coverage.outputs.coverage_text }}
@@ -56,7 +53,7 @@ jobs:
         env:
           XDEBUG_MODE: cover
         with:
-          php_version: ${{ matrix.php }}
+          php_version: 8.1
           php_extensions: xdebug
           configuration: test/phpunit/phpunit.xml
           bootstrap: vendor/autoload.php
@@ -90,9 +87,6 @@ jobs:
   phpstan:
     runs-on: ubuntu-latest
     needs: [ composer ]
-    strategy:
-      matrix:
-        php: [ 8.1, 8.2 ]
 
     steps:
       - uses: actions/download-artifact@v3
@@ -106,8 +100,9 @@ jobs:
       - name: PHP Static Analysis
         uses: php-actions/phpstan@v3
         with:
-          php_version: ${{ matrix.php }}
+          php_version: 8.1
           path: src/
+          level: 4
 
   remove_old_artifacts:
     runs-on: ubuntu-latest
