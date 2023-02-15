@@ -49,15 +49,15 @@ trait RegisteredNodeClass {
 		}
 
 		if($this instanceof Element
-			&& $otherNode instanceof Element) {
+		&& $otherNode instanceof Element) {
 			$similar = $this->namespaceURI === $otherNode->namespaceURI
 				&& $this->localName === $otherNode->localName
-				&& $this->attributes->length === $otherNode->attributes->length;
+				&& count($this->attributes) === count($otherNode->attributes);
 			if(!$similar) {
 				return false;
 			}
 
-			for($i = 0, $len = $this->attributes->length; $i < $len; $i++) {
+			for($i = 0, $len = count($this->attributes); $i < $len; $i++) {
 				$attr = $this->attributes->item($i);
 				$otherAttr = $otherNode->attributes->item($i);
 				if(!$attr->isEqualNode($otherAttr)) {
