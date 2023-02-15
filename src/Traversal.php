@@ -104,6 +104,7 @@ trait Traversal {
 
 			/** @phpstan-ignore-next-line */
 			if($node && $this->filter->acceptNode($node) === NodeFilter::FILTER_ACCEPT) {
+				/** @phpstan-ignore-next-line */
 				$this->pCurrentNode = $this->hintNullableNodeType($node);
 				return $this->pCurrentNode;
 			}
@@ -193,6 +194,7 @@ trait Traversal {
 					$result = $this->filter->acceptNode($node);
 				}
 				if($result === NodeFilter::FILTER_ACCEPT) {
+					/** @phpstan-ignore-next-line  */
 					$this->pCurrentNode = $this->hintNullableNodeType($node);
 					return $this->pCurrentNode;
 				}
@@ -209,6 +211,7 @@ trait Traversal {
 
 			/** @phpstan-ignore-next-line */
 			if($this->filter->acceptNode($node) === NodeFilter::FILTER_ACCEPT) {
+				/** @phpstan-ignore-next-line  */
 				$this->pCurrentNode = $this->hintNullableNodeType($node);
 				return $this->pCurrentNode;
 			}
@@ -393,6 +396,7 @@ trait Traversal {
 				break;
 			}
 			if(!is_null($node->nextSibling)) {
+				/** @phpstan-ignore-next-line  */
 				return $this->hintNodeType($node->nextSibling);
 			}
 		}
