@@ -61,8 +61,10 @@ class HTMLDocument extends Document {
 		}
 
 		if($nonElementChildNodes) {
-			/** @phpstan-ignore-next-line This is type hinted as Node earlier in the script. */
-			$this->documentElement->prepend(...$nonElementChildNodes);
+			call_user_func(
+				$this->documentElement->prepend(...),
+				...$nonElementChildNodes,
+			);
 		}
 	}
 
