@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
@@ -18,23 +18,26 @@ jobs:
       - name: Composer install
         uses: php-actions/composer@v6
         with:
-          php_version: '8.1'
+          php_version: 8.1
 
       - name: Archive build
         run: mkdir /tmp/github-actions/ && tar -cvf /tmp/github-actions/build.tar ./
 
       - name: Upload build archive for test runners
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build-artifact
           path: /tmp/github-actions
 
   phpunit:
     runs-on: ubuntu-latest
-    needs: [composer]
+    needs: [ composer ]
+
+    outputs:
+      coverage: ${{ steps.store-coverage.outputs.coverage_text }}
 
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: build-artifact
           path: /tmp/github-actions
@@ -44,8 +47,51 @@ jobs:
 
       - name: PHP Unit tests
         uses: php-actions/phpunit@v3
+        env:
+          XDEBUG_MODE: cover
         with:
-          php_version: '8.1'
+          php_version: 8.1
           php_extensions: xdebug
           configuration: test/phpunit/phpunit.xml
           bootstrap: vendor/autoload.php
+          coverage_text: _coverage/coverage.txt
+          coverage_clover: _coverage/clover.xml
+
+      - name: Store coverage data
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage
+          path: _coverage
+
+  coverage:
+    runs-on: ubuntu-latest
+    needs: [ phpunit ]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: code-coverage
+          path: _coverage
+
+      - name: Output coverage
+        run: cat "_coverage/coverage.txt"
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v3
+
+  remove_old_artifacts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Remove old artifacts for prior workflow runs on this repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "/repos/${{ github.repository }}/actions/artifacts?name=build-artifact" | jq ".artifacts[] | select(.name == \"build-artifact\") | .id" > artifact-id-list.txt
+          while read id
+          do
+            echo -n "Deleting artifact ID $id ... "
+            gh api --method DELETE /repos/${{ github.repository }}/actions/artifacts/$id && echo "Done"
+          done <artifact-id-list.txt
