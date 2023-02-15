@@ -103,8 +103,8 @@ trait Traversal {
 			$node = $node->parentNode;
 
 			if($node && $this->filter->acceptNode($node) === NodeFilter::FILTER_ACCEPT) {
-				$this->pCurrentNode = $node;
-				return $node;
+				$this->pCurrentNode = $this->hintNullableNodeType($node);
+				return $this->pCurrentNode;
 			}
 		}
 
@@ -190,9 +190,8 @@ trait Traversal {
 					$result = $this->filter->acceptNode($node);
 				}
 				if($result === NodeFilter::FILTER_ACCEPT) {
-					/** @var null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node */
-					$this->pCurrentNode = $node;
-					return $node;
+					$this->pCurrentNode = $this->hintNullableNodeType($node);
+					return $this->pCurrentNode;
 				}
 
 				$sibling = $node->previousSibling;
@@ -205,9 +204,8 @@ trait Traversal {
 			/** @var null|Element|Node|Text $node */
 			$node = $node->parentNode;
 			if($this->filter->acceptNode($node) === NodeFilter::FILTER_ACCEPT) {
-				/** @var Node $node */
-				$this->pCurrentNode = $node;
-				return $node;
+				$this->pCurrentNode = $this->hintNullableNodeType($node);
+				return $this->pCurrentNode;
 			}
 		}
 
@@ -354,24 +352,22 @@ trait Traversal {
 	}
 
 	private function matchChild(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node, string $direction):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
-		/** @var null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $result */
 		$result = match($direction) {
 			"first" => $node->firstChild,
 			"last", "next", "previous" => $node->lastChild,
 			default => null,
 		};
-		return $result;
+		return $this->hintNullableNodeType($result);
 	}
 
 	private function matchSibling(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node, string $direction):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
-		/** @var null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $result */
 		$result = match($direction) {
 			"next" => $node->nextSibling,
 			"previous" => $node->previousSibling,
 			default => null,
 		};
 
-		return $result;
+		return $this->hintNullableNodeType($result);
 	}
 
 	private function nextSkippingChildren(
@@ -392,9 +388,7 @@ trait Traversal {
 				break;
 			}
 			if(!is_null($node->nextSibling)) {
-				/** @var Element $nextSibling */
-				$nextSibling = $node->nextSibling;
-				return $nextSibling;
+				return $this->hintNodeType($node->nextSibling);
 			}
 		}
 
@@ -436,5 +430,25 @@ trait Traversal {
 		return $matches > 0
 			? NodeFilter::FILTER_ACCEPT
 			: NodeFilter::FILTER_REJECT;
+	}
+
+	/**
+	 * Due to libxml's inferred type system suggesting the use of native
+	 * DOMDocument types, this function is introduced to allow PHP to force
+	 * correct types at runtime. It also helps PHPStan understand the
+	 * correct types that are in use.
+	 */
+	private function hintNodeType(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $input):Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+		return $input;
+	}
+
+	/**
+	 * Due to libxml's inferred type system suggesting the use of native
+	 * DOMDocument types, this function is introduced to allow PHP to force
+	 * correct types at runtime. It also helps PHPStan understand the
+	 * correct types that are in use.
+	 */
+	private function hintNullableNodeType(null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $input):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+		return $input;
 	}
 }

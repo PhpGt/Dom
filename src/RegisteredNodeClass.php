@@ -8,6 +8,7 @@ use DOMNode;
  * specification and PHP implementation. This trait allows definition of
  * functions shared over all Node types.
  *
+ * @property-read HTMLDocument|XMLDocument $ownerDocument
  * @property-read null|Node|Element|Text $nextSibling Returns a Node representing the next node in the tree, or null if there isn't such node.
  * @property-read null|Node|Element|Text $firstChild
  * @property-read null|Node|Element|Text $lastChild
@@ -96,11 +97,13 @@ trait RegisteredNodeClass {
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected */
 	public function __prop_get_isConnected():bool {
 		$context = $this;
-		while($context = $context->parentNode) {
-			if($context instanceof Document) {
+		do {
+			/** @var Element|Node|Document $context */
+			if($context === $this->ownerDocument) {
 				return true;
 			}
 		}
+		while($context = $context->parentNode);
 
 		return false;
 	}
@@ -120,7 +123,7 @@ trait RegisteredNodeClass {
 	 * be set, producing a value of 10 (0x0A).
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
 	 */
-	public function compareDocumentPosition(Node|Element $otherNode):int {
+	public function compareDocumentPosition(DOMNode|Node|Element $otherNode):int {
 		$bits = 0b000000;
 		if($otherNode->ownerDocument !== $this->ownerDocument) {
 			$bits |= Node::DOCUMENT_POSITION_DISCONNECTED;

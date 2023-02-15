@@ -514,6 +514,7 @@ trait HTMLElement {
 				continue;
 			}
 
+			/** @var null|Element $parentElement */
 			$parentElement = $node->parentNode;
 			$closestHidden = $parentElement?->closest("[hidden]");
 			if($parentElement
