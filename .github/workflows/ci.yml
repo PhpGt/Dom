@@ -108,7 +108,6 @@ jobs:
         with:
           php_version: ${{ matrix.php }}
           path: src/
-          level: 4
 
   remove_old_artifacts:
     runs-on: ubuntu-latest
