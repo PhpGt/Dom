@@ -65,6 +65,7 @@ trait ParentNode {
 	public function append(...$nodes):void {
 // Without this clumsy iteration, PHP 8.1 throws "free(): double free detected in tcache 2"
 		foreach($nodes as $node) {
+			/** @phpstan-ignore-next-line libxml's DOMNode does not define append() */
 			parent::append($node);
 		}
 	}
@@ -76,6 +77,7 @@ trait ParentNode {
 	 * @param Node|Element|Text|Comment|string...$nodes
 	 */
 	public function prepend(...$nodes):void {
+		/** @phpstan-ignore-next-line libxml's DOMNode does not define prepend() */
 		parent::prepend(...$nodes);
 	}
 

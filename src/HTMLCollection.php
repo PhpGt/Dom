@@ -131,6 +131,7 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/namedItem
 	 */
 	public function namedItem(string $nameOrId):Element|RadioNodeList|null {
+		/** @var array<string, array<Element>> $matches */
 		$matches = [
 			"id" => [],
 			"name" => [],

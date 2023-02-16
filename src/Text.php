@@ -61,6 +61,7 @@ class Text extends DOMText {
 		}
 		$substr = substr($this->data, $offset);
 		$this->data = substr($this->data, 0, $offset);
+		/** @var Text $newNode */
 		$newNode = $this->ownerDocument->createTextNode($substr);
 
 		if($this->parentNode) {
