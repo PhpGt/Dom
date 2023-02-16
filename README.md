@@ -2,6 +2,8 @@
 
 # Modern DOM API.
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c16cbff2d67c4531b4ca6f60e2d341db)](https://app.codacy.com/gh/PhpGt/Dom?utm_source=github.com&utm_medium=referral&utm_content=PhpGt/Dom&utm_campaign=Badge_Grade_Settings)
+
 Built on top of PHP's native [DOMDocument](http://php.net/manual/en/book.dom.php), this project provides access to modern DOM APIs, as you would expect working with client-side code in the browser.
 
 Performing DOM manipulation in your server-side code enhances the way dynamic pages can be built. Utilising a standardised object-oriented interface means the page can be ready-processed, benefiting browsers, webservers and content delivery networks.
