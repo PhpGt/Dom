@@ -136,6 +136,7 @@ trait RegisteredNodeClass {
 		$unionPath = "$thisNodePath | $otherNodePath";
 		$xpathResult = $this->ownerDocument->evaluate($unionPath);
 
+		/** @var Node|Element|Document|DocumentType|Attr|ProcessingInstruction|DOMNode $node */
 		foreach($xpathResult as $node) {
 			if($node === $this) {
 				$bits |= Node::DOCUMENT_POSITION_FOLLOWING;
