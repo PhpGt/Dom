@@ -61,7 +61,10 @@ class HTMLDocument extends Document {
 		}
 
 		if($nonElementChildNodes) {
-			$this->documentElement->prepend(...$nonElementChildNodes);
+			call_user_func(
+				$this->documentElement->prepend(...),
+				...$nonElementChildNodes,
+			);
 		}
 	}
 

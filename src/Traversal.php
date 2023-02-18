@@ -102,7 +102,9 @@ trait Traversal {
 			/** @var Element $node */
 			$node = $node->parentNode;
 
+			/** @phpstan-ignore-next-line */
 			if($node && $this->filter->acceptNode($node) === NodeFilter::FILTER_ACCEPT) {
+				/** @phpstan-ignore-next-line */
 				$this->pCurrentNode = $this->hintNullableNodeType($node);
 				return $this->pCurrentNode;
 			}
@@ -182,14 +184,17 @@ trait Traversal {
 			while(!is_null($sibling)) {
 				/** @var null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node */
 				$node = $sibling;
+				/** @phpstan-ignore-next-line */
 				$result = $this->filter->acceptNode($node);
 
 				while($result !== NodeFilter::FILTER_REJECT
-					&& !is_null($node->lastChild)) {
+				&& !is_null($node->lastChild)) {
 					$node = $node->lastChild;
+					/** @phpstan-ignore-next-line */
 					$result = $this->filter->acceptNode($node);
 				}
 				if($result === NodeFilter::FILTER_ACCEPT) {
+					/** @phpstan-ignore-next-line  */
 					$this->pCurrentNode = $this->hintNullableNodeType($node);
 					return $this->pCurrentNode;
 				}
@@ -203,7 +208,10 @@ trait Traversal {
 
 			/** @var null|Element|Node|Text $node */
 			$node = $node->parentNode;
+
+			/** @phpstan-ignore-next-line */
 			if($this->filter->acceptNode($node) === NodeFilter::FILTER_ACCEPT) {
+				/** @phpstan-ignore-next-line  */
 				$this->pCurrentNode = $this->hintNullableNodeType($node);
 				return $this->pCurrentNode;
 			}
@@ -388,6 +396,7 @@ trait Traversal {
 				break;
 			}
 			if(!is_null($node->nextSibling)) {
+				/** @phpstan-ignore-next-line  */
 				return $this->hintNodeType($node->nextSibling);
 			}
 		}

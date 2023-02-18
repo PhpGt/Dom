@@ -257,8 +257,6 @@ trait ParentNode {
 	/**
 	 * The removeChild() method of the Node interface removes a child node
 	 * from the DOM and returns the removed node.
-	 *
-	 * @param Node|Element|Text|Comment $child
 	 */
 	public function removeChild(Node|Element|Text|Comment|DOMNode|ProcessingInstruction $child):Node|Element|Text|Comment|CdataSection|ProcessingInstruction {
 		try {
