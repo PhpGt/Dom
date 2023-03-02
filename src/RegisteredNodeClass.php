@@ -27,6 +27,7 @@ trait RegisteredNodeClass {
 	 * @return bool
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isEqualNode
 	 */
+	// phpcs:ignore
 	public function isEqualNode(Node|Element|Document|DocumentType|Attr|ProcessingInstruction|DOMNode $otherNode):bool {
 		if($otherNode instanceof Document) {
 			$otherNode = $otherNode->documentElement;
@@ -166,7 +167,10 @@ trait RegisteredNodeClass {
 	 * @return bool
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/contains
 	 */
-	public function contains(Node|Element|Text|ProcessingInstruction|DocumentType|DocumentFragment|Document|Comment|CdataSection|Attr $otherNode):bool {
+	public function contains(
+		Node|Element|Text|ProcessingInstruction|DocumentType|DocumentFragment
+		|Document|Comment|CdataSection|Attr $otherNode
+	):bool {
 		$context = $otherNode;
 
 		while($context = $context->parentNode) {

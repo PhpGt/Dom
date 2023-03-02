@@ -6,12 +6,15 @@ use Gt\PropFunc\MagicProp;
 trait Traversal {
 	use MagicProp;
 
-	private Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $pRoot;
+	private Node|Element|Text|Attr|ProcessingInstruction|Comment|Document
+	|DocumentType|DocumentFragment $pRoot;
 	private int $pWhatToShow;
-	private Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $pCurrentNode;
+	private Node|Element|Text|Attr|ProcessingInstruction|Comment|Document
+	|DocumentType|DocumentFragment $pCurrentNode;
 	private NodeFilter $pFilter;
 	private int $iteratorIndex;
-	private null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $validity;
+	private null|Node|Element|Text|Attr|ProcessingInstruction|Comment
+	|Document|DocumentType|DocumentFragment $validity;
 
 	protected function __construct(
 		Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $root,
@@ -26,11 +29,15 @@ trait Traversal {
 		$this->validity = null;
 
 		if(!$filter) {
-			$filter = fn(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node) => $this->filterFunction($node);
+			$filter = fn(Node|Element|Text|Attr|ProcessingInstruction
+			|Comment|Document|DocumentType|DocumentFragment $node) => $this->filterFunction($node);
 		}
 
 		if(is_callable($filter)) {
-			$filter = new class($filter, fn(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node) => $this->filterFunction($node)) extends NodeFilter {
+			$filter = new class($filter, fn(
+				Node|Element|Text|Attr|ProcessingInstruction
+				|Comment|Document|DocumentType|DocumentFragment $node
+			) => $this->filterFunction($node)) extends NodeFilter {
 				/** @var callable */
 				private $callback;
 				/** @var callable */
@@ -44,7 +51,10 @@ trait Traversal {
 					$this->defaultCallback = $defaultFilterFunction;
 				}
 
-				public function acceptNode(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node):int {
+				public function acceptNode(
+					Node|Element|Text|Attr|ProcessingInstruction
+					|Comment|Document|DocumentType|DocumentFragment $node
+				):int {
 					$showFilter = call_user_func(
 						$this->defaultCallback,
 						$node
@@ -66,7 +76,8 @@ trait Traversal {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/root */
-	protected function __prop_get_root():Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	protected function __prop_get_root(
+	):Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->pRoot;
 	}
 
@@ -81,7 +92,8 @@ trait Traversal {
 	}
 
 	/** @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/currentNode */
-	protected function __prop_get_currentNode():Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	protected function __prop_get_currentNode(
+	):Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->pCurrentNode;
 	}
 
@@ -95,7 +107,8 @@ trait Traversal {
 	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/parentNode
 	 */
-	public function parentNode():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	public function parentNode(
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		$node = $this->pCurrentNode;
 
 		while($node && $node !== $this->pRoot) {
@@ -122,7 +135,8 @@ trait Traversal {
 	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/firstChild
 	 */
-	public function firstChild():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	public function firstChild(
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->traverseChildren("first");
 	}
 
@@ -135,7 +149,8 @@ trait Traversal {
 	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/lastChild
 	 */
-	public function lastChild():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	public function lastChild(
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->traverseChildren("last");
 	}
 
@@ -148,7 +163,8 @@ trait Traversal {
 	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/previousSibling
 	 */
-	public function previousSibling():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	public function previousSibling(
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->traverseSiblings("previous");
 	}
 
@@ -160,7 +176,8 @@ trait Traversal {
 	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/nextSibling
 	 */
-	public function nextSibling():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	public function nextSibling(
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->traverseSiblings("next");
 	}
 
@@ -174,7 +191,8 @@ trait Traversal {
 	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/previousNode
 	 */
-	public function previousNode():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	public function previousNode(
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		/** @var null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node */
 		$node = $this->pCurrentNode;
 
@@ -229,7 +247,8 @@ trait Traversal {
 	 * @return null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/TreeWalker/nextNode
 	 */
-	public function nextNode():null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	public function nextNode(
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		if($node = $this->getNextNode($this->pCurrentNode)) {
 			/** @var Node $node */
 			$this->pCurrentNode = $node;
@@ -239,7 +258,9 @@ trait Traversal {
 		return null;
 	}
 
-	private function getNextNode(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	private function getNextNode(
+		Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		$result = NodeFilter::FILTER_ACCEPT;
 
 		while(true) {
@@ -276,7 +297,8 @@ trait Traversal {
 		return null;
 	}
 
-	public function current():Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	public function current(
+	):Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $this->pCurrentNode;
 	}
 
@@ -300,7 +322,9 @@ trait Traversal {
 		$this->pCurrentNode = $this->pRoot;
 	}
 
-	private function traverseChildren(string $direction):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	private function traverseChildren(
+		string $direction
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		$node = $this->matchChild($this->pCurrentNode, $direction);
 		if(!$node) {
 			return null;
@@ -336,7 +360,9 @@ trait Traversal {
 		return $node;
 	}
 
-	private function traverseSiblings(string $direction):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	private function traverseSiblings(
+		string $direction
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		$node = $this->pCurrentNode;
 
 		if($node === $this->pRoot) {
@@ -359,7 +385,10 @@ trait Traversal {
 		return $node;
 	}
 
-	private function matchChild(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node, string $direction):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	private function matchChild(
+		Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node,
+		string $direction
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		$result = match($direction) {
 			"first" => $node->firstChild,
 			"last", "next", "previous" => $node->lastChild,
@@ -368,7 +397,10 @@ trait Traversal {
 		return $this->hintNullableNodeType($result);
 	}
 
-	private function matchSibling(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node, string $direction):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	private function matchSibling(
+		Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node,
+		string $direction
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		$result = match($direction) {
 			"next" => $node->nextSibling,
 			"previous" => $node->previousSibling,
@@ -404,7 +436,10 @@ trait Traversal {
 		return null;
 	}
 
-	private function filterFunction(Node|Element|Attr|Text|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node):int {
+	// phpcs:ignore
+	private function filterFunction(
+		Node|Element|Attr|Text|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $node
+	):int {
 		$show = $this->pWhatToShow;
 		if($show === NodeFilter::SHOW_ALL) {
 			return NodeFilter::FILTER_ACCEPT;
@@ -447,7 +482,9 @@ trait Traversal {
 	 * correct types at runtime. It also helps PHPStan understand the
 	 * correct types that are in use.
 	 */
-	private function hintNodeType(Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $input):Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	private function hintNodeType(
+		Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $input
+	):Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $input;
 	}
 
@@ -457,7 +494,9 @@ trait Traversal {
 	 * correct types at runtime. It also helps PHPStan understand the
 	 * correct types that are in use.
 	 */
-	private function hintNullableNodeType(null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $input):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
+	private function hintNullableNodeType(
+		null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $input
+	):null|Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment {
 		return $input;
 	}
 }

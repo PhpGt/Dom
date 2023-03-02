@@ -15,7 +15,9 @@
 
 	"require-dev": {
 		"phpstan/phpstan": "^1.9",
-		"phpunit/phpunit": "^10.0"
+		"phpunit/phpunit": "^10.0",
+		"phpmd/phpmd": "^2.13",
+		"squizlabs/php_codesniffer": "^3.7"
 	},
 
 	"license": "MIT",

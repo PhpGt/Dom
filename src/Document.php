@@ -19,9 +19,7 @@ use DOMText;
 use Gt\Dom\Exception\HTMLDocumentDoesNotSupportCDATASectionException;
 use Gt\Dom\Exception\InvalidCharacterException;
 use Gt\Dom\Exception\NotSupportedException;
-use JetBrains\PhpStorm\Internal\LanguageLevelTypeAware;
 use Psr\Http\Message\StreamInterface;
-use ReturnTypeWillChange;
 use Stringable;
 
 /**
@@ -37,7 +35,7 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 	use ParentNode;
 	use RegisteredNodeClass;
 
-	const NodeClassLookup = [
+	const NODE_CLASS_LOOKUP = [
 		DOMDocument::class => Document::class,
 		DOMAttr::class => Attr::class,
 		DOMCdataSection::class => CdataSection::class,
@@ -358,7 +356,7 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 	}
 
 	private function registerNodeClasses():void {
-		foreach(self::NodeClassLookup as $nativeClass => $gtClass) {
+		foreach(self::NODE_CLASS_LOOKUP as $nativeClass => $gtClass) {
 			$this->registerNodeClass($nativeClass, $gtClass);
 		}
 	}
