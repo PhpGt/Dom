@@ -24,11 +24,13 @@ class DOMStringMap implements Countable {
 	}
 
 	public function __get(string $name):?string {
+		$name = $this->correctCamelCase($name);
 		$keyValuePairs = call_user_func($this->getterCallback);
 		return $keyValuePairs[$name] ?? null;
 	}
 
 	public function __set(string $name, string $value):void {
+		$name = $this->correctCamelCase($name);
 		$keyValuePairs = call_user_func($this->getterCallback);
 		$keyValuePairs[$name] = $value;
 		call_user_func($this->setterCallback, $keyValuePairs);
@@ -45,5 +47,19 @@ class DOMStringMap implements Countable {
 	public function count():int {
 		$keyValuePairs = call_user_func($this->getterCallback);
 		return count($keyValuePairs);
+	}
+
+	private function correctCamelCase(string $name):string {
+		preg_match_all(
+			'/((?:^|[A-Z])[a-z]+)/',
+			$name,
+			$matches
+		);
+
+		$wordArray = [];
+		foreach($matches[0] as $word) {
+			array_push($wordArray, lcfirst($word));
+		}
+		return implode("-", $wordArray);
 	}
 }
