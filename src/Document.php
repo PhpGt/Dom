@@ -249,9 +249,9 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 			throw new InvalidCharacterException($closingTag);
 		}
 
-		/** @var ProcessingInstruction $processingInstruction */
-		$processingInstruction = parent::createProcessingInstruction($target, $data);
-		return $processingInstruction;
+		/** @var ProcessingInstruction $procInstruction */
+		$procInstruction = parent::createProcessingInstruction($target, $data);
+		return $procInstruction;
 	}
 
 	/**

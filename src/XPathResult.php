@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DOMXPath;
 use Gt\Dom\Exception\XPathQueryException;
 use Iterator;
 
@@ -23,7 +24,7 @@ class XPathResult implements Iterator {
 		Document $document,
 		Node|Element $context
 	) {
-		$xpath = new \DOMXPath($document);
+		$xpath = new DOMXPath($document);
 		$result = $xpath->query($query, $context);
 
 		if(!$result) {

@@ -45,10 +45,10 @@ trait Traversal {
 
 				public function __construct(
 					callable $callback,
-					callable $defaultFilterFunction
+					callable $defaultCallback
 				) {
 					$this->callback = $callback;
-					$this->defaultCallback = $defaultFilterFunction;
+					$this->defaultCallback = $defaultCallback;
 				}
 
 				public function acceptNode(
