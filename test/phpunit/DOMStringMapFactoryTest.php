@@ -48,6 +48,7 @@ class DOMStringMapFactoryTest extends TestCase {
 		$attribute = $element->attributes[0];
 		self::assertSame("data-this-is-camel-case", $attribute->name);
 		self::assertSame("test", $attribute->value);
+		self::assertSame("test", $element->dataset->thisIsCamelCase);
 	}
 
 	public function testCreateDatasetMutate():void {
