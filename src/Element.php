@@ -60,6 +60,7 @@ class Element extends DOMElement implements ArrayAccess, Countable {
 		$this->setAttribute("class", $className);
 	}
 
+	// phpcs:ignore
 	public function __prop_get_elementType():ElementType {
 		return match($this->tagName) {
 			"a" => ElementType::HTMLAnchorElement,

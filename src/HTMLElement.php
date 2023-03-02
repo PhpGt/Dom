@@ -296,6 +296,7 @@ trait HTMLElement {
 	 * Builds and returns a URL string from the existing href attribute
 	 * value with the newly supplied overrides.
 	 */
+	// phpcs:ignore Generic.Metrics.CyclomaticComplexity
 	private function buildUrl(
 		string $scheme = null,
 		string $user = null,
@@ -2261,7 +2262,7 @@ trait HTMLElement {
 		);
 
 		if($value) {
-			$this->setAttribute("open","");
+			$this->setAttribute("open", "");
 		}
 		else {
 			$this->removeAttribute("open");
@@ -4235,6 +4236,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/insertRow
 	 * @link https://html.spec.whatwg.org/multipage/#htmltableelement
 	 */
+	// phpcs:ignore
 	public function insertRow(int $index = null):Element {
 		$this->allowTypes(
 			ElementType::HTMLTableElement,
@@ -4388,6 +4390,7 @@ trait HTMLElement {
 	/**
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/rowIndex
 	 */
+	// phpcs:ignore Generic.Metrics.CyclomaticComplexity
 	protected function __prop_get_rowIndex():int {
 		$this->allowTypes(
 			ElementType::HTMLTableRowElement,
@@ -4409,7 +4412,7 @@ trait HTMLElement {
 
 		$headCount = 0;
 		foreach($table?->querySelectorAll("thead>tr") ?? [] as $headIndex => $headChild) {
-			$headCount ++;
+			$headCount++;
 			if($headChild === $this) {
 				return $headIndex;
 			}
@@ -4417,7 +4420,7 @@ trait HTMLElement {
 
 		$bodyCount = 0;
 		foreach($table?->querySelectorAll("tbody>tr") ?? [] as $bodyIndex => $headChild) {
-			$bodyCount ++;
+			$bodyCount++;
 			if($headChild === $this) {
 				return $headCount + $bodyIndex;
 			}

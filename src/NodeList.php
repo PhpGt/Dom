@@ -211,8 +211,10 @@ class NodeList implements ArrayAccess, Countable, Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/NodeList/keys
 	 */
 	public function keys():Traversable {
-		foreach($this as $key => $value) {
-			yield $key;
+		$this->rewind();
+		while($this->valid()) {
+			yield $this->key();
+			$this->next();
 		}
 	}
 
