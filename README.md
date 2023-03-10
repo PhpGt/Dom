@@ -11,10 +11,10 @@ Performing DOM manipulation in your server-side code enhances the way dynamic pa
 <a href="https://github.com/PhpGt/Dom/actions" target="_blank">
 	<img src="https://badge.status.php.gt/dom-build.svg" alt="Build status" />
 </a>
-<a href="https://scrutinizer-ci.com/g/PhpGt/Dom" target="_blank">
+<a href="https://app.codacy.com/gh/PhpGt/Dom" target="_blank">
 	<img src="https://badge.status.php.gt/dom-quality.svg" alt="Code quality" />
 </a>
-<a href="https://scrutinizer-ci.com/g/PhpGt/Dom" target="_blank">
+<a href="https://app.codecov.io/gh/PhpGt/Dom" target="_blank">
 	<img src="https://badge.status.php.gt/dom-coverage.svg" alt="Code coverage" />
 </a>
 <a href="https://packagist.org/packages/PhpGt/Dom" target="_blank">

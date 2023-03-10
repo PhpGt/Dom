@@ -44,7 +44,7 @@ trait ChildNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/before
 	 */
 	public function before(...$nodes):void {
-		$parent = $this->parentElement;
+		$parent = $this->parentNode;
 		if(!$parent) {
 			return;
 		}
@@ -67,7 +67,7 @@ trait ChildNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/after
 	 */
 	public function after(...$nodes):void {
-		$parent = $this->parentElement;
+		$parent = $this->parentNode;
 		$nextSibling = $this->nextSibling;
 		if(!$parent) {
 			return;
@@ -90,7 +90,7 @@ trait ChildNode {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/replaceWith
 	 */
 	public function replaceWith(...$nodes):void {
-		$parent = $this->parentElement;
+		$parent = $this->parentNode;
 		if(!$parent) {
 			return;
 		}

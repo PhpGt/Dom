@@ -236,8 +236,10 @@ class DOMTokenList implements Countable, Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/keys
 	 */
 	public function keys():iterable {
-		foreach($this as $key => $value) {
-			yield $key;
+		$this->rewind();
+		while($this->valid()) {
+			yield $this->key();
+			$this->next();
 		}
 	}
 
@@ -250,7 +252,7 @@ class DOMTokenList implements Countable, Iterator {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/values
 	 */
 	public function values():iterable {
-		foreach($this as $key => $value) {
+		foreach($this as $value) {
 			yield $value;
 		}
 	}

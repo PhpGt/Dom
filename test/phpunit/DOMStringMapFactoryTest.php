@@ -38,6 +38,19 @@ class DOMStringMapFactoryTest extends TestCase {
 		self::assertEquals("php", $domStringMap->language);
 	}
 
+	public function testSetCorrectsCamelCase():void {
+		$document = new HTMLDocument();
+		$element = $document->createElement("example-element");
+		$domStringMap = DOMStringMapFactory::createDataset($element);
+		self::assertCount(0, $element->attributes);
+		$domStringMap->thisIsCamelCase = "test";
+		self::assertCount(1, $element->attributes);
+		$attribute = $element->attributes[0];
+		self::assertSame("data-this-is-camel-case", $attribute->name);
+		self::assertSame("test", $attribute->value);
+		self::assertSame("test", $element->dataset->thisIsCamelCase);
+	}
+
 	public function testCreateDatasetMutate():void {
 		$attributeArray = [
 			"id" => "example",

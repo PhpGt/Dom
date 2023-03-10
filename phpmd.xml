@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<ruleset name="PHP.Gt ruleset"
+	 xmlns="http://pmd.sf.net/ruleset/1.0.0"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+	 xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+	<description>Custom ruleset</description>
+
+	<rule ref="rulesets/codesize.xml">
+		<exclude name="TooManyPublicMethods"/>
+		<exclude name="CyclomaticComplexity"/>
+		<exclude name="NPathComplexity"/>
+	</rule>
+
+	<rule ref="rulesets/cleancode.xml">
+		<exclude name="StaticAccess" />
+		<exclude name="ElseExpression" />
+		<exclude name="IfStatementAssignment" />
+	</rule>
+
+	<rule ref="rulesets/controversial.xml">
+		<exclude name="CamelCaseMethodName" />
+	</rule>
+
+	<rule ref="rulesets/design.xml">
+		<exclude name="CouplingBetweenObjects" />
+		<exclude name="NumberOfChildren" />
+	</rule>
+
+	<rule ref="rulesets/naming.xml">
+		<exclude name="ShortVariable"/>
+		<exclude name="LongClassName"/>
+	</rule>
+
+	<rule ref="rulesets/unusedcode.xml">
+		<exclude name="UnusedFormalParameter" />
+	</rule>
+
+	<rule ref="rulesets/codesize.xml/TooManyPublicMethods">
+		<priority>1</priority>
+		<properties>
+			<property name="maxmethods" value="20" />
+		</properties>
+	</rule>
+
+	<rule ref="rulesets/naming.xml/ShortVariable">
+		<properties>
+			<property name="exceptions" value="ch,mh,sh,id,tr,td,i" />
+		</properties>
+	</rule>
+</ruleset>

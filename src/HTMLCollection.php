@@ -137,7 +137,7 @@ class HTMLCollection implements ArrayAccess, Countable, Iterator {
 			"name" => [],
 		];
 
-		foreach($matches as $attribute => $list) {
+		foreach(array_keys($matches) as $attribute) {
 			foreach($this as $element) {
 				if($element->getAttribute($attribute) === $nameOrId) {
 					array_push($matches[$attribute], $element);
