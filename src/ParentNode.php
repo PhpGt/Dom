@@ -77,8 +77,16 @@ trait ParentNode {
 	 * @param Node|Element|Text|Comment|string...$nodes
 	 */
 	public function prepend(...$nodes):void {
-		/** @phpstan-ignore-next-line libxml's DOMNode does not define prepend() */
-		parent::prepend(...$nodes);
+		$fragment = $this->ownerDocument->createDocumentFragment();
+
+		foreach($nodes as $node) {
+			if(is_string($node)) {
+				$node = $this->ownerDocument->createTextNode($node);
+			}
+			$fragment->appendChild($node);
+		}
+
+		$this->insertBefore($fragment, $this->firstChild);
 	}
 
 	/**
