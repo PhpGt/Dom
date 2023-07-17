@@ -187,6 +187,8 @@ class ParentNodeTest extends TestCase {
 	public function testPrependMixed():void {
 		$document = new HTMLDocument();
 		$sut = $document->createElement("example");
+		$document->documentElement->appendChild($sut);
+
 		$child = $sut->ownerDocument->createElement("child");
 		$sut->appendChild($child);
 
