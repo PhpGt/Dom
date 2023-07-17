@@ -20,7 +20,7 @@ Performing DOM manipulation in your server-side code enhances the way dynamic pa
 <a href="https://packagist.org/packages/PhpGt/Dom" target="_blank">
 	<img src="https://badge.status.php.gt/dom-version.svg" alt="Current version" />
 </a>
-<a href="http://www.php.gt/dom" target="_blank">
+<a href="https://www.php.gt/dom" target="_blank">
 	<img src="https://badge.status.php.gt/dom-docs.svg" alt="PHP.Gt/Dom documentation" />
 </a>
 
