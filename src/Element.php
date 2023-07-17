@@ -162,10 +162,15 @@ class Element extends DOMElement implements ArrayAccess, Countable {
 			$child->parentNode->removeChild($child);
 		}
 
-		$innerHTML = mb_convert_encoding(
+		if($innerHTML === "") {
+			return;
+		}
+
+		$conversionMap = [0x80, 0x10FFFF, 0, 0x1FFFFF];
+		$innerHTML = mb_encode_numericentity(
 			$innerHTML,
-			"HTML-ENTITIES",
-			"utf-8"
+			$conversionMap,
+			"UTF-8"
 		);
 
 		$tempDocument = new HTMLDocument();
