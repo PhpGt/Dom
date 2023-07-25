@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9bb09ce04f5eee88d91b81c03c78adf6",
+    "content-hash": "5f9765f0350d691d2d0e1206498cc2f4",
     "packages": [
         {
             "name": "phpgt/cssxpath",
