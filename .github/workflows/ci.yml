@@ -58,8 +58,6 @@ jobs:
         with:
           php_version: ${{ matrix.php }}
           php_extensions: xdebug
-          configuration: test/phpunit/phpunit.xml
-          bootstrap: vendor/autoload.php
           coverage_text: _coverage/coverage.txt
           coverage_clover: _coverage/clover.xml
 
