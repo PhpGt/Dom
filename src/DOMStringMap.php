@@ -52,14 +52,14 @@ class DOMStringMap implements Countable {
 
 	private function correctCamelCase(string $name):string {
 		preg_match_all(
-			'/((?:^|[A-Z])[a-z]+)/',
+			'/((?:^|[A-Z])[a-z]-+)/',
 			$name,
 			$matches
 		);
 
 		$wordArray = [];
 		foreach($matches[0] as $word) {
-			array_push($wordArray, lcfirst($word));
+			array_push($wordArray, strtolower($word));
 		}
 		return implode("-", $wordArray);
 	}

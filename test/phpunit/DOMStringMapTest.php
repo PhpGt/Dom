@@ -5,7 +5,7 @@ use Gt\Dom\DOMStringMap;
 use PHPUnit\Framework\TestCase;
 
 class DOMStringMapTest extends TestCase {
-	public function test():void {
+	public function testGetterSetter():void {
 		$keyValuePairs = [];
 		$getter = function() use (&$keyValuePairs) {
 			return $keyValuePairs;
@@ -17,6 +17,34 @@ class DOMStringMapTest extends TestCase {
 		$sut->example = "example123";
 		self::assertNotNull($sut->example);
 		self::assertSame($keyValuePairs["example"], $sut->example);
+	}
 
+	public function testGetterCamelCaseConversion():void {
+		$keyValuePairs = [
+			"this-is-camel-case" => uniqid("example-"),
+		];
+		$getter = function() use (&$keyValuePairs) {
+			return $keyValuePairs;
+		};
+		$setter = function(array $kvp) use (&$keyValuePairs) {
+			$keyValuePairs = $kvp;
+		};
+		$sut = new DOMStringMap($getter, $setter);
+
+		self::assertSame($keyValuePairs["this-is-camel-case"], $sut->thisIsCamelCase);
+	}
+
+	public function testSetterCamelCaseConversion():void {
+		$keyValuePairs = [];
+		$getter = function() use (&$keyValuePairs) {
+			return $keyValuePairs;
+		};
+		$setter = function(array $kvp) use (&$keyValuePairs) {
+			$keyValuePairs = $kvp;
+		};
+		$sut = new DOMStringMap($getter, $setter);
+		$sut->thisIsCamelCase = "example123";
+		self::assertSame("example123", $sut->get("thisIsCamelCase"));
+		self::assertSame("example123", $sut->get("this-is-camel-case"));
 	}
 }
