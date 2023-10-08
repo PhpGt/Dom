@@ -639,4 +639,15 @@ class ElementTest extends TestCase {
 		self::assertFalse(
 			$sut->hasAttributeNS($ns, "foo"));
 	}
+
+	public function testConstruct_copyrightTrademark():void {
+		$copyright = "©";
+		$trademark = "™";
+		$text = "Copyright $copyright PHP.Gt, DOM$trademark";
+		$sut = new HTMLDocument("<!doctype html><h1>PHP.Gt/Dom Unit Test</h1>");
+		$h1 = $sut->querySelector("h1");
+		$h1->innerHTML = $text;
+		self::assertStringContainsString($copyright, $h1->innerHTML);
+		self::assertStringContainsString($trademark, $h1->innerHTML);
+	}
 }

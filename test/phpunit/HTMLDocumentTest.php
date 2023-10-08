@@ -781,4 +781,18 @@ class HTMLDocumentTest extends TestCase {
 			self::assertStringNotContainsString($needle, $domString);
 		}
 	}
+
+	public function testConstruct_copyrightTrademark():void {
+		$copyright = "©";
+		$trademark = "™";
+		$text = "Copyright $copyright PHP.Gt, DOM$trademark";
+		$sut = new HTMLDocument("<!doctype html><h1>$text</h1>");
+		$h1 = $sut->querySelector("h1");
+		self::assertStringContainsString($copyright, $h1->innerHTML);
+		self::assertStringContainsString($trademark, $h1->innerHTML);
+
+		$sut->documentElement->innerHTML = $text;
+		self::assertStringContainsString($copyright, $sut->documentElement->innerHTML);
+		self::assertStringContainsString($trademark, $sut->documentElement->innerHTML);
+	}
 }
