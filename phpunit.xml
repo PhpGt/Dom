@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<phpunit
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd"
+	colors="true"
+	cacheDirectory="test/phpunit/.phpunit.cache"
+	bootstrap="vendor/autoload.php"
+>
+	<coverage />
+
+	<testsuites>
+		<testsuite name="main">
+			<directory>
+				./test/phpunit/
+			</directory>
+		</testsuite>
+	</testsuites>
+
+	<logging />
+
+	<source>
+		<include>
+			<directory>
+				src/
+			</directory>
+		</include>
+	</source>
+</phpunit>

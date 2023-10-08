@@ -3,6 +3,7 @@ namespace Gt\Dom;
 
 use Countable;
 
+#[\AllowDynamicProperties]
 class DOMStringMap implements Countable {
 	/** @var callable */
 	private $getterCallback;

@@ -112,7 +112,7 @@ trait Traversal {
 		$node = $this->pCurrentNode;
 
 		while($node && $node !== $this->pRoot) {
-			/** @var Element $node */
+			/** @var ?Element $node */
 			$node = $node->parentNode;
 
 			/** @phpstan-ignore-next-line */
