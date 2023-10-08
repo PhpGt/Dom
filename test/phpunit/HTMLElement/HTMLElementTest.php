@@ -332,4 +332,15 @@ class HTMLElementTest extends HTMLElementTestCase {
 		$sut->textContent = uniqid();
 		self::assertSame("", (string)$sut);
 	}
+
+	public function testValue_textarea():void {
+		$document = new HTMLDocument();
+		$sut = $document->createElement("textarea");
+		$sut->value = "example123";
+		self::assertSame("<textarea>example123</textarea>", $sut->outerHTML);
+		self::assertFalse($sut->hasAttribute("value"));
+
+		$sut->innerHTML = "changed value";
+		self::assertSame("changed value", $sut->value);
+	}
 }
