@@ -1892,6 +1892,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLStyleElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/disabled
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElemnet/disabled
 	 */
 	protected function __prop_get_disabled():bool {
 		$this->allowTypes(
@@ -1903,6 +1904,7 @@ trait HTMLElement {
 			ElementType::HTMLOptionElement,
 			ElementType::HTMLStyleElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLSelectElement,
 		);
 		return $this->hasAttribute("disabled");
 	}
@@ -1915,6 +1917,7 @@ trait HTMLElement {
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLOptionElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLStyleElement/disabled
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElemnet/disabled
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElemnet/disabled
 	 */
 	protected function __prop_set_disabled(bool $value):void {
 		$this->allowTypes(
@@ -1925,6 +1928,7 @@ trait HTMLElement {
 			ElementType::HTMLOptionElement,
 			ElementType::HTMLStyleElement,
 			ElementType::HTMLInputElement,
+			ElementType::HTMLSelectElement,
 		);
 		if($value) {
 			$this->setAttribute("disabled", "");
