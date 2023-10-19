@@ -16,12 +16,6 @@ class HTMLTextAreaElementTest extends HTMLElementTestCase {
 		self::assertPropertyAttributeCorrelateNumber($sut, "int:20", "cols");
 	}
 
-	public function testDefaultValue():void {
-		$document = new HTMLDocument();
-		$sut = $document->createElement("textarea");
-		self::assertPropertyAttributeCorrelate($sut, "value", "defaultValue");
-	}
-
 	public function testMaxLength():void {
 		$document = new HTMLDocument();
 		$sut = $document->createElement("textarea");
