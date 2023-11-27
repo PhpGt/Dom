@@ -36,7 +36,7 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 	use RegisteredNodeClass;
 
 	const NODE_CLASS_LOOKUP = [
-		DOMDocument::class => Document::class,
+		DOMDocument::class => HTMLDocument::class,
 		DOMAttr::class => Attr::class,
 		DOMCdataSection::class => CdataSection::class,
 		DOMCharacterData::class => CharacterData::class,
