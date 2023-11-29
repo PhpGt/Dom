@@ -36,7 +36,7 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 	use RegisteredNodeClass;
 
 	const NODE_CLASS_LOOKUP = [
-		DOMDocument::class => HTMLDocument::class,
+		DOMDocument::class => self::class,
 		DOMAttr::class => Attr::class,
 		DOMCdataSection::class => CdataSection::class,
 		DOMCharacterData::class => CharacterData::class,
@@ -357,6 +357,9 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 
 	private function registerNodeClasses():void {
 		foreach(self::NODE_CLASS_LOOKUP as $nativeClass => $gtClass) {
+			if ($gtClass === self::class) {
+				$gtClass = static::class;
+			}
 			$this->registerNodeClass($nativeClass, $gtClass);
 		}
 	}
