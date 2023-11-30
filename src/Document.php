@@ -335,10 +335,10 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 
 	/**
 	 * @see Node::isEqualNode()
-	 * @param Node|Element $otherNode
-	 * @noinspection PhpParameterNameChangedDuringInheritanceInspection
 	 */
-	public function isEqualNode(Node|Element|DOMNode $otherNode):bool {
+	public function isEqualNode(
+		null|Node|Element|Document|DocumentType|Attr|ProcessingInstruction|DOMNode $otherNode
+	):bool {
 		return $this->documentElement->isEqualNode($otherNode);
 	}
 
