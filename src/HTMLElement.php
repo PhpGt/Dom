@@ -791,6 +791,9 @@ trait HTMLElement {
 
 			return $this->options[$this->selectedIndex]->value;
 		}
+		elseif($this->elementType === ElementType::HTMLTextAreaElement) {
+			return $this->nodeValue;
+		}
 
 		return $this->textContent;
 	}
@@ -831,6 +834,9 @@ trait HTMLElement {
 					$option->selected = false;
 				}
 			}
+		}
+		elseif($this->elementType === ElementType::HTMLTextAreaElement) {
+			$this->nodeValue = $value;
 		}
 		else {
 			$this->setAttribute("value", $value);
