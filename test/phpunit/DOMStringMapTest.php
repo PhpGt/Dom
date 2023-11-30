@@ -19,7 +19,7 @@ class DOMStringMapTest extends TestCase {
 		self::assertSame($keyValuePairs["example"], $sut->example);
 	}
 
-	public function testGetterCamelCaseConversion():void {
+	public function testGetter_fromCamelCase():void {
 		$keyValuePairs = [
 			"this-is-camel-case" => uniqid("example-"),
 		];
@@ -32,6 +32,44 @@ class DOMStringMapTest extends TestCase {
 		$sut = new DOMStringMap($getter, $setter);
 
 		self::assertSame($keyValuePairs["this-is-camel-case"], $sut->thisIsCamelCase);
+	}
+
+	public function testGetter_fromHyphenated():void {
+		$keyValuePairs = [
+			"this-is-camel-case" => uniqid("example-"),
+		];
+		$getter = function() use (&$keyValuePairs) {
+			return $keyValuePairs;
+		};
+		$setter = function(array $kvp) use (&$keyValuePairs) {
+			$keyValuePairs = $kvp;
+		};
+		$sut = new DOMStringMap($getter, $setter);
+
+		self::assertSame($keyValuePairs["this-is-camel-case"], $sut->get("this-is-camel-case"));
+		self::assertSame($keyValuePairs["this-is-camel-case"], $sut->get("thisIsCamelCase"));
+		self::assertArrayNotHasKey("thisIsCamelCase", $keyValuePairs);
+	}
+
+	public function testSetter_fromHyphenated():void {
+		$keyValuePairs = [
+			"this-is-camel-case" => uniqid("example-"),
+		];
+		$getter = function() use (&$keyValuePairs) {
+			return $keyValuePairs;
+		};
+		$setter = function(array $kvp) use (&$keyValuePairs) {
+			$keyValuePairs = $kvp;
+		};
+		$sut = new DOMStringMap($getter, $setter);
+
+		$sut->set("this-is-camel-case", "update1");
+		$sut->set("thisIsCamelCase", "update2");
+		$sut->set("other-key", "other-update");
+
+		self::assertCount(2, $keyValuePairs);
+		self::assertSame("update2", $sut->thisIsCamelCase);
+		self::assertSame("other-update", $sut->otherKey);
 	}
 
 	public function testSetterCamelCaseConversion():void {
