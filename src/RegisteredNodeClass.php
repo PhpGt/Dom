@@ -1,6 +1,7 @@
 <?php
 namespace Gt\Dom;
 
+use DOMNameSpaceNode;
 use DOMNode;
 
 /**
@@ -22,13 +23,14 @@ trait RegisteredNodeClass {
 	 * Returns a Boolean which indicates whether or not two nodes are of
 	 * the same type and all their defining data points match.
 	 *
-	 * @param Node|Element|Document|DocumentType|Attr|ProcessingInstruction $otherNode
+	 * @param null|Node|Element|Document|DocumentType|Attr|ProcessingInstruction|DOMNode $otherNode
 	 * The Node to compare equality with.
-	 * @return bool
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/isEqualNode
 	 */
 	// phpcs:ignore
-	public function isEqualNode(Node|Element|Document|DocumentType|Attr|ProcessingInstruction|DOMNode $otherNode):bool {
+	public function isEqualNode(
+		null|Node|Element|Document|DocumentType|Attr|ProcessingInstruction|DOMNode $otherNode
+	):bool {
 		if($otherNode instanceof Document) {
 			$otherNode = $otherNode->documentElement;
 		}
@@ -163,13 +165,11 @@ trait RegisteredNodeClass {
 	 * Returns a Boolean value indicating whether or not a node is a
 	 * descendant of the calling node.
 	 *
-	 * @param Node $otherNode
-	 * @return bool
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Node/contains
 	 */
 	public function contains(
 		Node|Element|Text|ProcessingInstruction|DocumentType|DocumentFragment
-		|Document|Comment|CdataSection|Attr $otherNode
+		|Document|Comment|CdataSection|Attr|DOMNode|DOMNameSpaceNode|null $otherNode
 	):bool {
 		$context = $otherNode;
 
