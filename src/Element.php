@@ -5,6 +5,7 @@ use ArrayAccess;
 use Countable;
 use DOMElement;
 use DOMNamedNodeMap;
+use DOMNode;
 use Gt\Dom\Exception\InvalidAdjacentPositionException;
 use Gt\Dom\Exception\XPathQueryException;
 use Gt\PropFunc\MagicProp;
@@ -329,14 +330,11 @@ class Element extends DOMElement implements ArrayAccess, Countable {
 	 * 'beforeend': Just inside the targetElement, after its last child.
 	 * 'afterend': After the targetElement itself.
 	 *
-	 * @param Node|Element $element The element to be inserted into the tree.
-	 * @return ?Element The element that was inserted, or null, if the
-	 * insertion failed.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
 	 */
 	public function insertAdjacentElement(
 		string $position,
-		Node|Element|DocumentFragment|Text $element
+		DOMElement|DOMNode|Element|Node|DocumentFragment|Text $element
 	):?Element {
 		switch($position) {
 		case "beforebegin":

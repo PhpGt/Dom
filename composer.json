@@ -1,6 +1,6 @@
 {
 	"name": "phpgt/dom",
-	"description": "The modern DOM API for PHP projects.",
+	"description": "Modern DOM API.",
 	"type": "library",
 
 	"require": {
