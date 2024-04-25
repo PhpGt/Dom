@@ -67,6 +67,7 @@ trait ParentNode {
 		foreach($nodes as $node) {
 // And without this clumsy if/else, PHP 8.3 throws "double free or corruption (!prev)"
 			if(is_string($node)) {
+				/** @phpstan-ignore-next-line libxml's DOMNode does not define append() */
 				parent::append($node);
 			}
 			else {
