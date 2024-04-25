@@ -60,13 +60,18 @@ trait ParentNode {
 	 * 	returns the appended Node object.
 	 * + Element.append() can append several nodes and strings, whereas
 	 * 	Node.appendChild() can only append one node.
-	 * @param Node|Element|Text|Comment|string...$nodes
+	 * @param Node|Element|Text|Comment|DocumentFragment|string...$nodes
 	 */
 	public function append(...$nodes):void {
 // Without this clumsy iteration, PHP 8.1 throws "free(): double free detected in tcache 2"
 		foreach($nodes as $node) {
-			/** @phpstan-ignore-next-line libxml's DOMNode does not define append() */
-			parent::append($node);
+// And without this clumsy if/else, PHP 8.3 throws "double free or corruption (!prev)"
+			if(is_string($node)) {
+				parent::append($node);
+			}
+			else {
+				parent::appendChild($node);
+			}
 		}
 	}
 
