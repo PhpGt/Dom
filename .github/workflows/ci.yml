@@ -52,7 +52,7 @@ jobs:
         run: tar -xvf /tmp/github-actions/build.tar ./
 
       - name: PHP Unit tests
-        uses: php-actions/phpunit@v3
+        uses: php-actions/phpunit@v4
         env:
           XDEBUG_MODE: cover
         with:

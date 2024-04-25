@@ -21,4 +21,18 @@ class DocumentFragmentTest extends TestCase {
 		$sut->appendChild($nodeWithId);
 		self::assertSame($nodeWithId, $sut->getElementById("test"));
 	}
+
+	public function testAppendMultipleNodesThenAddToParentElement():void {
+		$document = new HTMLDocument();
+		$sut = $document->createDocumentFragment();
+		$expectedString = "";
+		for($i = 0; $i < 10; $i++) {
+			$textNode = $document->createTextNode("Node$i");
+			$sut->append($textNode);
+			$expectedString .= "Node$i";
+		}
+
+		$document->documentElement->append($sut);
+		self::assertSame($expectedString, $document->textContent);
+	}
 }
