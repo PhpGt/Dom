@@ -8,7 +8,7 @@ abstract class HTMLElementTestCase extends TestCase {
 	protected function assertPropertyAttributeCorrelate(
 		Element $element,
 		string $attribute,
-		string $property = null
+		?string $property = null
 	):void {
 		if(is_null($property)) {
 			$property = $attribute;
@@ -49,7 +49,7 @@ abstract class HTMLElementTestCase extends TestCase {
 	protected static function assertPropertyAttributeCorrelateBool(
 		Element $sut,
 		string $attribute,
-		string $property = null
+		?string $property = null
 	):void {
 		if(is_null($property)) {
 			$property = $attribute;
@@ -88,7 +88,7 @@ abstract class HTMLElementTestCase extends TestCase {
 		Element $sut,
 		string $type,
 		string $attribute,
-		string $property = null
+		?string $property = null
 	):void {
 		if(is_null($property)) {
 			$property = $attribute;

@@ -9,7 +9,7 @@ use Gt\Dom\HTMLDocument;
 class NodeTestFactory {
 	public static function createNode(
 		string $tagName,
-		Document $document = null
+		?Document $document = null
 	):Element {
 		if(!$document) {
 			$document = new HTMLDocument();
@@ -20,7 +20,7 @@ class NodeTestFactory {
 
 	public static function createHTMLElement(
 		string $tagName,
-		HTMLDocument $document = null
+		?HTMLDocument $document = null
 	):Element {
 		if(!$document) {
 			$document = new HTMLDocument();
@@ -30,7 +30,7 @@ class NodeTestFactory {
 	}
 
 	public static function createFragment(
-		HTMLDocument $document = null
+		?HTMLDocument $document = null
 	):DocumentFragment {
 		if(!$document) {
 			$document = HTMLDocumentFactory::create("");
@@ -41,7 +41,7 @@ class NodeTestFactory {
 
 	public static function createTextNode(
 		string $content = "",
-		HTMLDocument $document = null
+		?HTMLDocument $document = null
 	) {
 		if(!$document) {
 			$document = HTMLDocumentFactory::create("");

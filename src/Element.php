@@ -477,7 +477,7 @@ class Element extends DOMElement implements ArrayAccess, Countable {
 	 */
 	public function toggleAttribute(
 		string $name,
-		bool $force = null
+		?bool $force = null
 	):bool {
 		$add = true;
 		if(is_null($force)) {

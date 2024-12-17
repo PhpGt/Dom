@@ -19,7 +19,7 @@ trait Traversal {
 	protected function __construct(
 		Node|Element|Text|Attr|ProcessingInstruction|Comment|Document|DocumentType|DocumentFragment $root,
 		int $whatToShow = NodeFilter::SHOW_ALL,
-		NodeFilter|callable $filter = null
+		NodeFilter|callable|null $filter = null
 	) {
 		$this->pRoot = $root;
 		$this->pWhatToShow = $whatToShow;

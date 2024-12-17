@@ -218,7 +218,7 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 	public function createNodeIterator(
 		Node|Element $root,
 		int $whatToShow = NodeFilter::SHOW_ALL,
-		NodeFilter|callable $filter = null
+		NodeFilter|callable|null $filter = null
 	):NodeIterator {
 		return NodeIteratorFactory::create($root, $whatToShow, $filter);
 	}
@@ -275,7 +275,7 @@ abstract class Document extends DOMDocument implements Stringable, StreamInterfa
 	public function createTreeWalker(
 		Node|Element $root,
 		int $whatToShow = NodeFilter::SHOW_ALL,
-		NodeFilter|callable $filter = null
+		NodeFilter|callable|null $filter = null
 	):TreeWalker {
 		return TreeWalkerFactory::create($root, $whatToShow, $filter);
 	}

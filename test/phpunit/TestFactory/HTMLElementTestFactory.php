@@ -8,7 +8,7 @@ use Gt\Dom\HTMLElement\HTMLElement;
 class HTMLElementTestFactory {
 	public static function create(
 		string $tagName = "div",
-		HTMLDocument $document = null
+		?HTMLDocument $document = null
 	):HTMLElement {
 		if(!$document) {
 			$document = HTMLDocumentFactory::create("<!doctype html>");
