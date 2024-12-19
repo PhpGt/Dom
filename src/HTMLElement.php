@@ -298,14 +298,14 @@ trait HTMLElement {
 	 */
 	// phpcs:ignore Generic.Metrics.CyclomaticComplexity
 	private function buildUrl(
-		string $scheme = null,
-		string $user = null,
-		string $pass = null,
-		string $host = null,
-		int $port = null,
-		string $path = null,
-		string $query = null,
-		string $fragment = null,
+		?string $scheme = null,
+		?string $user = null,
+		?string $pass = null,
+		?string $host = null,
+		?int $port = null,
+		?string $path = null,
+		?string $query = null,
+		?string $fragment = null,
 	):string {
 		$existing = parse_url($this->href);
 		$new = [
@@ -4247,7 +4247,7 @@ trait HTMLElement {
 	 * @link https://html.spec.whatwg.org/multipage/#htmltableelement
 	 */
 	// phpcs:ignore
-	public function insertRow(int $index = null):Element {
+	public function insertRow(?int $index = null):Element {
 		$this->allowTypes(
 			ElementType::HTMLTableElement,
 			ElementType::HTMLTableSectionElement,
@@ -4366,7 +4366,7 @@ trait HTMLElement {
 	 * the new cell.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableRowElement/insertCell
 	 */
-	public function insertCell(int $index = null):Element {
+	public function insertCell(?int $index = null):Element {
 		$this->allowTypes(
 			ElementType::HTMLTableRowElement,
 		);

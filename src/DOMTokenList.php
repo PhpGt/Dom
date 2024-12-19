@@ -166,7 +166,7 @@ class DOMTokenList implements Countable, Iterator {
 	 * the call.
 	 * @link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/toggle
 	 */
-	public function toggle(string $token, bool $force = null):bool {
+	public function toggle(string $token, ?bool $force = null):bool {
 		/** @var ?bool $addRemove True to add, false to remove */
 		$addRemove = $force;
 
