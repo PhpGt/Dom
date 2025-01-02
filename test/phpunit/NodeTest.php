@@ -1,7 +1,6 @@
 <?php
 namespace Gt\Dom\Test;
 
-use Gt\Dom\Exception\ClientSideOnlyFunctionalityException;
 use Gt\Dom\Exception\NotFoundErrorException;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\Node;
@@ -13,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 class NodeTest extends TestCase {
 	public function testCanNotConstruct():void {
 		self::expectException(\Error::class);
-		self::expectExceptionMessage("Call to private Gt\Dom\Node::__construct()");
+		self::expectExceptionMessageMatches("/Call to private Gt.Dom.Node[0-9]*::__construct()/");
 		$className = Node::class;
 		/** @phpstan-ignore-next-line */
 		new $className();
