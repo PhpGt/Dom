@@ -1,5 +1,6 @@
 <?php
 // phpcs:ignoreFile
+// @phpstan-ignore-file
 namespace Gt\Dom;
 
 if (version_compare(PHP_VERSION, '8.4', '>=')) {
