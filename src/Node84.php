@@ -1,6 +1,5 @@
 <?php
 // phpcs:ignoreFile
-// @phpstan-ignore classConstant.nativeTypeNotSupported
 namespace Gt\Dom;
 
 use DOMNode;
@@ -30,12 +29,12 @@ class Node84 extends DOMNode {
 	const TYPE_ENTITY_DECL = XML_ENTITY_DECL_NODE;
 	const TYPE_NAMESPACE_DECL = XML_NAMESPACE_DECL_NODE;
 
-	public const int DOCUMENT_POSITION_DISCONNECTED = 0b000001;
-	public const int DOCUMENT_POSITION_PRECEDING = 0b000010;
-	public const int DOCUMENT_POSITION_FOLLOWING = 0b000100;
-	public const int DOCUMENT_POSITION_CONTAINS = 0b001000;
-	public const int DOCUMENT_POSITION_CONTAINED_BY = 0b010000;
-	public const int DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC = 0b100000;
+	public const int DOCUMENT_POSITION_DISCONNECTED = 0b000001; // @phpstan-ignore classConstant.nativeTypeNotSupported
+	public const int DOCUMENT_POSITION_PRECEDING = 0b000010; // @phpstan-ignore classConstant.nativeTypeNotSupported
+	public const int DOCUMENT_POSITION_FOLLOWING = 0b000100; // @phpstan-ignore classConstant.nativeTypeNotSupported
+	public const int DOCUMENT_POSITION_CONTAINS = 0b001000; // @phpstan-ignore classConstant.nativeTypeNotSupported
+	public const int DOCUMENT_POSITION_CONTAINED_BY = 0b010000; // @phpstan-ignore classConstant.nativeTypeNotSupported
+	public const int DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC = 0b100000; // @phpstan-ignore classConstant.nativeTypeNotSupported
 
 	private function __construct() {}
 }
