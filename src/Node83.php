@@ -1,6 +1,5 @@
 <?php
 // phpcs:ignoreFile
-// @phpstan-ignore
 namespace Gt\Dom;
 
 use DOMNode;

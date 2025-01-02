@@ -1,6 +1,6 @@
 <?php
 // phpcs:ignoreFile
-// @phpstan-ignore
+// @phpstan-ignore classConstant.nativeTypeNotSupported
 namespace Gt\Dom;
 
 use DOMNode;
