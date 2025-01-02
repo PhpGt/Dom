@@ -1,0 +1,5 @@
+parameters:
+    paths:
+        - src/
+    excludePaths:
+        - src/Node84.php
