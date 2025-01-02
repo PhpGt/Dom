@@ -21,7 +21,13 @@ class NodeTest extends TestCase {
 	public function testBaseURIClientSideOnly():void {
 		$document = new XMLDocument();
 		$sut = $document->createElement("example");
-		self::assertNull($sut->baseURI);
+
+		if(version_compare(PHP_VERSION, "8.4", ">=")) {
+			self::assertEquals(getcwd() . "/", $sut->baseURI);
+		}
+		else {
+			self::assertNull($sut->baseURI);
+		}
 	}
 
 	public function testChildNodesEmpty():void {

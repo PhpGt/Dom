@@ -24,7 +24,12 @@ class XMLDocumentTest extends TestCase {
 
 	public function testToStringEmptyXML():void {
 		$sut = new XMLDocument();
-		self::assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xml/>\n", (string)$sut);
+		if(version_compare(PHP_VERSION, "8.4", ">=")) {
+			self::assertEquals("<?xml version=\"1.0\"?>\n<xml/>\n", (string)$sut);
+		}
+		else {
+			self::assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xml/>\n", (string)$sut);
+		}
 	}
 
 	public function testPropContentTypeEmpty():void {
