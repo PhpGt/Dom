@@ -96,6 +96,14 @@ This repository aims to be as accurate as possible to the DOM specification at h
 
 This repository is intended to be as accurate to the DOM specification as possible. An extension to the repository is available at https://php.gt/domtemplate which adds page templating and data binding through custom elements and template attributes, introducing serverside functionality like that of WebComponents.
 
+## PHP 8.4 native HTMLDocument
+
+Since PHP 8.4's release, there has been a new native HTMLDocument class shipped in PHP natively. With this having native bindings, all operations are much faster. Work has been started to make PHPGT's Dom implementation utilise the new native code. Luckily, the DOM is a very well defined standard so whatever happens, minimal or no changes will be required to your code.
+
+Take a look at the benchmarks on the php84-benchmark branch for yourself: most operations are recorded to have a 90% or higher increase in speed by switching to the native implementation!
+
+More information will be laid out in the readme when more work has been taken towards an implementation of the native classes.
+
 [mdn-HTMLDocument]: https://developer.mozilla.org/docs/Web/API/HTMLDocument
 [mdn-Element]: https://developer.mozilla.org/docs/Web/API/Element
 [mdn-HTMLCollection]: https://developer.mozilla.org/docs/Web/API/HTMLCollection
